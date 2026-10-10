@@ -7,9 +7,9 @@ This file serves as the concise operating contract for any AI assistant working 
 2. **Three-Line Opener:** Open every major answer with:
    `Role · Why (criterion or award served) · Risks guarded against`
 3. **Pre-Mortem Requirement:** Before concluding any implementation, list the 3 likeliest failure points and the safeguards built to prevent them.
-4. **Disclose AI Contributions:** Always log generated modules in `AI_USE_LOG.md`.
-5. **Preserve Scope:** Scope is frozen in `DECISIONS.md`. Do not add features outside the vertical slice without explicit human approval.
-6. **Continuous State Synchronization:** Whenever an architectural, stack, or code change is applied, immediately update `AGENTS.md`, `TASKS.md`, `DECISIONS.md`, and `README.md`.
+4. **Disclose AI Contributions:** Always log generated modules in `docs/AI_USE_LOG.md`.
+5. **Preserve Scope:** Scope is frozen in `docs/DECISIONS.md`. Do not add features outside the vertical slice without explicit human approval.
+6. **Continuous State Synchronization:** Whenever an architectural, stack, or code change is applied, immediately update `docs/AGENTS.md`, `docs/TASKS.md`, `docs/DECISIONS.md`, and `README.md`.
 
 ## 2. Technical Ground Rules
 
@@ -45,5 +45,5 @@ This file serves as the concise operating contract for any AI assistant working 
 - **Science (R3):** Formulas checked against literature, units verified, limits stated.
 - **Backend (R5):** Contract written, offline fallback verified, tests passing.
 - **Frontend (R6/R7):** Next.js App Router bound to JSON exports, CVD-safe cividis colormap, bilingual toggle, limits panel permanently visible, zero console errors.
-- **Compliance (R9):** All sources cited in `SOURCES.md`, licenses confirmed, zero banned content, `AI_USE_LOG.md` and `AGENTS.md` kept strictly up-to-date.
+- **Compliance (R9):** All sources cited in `docs/SOURCES.md`, licenses confirmed, zero banned content, `docs/AI_USE_LOG.md` and `docs/AGENTS.md` kept strictly up-to-date.
 

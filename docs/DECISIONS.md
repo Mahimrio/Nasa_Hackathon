@@ -62,6 +62,7 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-10-09 | Use cividis color palette for reach risk map | Jet / Rainbow color maps | Cividis is mathematically optimized for color vision deficiency (CVD) and greyscale printing. | Low | R7 |
 | 2026-10-09 | Display metrics to exactly 2 decimal places | Printing 6 decimal places | Over-precision signals fake / hardcoded numbers to judges. | Low | R9/R10 |
 | 2026-10-09 | Migrate Tier 4 UI from Streamlit to Next.js 16 | Streamlit Python UI | Next.js offers client-side slider reactivity without script reruns, custom CVD-safe SVG maps, native bilingual toggling, and superior mobile presentation. | Low | R6/R7 |
+| 2026-10-11 | Relocate documentation markdown files into `docs/` | Flat root directory clutter | Establishes clean repository root with only README.md at top-level; keeps documentation modular | Low | R9 |
 
 ---
 

@@ -57,11 +57,13 @@ All metrics computed directly from code on the independent test period (April–
 Distributed under the **MIT License**. See `LICENSE` for details.
 
 ## Documentation Links
-- [SOLUTION_ARCHITECTURE.md](file:///f:/Nasa%20Webapp%20Challange/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
-- [Problem_and_Challenge_Statement.md](file:///f:/Nasa%20Webapp%20Challange/Problem_and_Challenge_Statement.md) — Core problem statement and elevator pitches
-- [DECISIONS.md](file:///f:/Nasa%20Webapp%20Challange/DECISIONS.md) — Scope boundary and decision ledger
-- [SOURCES.md](file:///f:/Nasa%20Webapp%20Challange/SOURCES.md) — Citation list and verified claims ledger
-- [VIDEO_SCRIPTS.md](file:///f:/Nasa%20Webapp%20Challange/VIDEO_SCRIPTS.md) — Word-for-word scripts for 240s Local & 30s Global video submissions
-- [RISK_REGISTER.md](file:///f:/Nasa%20Webapp%20Challange/RISK_REGISTER.md) — Guardrails against vibe-coding and hackathon failure modes
-- [TASKS.md](file:///f:/Nasa%20Webapp%20Challange/TASKS.md) — Single source of truth for work orders
-- [AI_USE_LOG.md](file:///f:/Nasa%20Webapp%20Challange/AI_USE_LOG.md) — Transparent disclosure of AI assistance
+- [SOLUTION_ARCHITECTURE.md](docs/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
+- [Problem_and_Challenge_Statement.md](docs/Problem_and_Challenge_Statement.md) — Core problem statement and elevator pitches
+- [DECISIONS.md](docs/DECISIONS.md) — Scope boundary and decision ledger
+- [SOURCES.md](docs/SOURCES.md) — Citation list and verified claims ledger
+- [VIDEO_SCRIPTS.md](docs/VIDEO_SCRIPTS.md) — Word-for-word scripts for 240s Local & 30s Global video submissions
+- [RISK_REGISTER.md](docs/RISK_REGISTER.md) — Guardrails against vibe-coding and hackathon failure modes
+- [TASKS.md](docs/TASKS.md) — Single source of truth for work orders
+- [AI_USE_LOG.md](docs/AI_USE_LOG.md) — Transparent disclosure of AI assistance
+- [AGENTS.md](docs/AGENTS.md) — AI agent operating instructions and ground rules
+- [STEERING_GUIDE_FINAL.md](docs/STEERING_GUIDE_FINAL.md) — Comprehensive steering guide and prompt protocols
