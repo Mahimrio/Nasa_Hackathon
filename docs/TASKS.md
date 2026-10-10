@@ -16,7 +16,7 @@
 | **WO-005** | Scientific validation metrics module | R3 Scientist | Hydrology Lead | **DONE** | Hour 10 | NSE, KGE, PBIAS, timing error, and lead time computed, formatted to 2dp | Implemented in `pipeline/metrics.py` |
 | **WO-006** | End-to-end Minimum Viable Pipeline (MVP) runner | R5 Backend | Dev Lead | **DONE** | Hour 11 | `python pipeline/run_pipeline.py` passes all 7 architectural steps | Output: NSE 0.74, KGE 0.68, Lead 21.0h |
 | **WO-007** | State files & compliance documentation | R9 Compliance | Docs Lead | **DONE** | Hour 13 | `DECISIONS.md`, `TASKS.md`, `SOURCES.md`, `RISK_REGISTER.md`, `AI_USE_LOG.md`, `AGENTS.md`, `README.md` created | Core state sync |
-| **WO-008** | Interactive Delivery Interface (Web Dashboard) | R6 Frontend | Dev Lead | **DONE** | Hour 22 | Reach map (cividis), Harvest Flag card, hydrograph with uncertainty, time slider, permanent Limits Panel | Next.js 16 app built in `ui/`, verified via browser subagent |
+| **WO-008** | Interactive Delivery Interface (Web Dashboard Redesign) | R6 Frontend | Dev Lead | **DONE** | Hour 22 | Redesigned per `DESIGN_ARCHITECTURE.md`: 8:4 hero River Map + Harvest Decision rail, dual-axis hydrograph with timeline scrubber, modular components, reach inspector, and operational limits | Next.js 16 App Router app in `ui/`, verified via automated browser subagent with 0 console errors |
 | **WO-009** | Video demo scripts (Three-video pipeline) | R8 Storyteller | Pitch Lead | **DONE** | Hour 28 | Scripts written strictly from `SOURCES.md` claims | Complete scripts for Video 1 (240s prescreening), Video 2 (240s local demo), and Video 3 (30s global) in `VIDEO_SCRIPTS.md` |
 | **WO-010** | Release QA & submission compliance audit | R10 QA | Team Lead | **TODO** | Hour 36 | Clean-checkout run, offline fixture test, public repo check, no banned content | 2 hours before deadline |
 
@@ -30,11 +30,11 @@
 * **Role:** R5 Backend Engineer / R10 QA.
 * **Result:** PASSED. NSE: 0.74, KGE: 0.68, PBIAS: +1.8%, Timing Error: -5.5h, Warning Lead Time: 21.0h.
 
-### WO-008: Interactive Delivery Interface (Web Dashboard)
-* **Goal:** Deliver single-screen dashboard for Sunamganj Upazila Agriculture Officer.
+### WO-008: Interactive Delivery Interface (Web Dashboard Redesign)
+* **Goal:** Deliver single-screen dashboard for Sunamganj Upazila Agriculture Officer conforming to `DESIGN_ARCHITECTURE.md`.
 * **Why it matters:** Fulfills Presentation & Relevance scoring criteria.
 * **Role:** R6 Frontend & Data-Viz Engineer + R7 UX Designer.
-* **Result:** PASSED. Built Next.js 16 App Router application (`ui/`) with cividis-styled reach map SVG, Recharts hydrograph with dynamic ±0.18m uncertainty band, time slider driving timeseries snapshots, harvest advisory card with EN/বাংলা toggle, 5 scientific validation metrics, and permanently visible operational limits panel. Verified in live browser.
+* **Result:** PASSED. Built and redesigned Next.js 16 App Router application (`ui/`) with modular components (`AppHeader`, `PageContextBar`, `RiverMapPanel`, `HarvestDecisionPanel`, `HydrographPanel`, `ValidationMetricsPanel`, `OperationalLimitsPanel`, `ReachInspectorModal`, `AdvisoryBulletinModal`, `ModelArchitectureModal`). Features glassmorphic surfaces, restrained neumorphism, animated river flow vectors, pulsating sonar gauge marker, synchronized dual hydrograph (inverted rainfall hyetograph + stage curve with ±0.18m uncertainty), timeline scrubber with replay controls (1x, 2x, 5x), reach inspector modal, bilingual EN/বাংলা localization, and permanent operational limits panel. Verified via automated browser subagent with 0 console errors.
 
 ### WO-009: Video Demo Scripts (Next Step)
 * **Goal:** Write word-for-word scripts for the 240s local qualification video and 30s global elevator pitch.

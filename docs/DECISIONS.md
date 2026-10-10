@@ -63,6 +63,8 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-10-09 | Display metrics to exactly 2 decimal places | Printing 6 decimal places | Over-precision signals fake / hardcoded numbers to judges. | Low | R9/R10 |
 | 2026-10-09 | Migrate Tier 4 UI from Streamlit to Next.js 16 | Streamlit Python UI | Next.js offers client-side slider reactivity without script reruns, custom CVD-safe SVG maps, native bilingual toggling, and superior mobile presentation. | Low | R6/R7 |
 | 2026-10-11 | Relocate documentation markdown files into `docs/` | Flat root directory clutter | Establishes clean repository root with only README.md at top-level; keeps documentation modular | Low | R9 |
+| 2026-10-11 | Implement complete dashboard redesign per `docs/DESIGN_ARCHITECTURE.md` | Monolithic single-file dashboard or generic admin templates | Implements glassmorphism, restrained neumorphism, 8:4 hero River Map + Harvest Decision rail, Recharts hydrograph with timeline playback, modular components, and reach inspection while preserving 100% scientific pipeline integrity | Low | R6/R7 |
+
 
 ---
 

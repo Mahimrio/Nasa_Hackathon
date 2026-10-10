@@ -58,6 +58,7 @@ Distributed under the **MIT License**. See `LICENSE` for details.
 
 ## Documentation Links
 - [SOLUTION_ARCHITECTURE.md](docs/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
+- [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) — Visual & interaction design architecture specification for the delivery dashboard
 - [Problem_and_Challenge_Statement.md](docs/Problem_and_Challenge_Statement.md) — Core problem statement and elevator pitches
 - [DECISIONS.md](docs/DECISIONS.md) — Scope boundary and decision ledger
 - [SOURCES.md](docs/SOURCES.md) — Citation list and verified claims ledger

@@ -23,17 +23,18 @@ This file serves as the concise operating contract for any AI assistant working 
 - **Offline First:** All demos and pipelines must default to fixtures in `data/fixtures/` to survive venue network instability.
 
 ### Frontend Delivery Dashboard (Tier 4 — Next.js 16)
-- **Framework & Directory:** Next.js 16 App Router in `ui/`. Stateful components must declare `"use client"`.
+- **Framework & Architecture:** Next.js 16 App Router in `ui/` conforming to `docs/DESIGN_ARCHITECTURE.md`. Modular components organized under `ui/app/components/` (`AppHeader`, `PageContextBar`, `RiverMapPanel`, `HarvestDecisionPanel`, `HydrographPanel`, `ValidationMetricsPanel`, `OperationalLimitsPanel`, `ReachInspectorModal`, `AdvisoryBulletinModal`, `ModelArchitectureModal`).
 - **Data Hydration:** The UI reads purely static JSON fixtures from `ui/public/data/*.json` (generated via `python scripts/export_json.py`). Zero runtime Python server or live API calls required during judging demos.
-- **Recharts & Dynamic Timeline:** Recharts renders stage and rainfall hyetographs with analytical uncertainty bands (`upper`/`lower`). Time slider scrubs index across `event_timeseries.json`.
+- **Recharts & Dynamic Timeline:** Recharts renders stage and rainfall hyetographs with analytical uncertainty bands (`upper`/`lower`). Time slider and replay engine (1x, 2x, 5x) scrub index across `event_timeseries.json`.
+- **Styling & Depth:** Complete design token implementation in `ui/app/globals.css` with atmospheric gradients, glassmorphism (`backdrop-filter: blur(18px)`), restrained neumorphism, and vector river flow and gauge sonar animations.
 - **No Hardcoded Dates/Metrics:** Dates, timestamps, and performance metrics must be dynamically parsed from exported JSON data files, never hardcoded (Trap B10 / Trap C1).
-- **Bilingual Interface:** Every user-facing label, advisory text, metric sub-label, and tooltip must support instantaneous English (`en`) and Bengali (`bn`) toggling.
-- **Accessibility & CVD:** Use Cividis-inspired CVD-safe palette (WCAG AA $\ge 4.5:1$). Status flags must use icon + text label + color (never color alone, per §4.3).
+- **Bilingual Interface:** Every user-facing label, advisory text, metric sub-label, and tooltip supports instantaneous English (`en`) and Bengali (`bn`) toggling.
+- **Accessibility & CVD:** Use CVD-safe palette (WCAG AA $\ge 4.5:1$) and `@media (prefers-reduced-motion: reduce)` support. Status flags must use icon + text label + color (never color alone, per §4.3).
 - **Limits Panel:** The operational limits panel must remain permanently visible on screen (Trap C3).
 
 ## 3. Project Status & Work Orders
 - **WO-001 to WO-007 (Scientific Pipeline):** **DONE** (NSE: `0.74`, KGE: `0.68`, PBIAS: `+1.8%`, Timing: `-5.5 h`, Lead: `21.0 h`). All 6 unit tests pass.
-- **WO-008 (Next.js Interactive Dashboard):** **DONE** (`ui/` app running on port 3000, verified via browser subagent with zero console errors).
+- **WO-008 (Next.js Interactive Dashboard Redesign):** **DONE** (Complete redesign per `docs/DESIGN_ARCHITECTURE.md` running on port 3000, verified via browser subagent with zero console errors).
 - **WO-009 (Video Demo Scripts):** **DONE** (Three-video pipeline: Video 1 Prescreening 240s, Video 2 Local Judging 240s, Video 3 Global 30s in `VIDEO_SCRIPTS.md` matching Participants Guide §08).
 - **Current Active Task:** **WO-010** (Release QA & submission compliance audit).
 - **Pending Human Verification:**
