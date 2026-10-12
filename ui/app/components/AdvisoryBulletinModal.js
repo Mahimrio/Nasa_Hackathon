@@ -11,12 +11,15 @@ export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dange
     <div className="modal-overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="bulletin-title">
       <div className="modal-content-panel" style={{ maxWidth: "600px" }}>
         <button className="modal-close-btn" onClick={onClose} aria-label="Close advisory bulletin">
-          ✕
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
 
         {/* Official Header */}
         <div style={{ textAlign: "center", borderBottom: "1px solid rgba(177,221,255,0.12)", paddingBottom: "16px", marginBottom: "18px" }}>
-          <div style={{ fontSize: "11px", letterSpacing: "0.08em", color: "var(--cyan-400)", fontWeight: 700, textTransform: "uppercase" }}>
+          <div style={{ fontSize: "12px", letterSpacing: "0.08em", color: "var(--cyan-400)", fontWeight: 700, textTransform: "uppercase" }}>
             GOVERNMENT OF THE PEOPLE&apos;S REPUBLIC OF BANGLADESH · DAE / BWDB
           </div>
           <h2 id="bulletin-title" style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)", marginTop: "4px" }}>
@@ -24,7 +27,7 @@ export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dange
               ? "Boro Rice Harvest Advisory & Flash Flood Early Warning Bulletin"
               : "বোরো ধান কর্তন পরামর্শ ও আগাম বন্যা সতর্কবার্তা বুলেটিন"}
           </h2>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-muted)", marginTop: "6px" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text-muted)", marginTop: "6px" }}>
             Issued: {dateStr} at {timeStr} UTC · Target: Upazila Agriculture Officers (Sunamganj & Sylhet)
           </div>
         </div>
@@ -40,9 +43,24 @@ export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dange
           gap: "14px",
           marginBottom: "18px"
         }}>
-          <span style={{ fontSize: "32px" }}>
-            {flag === "RED" ? "⛔" : flag === "AMBER" ? "⚠" : "✓"}
-          </span>
+          <div style={{ flexShrink: 0, color: flag === "RED" ? "var(--red-400)" : flag === "AMBER" ? "var(--amber-400)" : "var(--green-400)" }}>
+            {flag === "RED" ? (
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+              </svg>
+            ) : flag === "AMBER" ? (
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            ) : (
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
+          </div>
           <div>
             <div style={{ fontSize: "16px", fontWeight: 800, color: flag === "RED" ? "var(--red-400)" : flag === "AMBER" ? "var(--amber-400)" : "var(--green-400)" }}>
               {lang === "en" ? `OPERATIONAL FLAG: ${flag}` : `সতর্কবার্তা স্তর: ${flag === "RED" ? "জরুরি" : flag === "AMBER" ? "সতর্কতা" : "স্বাভাবিক"}`}
@@ -92,10 +110,15 @@ export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dange
         <div style={{ display: "flex", gap: "10px" }}>
           <button
             className="btn-standard neu-inset"
-            style={{ flex: 1, justifyContent: "center" }}
+            style={{ flex: 1, justifyContent: "center", display: "inline-flex", alignItems: "center", gap: "6px" }}
             onClick={() => window.print()}
           >
-            🖨️ {lang === "en" ? "Print Official Bulletin" : "বুলেটিন প্রিন্ট করুন"}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
+            <span>{lang === "en" ? "Print Official Bulletin" : "বুলেটিন প্রিন্ট করুন"}</span>
           </button>
           <button
             className="btn-standard btn-primary"

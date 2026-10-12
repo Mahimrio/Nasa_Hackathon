@@ -92,9 +92,6 @@ export default function RiverMapPanel({
             </svg>
           </div>
           <div>
-            <div className="card-eyebrow">
-              {lang === "en" ? "SWOT RIVER CORRIDOR REACH MAP" : "SWOT নদী রিচ করিডোর মানচিত্র"}
-            </div>
             <div className="card-title">
               {lang === "en" ? "Surma–Kushiyara Hydrodynamic Network" : "সুরমা-কুশিয়ারা হাইড্রোডাইনামিক নেটওয়ার্ক"}
             </div>
@@ -114,11 +111,15 @@ export default function RiverMapPanel({
                 color: "var(--cyan-400)",
                 cursor: "pointer",
                 padding: "0 2px",
-                fontSize: "11px",
+                display: "inline-flex",
+                alignItems: "center",
               }}
               title="Inspect Manning n and hydraulic dimensions"
             >
-              🔍
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
             </button>
           </div>
         )}
@@ -150,15 +151,21 @@ export default function RiverMapPanel({
             title="Reset Map Orientation"
             aria-label="Reset Map Orientation"
           >
-            ⟲
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+            </svg>
           </button>
           <button
             className={`map-tool-btn ${showFlowAnim ? "active" : ""}`}
             onClick={() => setShowFlowAnim(!showFlowAnim)}
-            title={lang === "en" ? "Toggle River Flow Vector Motion" : "নদী প্রবাহ অ্যানিমেশন চালু/বন্ধ"}
+            title={lang === "en" ? "Toggle River Flow Vector Motion" : "নদী प्रवाह অ্যানিমেশন চালু/বন্ধ"}
             aria-label="Toggle Flow Animation"
           >
-            ≋
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+              <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
+            </svg>
           </button>
           <button
             className={`map-tool-btn ${showSwotSwath ? "active" : ""}`}
@@ -166,7 +173,13 @@ export default function RiverMapPanel({
             title={lang === "en" ? "Toggle SWOT Orbital Swath (120km swath)" : "SWOT উপগ্রহ কক্ষপথ ওভারলে"}
             aria-label="Toggle SWOT Orbit Swath"
           >
-            🛰️
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M13 7 9 3 5 7l4 4" />
+              <path d="m17 11 4 4-4 4-4-4" />
+              <path d="m8 12 4 4 6-6-4-4Z" />
+              <path d="m16 8 3-3" />
+              <path d="M9 21a6 6 0 0 0-6-6" />
+            </svg>
           </button>
           <button
             className={`map-tool-btn ${showTerrain ? "active" : ""}`}
@@ -174,7 +187,9 @@ export default function RiverMapPanel({
             title={lang === "en" ? "Toggle Meghalaya Topography Shading" : "পাহাড় ও হাওর ভূপ্রকৃতি ওভারলে"}
             aria-label="Toggle Terrain Shading"
           >
-            ⛰️
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+            </svg>
           </button>
         </div>
 
@@ -247,10 +262,10 @@ export default function RiverMapPanel({
               {/* Haor Depressions (Tanguar / Hakaluki wetland basins) */}
               <ellipse cx="65" cy="225" rx="55" ry="35" fill="url(#haorWetlandGradient)" />
               <ellipse cx="140" cy="265" rx="45" ry="22" fill="url(#haorWetlandGradient)" />
-              <text x="65" y="228" fontSize="8" fill="#4B6A8A" fontWeight="600" textAnchor="middle">
+              <text x="65" y="228" fontSize="12" fill="#94A3B8" fontWeight="600" textAnchor="middle">
                 {lang === "en" ? "SUNAMGANJ HAOR BASIN" : "সুনামগঞ্জ হাওর অববাহিকা"}
               </text>
-              <text x="140" y="268" fontSize="7.5" fill="#3B5773" fontWeight="500" textAnchor="middle">
+              <text x="140" y="268" fontSize="12" fill="#94A3B8" fontWeight="500" textAnchor="middle">
                 {lang === "en" ? "Hakaluki Haor" : "হাকালুকি হাওর"}
               </text>
             </g>
@@ -263,17 +278,17 @@ export default function RiverMapPanel({
               y1="46"
               x2="460"
               y2="46"
-              stroke="rgba(255, 196, 92, 0.25)"
+              stroke="rgba(255, 196, 92, 0.35)"
               strokeWidth="1.2"
               strokeDasharray="5 4"
             />
-            <text x="390" y="22" fontSize="9.5" fill="#71849C" fontWeight="700" letterSpacing="0.08em">
+            <text x="270" y="24" fontSize="12" fill="#CBD5E1" fontWeight="700" letterSpacing="0.08em">
               {lang === "en" ? "MEGHALAYA (INDIA)" : "মেঘালয় (ভারত)"}
             </text>
-            <text x="40" y="20" fontSize="8" fill="#5A6F8A" fontStyle="italic">
+            <text x="40" y="24" fontSize="12" fill="#94A3B8" fontStyle="italic">
               {lang === "en" ? "Precipitation Source Catchment" : "বৃষ্টিপাত প্রবাহ উৎস"}
             </text>
-            <text x="230" y="42" fontSize="8" fill="#FFC45C" opacity="0.6" textAnchor="middle">
+            <text x="230" y="42" fontSize="12" fill="#FFC45C" opacity="0.9" textAnchor="middle">
               {lang === "en" ? "— International Border —" : "— আন্তর্জাতিক সীমান্ত —"}
             </text>
           </g>
@@ -297,7 +312,7 @@ export default function RiverMapPanel({
                 strokeWidth="1.5"
                 strokeDasharray="6 4"
               />
-              <text x="245" y="15" fontSize="7.5" fill="#8172FF" fontWeight="600" opacity="0.8">
+              <text x="245" y="15" fontSize="12" fill="#A5B4FC" fontWeight="600" opacity="0.95">
                 SWOT KaRIn Ground Track (Pass 018)
               </text>
             </g>
@@ -362,9 +377,9 @@ export default function RiverMapPanel({
                   <text
                     x={p.labelPos.x}
                     y={p.labelPos.y}
-                    fontSize={isSelected ? "10.5" : "9.5"}
+                    fontSize={isSelected ? "12" : "11"}
                     fontWeight={isSelected ? "750" : "600"}
-                    fill={isSelected ? "#F2F7FF" : "#A9BAD0"}
+                    fill={isSelected ? "#F2F7FF" : "#CBD5E1"}
                     letterSpacing="-0.01em"
                     pointerEvents="none"
                   >
@@ -374,9 +389,9 @@ export default function RiverMapPanel({
                   {/* Secondary Manning roughness tag */}
                   <text
                     x={p.labelPos.x}
-                    y={p.labelPos.y + 11}
-                    fontSize="7.5"
-                    fill="#71849C"
+                    y={p.labelPos.y + 13}
+                    fontSize="12"
+                    fill="#94A3B8"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"
                   >
@@ -415,24 +430,24 @@ export default function RiverMapPanel({
               fill="#FFC45C"
               stroke="#050A12"
               strokeWidth="2"
-              filter="drop-shadow(0 0 6px rgba(255, 196, 92, 0.8))"
+              filter="drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))"
             />
 
             {/* Gauge Station Text Readout */}
             <rect
               x="272"
-              y="102"
-              width="135"
-              height="26"
-              rx="4"
-              fill="rgba(5, 10, 18, 0.88)"
-              stroke="rgba(255, 196, 92, 0.4)"
+              y="98"
+              width="160"
+              height="34"
+              rx="6"
+              fill="rgba(5, 10, 18, 0.92)"
+              stroke="rgba(255, 196, 92, 0.5)"
               strokeWidth="1"
             />
-            <text x="278" y="115" fontSize="8.5" fill="#FFC45C" fontWeight="750">
-              ★ {lang === "en" ? "SW108 Kanaighat Gauge" : "SW১০৮ কানাইঘাট গেজ"}
+            <text x="278" y="113" fontSize="12" fill="#FFC45C" fontWeight="750">
+              {lang === "en" ? "SW108 Kanaighat Gauge" : "SW১০৮ কানাইঘাট গেজ"}
             </text>
-            <text x="278" y="124" fontSize="7.5" fill="#F2F7FF" fontFamily="var(--font-mono)">
+            <text x="278" y="125" fontSize="12" fill="#F2F7FF" fontFamily="var(--font-mono)">
               {currentGaugeLevel ? `${currentGaugeLevel.toFixed(2)} m PWD` : `Model: ${currentStage.toFixed(2)} m`}
               <tspan fill="#FF647C"> (Danger: {dangerLevel}m)</tspan>
             </text>
@@ -440,8 +455,8 @@ export default function RiverMapPanel({
 
           {/* Flow Direction Indicator */}
           <g transform="translate(60, 130)">
-            <text x="0" y="0" fontSize="8.5" fill="#35D8F2" fontStyle="italic" fontWeight="600">
-              {lang === "en" ? "Direction of Flow ➔" : "প্রবাহের দিক ➔"}
+            <text x="0" y="0" fontSize="12" fill="#38BDF8" fontStyle="italic" fontWeight="600">
+              {lang === "en" ? "Direction of Flow →" : "প্রবাহের দিক →"}
             </text>
           </g>
         </svg>
@@ -451,24 +466,24 @@ export default function RiverMapPanel({
       <div className="map-bottom-legend">
         <div className="legend-swatches-row">
           <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#30E08A", boxShadow: "0 0 6px rgba(48,224,138,0.5)" }} />
+            <span className="swatch-line" style={{ background: "#30E08A" }} />
             <span>{lang === "en" ? "Safe (<80% Danger)" : "নিরাপদ"}</span>
           </div>
           <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#FFC45C", boxShadow: "0 0 6px rgba(255,196,92,0.5)" }} />
+            <span className="swatch-line" style={{ background: "#FFC45C" }} />
             <span>{lang === "en" ? "Watch (80-100%)" : "সতর্কতা"}</span>
           </div>
           <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#FF647C", boxShadow: "0 0 8px rgba(255,100,124,0.6)" }} />
+            <span className="swatch-line" style={{ background: "#FF647C" }} />
             <span>{lang === "en" ? "Critical (>13.20m)" : "জরুরি"}</span>
           </div>
           <div className="swatch-group">
-            <span className="swatch-dot" style={{ background: "#FFC45C", boxShadow: "0 0 6px #FFC45C" }} />
+            <span className="swatch-dot" style={{ background: "#FFC45C" }} />
             <span>{lang === "en" ? "BWDB Gauge Station" : "BWDB গেজ স্টেশন"}</span>
           </div>
         </div>
 
-        <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
           {lang === "en"
             ? "Click any river reach to inspect calibrated roughness (Manning n)"
             : "ক্যালিব্রেটেড প্যারামিটার দেখতে যেকোনো রিচে ক্লিক করুন"}

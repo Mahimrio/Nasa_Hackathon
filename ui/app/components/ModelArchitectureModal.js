@@ -5,15 +5,30 @@ export default function ModelArchitectureModal({ lang, onClose }) {
     <div className="modal-overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="model-info-title">
       <div className="modal-content-panel" style={{ maxWidth: "680px" }}>
         <button className="modal-close-btn" onClick={onClose} aria-label="Close model info">
-          ✕
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-          <span style={{ fontSize: "28px" }}>💧</span>
+          <div style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "8px",
+            background: "rgba(56, 189, 248, 0.12)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--cyan-400)",
+            flexShrink: 0
+          }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+            </svg>
+          </div>
           <div>
-            <div className="card-eyebrow" style={{ color: "var(--cyan-400)" }}>
-              {lang === "en" ? "HYDROLOGIC ROUTING & SATELLITE PIPELINE ARCHITECTURE" : "হাইড্রোসিন্থেটিক রাউটিং ও উপগ্রহ পাইপলাইন"}
-            </div>
             <h2 id="model-info-title" style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)" }}>
               {lang === "en" ? "HydroSense-SWOT Scientific Architecture" : "হাইড্রোসেন্স-SWOT বৈজ্ঞানিক স্থাপত্য"}
             </h2>
@@ -33,7 +48,7 @@ export default function ModelArchitectureModal({ lang, onClose }) {
               <strong style={{ color: "var(--cyan-300)", fontSize: "13px" }}>
                 Tier 1: SWOT River Roughness Calibration
               </strong>
-              <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Offline / 21-day orbit</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Offline / 21-day orbit</span>
             </div>
             <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
               Calibrates Manning&apos;s roughness coefficient (n) and bed elevation (z_bed) for each SWORD reach using SWOT L2 HR RiverSP water surface elevation (WSE), width (W), and longitudinal slope.
@@ -45,7 +60,7 @@ export default function ModelArchitectureModal({ lang, onClose }) {
               <strong style={{ color: "var(--blue-500)", fontSize: "13px" }}>
                 Tier 2: IMERG Catchment Precipitation Inflow
               </strong>
-              <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>30-min latency: ~4h</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>30-min latency: ~4h</span>
             </div>
             <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
               Integrates GPM IMERG Early Run half-hourly precipitation over the 185 km² upper Meghalaya catchment into boundary hydrograph inflow Q via SCS-CN calibrated runoff coefficients.
@@ -57,7 +72,7 @@ export default function ModelArchitectureModal({ lang, onClose }) {
               <strong style={{ color: "var(--violet-500)", fontSize: "13px" }}>
                 Tier 3: Muskingum-Cunge Flood Wave Routing
               </strong>
-              <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>~26h Travel Time</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>~26h Travel Time</span>
             </div>
             <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
               Physically-based variable-parameter flood routing through the Surma-Kushiyara river network, tracking wave attenuation, celerity, and stage hydrographs down to the Haor rim.
@@ -69,7 +84,7 @@ export default function ModelArchitectureModal({ lang, onClose }) {
               <strong style={{ color: "var(--green-400)", fontSize: "13px" }}>
                 Tier 4: Early Warning & Harvest Advisory Engine
               </strong>
-              <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Lead time: 21.0h</span>
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Lead time: 21.0h</span>
             </div>
             <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
               Evaluates future stage vs 13.20m PWD danger level with ±0.18m uncertainty bands, triggering actionable GREEN / AMBER / RED flags with bilingual operational guidance.

@@ -135,7 +135,11 @@ export default function DashboardPage() {
   if (!eventData || !current) {
     return (
       <div className="loading-screen-wrap" role="alert">
-        <div style={{ fontSize: "42px" }}>⚠️</div>
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--red-400)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
         <div className="loading-headline" style={{ color: "var(--red-400)" }}>
           Failed to load pipeline datasets
         </div>
@@ -173,11 +177,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* Atmospheric Background Glow Blooms */}
-      <div className="ambient-bloom ambient-bloom-1" aria-hidden="true" />
-      <div className="ambient-bloom ambient-bloom-2" aria-hidden="true" />
-      <div className="ambient-bloom ambient-bloom-3" aria-hidden="true" />
-
       {/* Top Application Bar */}
       <AppHeader
         lang={lang}

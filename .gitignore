@@ -54,3 +54,7 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Skill & tooling platform binaries (downloaded on demand per OS/arch)
+**/scripts/bin/
+

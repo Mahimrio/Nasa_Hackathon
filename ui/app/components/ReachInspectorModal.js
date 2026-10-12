@@ -10,15 +10,30 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, la
     <div className="modal-overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="reach-modal-title">
       <div className="modal-content-panel">
         <button className="modal-close-btn" onClick={onClose} aria-label="Close reach inspector">
-          ✕
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-          <span style={{ fontSize: "24px" }}>🛰️</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+          <div style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "8px",
+            background: "rgba(56, 189, 248, 0.12)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "var(--cyan-400)",
+            flexShrink: 0
+          }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+            </svg>
+          </div>
           <div>
-            <div className="card-eyebrow" style={{ color: "var(--cyan-400)" }}>
-              {lang === "en" ? "SWOT RIVER REACH HYDRAULIC PROFILE" : "SWOT নদী রিচ হাইড্রোডাইনামিক প্রোফাইল"}
-            </div>
             <h2 id="reach-modal-title" style={{ fontSize: "18px", fontWeight: 700, color: "var(--text-primary)" }}>
               {lang === "en" ? reach.name : reach.name_bn}
             </h2>
@@ -93,14 +108,14 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, la
           <div style={{
             padding: "12px",
             borderRadius: "8px",
-            background: "rgba(255, 196, 92, 0.1)",
-            border: "1px solid rgba(255, 196, 92, 0.3)",
+            background: "rgba(255, 196, 92, 0.08)",
+            border: "1px solid rgba(255, 196, 92, 0.25)",
             marginBottom: "16px"
           }}>
-            <div style={{ color: "var(--amber-400)", fontWeight: 700, fontSize: "12px", marginBottom: "4px" }}>
-              ★ {reach.gauge_station} (Co-located Gauge)
+            <div style={{ color: "var(--amber-400)", fontWeight: 700, fontSize: "12.5px", marginBottom: "4px" }}>
+              BWDB Station: {reach.gauge_station} (Co-located Gauge)
             </div>
-            <div style={{ fontSize: "11.5px", color: "var(--text-secondary)" }}>
+            <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               Danger Level: <strong>{reach.danger_level_m} m PWD</strong>. Direct stage observations from Bangladesh Water Development Board (BWDB) are assimilated here for real-time validation.
             </div>
           </div>

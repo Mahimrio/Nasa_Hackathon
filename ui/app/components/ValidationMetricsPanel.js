@@ -104,9 +104,6 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
             </svg>
           </div>
           <div>
-            <div className="card-eyebrow">
-              {lang === "en" ? "QUANTITATIVE HYDROLOGIC BENCHMARKS" : "বৈজ্ঞানিক মডেল মূল্যায়ন মানদণ্ড"}
-            </div>
             <div className="card-title">
               {lang === "en"
                 ? "Scientific Validation — April 2026 Flood Event Replay"
@@ -115,8 +112,8 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
           </div>
         </div>
 
-        <div style={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
-          {lang === "en" ? "Calibration:" : "ক্রমাঙ্কন:"} {metrics.calibration_period} ➔ {lang === "en" ? "Test:" : "পরীক্ষা:"} {metrics.test_period}
+        <div style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+          {lang === "en" ? "Calibration:" : "ক্রমাঙ্কন:"} {metrics.calibration_period} → {lang === "en" ? "Test:" : "পরীক্ষা:"} {metrics.test_period}
         </div>
       </div>
 
@@ -138,7 +135,11 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
               <div className="metric-card-top">
                 <span className="metric-tag-label">{m.label}</span>
                 <span className="metric-info-icon" title={m.def.descEn}>
-                  ℹ
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
                 </span>
               </div>
 
@@ -147,7 +148,9 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
               <div className="metric-card-bottom">
                 <div className="metric-full-name">{m.name}</div>
                 <div className="metric-benchmark-chip">
-                  <span>✓</span>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
                   <span>{m.def.benchmark}</span>
                 </div>
               </div>
@@ -167,16 +170,16 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
                     padding: "10px 12px",
                     boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
                     zIndex: 30,
-                    fontSize: "11px",
-                    lineHeight: "1.4",
+                    fontSize: "12px",
+                    lineHeight: "1.45",
                     color: "var(--text-secondary)",
                     pointerEvents: "none",
                   }}
                 >
-                  <div style={{ color: "var(--cyan-300)", fontWeight: 700, marginBottom: "4px" }}>
+                  <div style={{ color: "var(--cyan-300)", fontWeight: 700, marginBottom: "4px", fontSize: "12.5px" }}>
                     {m.def.nameEn}
                   </div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "9.5px", color: "var(--text-muted)", marginBottom: "6px" }}>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text-secondary)", marginBottom: "6px" }}>
                     Formula: {m.def.formula}
                   </div>
                   <div>{lang === "en" ? m.def.descEn : m.def.descBn}</div>

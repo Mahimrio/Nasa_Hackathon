@@ -16,14 +16,14 @@ export default function PageContextBar({
           {lang === "en" ? (
             <>
               Surma–Kushiyara River Intelligence
-              <span className="brand-badge" style={{ fontSize: "11px", padding: "3px 8px" }}>
+              <span className="brand-badge" style={{ fontSize: "12px", padding: "3px 8px" }}>
                 HAOR BASIN
               </span>
             </>
           ) : (
             <>
               সুরমা-কুশিয়ারা নদী মনিটরিং
-              <span className="brand-badge" style={{ fontSize: "11px", padding: "3px 8px" }}>
+              <span className="brand-badge" style={{ fontSize: "12px", padding: "3px 8px" }}>
                 হাওর অববাহিকা
               </span>
             </>
@@ -39,7 +39,7 @@ export default function PageContextBar({
       <div className="context-controls-block">
         {/* Quick Event Navigation Presets */}
         <div className="quick-preset-chips" role="group" aria-label="Event Timeline Presets">
-          <span style={{ fontSize: "11px", color: "var(--text-muted)", paddingLeft: "6px" }}>
+          <span style={{ fontSize: "12px", color: "var(--text-secondary)", paddingLeft: "6px" }}>
             {lang === "en" ? "Jump:" : "দ্রুত যান:"}
           </span>
           <button
@@ -60,8 +60,12 @@ export default function PageContextBar({
             className="preset-chip active"
             onClick={() => onJumpToSlider(peakIdx)}
             title="Flood Wave Peak Stage at Kanaighat"
+            style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
           >
-            ⚡ {lang === "en" ? "Flood Peak (13.4m)" : "শীর্ষ বন্যা (১৩.৪ মি)"}
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
+            <span>{lang === "en" ? "Flood Peak (13.4m)" : "শীর্ষ বন্যা (১৩.৪ মি)"}</span>
           </button>
           <button
             className="preset-chip"
@@ -95,7 +99,7 @@ export default function PageContextBar({
             >
               {reaches.map((r) => (
                 <option key={r.reach_id} value={r.reach_id} style={{ background: "#08111F" }}>
-                  {lang === "en" ? r.name : r.name_bn} {r.has_gauge ? "★ Gauge" : ""}
+                  {lang === "en" ? r.name : r.name_bn} {r.has_gauge ? "(Gauge Station)" : ""}
                 </option>
               ))}
             </select>
