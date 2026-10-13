@@ -2,89 +2,102 @@
 
 import { useState } from "react";
 
-const METRIC_DEFINITIONS = {
-  NSE: {
-    nameEn: "Nash-Sutcliffe Efficiency",
-    nameBn: "ন্যাশ-সাটক্লিফ দক্ষতা",
-    benchmark: "> 0.65 (Good)",
-    formula: "1 - [Σ(Qobs - Qsim)² / Σ(Qobs - Q̄obs)²]",
-    descEn: "Standard hydrological goodness-of-fit score. 0.74 confirms the SWOT-calibrated Manning's roughness accurately models channel hydrodynamics compared to BWDB gauge observations.",
-    descBn: "স্ট্যান্ডার্ড হাইড্রোলজিক্যাল ফিট স্কোর। ০.৭৪ মান নির্দেশ করে যে SWOT ক্যালিব্রেশন কার্যকরভাবে নদীর স্তর মডেল করতে সক্ষম।",
-  },
-  KGE: {
-    nameEn: "Kling-Gupta Efficiency",
-    nameBn: "ক্লিং-গুপ্তা দক্ষতা",
-    benchmark: "> 0.60 (Balanced)",
-    formula: "1 - √[(r - 1)² + (α - 1)² + (β - 1)²]",
-    descEn: "Integrates linear correlation (r), variability ratio (α), and volume bias (β). 0.68 indicates well-balanced hydrograph shape and peak discharge timing.",
-    descBn: "লিনিয়ার সম্পর্ক, পরিবর্তনশীলতার অনুপাত এবং ভলিউম পক্ষপাতের সুষম সমন্বয়। ০.৬৮ নির্দেশ করে শীর্ষ প্রবাহের আকার নির্ভরযোগ্য।",
-  },
-  PBIAS: {
-    nameEn: "Percent Bias",
-    nameBn: "শতাংশ পক্ষপাত",
-    benchmark: "< ±10% (Excellent)",
-    formula: "[Σ(Qsim - Qobs) / Σ(Qobs)] × 100",
-    descEn: "+1.8% indicates slight conservative over-prediction, desirable for civil defense early warning to prevent unexpected overtopping.",
-    descBn: "+১.৮% সামান্য রক্ষণশীল পূর্বানুমান নির্দেশ করে, যা সতর্কবার্তার ক্ষেত্রে বাঁধ উপচে পড়া রোধে সহায়ক।",
-  },
-  TIMING: {
-    nameEn: "Peak Arrival Timing Error",
-    nameBn: "শীর্ষ আগমনের সময় ত্রুটি",
-    benchmark: "< 6h Lead Error",
-    formula: "t_peak,model - t_peak,gauge",
-    descEn: "-5.5h error means model predicts the flash flood crest 5.5 hours before gauge observations, giving farmers a vital early warning safety margin.",
-    descBn: "-৫.৫ ঘণ্টার ত্রুটি অর্থ মডেলটি প্রকৃত শীর্ষ পৌঁছানোর সাড়ে ৫ ঘণ্টা আগেই সংকেত দেয়, যা কৃষকদের ফসল রক্ষার অতিরিক্ত সময় দেয়।",
-  },
-  LEAD: {
-    nameEn: "Actionable Warning Lead Time",
-    nameBn: "কার্যকর সতর্কবার্তা আগাম সময়",
-    benchmark: "> 18h Golden Window",
-    formula: "t_warning_flag - t_danger_exceed",
-    descEn: "21.0 hours of advance notice before water level reaches 13.20m PWD danger level, providing the golden window for Boro rice harvesting and livestock evacuation.",
-    descBn: "বিপৎসীমায় পৌঁছানোর ২১ ঘণ্টা আগেই সংকেত, যা বোরো ধান কাটা ও গবাদিপশু নিরাপদে সরিয়ে নেওয়ার জন্য সুবর্ণ সময়।",
-  },
-};
+function getMetricDefinitions(metrics) {
+  const f = metrics?.formatted || {
+    nse: "0.73",
+    kge: "0.68",
+    pbias: "+1.8%",
+    timing_error: "-2.0 h",
+    lead_time: "22.0 h",
+  };
+  const danger = metrics?.danger_level_m ?? 13.2;
+
+  return {
+    NSE: {
+      nameEn: "Nash-Sutcliffe Efficiency",
+      nameBn: "ন্যাশ-সাটক্লিফ দক্ষতা",
+      benchmark: "> 0.65 (Good)",
+      formula: "1 - [Σ(Qobs - Qsim)² / Σ(Qobs - Q̄obs)²]",
+      descEn: `Computed score of ${f.nse} exceeds the scientific benchmark (>0.65), confirming SWOT channel calibration accurately captures hydrodynamics.`,
+      descBn: `গণনাকৃত স্কোর ${f.nse} মানদণ্ড (>০.৬৫) অতিক্রম করেছে, যা প্রমাণ করে SWOT ক্যালিব্রেশন কার্যকর।`,
+    },
+    KGE: {
+      nameEn: "Kling-Gupta Efficiency",
+      nameBn: "ক্লিং-গুপ্তা দক্ষতা",
+      benchmark: "> 0.60 (Balanced)",
+      formula: "1 - √[(r - 1)² + (α - 1)² + (β - 1)²]",
+      descEn: `Computed score of ${f.kge} integrates correlation, variability ratio, and volume bias for balanced hydrograph crest reproduction.`,
+      descBn: `গণনাকৃত স্কোর ${f.kge} লিনিয়ার সম্পর্ক, পরিবর্তনশীলতা ও ভলিউম পক্ষপাতের সুষম সমন্বয় নিশ্চিত করে।`,
+    },
+    PBIAS: {
+      nameEn: "Percent Bias",
+      nameBn: "শতাংশ পক্ষপাত",
+      benchmark: "< ±10% (Excellent)",
+      formula: "[Σ(Qsim - Qobs) / Σ(Qobs)] × 100",
+      descEn: `${f.pbias} indicates slight conservative bias, desirable for civil defense early warning to prevent unexpected levee overtopping.`,
+      descBn: `${f.pbias} সামান্য রক্ষণশীল পূর্বানুমান নির্দেশ করে, যা বাঁধ উপচে পড়া রোধে অত্যন্ত কার্যকর।`,
+    },
+    TIMING: {
+      nameEn: "Peak Arrival Timing Error",
+      nameBn: "শীর্ষ আগমনের সময় ত্রুটি",
+      benchmark: "< 6h Lead Error",
+      formula: "t_peak,model - t_peak,gauge",
+      descEn: `${f.timing_error} crest error means the model alerts before peak crest reaches the gauge, giving farmers advance safety margin.`,
+      descBn: `${f.timing_error} শীর্ষ ত্রুটি নির্দেশ করে মডেলটি গেজে পানি ওঠার পূর্বেই সংকেত প্রদান করে।`,
+    },
+    LEAD: {
+      nameEn: "Actionable Warning Lead Time",
+      nameBn: "কার্যকর সতর্কবার্তা আগাম সময়",
+      benchmark: "> 18h Golden Window",
+      formula: "t_warning_flag - t_danger_exceed",
+      descEn: `${f.lead_time} advance notice before water level reaches ${danger.toFixed(2)}m danger level — the golden window for Boro harvesting.`,
+      descBn: `বিপৎসীমায় (${danger.toFixed(2)} মি) পৌঁছানোর ${f.lead_time} আগেই সংকেত — বোরো ধান কাটার সুবর্ণ সময়।`,
+    },
+  };
+}
 
 export default function ValidationMetricsPanel({ metrics, lang }) {
   const [activeTooltip, setActiveTooltip] = useState(null);
 
   if (!metrics) return null;
 
+  const defs = getMetricDefinitions(metrics);
+
   const metricCards = [
     {
       key: "NSE",
       label: "NSE",
       value: metrics.formatted.nse,
-      name: lang === "en" ? METRIC_DEFINITIONS.NSE.nameEn : METRIC_DEFINITIONS.NSE.nameBn,
-      def: METRIC_DEFINITIONS.NSE,
+      name: lang === "en" ? defs.NSE.nameEn : defs.NSE.nameBn,
+      def: defs.NSE,
     },
     {
       key: "KGE",
       label: "KGE",
       value: metrics.formatted.kge,
-      name: lang === "en" ? METRIC_DEFINITIONS.KGE.nameEn : METRIC_DEFINITIONS.KGE.nameBn,
-      def: METRIC_DEFINITIONS.KGE,
+      name: lang === "en" ? defs.KGE.nameEn : defs.KGE.nameBn,
+      def: defs.KGE,
     },
     {
       key: "PBIAS",
       label: "PBIAS",
       value: metrics.formatted.pbias,
-      name: lang === "en" ? METRIC_DEFINITIONS.PBIAS.nameEn : METRIC_DEFINITIONS.PBIAS.nameBn,
-      def: METRIC_DEFINITIONS.PBIAS,
+      name: lang === "en" ? defs.PBIAS.nameEn : defs.PBIAS.nameBn,
+      def: defs.PBIAS,
     },
     {
       key: "TIMING",
       label: lang === "en" ? "PEAK TIMING" : "শীর্ষ সময়",
       value: metrics.formatted.timing_error,
-      name: lang === "en" ? METRIC_DEFINITIONS.TIMING.nameEn : METRIC_DEFINITIONS.TIMING.nameBn,
-      def: METRIC_DEFINITIONS.TIMING,
+      name: lang === "en" ? defs.TIMING.nameEn : defs.TIMING.nameBn,
+      def: defs.TIMING,
     },
     {
       key: "LEAD",
       label: lang === "en" ? "WARNING LEAD" : "আগাম সতর্কতা",
       value: metrics.formatted.lead_time,
-      name: lang === "en" ? METRIC_DEFINITIONS.LEAD.nameEn : METRIC_DEFINITIONS.LEAD.nameBn,
-      def: METRIC_DEFINITIONS.LEAD,
+      name: lang === "en" ? defs.LEAD.nameEn : defs.LEAD.nameBn,
+      def: defs.LEAD,
       accent: true,
     },
   ];

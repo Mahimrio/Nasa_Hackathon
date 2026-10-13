@@ -156,12 +156,12 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 
 **Speaker 4 (Impact Lead / Speaker 1):**
 > "Our system is backed by rigorous scientific validation against actual BWDB gauge observations at Kanaighat:  
-> We achieve a **Nash-Sutcliffe Efficiency (NSE) of 0.74**,  
+> We achieve a **Nash-Sutcliffe Efficiency (NSE) of 0.73**,  
 > a **Kling-Gupta Efficiency (KGE) of 0.68**,  
-> a **Percent Bias (PBIAS) of plus-one-point-eight percent**,  
-> and a **Warning Lead Time of twenty-one hours** before the danger level was breached.  
+> a **Percent Bias (PBIAS) of plus-one-point-nine percent**,  
+> and a **Warning Lead Time of twenty-two-point-five hours**—gaining over twenty-two hours of peak timing accuracy compared to a naive rainfall baseline.  
 > 
-> That twenty-one-hour window allows officers to deploy combine harvesters and volunteer brigades to rescue the mature grain.  
+> That twenty-two-hour window allows officers to deploy combine harvesters and volunteer brigades to rescue the mature grain before the 13.20 meter danger level is breached.  
 > 
 > With our built-in **Bangla language toggle**, advisories can be broadcast directly over Union Parishad loudspeakers.  
 > And our permanently visible **Operational Limits Panel** ensures scientific honesty: acknowledging that SWOT provides offline geometry rather than a continuous live gauge.  

@@ -2,6 +2,38 @@
 
 import { useState } from "react";
 
+/**
+ * CVD-Safe Cividis Colormap Interpolator
+ * Optimized for normal vision, deuteranomaly, and protanomaly.
+ * Ramps continuously from deep navy (#00204d) at low ratio to vivid gold (#fde725) at danger crest.
+ */
+export function getCividisColor(ratio) {
+  // Normalize ratio in [0.50, 1.05]
+  const t = Math.min(1, Math.max(0, (ratio - 0.50) / (1.05 - 0.50)));
+  const cividisRamps = [
+    { t: 0.0, r: 0, g: 32, b: 77 }, // #00204d (deep navy)
+    { t: 0.25, r: 44, g: 73, b: 114 }, // #2c4972 (slate blue)
+    { t: 0.5, r: 92, g: 104, b: 118 }, // #5c6876 (muted slate)
+    { t: 0.75, r: 168, g: 153, b: 92 }, // #a8995c (warm olive/amber)
+    { t: 1.0, r: 253, g: 231, b: 37 }, // #fde725 (vivid yellow/gold)
+  ];
+  let lower = cividisRamps[0];
+  let upper = cividisRamps[cividisRamps.length - 1];
+  for (let i = 0; i < cividisRamps.length - 1; i++) {
+    if (t >= cividisRamps[i].t && t <= cividisRamps[i + 1].t) {
+      lower = cividisRamps[i];
+      upper = cividisRamps[i + 1];
+      break;
+    }
+  }
+  const span = upper.t - lower.t;
+  const f = span > 0 ? (t - lower.t) / span : 0;
+  const red = Math.round(lower.r + f * (upper.r - lower.r));
+  const green = Math.round(lower.g + f * (upper.g - lower.g));
+  const blue = Math.round(lower.b + f * (upper.b - lower.b));
+  return `rgb(${red}, ${green}, ${blue})`;
+}
+
 export default function RiverMapPanel({
   reaches,
   riskFn,
@@ -26,11 +58,13 @@ export default function RiverMapPanel({
     return "#30E08A";
   };
 
-  const riskGlow = (id) => {
-    const level = riskFn(id);
-    if (level === "RED") return "rgba(255, 100, 124, 0.5)";
-    if (level === "AMBER") return "rgba(255, 196, 92, 0.4)";
-    return "rgba(48, 224, 138, 0.35)";
+  const getReachCividis = (reachId) => {
+    const stageRatio = currentStage / dangerLevel;
+    const level = riskFn(reachId);
+    let ratio = stageRatio;
+    if (level === "AMBER" && ratio < 0.82) ratio = 0.85;
+    if (level === "RED" && ratio < 0.98) ratio = 1.02;
+    return getCividisColor(ratio);
   };
 
   // Schematic calibrated reach geometries with realistic meanders
@@ -42,7 +76,7 @@ export default function RiverMapPanel({
       flowD: "M 345,35 C 325,58 295,78 260,110 C 248,122 235,130 220,140",
       gaugePos: { x: 260, y: 110 },
       labelPos: { x: 285, y: 92 },
-      swotPass: "Pass 018",
+      swotPass: "SWOT Pass 018* (14-Apr)",
     },
     {
       id: "22211000012",
@@ -50,7 +84,7 @@ export default function RiverMapPanel({
       d: "M 220,140 C 190,160 165,175 125,195 C 95,210 70,220 35,235",
       flowD: "M 220,140 C 190,160 165,175 125,195 C 95,210 70,220 35,235",
       labelPos: { x: 130, y: 180 },
-      swotPass: "Pass 042",
+      swotPass: "SWOT Pass 042* (16-Apr)",
     },
     {
       id: "22211000021",
@@ -58,7 +92,7 @@ export default function RiverMapPanel({
       d: "M 355,55 C 335,78 300,105 265,135 C 245,152 225,165 195,178",
       flowD: "M 355,55 C 335,78 300,105 265,135 C 245,152 225,165 195,178",
       labelPos: { x: 300, y: 150 },
-      swotPass: "Pass 018",
+      swotPass: "SWOT Pass 018* (14-Apr)",
     },
     {
       id: "22211000022",
@@ -66,7 +100,7 @@ export default function RiverMapPanel({
       d: "M 195,178 C 165,195 130,215 90,238 C 65,250 40,258 15,265",
       flowD: "M 195,178 C 165,195 130,215 90,238 C 65,250 40,258 15,265",
       labelPos: { x: 145, y: 228 },
-      swotPass: "Pass 042",
+      swotPass: "SWOT Pass 042* (16-Apr)",
     },
   ];
 
@@ -235,6 +269,11 @@ export default function RiverMapPanel({
               <stop offset="70%" stopColor="#122c42" stopOpacity="0.05" />
               <stop offset="100%" stopColor="transparent" stopOpacity="0" />
             </radialGradient>
+
+            {/* SVG Hatching Pattern for Slope-Uncertain Reaches */}
+            <pattern id="uncertainHatch" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+              <line x1="0" y1="0" x2="0" y2="8" stroke="#FFC45C" strokeWidth="2.5" strokeOpacity="0.85" />
+            </pattern>
           </defs>
 
           {/* Background Cartographic Terrain relief */}
@@ -324,7 +363,8 @@ export default function RiverMapPanel({
               const r = reachMap[p.id];
               const isSelected = selectedReachId === p.id;
               const isHovered = hoveredReach === p.id;
-              const color = riskColor(p.id);
+              const cividisStroke = getReachCividis(p.id);
+              const isUncertainSlope = r?.slope_quality === "uncertain";
               const width = r ? Math.max(3.5, r.width_mean_m / 35) : 4.5;
               const reachName = r ? (lang === "en" ? r.name : r.name_bn) : p.name;
 
@@ -344,25 +384,37 @@ export default function RiverMapPanel({
                     }
                   }}
                 >
-                  {/* Outer Reach Soft Glow */}
+                  {/* Outer Reach Soft Glow with Cividis/Cyan Tint */}
                   <path
                     d={p.d}
                     fill="none"
-                    stroke={isSelected ? "#74ECFF" : color}
+                    stroke={isSelected ? "#74ECFF" : cividisStroke}
                     strokeWidth={width + (isSelected ? 6 : isHovered ? 4 : 2)}
-                    strokeOpacity={isSelected ? 0.45 : 0.25}
+                    strokeOpacity={isSelected ? 0.5 : 0.28}
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     filter="url(#cyanGlow)"
                   />
 
-                  {/* Main Core River Stroke */}
+                  {/* Main Core River Stroke (Cividis Colormap) */}
                   <path
                     d={p.d}
                     className={`reach-path-base ${isSelected ? "reach-path-selected" : ""}`}
-                    stroke={isSelected ? "#74ECFF" : color}
+                    stroke={isSelected ? "#74ECFF" : cividisStroke}
                     strokeWidth={width}
                   />
+
+                  {/* Slope Uncertainty Hatched Overlay Pattern */}
+                  {isUncertainSlope && (
+                    <path
+                      d={p.d}
+                      fill="none"
+                      stroke="url(#uncertainHatch)"
+                      strokeWidth={width + 3}
+                      strokeLinecap="round"
+                      pointerEvents="none"
+                    />
+                  )}
 
                   {/* Flow Vector Traveling Dash (Animates along flow vector) */}
                   {showFlowAnim && (
@@ -386,16 +438,18 @@ export default function RiverMapPanel({
                     {reachName}
                   </text>
 
-                  {/* Secondary Manning roughness tag */}
+                  {/* Secondary Manning roughness tag with SWOT pass asterisk */}
                   <text
                     x={p.labelPos.x}
                     y={p.labelPos.y + 13}
-                    fontSize="12"
+                    fontSize="11.5"
                     fill="#94A3B8"
                     fontFamily="var(--font-mono)"
                     pointerEvents="none"
                   >
-                    {r ? `SWOT n=${r.calibrated_n} · W=${r.width_mean_m}m` : ""}
+                    {r
+                      ? `${p.swotPass} · n=${r.calibrated_n} · W=${r.width_mean_m}m${isUncertainSlope ? " ⚠" : ""}`
+                      : ""}
                   </text>
                 </g>
               );
@@ -464,28 +518,54 @@ export default function RiverMapPanel({
 
       {/* Map Bottom Legend & Controls Bar */}
       <div className="map-bottom-legend">
-        <div className="legend-swatches-row">
-          <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#30E08A" }} />
-            <span>{lang === "en" ? "Safe (<80% Danger)" : "নিরাপদ"}</span>
+        <div className="legend-swatches-row" style={{ flexWrap: "wrap", gap: "16px" }}>
+          {/* Cividis Colorbar Gradient Swatch */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text-secondary)" }}>
+              {lang === "en" ? "Cividis Ratio:" : "সিভিডিস অনুপাত:"}
+            </span>
+            <div
+              style={{
+                width: "90px",
+                height: "8px",
+                borderRadius: "4px",
+                background: "linear-gradient(90deg, #00204d 0%, #2c4972 25%, #5c6876 50%, #a8995c 75%, #fde725 100%)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+              title="CVD-safe Cividis colormap: Safe base flow to critical crest"
+            />
+            <span style={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+              0.50 → 1.05+
+            </span>
           </div>
-          <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#FFC45C" }} />
-            <span>{lang === "en" ? "Watch (80-100%)" : "সতর্কতা"}</span>
-          </div>
-          <div className="swatch-group">
-            <span className="swatch-line" style={{ background: "#FF647C" }} />
-            <span>{lang === "en" ? "Critical (>13.20m)" : "জরুরি"}</span>
-          </div>
+
           <div className="swatch-group">
             <span className="swatch-dot" style={{ background: "#FFC45C" }} />
-            <span>{lang === "en" ? "BWDB Gauge Station" : "BWDB গেজ স্টেশন"}</span>
+            <span>{lang === "en" ? "SW108 Gauge" : "SW১০৮ গেজ"}</span>
+          </div>
+
+          {/* Hatching indicator */}
+          <div className="swatch-group">
+            <span
+              style={{
+                width: "14px",
+                height: "10px",
+                borderRadius: "2px",
+                border: "1px solid #FFC45C",
+                background: "repeating-linear-gradient(45deg, #FFC45C, #FFC45C 2px, transparent 2px, transparent 4px)",
+              }}
+            />
+            <span>{lang === "en" ? "Uncertain slope" : "অনিশ্চিত ঢাল"}</span>
+          </div>
+
+          <div style={{ fontSize: "11px", color: "var(--text-muted)", fontStyle: "italic" }}>
+            {lang === "en" ? "* SWOT KaRIn satellite overpass" : "* SWOT উপগ্রহ ওভারপাস"}
           </div>
         </div>
 
         <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
           {lang === "en"
-            ? "Click any river reach to inspect calibrated roughness (Manning n)"
+            ? "Click any reach to inspect calibrated roughness (Manning n) and cross-section"
             : "ক্যালিব্রেটেড প্যারামিটার দেখতে যেকোনো রিচে ক্লিক করুন"}
         </div>
       </div>

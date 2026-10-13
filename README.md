@@ -22,9 +22,9 @@ HydroSense-SWOT delivers an actionable early-warning harvest decision tool for U
    python pipeline/run_pipeline.py
    python scripts/export_json.py
    ```
-4. **Run test suite:**  
+4. **Run test suite (33 unit tests):**  
    ```bash
-   python -m pytest tests/test_pipeline.py -v
+   python -m pytest tests/ -v
    ```
 5. **Launch Next.js interactive dashboard:**  
    ```bash
@@ -39,12 +39,12 @@ HydroSense-SWOT delivers an actionable early-warning harvest decision tool for U
 - **SWORD v16 & HydroSHEDS v1:** River network topology, reach boundaries, and catchment area delineation (`hydrosheds.org`).
 
 ## Scientific Results (Replay of April 2026 Event)
-All metrics computed directly from code on the independent test period (April–May 2026):
-* **Nash-Sutcliffe Efficiency (NSE):** `0.74`
-* **Kling-Gupta Efficiency (KGE):** `0.68`
-* **Percent Bias (PBIAS):** `+1.8%`
-* **Peak Timing Error:** `-5.5 h`
-* **Warning Lead Time:** `21.0 h` advance warning before observed gauge crossed danger level
+All metrics evaluated on the independent test period (April 1 – May 31, 2026) using 15-minute tolerance alignment against BWDB Kanaighat gauge records:
+* **Nash-Sutcliffe Efficiency (NSE):** `0.73` (vs `-0.15` rainfall baseline, `+0.88` gain)
+* **Kling-Gupta Efficiency (KGE):** `0.68` (vs `0.46` rainfall baseline)
+* **Percent Bias (PBIAS):** `+1.9%` (vs `+2.6%` rainfall baseline)
+* **Peak Timing Error:** `-2.0 h` (vs `-24.0 h` rainfall baseline, `+22.0 h` accuracy gain)
+* **Warning Lead Time:** `22.5 h` advance warning before observed gauge crossed danger level ($13.20\text{ m PWD}$)
 
 ## Limitations & Operational Boundaries
 - **Spatial Resolution:** SWOT resolves rivers wider than ~100 m. Narrow headwater tributaries in Meghalaya are not resolved.
@@ -57,6 +57,8 @@ All metrics computed directly from code on the independent test period (April–
 Distributed under the **MIT License**. See `LICENSE` for details.
 
 ## Documentation Links
+- [HYDROSENSE_BUILD_PROMPTS.md](docs/HYDROSENSE_BUILD_PROMPTS.md) — Step-by-step verified engineering prompts
+- [validation_report.md](data/processed/validation_report.md) — Formal scientific validation report with diagnostic figures
 - [SOLUTION_ARCHITECTURE.md](docs/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
 - [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) — Visual & interaction design architecture specification for the delivery dashboard
 - [Problem_and_Challenge_Statement.md](docs/Problem_and_Challenge_Statement.md) — Core problem statement and elevator pitches

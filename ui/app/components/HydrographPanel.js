@@ -27,6 +27,7 @@ export default function HydrographPanel({
   timeStr,
   lang,
   peakIdx,
+  selectedReach,
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [playSpeed, setPlaySpeed] = useState(1); // 1x, 2x, 5x
@@ -49,6 +50,11 @@ export default function HydrographPanel({
   }, [isPlaying, playSpeed, eventDataLength, setSliderIdx]);
 
   const currentTimeFormatted = current ? current.timestamp.slice(5, 16).replace("T", " ") : "";
+  const reachDisplayName = selectedReach
+    ? lang === "en"
+      ? selectedReach.name
+      : selectedReach.name_bn
+    : "SW108 Kanaighat";
 
   return (
     <section className="glass-panel card-padding hydrograph-panel" aria-label="Hydrologic Time-Series Analysis">
@@ -63,34 +69,38 @@ export default function HydrographPanel({
           <div>
             <div className="card-title">
               {lang === "en"
-                ? "Hydrograph — SW108 Kanaighat (Surma River Corridor)"
-                : "হাইড্রোগ্রাফ — SW১০৮ কানাইঘাট (সুরমা নদী)"}
+                ? `Hydrograph — ${reachDisplayName} (Surma River Corridor)`
+                : `হাইড্রোগ্রাফ — ${reachDisplayName} (সুরমা নদী)`}
             </div>
           </div>
         </div>
 
         {/* Legend */}
         <div className="chart-header-actions">
-          <div style={{ display: "flex", alignItems: "center", gap: "16px", fontSize: "12px", color: "var(--text-secondary)" }}>
+          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "14px", fontSize: "12px", color: "var(--text-secondary)" }}>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "12px", height: "3px", background: "#35D8F2", borderRadius: "2px" }} />
+              <span style={{ width: "14px", height: "3px", background: "#35D8F2", borderRadius: "2px" }} />
               {lang === "en" ? "Modelled Stage" : "মডেল স্তর"}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "12px", height: "3px", background: "#FFC45C", borderTop: "2px dashed #FFC45C" }} />
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #F8FAFC" }} />
               {lang === "en" ? "BWDB Observed" : "পর্যবেক্ষিত"}
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dotted #94A3B8" }} />
+              {lang === "en" ? "Rainfall Baseline" : "বেসলাইন"}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "10px", height: "8px", background: "rgba(53, 216, 242, 0.2)", borderRadius: "2px" }} />
               {lang === "en" ? "±0.18m Uncertainty" : "±০.১৮ মি অনিশ্চয়তা"}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "10px", height: "8px", background: "rgba(77, 170, 223, 0.6)", borderRadius: "2px" }} />
+              <span style={{ width: "10px", height: "8px", background: "rgba(56, 189, 248, 0.6)", borderRadius: "2px" }} />
               {lang === "en" ? "IMERG Rain (mm/h)" : "বৃষ্টি (মিমি/ঘ)"}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "12px", height: "2px", background: "#FF647C", borderTop: "2px dashed #FF647C" }} />
-              {lang === "en" ? "Danger (13.20m)" : "বিপদসীমা"}
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #FFC45C" }} />
+              {lang === "en" ? `Danger (${dangerLevel.toFixed(2)}m)` : `বিপদসীমা (${dangerLevel.toFixed(2)}m)`}
             </span>
           </div>
         </div>
@@ -138,7 +148,7 @@ export default function HydrographPanel({
               domain={["auto", "auto"]}
               tick={{ fontSize: 10.5, fill: "#71849C", fontFamily: "var(--font-mono)" }}
               label={{
-                value: lang === "en" ? "Stage (m PWD)" : "পানি স্তর (m PWD)",
+                value: lang === "en" ? "Water Level (m PWD)" : "পানির স্তর (m PWD)",
                 angle: -90,
                 position: "insideLeft",
                 fontSize: 11,
@@ -168,17 +178,17 @@ export default function HydrographPanel({
               name={lang === "en" ? "Lower 95% Bound" : "নিম্ন সীমা"}
             />
 
-            {/* Danger Level Reference Line */}
+            {/* Danger Level Reference Line (Amber Dashed at 13.20m) */}
             <ReferenceLine
               y={dangerLevel}
-              stroke="#FF647C"
+              stroke="#FFC45C"
               strokeDasharray="6 4"
-              strokeWidth={1.5}
+              strokeWidth={1.8}
               label={{
-                value: lang === "en" ? `Danger ${dangerLevel}m` : `বিপদসীমা ${dangerLevel}m`,
+                value: lang === "en" ? `Danger ${dangerLevel.toFixed(2)}m` : `বিপদসীমা ${dangerLevel.toFixed(2)}m`,
                 position: "right",
                 fontSize: 10,
-                fill: "#FF647C",
+                fill: "#FFC45C",
                 fontWeight: 700,
               }}
             />
@@ -210,16 +220,29 @@ export default function HydrographPanel({
               name={lang === "en" ? "Modelled Stage" : "মডেল স্তর"}
             />
 
-            {/* Observed Water Stage (Gold Dashed Line with Dots) */}
+            {/* Observed Water Stage (White Dashed Line with Soft Points) */}
             <Line
               type="monotone"
               dataKey="observed"
-              stroke="#FFC45C"
+              stroke="#F8FAFC"
               strokeWidth={2}
               strokeDasharray="5 3"
               dot={false}
-              activeDot={{ r: 4, fill: "#FFC45C", stroke: "#050A12", strokeWidth: 1.5 }}
+              activeDot={{ r: 4, fill: "#F8FAFC", stroke: "#050A12", strokeWidth: 1.5 }}
               name={lang === "en" ? "BWDB Observed" : "BWDB পর্যবেক্ষণ"}
+              connectNulls={false}
+            />
+
+            {/* Baseline Water Stage (Grey Dotted Line) */}
+            <Line
+              type="monotone"
+              dataKey="baseline"
+              stroke="#94A3B8"
+              strokeWidth={1.8}
+              strokeDasharray="2 3"
+              dot={false}
+              activeDot={{ r: 3, fill: "#94A3B8", stroke: "#050A12", strokeWidth: 1.5 }}
+              name={lang === "en" ? "Rainfall Baseline" : "বৃষ্টি বেসলাইন"}
               connectNulls={false}
             />
 
