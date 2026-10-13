@@ -15,7 +15,7 @@ The dashboard provides Upazila Agriculture Officers in the flood-prone Haor basi
 - **Harvest Decision Engine (`HarvestDecisionPanel.js`):** Prominent glowing status orb (NORMAL / WATCH / CRITICAL) with:
   - Bilingual agricultural advisory (English / বাংলা) instructing immediate or scheduled harvest.
   - Physical water column progress bar comparing modelled stage against the 13.20 m PWD danger level.
-  - Monospace hydraulic telemetry readout (Modelled stage, danger level, clearance buffer, BWDB observed level, wave travel time ~25.9h, warning lead time 21.0h).
+  - Monospace hydraulic telemetry readout (Modelled stage, danger level, clearance buffer, BWDB observed level, wave travel time ~25.9h, warning lead time 22.0h).
 - **Synchronized Dual Hydrograph (`HydrographPanel.js`):**
   - Inverted GPM IMERG Early Run rainfall hyetograph (mm/h) with cyan-to-blue gradient bars.
   - Main stage hydrograph with modelled water levels, BWDB observed gauge readings, and dynamic $\pm 0.18\text{ m}$ analytical uncertainty envelope.
@@ -23,7 +23,7 @@ The dashboard provides Upazila Agriculture Officers in the flood-prone Haor basi
   - Current-time vertical reference cursor line.
   - Full simulation replay engine with Play/Pause loop, 1x/2x/5x speed selector, -1h/+1h stepping, and tactile range scrubber.
 - **Scientific Validation Benchmarks (`ValidationMetricsPanel.js`):** 5-column metric cards:
-  - NSE (`0.74`), KGE (`0.68`), PBIAS (`+1.8%`), Peak Timing Error (`-5.5 h`), and Warning Lead Time (`21.0 h`).
+  - NSE (`0.73`), KGE (`0.68`), PBIAS (`+1.8%`), Peak Timing Error (`-2.0 h`), and Warning Lead Time (`22.0 h`).
   - Interactive infomorphism definition popovers explaining formulas and benchmark criteria on hover.
 - **Permanent Operational Limits Panel (`OperationalLimitsPanel.js`):** Permanently visible physical constraints (§4.1), covering SWOT spatial resolution (>100 m), slope noise filtering, IMERG orographic bias, and routing regime.
 - **Interactive Modals:**

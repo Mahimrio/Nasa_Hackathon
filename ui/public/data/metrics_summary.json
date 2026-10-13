@@ -1,15 +1,36 @@
 {
-  "nse": 0.74,
+  "nse": 0.73,
   "kge": 0.68,
   "pbias": 1.8,
-  "timing_error_h": -5.5,
-  "lead_time_h": 21.0,
+  "timing_error_h": -2.0,
+  "lead_time_h": 22.0,
   "formatted": {
-    "nse": "0.74",
+    "nse": "0.73",
     "kge": "0.68",
     "pbias": "+1.8%",
-    "timing_error": "-5.5 h",
-    "lead_time": "21.0 h"
+    "timing_error": "-2.0 h",
+    "lead_time": "22.0 h"
+  },
+  "baseline": {
+    "nse": -0.15,
+    "kge": 0.46,
+    "pbias": 2.6,
+    "timing_error_h": -24.0,
+    "lead_time_h": 37.5,
+    "formatted": {
+      "nse": "-0.15",
+      "kge": "0.46",
+      "pbias": "+2.6%",
+      "timing_error": "-24.0 h",
+      "lead_time": "37.5 h"
+    }
+  },
+  "comparison": {
+    "nse_gain": 0.88,
+    "timing_accuracy_gain_h": 22.0,
+    "lead_time_delta_h": -15.5,
+    "model_beats_baseline_nse": true,
+    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing peak timing error by +22.0h and achieving NSE 0.73 versus baseline NSE -0.15."
   },
   "danger_level_m": 13.2,
   "travel_time_h": 25.9,

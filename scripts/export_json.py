@@ -124,6 +124,7 @@ def main():
     df_baseline = run_rainfall_baseline(df_routed, threshold_watch=35.0, threshold_act=65.0)
     df_routed["baseline_flag"] = df_baseline["baseline_flag"]
     df_routed["baseline_rain_6h"] = df_baseline["baseline_rain_6h"]
+    df_routed["baseline_stage"] = np.round(7.74 + df_baseline["baseline_rain_6h"] * 0.045, 2)
 
     # ---- 3. Load gauge ----
     df_gauge = pd.read_csv(
@@ -132,8 +133,11 @@ def main():
     )
     df_gauge["timestamp"] = pd.to_datetime(df_gauge["timestamp"], utc=True)
 
-    # ---- 4. Compute metrics ----
-    metrics = evaluate_all_metrics(df_routed, df_gauge, danger_level_m=13.20)
+    # ---- 4. Compute metrics & baseline comparison ----
+    from pipeline.metrics import compare_model_vs_baseline
+    comparison = compare_model_vs_baseline(df_routed, df_baseline, df_gauge, danger_level_m=13.20)
+    hs_m = comparison["hydrosense"]
+    base_m = comparison["baseline"]
 
     # ================ EXPORT JSON FILES ================
 
@@ -171,12 +175,21 @@ def main():
 
     # D. Metrics Summary
     metrics_out = {
-        "nse": round(metrics["nse"], 2),
-        "kge": round(metrics["kge"], 2),
-        "pbias": round(metrics["pbias"], 1),
-        "timing_error_h": round(metrics["timing_error_h"], 1),
-        "lead_time_h": round(metrics["lead_time_h"], 1),
-        "formatted": metrics["formatted"],
+        "nse": round(hs_m["nse"], 2) if hs_m["nse"] is not None else None,
+        "kge": round(hs_m["kge"], 2) if hs_m["kge"] is not None else None,
+        "pbias": round(hs_m["pbias"], 1) if hs_m["pbias"] is not None else None,
+        "timing_error_h": round(hs_m["timing_error_h"], 1),
+        "lead_time_h": round(hs_m["lead_time_h"], 1),
+        "formatted": hs_m["formatted"],
+        "baseline": {
+            "nse": round(base_m["nse"], 2) if base_m["nse"] is not None else None,
+            "kge": round(base_m["kge"], 2) if base_m["kge"] is not None else None,
+            "pbias": round(base_m["pbias"], 1) if base_m["pbias"] is not None else None,
+            "timing_error_h": round(base_m["timing_error_h"], 1),
+            "lead_time_h": round(base_m["lead_time_h"], 1),
+            "formatted": base_m["formatted"],
+        },
+        "comparison": comparison["comparison"],
         "danger_level_m": 13.20,
         "travel_time_h": 25.9,
         "imerg_latency_h": 4.0,
@@ -203,6 +216,15 @@ def main():
     with open(os.path.join(JSON_DIR, "reach_metadata.json"), "w", encoding="utf-8") as f:
         json.dump(REACH_META, f, indent=2, ensure_ascii=False)
     print(f"  [5/5] reach_metadata.json ({len(REACH_META)} reaches)")
+
+    # F. Sensitivity Results (if available)
+    sens_csv = os.path.join(PROJECT_ROOT, "data", "processed", "sensitivity_results.csv")
+    if os.path.exists(sens_csv):
+        df_sens = pd.read_csv(sens_csv)
+        sens_records = df_sens.to_dict(orient="records")
+        with open(os.path.join(JSON_DIR, "sensitivity_results.json"), "w", encoding="utf-8") as f:
+            json.dump(sens_records, f, indent=2)
+        print(f"  [Bonus] sensitivity_results.json ({len(sens_records)} runs)")
 
     print("\n  All JSON files exported to: " + JSON_DIR)
     print("=" * 60)

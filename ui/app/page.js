@@ -93,6 +93,7 @@ export default function DashboardPage() {
       lower: d.stage_lower,
       upper: d.stage_upper,
       observed: gaugeMap[d.timestamp] ?? null,
+      baseline: d.baseline_stage ?? (7.74 + (d.baseline_rain_6h ?? 0) * 0.045),
       rainfall: d.imerg_map_mmh,
       flag: d.harvest_flag,
     }));
@@ -104,6 +105,12 @@ export default function DashboardPage() {
     const match = gaugeData.find((g) => g.timestamp === current.timestamp);
     return match ? match.water_level_m : null;
   }, [gaugeData, current]);
+
+  // ---- CURRENT SELECTED REACH ----
+  const selectedReach = useMemo(() => {
+    if (!reachMeta) return null;
+    return reachMeta.find((r) => r.reach_id === selectedReachId) || null;
+  }, [reachMeta, selectedReachId]);
 
   // ---- DYNAMIC REACH RISK CALCULATION ----
   const reachRiskLevel = useCallback(
@@ -220,6 +227,7 @@ export default function DashboardPage() {
             currentGaugeLevel={currentGaugeLevel}
             metrics={metrics}
             lang={lang}
+            selectedReach={selectedReach}
           />
         </div>
 
@@ -238,6 +246,7 @@ export default function DashboardPage() {
             timeStr={timeStr}
             lang={lang}
             peakIdx={peakIdx}
+            selectedReach={selectedReach}
           />
         </div>
 
@@ -245,7 +254,7 @@ export default function DashboardPage() {
         <ValidationMetricsPanel metrics={metrics} lang={lang} />
 
         {/* Permanent Operational Limitations & Methodological Bounds */}
-        <OperationalLimitsPanel lang={lang} />
+        <OperationalLimitsPanel lang={lang} metrics={metrics} />
       </main>
 
       {/* Global Application Footer */}

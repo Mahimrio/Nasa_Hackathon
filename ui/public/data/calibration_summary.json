@@ -2,29 +2,29 @@
   "22211000011": {
     "n": 0.0294,
     "z_bed": 6.82,
-    "n_valid_passes": 65,
-    "mean_slope2": 5.16e-05,
-    "mean_width": 184.9
+    "n_valid_passes": 72,
+    "mean_slope2": 5.17e-05,
+    "mean_width": 185.9
   },
   "22211000012": {
     "n": 0.0339,
     "z_bed": 4.99,
-    "n_valid_passes": 70,
-    "mean_slope2": 4.62e-05,
-    "mean_width": 216.1
+    "n_valid_passes": 72,
+    "mean_slope2": 4.63e-05,
+    "mean_width": 215.6
   },
   "22211000021": {
     "n": 0.0333,
     "z_bed": 6.07,
-    "n_valid_passes": 66,
+    "n_valid_passes": 71,
     "mean_slope2": 4.87e-05,
-    "mean_width": 200.9
+    "mean_width": 200.6
   },
   "22211000022": {
     "n": 0.0337,
     "z_bed": 4.95,
-    "n_valid_passes": 69,
-    "mean_slope2": 4.16e-05,
-    "mean_width": 235.6
+    "n_valid_passes": 73,
+    "mean_slope2": 4.17e-05,
+    "mean_width": 235.8
   }
 }
