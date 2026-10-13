@@ -4,3 +4,9 @@ scipy>=1.15.0
 netCDF4>=1.7.0
 xarray>=2024.0.0
 pytest>=8.0.0
+earthaccess>=0.19.0
+requests>=2.31.0
+rioxarray>=0.17.0
+geopandas>=1.0.0
+h5netcdf>=1.4.0
+

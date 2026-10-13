@@ -70,8 +70,12 @@ def main():
     # Step 3: Run Manning calibration -> assert n per reach in [0.025, 0.10]
     # -------------------------------------------------------------
     print(f"\n[Step 3] Running Manning's Roughness (n) Calibration...")
+    from pipeline.calibration_diagnostics import plot_calibration_diagnostics
+    import json
+
     calibrated_params = {}
     target_reach_id = "22211000011"  # Kanaighat reach
+    cal_json_path = os.path.join(PROJECT_ROOT, "data", "processed", "calibration_results.json")
 
     for r_id in ds_swot["reach_id"].values:
         r_str = str(r_id)
@@ -81,13 +85,31 @@ def main():
             width_series=reach_sub["width"].values,
             slope2_series=reach_sub["slope2"].values,
             slope_u_series=reach_sub["slope_u"].values,
-            quality_series=reach_sub["quality_f"].values,
-            dark_series=reach_sub["dark_frac"].values,
+            wse_u_series=reach_sub["wse_u"].values if "wse_u" in reach_sub else None,
+            quality_series=reach_sub["quality_f"].values if "quality_f" in reach_sub else None,
+            dark_series=reach_sub["dark_frac"].values if "dark_frac" in reach_sub else None,
+            time_series=reach_sub["time"].values if "time" in reach_sub else None,
+            reach_id=r_str,
         )
         assert res["n_valid_passes"] >= 5, f"Reach {r_str} has fewer than 5 valid passes ({res['n_valid_passes']})"
         assert 0.025 <= res["n"] <= 0.10, f"Reach {r_str} calibrated n={res['n']} outside [0.025, 0.10]"
         calibrated_params[r_str] = res
-        print(f"         Reach {r_str}: n = {res['n']:.4f}, z_bed = {res['z_bed']:.2f} m, valid_passes = {res['n_valid_passes']}")
+        print(
+            f"         Reach {r_str}: n = {res['n_calibrated']:.4f}, z_bed = {res['z_bed_m']:.2f} m, "
+            f"valid_passes = {res['n_valid_passes']}, RMSE = {res['rmse_m3s']} m³/s"
+        )
+        print(
+            f"           [Exclusions] Low-flow (<0.5m above bed) = {res['passes_excluded_low_flow']}, "
+            f"Slope noise = {res['passes_excluded_slope_quality']}, At-bound = {res['n_at_bound']}"
+        )
+
+    # Save to data/processed/calibration_results.json
+    os.makedirs(os.path.dirname(cal_json_path), exist_ok=True)
+    with open(cal_json_path, "w", encoding="utf-8") as f:
+        json.dump(calibrated_params, f, indent=2)
+
+    # Generate diagnostic figures
+    plot_calibration_diagnostics(ds_swot, calibrated_params)
 
     # -------------------------------------------------------------
     # Step 4: Load imerg_map.nc -> assert MAP is not all-zero
@@ -167,6 +189,10 @@ def main():
     df_routed["baseline_rain_6h"] = df_baseline["baseline_rain_6h"]
     df_routed.to_csv(out_results_path, index=False)
     print(f"\nSaved processed event results to {out_results_path}")
+
+    # Generate formal scientific validation report and figures (Prompt 5)
+    from pipeline.validation_report import run_scientific_validation
+    run_scientific_validation(out_results_path, os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv"))
 
     print("\n" + "=" * 70)
     print("  MVP PIPELINE PASSED ALL 7 GATES SUCCESSFULLY")

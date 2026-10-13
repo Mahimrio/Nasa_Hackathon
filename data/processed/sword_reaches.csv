@@ -1,0 +1,5 @@
+reach_id,river_name,reach_name,lat_center,lon_center,width_mean_m,slope_mean,length_m,catchment_area_km2,swot_resolved
+22211000011,Surma,Surma-Upper-Kanaighat,25.0125,92.2612,160.0,5.2e-05,12500.0,185.0,True
+22211000012,Surma,Surma-Mid-Sylhet,24.8917,91.8719,190.0,4.6e-05,14200.0,240.0,True
+22211000021,Kushiyara,Kushiyara-Upper-Amalshid,24.871,92.4831,175.0,4.9e-05,13800.0,210.0,True
+22211000022,Kushiyara,Kushiyara-Mid-Sherpur,24.6283,91.6742,210.0,4.1e-05,15000.0,290.0,True

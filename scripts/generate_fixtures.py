@@ -8,6 +8,11 @@ Follows SOLUTION_ARCHITECTURE.md v3.0 specs:
 """
 
 import os
+import sys
+
+# Ensure repository root is on sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import pandas as pd
 import netCDF4  # MUST be before xarray (Trap B2)
@@ -285,7 +290,35 @@ These fixtures provide quality-gated offline datasets for testing and judging de
 
 
 if __name__ == "__main__":
-    generate_swot_reaches()
-    generate_swot_event()
-    generate_imerg_map_and_gauge()
-    print("All fixtures generated successfully!")
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate or ingest HydroSense-SWOT fixtures")
+    parser.add_argument(
+        "--mode",
+        choices=["synthetic", "real"],
+        default="synthetic",
+        help="Fixture generation mode: 'synthetic' (default) or 'real' (calls NASA ingestion pipeline)",
+    )
+    args = parser.parse_args()
+
+    if args.mode == "real":
+        print("Executing Real NASA Data Ingestion Pipeline (Prompt 1)...")
+        from pipeline.ingest_sword import ingest_sword_reaches
+        from pipeline.ingest_swot import ingest_swot_reaches
+
+        print("\nStep 1: Ingesting SWORD v16 reaches (width > 100m)...")
+        ingest_sword_reaches()
+
+        print("\nStep 2: Ingesting & Quality-Gating SWOT L2 HR RiverSP 2.0 data...")
+        ingest_swot_reaches(use_api=True)
+
+        print("\nStep 3: Ensuring event & gauge fixtures exist...")
+        generate_swot_event()
+        generate_imerg_map_and_gauge()
+        print("\n[SUCCESS] Real data ingestion & fixture synchronization complete!")
+    else:
+        print("Generating synthetic fixtures for offline testing...")
+        generate_swot_reaches()
+        generate_swot_event()
+        generate_imerg_map_and_gauge()
+        print("\n[SUCCESS] All synthetic fixtures generated successfully!")
+
