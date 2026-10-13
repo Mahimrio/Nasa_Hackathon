@@ -1,37 +1,73 @@
 """
-Harvest Decision Flag Module for HydroSense-SWOT.
-Follows SOLUTION_ARCHITECTURE.md v3.0 Section 3.4 & Tier 4:
-- Computes operational Harvest Flag based on threshold crossing timing
-- Warning states: GREEN (Wait / অপেক্ষা করুন), AMBER (Prepare / প্রস্তুতি নিন), RED (Harvest Now / দ্রুত ধান কাটুন)
-- Danger level for Surma at Kanaighat: 13.20 m PWD
+HydroSense-SWOT — Harvest Decision Flag & Bilingual Advisory Module
+Upgraded for Prompt 4: P4-ROUTING-ENGINE-REAL
+
+Transforms forward-looking hydrodynamic stage forecasts into actionable,
+single-glance harvest decisions for Upazila Agriculture Officers and Boro rice farmers:
+- GREEN: Normal / অপেক্ষা করুন (Water level within safe channel capacity)
+- AMBER: Watch / প্রস্তুতি নিন (River approaching threshold, mobilize labor within 12-24h)
+- RED: Critical Action / দ্রুত ধান কাটুন (Breach forecast, cut mature Boro immediately)
+
+Guardrails & Critical Ground Rules:
+- Thresholds: BWDB Kanaighat Danger Level = 13.20 m PWD; Amber = 80% DL (10.56 m PWD).
+- Travel Time Driven: Look-ahead window derived dynamically from hydrodynamic routing
+  travel time (K_total_hours ~ 25.9h = ~52 30-min steps), never hardcoded.
+- Data-Driven Peak Date (Guard B10): Peak date extracted programmatically via idxmax().
 """
 
+import logging
+from typing import Optional
 import numpy as np
 import pandas as pd
 
-def compute_harvest_flags(df_routing, danger_level_m=13.20, lead_steps=48):
+logger = logging.getLogger("harvest_flag")
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+
+KANAIGHAT_DANGER_LEVEL_M = 13.20
+AMBER_RATIO = 0.80
+
+
+def compute_harvest_flags(
+    df_routing: pd.DataFrame,
+    danger_level_m: float = KANAIGHAT_DANGER_LEVEL_M,
+    travel_time_hours: Optional[float] = None,
+    lead_steps: Optional[int] = None,
+) -> pd.DataFrame:
     """
-    Computes harvest flags by looking ahead by lead_steps (default 48 steps * 30 min = 24 hours).
-    
+    Computes operational harvest flags using forward hydrodynamic look-ahead.
+
     Parameters:
-    - df_routing: DataFrame containing 'modelled_stage'
-    - danger_level_m: Flood threshold in meters (default 13.20m for Kanaighat)
-    - lead_steps: Number of forward time steps to evaluate future crest
-    
+        df_routing: DataFrame containing 'modelled_stage' and 'timestamp'.
+        danger_level_m: Flood threshold (13.20 m PWD for Kanaighat SW108).
+        travel_time_hours: Hydrodynamic travel time in hours. If None, reads
+                           from df_routing.attrs['travel_time_hours'] or defaults to 26h.
+        lead_steps: Optional explicit look-ahead steps (for backwards compatibility).
+
     Returns:
-    - Updated DataFrame with 'harvest_flag', 'future_stage', 'advisory_en', 'advisory_bn'
+        pd.DataFrame with 'future_stage', 'harvest_flag', 'advisory_en', 'advisory_bn',
+        and peak date metadata (Guard B10).
     """
     df = df_routing.copy()
-    n = len(df)
+    n_steps = len(df)
     stages = df["modelled_stage"].values
 
-    future_stage = np.zeros(n)
-    for i in range(n):
-        # Look forward within the routing window
-        end_idx = min(i + lead_steps, n)
-        future_stage[i] = np.max(stages[i:end_idx])
+    if lead_steps is not None:
+        lead_steps = max(int(lead_steps), 1)
+        if travel_time_hours is None:
+            travel_time_hours = lead_steps * 0.5
+    else:
+        # Determine look-ahead steps from hydrodynamic travel time
+        if travel_time_hours is None:
+            travel_time_hours = df.attrs.get("travel_time_hours", 26.0)
+        # 30-min steps -> steps = hours * 2
+        lead_steps = max(int(round(travel_time_hours * 2)), 1)
 
-    amber_threshold = 0.80 * danger_level_m  # 10.56 m
+    amber_threshold_m = AMBER_RATIO * danger_level_m  # 10.56 m
+
+    future_stage = np.zeros(n_steps)
+    for i in range(n_steps):
+        end_idx = min(i + lead_steps, n_steps)
+        future_stage[i] = np.max(stages[i:end_idx])
 
     flags = []
     adv_en = []
@@ -40,20 +76,54 @@ def compute_harvest_flags(df_routing, danger_level_m=13.20, lead_steps=48):
     for f_lvl in future_stage:
         if f_lvl >= danger_level_m:
             flags.append("RED")
-            adv_en.append("CRITICAL: Surge breach imminent within 24h. Harvest mature Boro immediately.")
-            adv_bn.append("জরুরি: আগামী ২৪ ঘণ্টার মধ্যে বাঁধ উপচে পড়ার আশঙ্কা। এখনই ধান কাটুন।")
-        elif f_lvl >= amber_threshold:
+            adv_en.append(
+                f"CRITICAL: Surge breach forecast within ~{travel_time_hours:.0f}h. Harvest mature Boro immediately."
+            )
+            adv_bn.append(
+                f"জরুরি: আগামী ~{travel_time_hours:.0f} ঘণ্টার মধ্যে বাঁধ উপচে পড়ার আশঙ্কা। পাকা বোরো ধান অবিলম্বে কাটুন।"
+            )
+        elif f_lvl >= amber_threshold_m:
             flags.append("AMBER")
-            adv_en.append("WATCH: River rising rapidly. Prepare labor and harvest within 12-24 hours.")
-            adv_bn.append("সতর্কতা: নদীর পানি দ্রুত বাড়ছে। ১২-২৪ ঘণ্টার মধ্যে ধান কাটার প্রস্তুতি নিন।")
+            adv_en.append(
+                "WATCH: Water rising rapidly towards danger level. Mobilize harvesters and prepare labor."
+            )
+            adv_bn.append(
+                "সতর্কতা: পানি দ্রুত বিপৎসীমার দিকে বাড়ছে। ধান কাটার শ্রমিক ও যন্ত্রপাতি প্রস্তুত রাখুন।"
+            )
         else:
             flags.append("GREEN")
-            adv_en.append("NORMAL: Water level within safe channel capacity. No immediate harvest required.")
-            adv_bn.append("স্বাভাবিক: পানি বিপৎসীমার নিচে। তাৎক্ষণিক ধান কাটার প্রয়োজন নেই।")
+            adv_en.append(
+                "NORMAL: River stage within safe channel capacity. Allow Boro grain to mature."
+            )
+            adv_bn.append(
+                "স্বাভাবিক: পানি নিরাপদ সীমার মধ্যে আছে। ধান পুরোপুরি পাকার জন্য অপেক্ষা করুন।"
+            )
 
     df["future_stage"] = np.round(future_stage, 2)
     df["harvest_flag"] = flags
     df["advisory_en"] = adv_en
     df["advisory_bn"] = adv_bn
 
+    # Guard B10: Peak date driven programmatically from data, never hardcoded
+    peak_idx = df["modelled_stage"].idxmax()
+    peak_timestamp = df.loc[peak_idx, "timestamp"]
+    peak_stage_val = df.loc[peak_idx, "modelled_stage"]
+
+    df.attrs["peak_timestamp"] = str(peak_timestamp)
+    df.attrs["peak_stage_m"] = float(round(peak_stage_val, 2))
+    df.attrs["danger_level_m"] = float(danger_level_m)
+    df.attrs["amber_level_m"] = float(round(amber_threshold_m, 2))
+    df.attrs["look_ahead_hours"] = float(round(travel_time_hours, 1))
+
     return df
+
+
+if __name__ == "__main__":
+    times = pd.date_range("2026-04-10", periods=100, freq="30min", tz="UTC")
+    stages = 8.0 + 5.5 * np.sin(np.linspace(0, np.pi, 100))
+    test_df = pd.DataFrame({"timestamp": times, "modelled_stage": stages})
+    test_df.attrs["travel_time_hours"] = 25.9
+    flagged = compute_harvest_flags(test_df)
+    print("Flag Counts:")
+    print(flagged["harvest_flag"].value_counts())
+    print(f"Data-driven peak: {flagged.attrs['peak_timestamp']} ({flagged.attrs['peak_stage_m']}m)")
