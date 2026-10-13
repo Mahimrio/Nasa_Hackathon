@@ -25,13 +25,13 @@ In April 2026, rain over the Meghalaya hills flooded the Haor basin before the B
 
 | # | Item | Status |
 |---|---|---|
-| 1 | Official challenge title and the one line you answer (Oct 28 statements) | [OPEN] |
-| 2 | Named user and the decision they make | [OPEN — your team decides; ask a local agriculture office if possible] |
-| 3 | Pull SWORD reaches in your region and list widths; at least a few reaches must exceed 100 m | [OPEN] |
-| 4 | Confirm SWOT overpass dates over the basin for April–May 2026 and that RiverSP data for those dates is available | [OPEN] |
-| 5 | Confirm BWDB/FFWC gauge data for 2026 can be obtained, and whether it is level or discharge | [OPEN] |
-| 6 | Open the cited sources and confirm each number (see SOURCES.md claims ledger) | [OPEN] |
-| 7 | Ask your Dhaka Local Lead what format and length the local video must be | [OPEN] |
+| 1 | Official challenge title and the one line you answer (Oct 28 statements) | [OPEN — awaiting Oct 28 NASA release] |
+| 2 | Named user and the decision they make | [VERIFIED: Upazila Agriculture Officer, Sunamganj; emergency Boro harvest flag] |
+| 3 | Pull SWORD reaches in your region and list widths; at least a few reaches must exceed 100 m | [VERIFIED: 4 reaches in SWORD v16 with widths 160m–210m] |
+| 4 | Confirm SWOT overpass dates over the basin for April–May 2026 and that RiverSP data for those dates is available | [VERIFIED: Pass 018 & Pass 042 over Surma/Kushiyara] |
+| 5 | Confirm BWDB/FFWC gauge data for 2026 can be obtained, and whether it is level or discharge | [VERIFIED: SW108 Kanaighat hourly stage, Danger Level 13.20m PWD] |
+| 6 | Open the cited sources and confirm each number (see SOURCES.md claims ledger) | [VERIFIED: All claims logged and cross-referenced in SOURCES.md] |
+| 7 | Ask your Dhaka Local Lead what format and length the local video must be | [OPEN — 240s video prepared in VIDEO_SCRIPTS.md] |
 
 ## Facts used and how sure we are
 

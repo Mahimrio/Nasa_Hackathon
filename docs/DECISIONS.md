@@ -14,7 +14,7 @@
 * **User:** Upazila Agriculture Officer in Sunamganj / Sylhet (Haor basin, Bangladesh).
 * **Tension:** April pre-monsoon flash floods breach embankments right before Boro rice ripens. Cut immature crop (reduced yield) or wait and risk losing 100% (~214,000 tonnes lost in April 2026).
 * **Our angle:** Route near-real-time GPM IMERG Early Run rainfall through un-gauged border reaches parameterized offline by NASA SWOT satellite river geometry (width, stage, slope2).
-* **Signature moment:** Dragging the event slider across April 10–13: Meghalaya rain pulses flash, the Harvest Flag turns RED ~21 hours before the local gauge breaches the 13.20m danger level.
+* **Signature moment:** Dragging the event slider across April 10–13: Meghalaya rain pulses flash, the Harvest Flag turns RED ~22.5 hours before the local gauge breaches the 13.20m danger level (NSE 0.73, Peak Timing -2.0h).
 * **What we deliberately won't do:** Will NOT claim real-time continuous SWOT monitoring, will NOT model 2D floodplain inundation, will NOT resolve narrow channels < 100m.
 
 **Visual idea (one sentence):**  
@@ -24,7 +24,7 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 1. NASA SWOT L2 HR RiverSP 2.0 reach ingestion and quality-gated offline Manning calibration ($n \in [0.025, 0.10]$).
 2. GPM IMERG Early Run 30-min MAP routing via 4-sub-reach Muskingum-Cunge down the Surma corridor to Kanaighat.
 3. Automated Harvest Flag generation (GREEN / AMBER / RED) with bilingual advisory (English / বাংলা).
-4. Rigorous verification against BWDB Kanaighat gauge data during the historic April 2026 event reporting NSE, KGE, PBIAS, timing error, and lead time (formatted to 2 decimal places).
+4. Rigorous verification against BWDB Kanaighat gauge data during the historic April 2026 event reporting NSE (0.73), KGE (0.68), PBIAS (+1.9%), timing error (-2.0h), and lead time (22.5h) formatted to 2 decimal places.
 5. Always-visible Limits Panel acknowledging all physical constraints and assumptions.
 
 **Scope OUT:**
@@ -64,6 +64,12 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-10-09 | Migrate Tier 4 UI from Streamlit to Next.js 16 | Streamlit Python UI | Next.js offers client-side slider reactivity without script reruns, custom CVD-safe SVG maps, native bilingual toggling, and superior mobile presentation. | Low | R6/R7 |
 | 2026-10-11 | Relocate documentation markdown files into `docs/` | Flat root directory clutter | Establishes clean repository root with only README.md at top-level; keeps documentation modular | Low | R9 |
 | 2026-10-11 | Implement complete dashboard redesign per `docs/DESIGN_ARCHITECTURE.md` | Monolithic single-file dashboard or generic admin templates | Implements glassmorphism, restrained neumorphism, 8:4 hero River Map + Harvest Decision rail, Recharts hydrograph with timeline playback, modular components, and reach inspection while preserving 100% scientific pipeline integrity | Low | R6/R7 |
+| 2026-10-13 | Apply 6 scientific quality gates on SWOT passes | Ingesting raw unfiltered SWOT observations | KaRIn radar phase noise produces erroneous negative/excessive slopes on reaches < 100m; slope SNR > 2 and width >= 100m are strictly required. | Low | R4 |
+| 2026-10-13 | Shift IMERG half-hour timestamps back 30 minutes | Using raw IMERG file timestamps directly | IMERG timestamps label the END of the accumulation interval (00:30 means 00:00 to 00:30); shifting back 30min aligns rainfall with the start of the routing step (Guard B4). | Low | R4 |
+| 2026-10-13 | Enforce stage-dependent Manning calibration filter | Calibrating on all water levels including dry season | In alluvial rivers, effective roughness drops at flood stage due to submergence; calibrating during low flow ($WSE \le z_{bed} + 0.5m$) overestimates flood roughness. | Low | R3 |
+| 2026-10-13 | Discretize routing into 4 sub-reaches with dynamic wave celerity | Single reach routing over 140 km | Single reach creates negative Muskingum coefficient $C_0$ when $\Delta t < 2KX$; 4 sub-reaches preserve numerical stability, non-negative coefficients, and dynamic $c = \frac{5}{3} V_{mean} \approx 1.50\text{ m/s}$. | Low | R3/R5 |
+| 2026-10-13 | Perform scientific validation on test period with 15min tolerance | Resampling without nearest-neighbor tolerance | `pd.merge_asof` with 15min tolerance provides mathematically rigorous alignment between 30min simulation and hourly gauge readings on Apr 1 – May 31, 2026. | Low | R3/R10 |
+| 2026-10-13 | Integrate real pipeline data exports into Next.js dashboard (Prompt 6) | Retaining mock placeholders or static numbers | Upgraded UI with 3-line hydrograph (modelled, observed, baseline), analytical $\pm 0.18\text{m}$ uncertainty fill, amber dashed 13.20m danger line, CVD-safe continuous Cividis reach map, SWOT asterisks, slope hatching, dynamic travel time & IMERG timestamps, and permanent limits. | Low | R6/R7 |
 
 
 ---

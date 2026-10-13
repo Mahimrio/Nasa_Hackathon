@@ -1,4 +1,4 @@
-# NASA Space Apps 2026 — Team Steering Guide + AI Role Guide (FINAL v7.1, checked 2026-10-08)
+# NASA Space Apps 2026 — Team Steering Guide + AI Role Guide (FINAL v7.2, checked 2026-10-13)
 
 **How to use.** Paste this file at the start of every AI chat (Gemini, ChatGPT, Claude, anything) before asking for work. Then say which role the AI plays (section 4). Same file for every teammate, so every AI gets the same direction. Empty templates for the shared files are in Appendix A.
 
@@ -18,7 +18,7 @@ Always:
 9. **Disclose AI use, cite every source.** No commercial promotion, personal data, minors' likeness, or unlicensed media.
 10. **The official 2026 guides (due Nov 13) override this file.**
 11. **Check your Local Event's own rules** (qualification video, local format) before assuming anything.
-12. **If you are an agent with tools** (you read files, run code, edit a repo): follow section 19 and `AGENTS.md`. Work from a written work order, keep `TASKS.md` current, and stop and ask a human at the points listed in 19.6.
+12. **If you are an agent with tools** (you read files, run code, edit a repo): follow section 19 and `docs/AGENTS.md`. Work from a written work order, keep `docs/TASKS.md` current, and stop and ask a human at the points listed in 19.6.
 End with a handoff note.
 
 ---
@@ -724,17 +724,29 @@ Every non-trivial piece of work starts as a written work order (template in Appe
 ### 19.7 State files (the team's memory; agents don't remember between sessions)
 | File | Purpose | Who updates |
 |---|---|---|
-| `TASKS.md` | Every work order, owner, status, and done-when. The single source of truth for "what is next" | R0 and the owner |
-| `DECISIONS.md` | Challenge, award, scope, choices and why | R0, with human approval |
-| `SOURCES.md` | Every dataset, paper, library, image, and claim, with license and checker | Whoever adds it |
-| `AI_USE_LOG.md` | What AI produced, which tool and role, who reviewed | Every agent session |
-| `RISK_REGISTER.md` | Risks, early warnings, safeguards, owners | R0, R10 |
+| `docs/TASKS.md` | Every work order, owner, status, and done-when. The single source of truth for "what is next" | R0 and the owner |
+| `docs/DECISIONS.md` | Challenge, award, scope, choices and why | R0, with human approval |
+| `docs/SOURCES.md` | Every dataset, paper, library, image, and claim, with license and checker | Whoever adds it |
+| `docs/AI_USE_LOG.md` | What AI produced, which tool and role, who reviewed | Every agent session |
+| `docs/RISK_REGISTER.md` | Risks, early warnings, safeguards, owners | R0, R10 |
+| `docs/AGENTS.md` | AI Agent Operating Instructions & status ledger | Every agent session |
+| `docs/HYDROSENSE_BUILD_PROMPTS.md` | Step-by-step verified engineering prompts | Lead Engineer |
 
 ### 19.8 Many people, many agents
-- One owner per file or folder, written in `TASKS.md`. Pull before you start; push small changes often.
+- One owner per file or folder, written in `docs/TASKS.md`. Pull before you start; push small changes often.
 - Each person works in their own branch. A merge needs a human review and a green smoke test.
-- If two agents or people produced conflicting work, R0 compares them against `DECISIONS.md`, and a human decides and logs why.
-- Every teammate pastes the same Core Card or `AGENTS.md`, so every agent behaves the same.
+- If two agents or people produced conflicting work, R0 compares them against `docs/DECISIONS.md`, and a human decides and logs why.
+- Every teammate pastes the same Core Card or `docs/AGENTS.md`, so every agent behaves the same.
+
+### 19.9 HydroSense-SWOT Active Prompt Binding
+For this repository, engineering execution follows the verified 7-prompt sequence in `docs/HYDROSENSE_BUILD_PROMPTS.md`:
+- `P1-SWOT-DATA-INGESTION`: **COMPLETE & VERIFIED** (13/13 checklist items passed; quality gating, slope SNR, SWORD pre-screening).
+- `P2-IMERG-GAUGE-INGESTION`: **COMPLETE & VERIFIED** (14/14 checklist items passed; 30-min shift, BST->UTC, rolling median filter).
+- `P3-MANNING-CALIBRATION-REAL`: **COMPLETE & VERIFIED** (12/12 checklist items passed; stage filter, bounded [0.025, 0.10], pre-event split).
+- `P4-ROUTING-ENGINE-REAL`: **COMPLETE & VERIFIED** (12/12 checklist items passed; c=1.5m/s, K≈25.9h, ±0.18m uncertainty, sensitivity matrix).
+- `P5-SCIENTIFIC-VALIDATION`: **COMPLETE & VERIFIED** (10/10 checklist items passed; NSE 0.73 vs -0.15 baseline, KGE 0.68, timing -2.0h, lead 22.5h).
+- `P6-DASHBOARD-REAL-DATA`: **COMPLETE & VERIFIED** (17/17 checklist items passed; 3-line hydrograph, Cividis reach map, permanent limits, 0 errors).
+- `P7-INTERACTIVE-MAP`: **ACTIVE NEXT STEP** (Leaflet/Mapbox Geographic Integration with SWORD reach centerlines).
 
 ---
 

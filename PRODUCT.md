@@ -33,7 +33,7 @@ Unlike conventional flood forecasts that rely on sparse downstream river gauges 
 ## Capabilities and Constraints
 
 - **Confirmed Capabilities:**
-  - Automated Manning roughness calibration ($n \in [0.025, 0.10]$) on 4 SWOT river reaches (ID 2128000001 to 2128000004).
+  - Automated Manning roughness calibration ($n \in [0.025, 0.10]$) on 4 SWOT river reaches (`22211000011`, `22211000012`, `22211000021`, `22211000022`).
   - 4-sub-reach Muskingum-Cunge hydrologic routing down the Surma corridor to the BWDB Kanaighat gauge station (SW108).
   - Automated 3-tier Harvest Flag logic (GREEN: Normal, AMBER: Caution / 80% danger level, RED: Critical Harvest / 100% danger level at 13.20 m PWD).
   - Bilingual localization (English / বাংলা) across headers, metric cards, harvest directives, and modal dialogs.
@@ -55,9 +55,9 @@ Unlike conventional flood forecasts that rely on sparse downstream river gauges 
 - NASA SWOT L2 HR RiverSP 2.0 (PO.DAAC Collection C2799438271-POCLOUD).
 - NASA GPM IMERG Early Run V07B (`GPM_3IMERGHHE`, ~4-hour latency).
 - Bangladesh Water Development Board (BWDB) Kanaighat gauge records (Station SW108, Danger Level 13.20 m PWD).
-- Verified historical validation event: April 10–13, 2026 transboundary flash flood.
+- Verified historical validation event: April 10–13, 2026 transboundary flash flood replay.
 - Published research: Haor Basin Flash Flood Assessment (*J. Environ. Sci. & Nat. Resour.* 2019; 149,224 ha lost in Sunamganj).
-- Verified model performance: NSE 0.90, KGE 0.88, PBIAS +4.2%, Lead Time +21.0 hours.
+- Verified model performance: NSE 0.73, KGE 0.68, PBIAS +1.9%, Timing Error -2.0 h, Lead Time 22.5 h (vs NSE -0.15 and Timing Error -24.0 h for rainfall baseline).
 
 ## Product Principles
 
