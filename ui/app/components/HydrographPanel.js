@@ -58,10 +58,18 @@ export default function HydrographPanel({
 
   return (
     <section className="glass-panel card-padding hydrograph-panel" aria-label="Hydrologic Time-Series Analysis">
+      {/* Screen Reader Chart Summary Alternative (§8 Accessibility) */}
+      <div className="sr-only" role="region" aria-label="Hydrograph Accessible Summary">
+        {lang === "en"
+          ? `Dual-axis hydrograph for ${reachDisplayName}. Event period: ${startDateStr} to ${endDateStr}. Current modelled water level is ${current?.modelled_stage?.toFixed(2)} meters PWD compared to danger level of ${dangerLevel.toFixed(2)} meters PWD. Use arrow keys on the timeline scrubber below to step through hourly flood simulation time steps.`
+          : `${reachDisplayName}-এর জন্য দ্বৈত অক্ষীয় হাইড্রোগ্রাফ। সময়সীমা: ${startDateStr} থেকে ${endDateStr}। বর্তমান মডেলকৃত পানি স্তর ${current?.modelled_stage?.toFixed(2)} মিটার এবং বিপৎসীমা ${dangerLevel.toFixed(2)} মিটার। টাইমলাইন স্ক্রাবারে অ্যারো কি চেপে প্রতি ঘণ্টার সিমুলেশন পর্যায় দেখুন।`}
+      </div>
+
       {/* Panel Header */}
       <div className="card-header-bar">
         <div className="card-title-group">
           <div className="card-icon" aria-hidden="true">
+
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
@@ -277,39 +285,44 @@ export default function HydrographPanel({
 
             <button
               className="btn-standard neu-inset"
-              style={{ height: "32px", padding: "0 10px", fontSize: "12px" }}
+              style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
               onClick={() => setSliderIdx((i) => Math.max(0, i - 1))}
-              title="Step Backward 1 hour"
+              title={lang === "en" ? "Step Backward 1 hour (Arrow Left)" : "১ ঘণ্টা পিছিয়ে যান"}
+              aria-label="Step Backward 1 hour"
             >
               -1h
             </button>
             <button
               className="btn-standard neu-inset"
-              style={{ height: "32px", padding: "0 10px", fontSize: "12px" }}
+              style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
               onClick={() => setSliderIdx((i) => Math.min(eventDataLength - 1, i + 1))}
-              title="Step Forward 1 hour"
+              title={lang === "en" ? "Step Forward 1 hour (Arrow Right)" : "১ ঘণ্টা এগিয়ে যান"}
+              aria-label="Step Forward 1 hour"
             >
               +1h
             </button>
             <button
               className="btn-standard neu-inset"
-              style={{ height: "32px", padding: "0 10px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "4px" }}
+              style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px" }}
               onClick={() => setSliderIdx(peakIdx)}
-              title="Jump Directly to Peak Water Level"
+              title={lang === "en" ? "Jump Directly to Peak Water Level" : "শীর্ষ পানি স্তরে যান"}
+              aria-label="Jump Directly to Peak Water Level"
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
               </svg>
-              <span>Peak</span>
+              <span>{lang === "en" ? "Peak" : "শীর্ষ"}</span>
             </button>
 
             {/* Speed Selector */}
-            <div className="timeline-speed-selector">
+            <div className="timeline-speed-selector" role="group" aria-label="Playback Speed">
               {[1, 2, 5].map((speed) => (
                 <button
                   key={speed}
                   className={`speed-btn ${playSpeed === speed ? "active" : ""}`}
                   onClick={() => setPlaySpeed(speed)}
+                  aria-pressed={playSpeed === speed}
+                  aria-label={`${speed}x Playback Speed`}
                 >
                   {speed}x
                 </button>
@@ -332,7 +345,7 @@ export default function HydrographPanel({
           </div>
         </div>
 
-        {/* Tactile Range Scrubber Track */}
+        {/* Tactile Range Scrubber Track (§4.5 & WCAG Keyboard Navigation) */}
         <div className="timeline-slider-track-wrap">
           <input
             type="range"
@@ -340,13 +353,45 @@ export default function HydrographPanel({
             min={0}
             max={eventDataLength - 1}
             value={sliderIdx}
+            aria-label={lang === "en" ? "Event flood simulation timeline scrubber" : "বন্যা সিমুলেশন টাইমলাইন স্ক্রাবার"}
+            aria-valuemin={0}
+            aria-valuemax={eventDataLength - 1}
+            aria-valuenow={sliderIdx}
+            aria-valuetext={`${dateStr} ${timeStr} UTC, ${lang === "en" ? "Stage" : "পানি স্তর"}: ${current?.modelled_stage?.toFixed(2)}m`}
             onChange={(e) => {
               setIsPlaying(false);
               setSliderIdx(Number(e.target.value));
             }}
-            aria-label="Event timeline scrubber"
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx((i) => Math.max(0, i - 1));
+              } else if (e.key === "ArrowRight") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx((i) => Math.min(eventDataLength - 1, i + 1));
+              } else if (e.key === "PageDown") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx((i) => Math.max(0, i - 12));
+              } else if (e.key === "PageUp") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx((i) => Math.min(eventDataLength - 1, i + 12));
+              } else if (e.key === "Home") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx(0);
+              } else if (e.key === "End") {
+                e.preventDefault();
+                setIsPlaying(false);
+                setSliderIdx(eventDataLength - 1);
+              }
+            }}
           />
         </div>
+
 
         {/* Start / End Date Extents */}
         <div className="timeline-date-extents">

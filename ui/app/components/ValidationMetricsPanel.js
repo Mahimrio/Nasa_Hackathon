@@ -141,10 +141,13 @@ export default function ValidationMetricsPanel({ metrics, lang }) {
               className={`validation-metric-card ${m.accent ? "accent-card" : ""}`}
               onMouseEnter={() => setActiveTooltip(m.key)}
               onMouseLeave={() => setActiveTooltip(null)}
+              onFocus={() => setActiveTooltip(m.key)}
+              onBlur={() => setActiveTooltip(null)}
               tabIndex={0}
               role="region"
               aria-label={`${m.label}: ${m.value}. ${m.def.benchmark}`}
             >
+
               <div className="metric-card-top">
                 <span className="metric-tag-label">{m.label}</span>
                 <span className="metric-info-icon" title={m.def.descEn}>
