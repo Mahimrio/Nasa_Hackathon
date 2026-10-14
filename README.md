@@ -52,11 +52,25 @@ All metrics evaluated on the independent test period (April 1 – May 31, 2026) 
 - **Sensor Revisit vs Routing:** SWOT does not act as a live continuous gauge (21-day orbit repeat); it provides offline channel parameterization. Operational lead time is driven by routing observed GPM IMERG rainfall.
 - **In-Channel Hydraulic Regime:** Muskingum-Cunge routing models the rising limb and threshold-crossing timing. 2D floodplain inundation and post-breach backwater dynamics are not modelled.
 - **Orographic Bias:** GPM IMERG may overestimate intense rainfall over the steep Meghalaya escarpment; calibration against downstream gauge stage implicitly dampens this bias.
+- *Detailed specification:* See the permanently visible [Operational Limits Panel specification](docs/DESIGN_ARCHITECTURE.md#operational-limits-panel) and [SOLUTION_ARCHITECTURE.md §4.1](docs/SOLUTION_ARCHITECTURE.md).
+
+## Citation & Team
+- **Team:** AUSTrology
+- **Hackathon:** NASA International Space Apps Challenge 2026
+- **Project:** HydroSense-SWOT — Near-Real-Time Hydrologic Routing with NASA SWOT & GPM IMERG
+- **Team Members:**
+  - Fazle Rabbi Mugdho — Systems & Backend Algorithm Developer
+  - Mahim Abdullah Rianto — Data Infrastructure & Pipeline Developer
+  - Taisha Tasnim Triti — Geospatial & Domain Researcher
+  - Samia Rahman Arpita — Technical Quality & Compliance Specialist
+  - Redwana Binte Jaman Tonima — Product Impact & Media Strategist
+  - Arko Saha — Frontend & Product Experience Developer
 
 ## License
 Distributed under the **MIT License**. See `LICENSE` for details.
 
 ## Documentation Links
+- [SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) — Pre-submission compliance and NASA Space Apps rules checklist
 - [HYDROSENSE_BUILD_PROMPTS.md](docs/HYDROSENSE_BUILD_PROMPTS.md) — Step-by-step verified engineering prompts
 - [validation_report.md](data/processed/validation_report.md) — Formal scientific validation report with diagnostic figures
 - [SOLUTION_ARCHITECTURE.md](docs/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
@@ -70,3 +84,4 @@ Distributed under the **MIT License**. See `LICENSE` for details.
 - [AI_USE_LOG.md](docs/AI_USE_LOG.md) — Transparent disclosure of AI assistance
 - [AGENTS.md](docs/AGENTS.md) — AI agent operating instructions and ground rules
 - [STEERING_GUIDE_FINAL.md](docs/STEERING_GUIDE_FINAL.md) — Comprehensive steering guide and prompt protocols
+
