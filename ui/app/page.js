@@ -184,6 +184,11 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* Skip to Main Content Link (§8 Accessibility) */}
+      <a href="#main-content" className="skip-to-content">
+        {lang === "en" ? "Skip to Main Content" : "মূল বিষয়বস্তুতে যান"}
+      </a>
+
       {/* Top Application Bar */}
       <AppHeader
         lang={lang}
@@ -195,7 +200,8 @@ export default function DashboardPage() {
       />
 
       {/* Main Dashboard Application Shell */}
-      <main className="dashboard-shell" role="main">
+      <main id="main-content" className="dashboard-shell" role="main" tabIndex="-1">
+
         {/* Context Strip & Quick Timeline Jumps */}
         <PageContextBar
           lang={lang}

@@ -26,11 +26,11 @@
   --glass-stroke-red: rgba(255, 100, 124, 0.45);
   --glass-stroke-green: rgba(48, 224, 138, 0.4);
 
-  /* ---- Typography Colors ---- */
+  /* ---- Typography Colors (WCAG AA Compliant >= 4.5:1) ---- */
   --text-primary: #F2F7FF;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
+  --text-secondary: #E2E8F0;
+  --text-muted: #A5B4FC;
+  --text-dim: #94A3B8;
 
   /* ---- Chromatic Accent & Semantic Data Palette ---- */
   --cyan-400: #38BDF8;
@@ -494,12 +494,17 @@ body::before {
 }
 
 .lang-option {
-  padding: 0 12px;
-  font-size: 12px;
+  padding: 8px 14px;
+  min-height: 38px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
   font-weight: 600;
   border: none;
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   border-radius: 8px;
   transition: all var(--motion-fast) var(--ease-out);
@@ -515,10 +520,13 @@ body::before {
   border: 1px solid rgba(53, 216, 242, 0.35);
 }
 
-/* Icon Buttons (§4.8) */
+
+/* Icon Buttons (§4.8 - WCAG Touch Target 44x44px) */
 .btn-icon {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--radius-sm);
   background: rgba(14, 27, 45, 0.75);
   border: 1px solid var(--glass-stroke);
@@ -541,9 +549,10 @@ body::before {
   transform: scale(0.96);
 }
 
-/* Standard Button (§4.8) */
+/* Standard Button (§4.8 - WCAG Touch Target >= 44px) */
 .btn-standard {
-  height: 38px;
+  height: 44px;
+  min-height: 44px;
   padding: 0 var(--space-4);
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -558,6 +567,7 @@ body::before {
   color: var(--text-primary);
   text-decoration: none;
 }
+
 
 .btn-standard:hover {
   background: rgba(24, 48, 78, 0.9);
@@ -633,7 +643,11 @@ body::before {
 }
 
 .preset-chip {
-  padding: 4px 10px;
+  padding: 8px 12px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
   font-weight: 600;
   border-radius: 6px;
@@ -648,6 +662,7 @@ body::before {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
 }
+
 
 .preset-chip.active {
   background: rgba(53, 216, 242, 0.18);
@@ -743,20 +758,22 @@ body::before {
   }
 }
 
-/* Floating Map Overlay Toolbar */
+/* Floating Map Overlay Toolbar (§4.3 - Spacing >= 8px) */
 .map-floating-toolbar {
   position: absolute;
   top: 14px;
   right: 14px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   z-index: 10;
 }
 
 .map-tool-btn {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 8px;
   background: rgba(8, 17, 31, 0.85);
   border: 1px solid var(--glass-stroke);
@@ -764,7 +781,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(12px);
@@ -782,6 +799,7 @@ body::before {
   color: var(--cyan-300);
   border-color: var(--cyan-400);
 }
+
 
 /* Map Bottom Legend Bar */
 .map-bottom-legend {
@@ -1042,8 +1060,10 @@ body::before {
 }
 
 .timeline-play-btn {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: #0284C7;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1073,8 +1093,10 @@ body::before {
 }
 
 .speed-btn {
-  padding: 4px 8px;
-  font-size: 12px;
+  padding: 6px 10px;
+  min-height: 38px;
+  min-width: 38px;
+  font-size: 13px;
   font-weight: 600;
   border: none;
   background: transparent;
@@ -1082,6 +1104,7 @@ body::before {
   cursor: pointer;
   transition: all var(--motion-fast);
 }
+
 
 .speed-btn.active {
   background: rgba(53, 216, 242, 0.25);
@@ -1330,10 +1353,12 @@ body::before {
 
 .modal-close-btn {
   position: absolute;
-  top: 18px;
-  right: 18px;
-  width: 32px;
-  height: 32px;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: none;
@@ -1345,6 +1370,7 @@ body::before {
   cursor: pointer;
   transition: all var(--motion-fast);
 }
+
 
 .modal-close-btn:hover {
   background: rgba(255, 255, 255, 0.16);
@@ -1567,3 +1593,26 @@ body::before {
   white-space: nowrap;
   border: 0;
 }
+
+.skip-to-content {
+  position: fixed;
+  top: -80px;
+  left: 20px;
+  background: var(--cyan-400);
+  color: #050A12;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  z-index: 10000;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  transition: top var(--motion-fast);
+}
+
+.skip-to-content:focus {
+  top: 16px;
+  outline: 3px solid #FFFFFF !important;
+  outline-offset: 2px !important;
+}
+

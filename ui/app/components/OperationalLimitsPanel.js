@@ -76,18 +76,22 @@ export default function OperationalLimitsPanel({ lang, metrics }) {
 
         <button
           className="btn-standard neu-inset"
-          style={{ height: "30px", padding: "0 12px", fontSize: "12px" }}
+          style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
           onClick={() => setIsExpanded(!isExpanded)}
+          aria-expanded={isExpanded}
+          aria-controls="operational-limits-grid"
+          aria-label={isExpanded ? (lang === "en" ? "Collapse operational limitations" : "সীমাবদ্ধতা প্যানেল সংকোচন করুন") : (lang === "en" ? "Expand operational limitations" : "সীমাবদ্ধতা প্যানেল প্রসারিত করুন")}
         >
           {isExpanded ? (lang === "en" ? "Collapse" : "সংকোচন") : (lang === "en" ? "Expand" : "প্রসারিত")}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 200ms" }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 200ms" }} aria-hidden="true">
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </button>
       </div>
 
       {isExpanded && (
-        <div className="limits-grid-layout">
+        <div id="operational-limits-grid" className="limits-grid-layout" role="region" aria-label="Operational Limits Details">
+
           {limits.map((l) => (
             <div key={l.id} className="limit-item">
               <span className="limit-icon-bullet" aria-hidden="true">

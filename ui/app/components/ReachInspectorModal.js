@@ -1,15 +1,44 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 export default function ReachInspectorModal({ reach, calibrationData, riskFn, lang, onClose }) {
+  const closeBtnRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    closeBtnRef.current?.focus();
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   if (!reach) return null;
 
   const cal = calibrationData ? calibrationData[reach.reach_id] : null;
   const currentRisk = riskFn ? riskFn(reach.reach_id) : "GREEN";
 
   return (
-    <div className="modal-overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="reach-modal-title">
+    <div
+      className="modal-overlay-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="reach-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="modal-content-panel">
-        <button className="modal-close-btn" onClick={onClose} aria-label="Close reach inspector">
+        <button
+          ref={closeBtnRef}
+          className="modal-close-btn"
+          onClick={onClose}
+          aria-label={lang === "en" ? "Close reach inspector (Press Escape)" : "বন্ধ করুন (Escape চাপুন)"}
+        >
+
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />

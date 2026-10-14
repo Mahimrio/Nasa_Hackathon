@@ -56,8 +56,9 @@ export default function HarvestDecisionPanel({
     <section
       className="glass-panel card-padding decision-panel"
       aria-label={`Harvest Decision: ${flagConf.labelEn}`}
-      aria-live="polite"
+      aria-live={current.harvest_flag === "RED" ? "assertive" : "polite"}
     >
+
       {/* Panel Header */}
       <div className="card-header-bar">
         <div className="card-title-group">

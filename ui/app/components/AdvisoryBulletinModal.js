@@ -1,6 +1,21 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dangerLevel = 13.2, lang, onClose }) {
+  const closeBtnRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    closeBtnRef.current?.focus();
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   if (!current) return null;
 
   const flag = current.harvest_flag;
@@ -8,9 +23,23 @@ export default function AdvisoryBulletinModal({ current, dateStr, timeStr, dange
   const isDanger = stage >= dangerLevel;
 
   return (
-    <div className="modal-overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="bulletin-title">
+    <div
+      className="modal-overlay-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bulletin-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
       <div className="modal-content-panel" style={{ maxWidth: "600px" }}>
-        <button className="modal-close-btn" onClick={onClose} aria-label="Close advisory bulletin">
+        <button
+          ref={closeBtnRef}
+          className="modal-close-btn"
+          onClick={onClose}
+          aria-label={lang === "en" ? "Close advisory bulletin (Press Escape)" : "বুলেটিন বন্ধ করুন (Escape চাপুন)"}
+        >
+
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
