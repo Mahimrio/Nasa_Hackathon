@@ -44,6 +44,10 @@ yarn-error.log*
 .env.production.local
 *.pem
 
+# Raw Data Downloads
+data/raw/
+
+
 # OS generated files
 .DS_Store
 Thumbs.db
