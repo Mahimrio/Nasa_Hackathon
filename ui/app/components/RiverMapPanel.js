@@ -371,7 +371,12 @@ export default function RiverMapPanel({
               return (
                 <g
                   key={p.id}
-                  onClick={() => setSelectedReachId(p.id)}
+                  onClick={() => {
+                    setSelectedReachId(p.id);
+                    if (onInspectReach && r) {
+                      onInspectReach(r);
+                    }
+                  }}
                   onMouseEnter={() => setHoveredReach(p.id)}
                   onMouseLeave={() => setHoveredReach(null)}
                   style={{ cursor: "pointer" }}
@@ -381,6 +386,9 @@ export default function RiverMapPanel({
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       setSelectedReachId(p.id);
+                      if (onInspectReach && r) {
+                        onInspectReach(r);
+                      }
                     }
                   }}
                 >
@@ -563,10 +571,27 @@ export default function RiverMapPanel({
           </div>
         </div>
 
-        <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-          {lang === "en"
-            ? "Click any reach to inspect calibrated roughness (Manning n) and cross-section"
-            : "ক্যালিব্রেটেড প্যারামিটার দেখতে যেকোনো রিচে ক্লিক করুন"}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+            {lang === "en"
+              ? "Click any reach on the map or inspect calibrated parameters:"
+              : "মানচিত্রে ক্লিক করুন বা ক্যালিব্রেটেড প্যারামিটার দেখুন:"}
+          </span>
+          <button
+            className="btn-standard neu-inset"
+            style={{ fontSize: "11px", padding: "3px 10px", display: "inline-flex", alignItems: "center", gap: "5px" }}
+            onClick={() => {
+              const sel = reaches?.find((x) => x.reach_id === selectedReachId) || reaches?.[0];
+              if (onInspectReach && sel) onInspectReach(sel);
+            }}
+            title={lang === "en" ? "Inspect Reach Hydraulic Parameters" : "রিচের হাইড্রোলিক প্যারামিটার দেখুন"}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <span>{lang === "en" ? "Inspect Parameters" : "প্যারামিটার দেখুন"}</span>
+          </button>
         </div>
       </div>
     </section>
