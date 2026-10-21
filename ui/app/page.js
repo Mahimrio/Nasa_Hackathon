@@ -224,6 +224,7 @@ export default function DashboardPage() {
             currentStage={current.modelled_stage}
             dangerLevel={dangerLevel}
             currentGaugeLevel={currentGaugeLevel}
+            currentRainfall={current?.rainfall ?? current?.imerg_map_mmh ?? 0}
             onInspectReach={(r) => setInspectingReach(r)}
           />
 
