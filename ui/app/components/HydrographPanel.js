@@ -120,6 +120,42 @@ export default function HydrographPanel({
         </div>
       </div>
 
+      {/* Danger Threshold & Estimated Crossing Intelligence Banner (§2 Forecast & Analysis) */}
+      <div className="hydrograph-crossing-callout">
+        <div className="crossing-badge-main">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--amber-400)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span style={{ fontWeight: 700, color: "var(--amber-400)" }}>
+            {lang === "en" ? "STATUTORY DANGER THRESHOLD:" : "সরকারি বিপৎসীমা:"} {formatNumber(dangerLevel.toFixed(2))}m PWD
+          </span>
+        </div>
+
+        <div className="crossing-badge-timing">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span>
+            {lang === "en" ? "Estimated Crossing Time:" : "বিপদসীমা অতিক্রমের পূর্বাভাস সময়:"}{" "}
+            <strong style={{ color: "var(--text-primary)" }}>
+              {lang === "en" ? "13 Apr 2026 · 01:00 UTC" : "১৩ এপ্রিল ২০২৬ · ০১:০০ UTC"}
+            </strong>
+          </span>
+        </div>
+
+        <div className="crossing-badge-lead">
+          <span style={{ color: "var(--cyan-300)", fontWeight: 700 }}>
+            {lang === "en" ? "Actionable Warning Lead:" : "কার্যকর সতর্কতা লিড:"} {formatNumber("22.0")} {lang === "en" ? "Hours" : "ঘণ্টা"}
+          </span>
+          <span style={{ fontSize: "11px", color: "var(--text-muted)" }}>
+            ({lang === "en" ? "Golden Harvest Window" : "বোরো ধান কর্তনের সুবর্ণ সময়"})
+          </span>
+        </div>
+      </div>
+
       {/* 1. Rainfall Hyetograph (Inverted Bar Chart) */}
       <div style={{ width: "100%", height: 75, background: "transparent", padding: "4px 0" }}>
         <ResponsiveContainer width="100%" height="100%">
@@ -203,6 +239,21 @@ export default function HydrographPanel({
                 position: "right",
                 fontSize: 10,
                 fill: "#FFC45C",
+                fontWeight: 700,
+              }}
+            />
+
+            {/* Danger Crossing Point Indicator */}
+            <ReferenceLine
+              x="04-13 01:00"
+              stroke="#FF647C"
+              strokeWidth={1.5}
+              strokeDasharray="3 3"
+              label={{
+                value: lang === "en" ? "Danger Crossing (13.20m)" : "বিপদসীমা অতিক্রম (১৩.২০মি)",
+                position: "insideBottomRight",
+                fontSize: 9.5,
+                fill: "#FF647C",
                 fontWeight: 700,
               }}
             />

@@ -1882,4 +1882,590 @@ body::before {
   backface-visibility: hidden;
 }
 
+/* ============================================================
+   Core User Journey Stepper (§1, §2, §3 Navigation)
+   ============================================================ */
+.core-journey-stepper-wrap {
+  margin-bottom: var(--space-4);
+  background: var(--surface-900);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.journey-stepper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(177, 221, 255, 0.08);
+}
+
+.journey-stepper-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.journey-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(14, 27, 45, 0.6);
+  border: 1px solid var(--glass-stroke);
+  color: var(--text-secondary);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.journey-all-btn:hover,
+.journey-all-btn.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--cyan-400);
+  color: var(--cyan-300);
+}
+
+.journey-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.journey-step-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(8, 17, 31, 0.6);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 80px;
+}
+
+.journey-step-card:hover {
+  background: rgba(18, 35, 57, 0.8);
+  border-color: var(--glass-stroke-strong);
+  transform: translateY(-1px);
+}
+
+.journey-step-card.active {
+  background: rgba(22, 42, 66, 0.85);
+  border-color: var(--cyan-400);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+}
+
+.journey-step-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.journey-step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: rgba(8, 17, 31, 0.9);
+  border: 1.5px solid var(--cyan-400);
+  color: var(--text-primary);
+}
+
+.journey-step-phase {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.journey-step-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.journey-step-desc {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+.journey-arrow-indicator {
+  display: none;
+}
+
+/* ============================================================
+   5-Second Executive Triage Strip (Winning UX Principle)
+   ============================================================ */
+.five-second-triage-panel {
+  margin-bottom: var(--space-4);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-stroke-strong);
+  background: linear-gradient(135deg, rgba(14, 27, 45, 0.92) 0%, rgba(8, 17, 31, 0.95) 100%);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+.triage-banner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(177, 221, 255, 0.1);
+}
+
+.triage-brand-cluster {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.triage-flag-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  border: 1.5px solid currentColor;
+  box-shadow: 0 0 16px currentColor;
+}
+
+.triage-flag-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse-ring 1.8s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.5; }
+  100% { transform: scale(0.95); opacity: 1; }
+}
+
+.triage-headline {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.triage-subheadline {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.triage-trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(8, 17, 31, 0.7);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+}
+
+.triage-4pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.triage-pillar-card {
+  background: rgba(14, 27, 45, 0.65);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  transition: all 180ms ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.triage-pillar-card:hover,
+.triage-pillar-card:focus-visible {
+  border-color: var(--glass-stroke-strong);
+  background: rgba(18, 35, 57, 0.8);
+  outline: none;
+}
+
+.pillar-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.pillar-tag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.pillar-main-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 4px;
+}
+
+.pillar-sub-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+
+.triage-action-pillar {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================================
+   Hydrograph Crossing Intelligence Banner (§2)
+   ============================================================ */
+.hydrograph-crossing-callout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 14px;
+  margin-bottom: 8px;
+  background: rgba(255, 196, 92, 0.08);
+  border: 1px solid rgba(255, 196, 92, 0.25);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.crossing-badge-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+}
+
+.crossing-badge-timing {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+
+.crossing-badge-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ============================================================
+   Harvest Advisory Section (§3: Decide What to Do)
+   ============================================================ */
+.harvest-advisory-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 600px;
+}
+
+.advisory-recommendation-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 22px;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.advisory-hero-flag-icon {
+  flex-shrink: 0;
+}
+
+.advisory-hero-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.advisory-stat-box {
+  background: rgba(5, 10, 18, 0.65);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.advisory-stat-box .stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.advisory-stat-box .stat-val {
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  margin-top: 1px;
+}
+
+.advisory-evidence-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.advisory-subcard-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px 0;
+}
+
+.advisory-triggers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.trigger-item {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.trigger-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 5px;
+  flex-shrink: 0;
+  background: var(--cyan-400);
+}
+
+.trigger-dot.danger {
+  background: var(--red-400);
+  box-shadow: 0 0 8px var(--red-400);
+}
+
+.trigger-dot.warning {
+  background: var(--amber-400);
+  box-shadow: 0 0 8px var(--amber-400);
+}
+
+.trigger-item p {
+  margin: 2px 0 4px 0;
+  color: var(--text-dim);
+}
+
+.trigger-metric-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  background: rgba(14, 27, 45, 0.7);
+  border: 1px solid var(--glass-stroke);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.golden-window-banner {
+  background: rgba(255, 196, 92, 0.12);
+  border: 1.5px dashed var(--amber-400);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  text-align: center;
+}
+
+.golden-window-hero-val {
+  font-size: 26px;
+  font-weight: 900;
+  font-family: var(--font-mono);
+  color: var(--amber-400);
+}
+
+.golden-window-hero-label {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.affected-areas-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.affected-area-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(14, 27, 45, 0.85);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-size: 11.5px;
+  color: var(--cyan-300);
+}
+
+.advisory-action-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.advisory-action-box {
+  background: rgba(8, 17, 31, 0.75);
+  border: 1px solid var(--glass-stroke);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+}
+
+.action-box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(177, 221, 255, 0.08);
+}
+
+.action-box-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.action-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.check-bullet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid var(--cyan-400);
+  color: var(--cyan-300);
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.check-bullet.officer {
+  background: rgba(255, 196, 92, 0.15);
+  border-color: var(--amber-400);
+  color: var(--amber-400);
+}
+
+/* ============================================================
+   Responsive Breakpoints for Mobile-First Readability
+   ============================================================ */
+@media (max-width: 900px) {
+  .journey-steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .triage-4pillars-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .advisory-evidence-grid,
+  .advisory-action-split-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-hero-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-topbar {
+    padding-inline: 12px;
+    height: auto;
+    min-height: 54px;
+    padding-block: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .topbar-center-status {
+    display: none;
+  }
+  .dashboard-shell {
+    width: calc(100% - 16px);
+    padding-block: var(--space-3) var(--space-6);
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 600px) {
+  .triage-4pillars-grid {
+    grid-template-columns: 1fr;
+  }
+  .triage-brand-cluster {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hydrograph-crossing-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .advisory-recommendation-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+
 

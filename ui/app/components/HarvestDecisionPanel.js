@@ -115,7 +115,15 @@ export default function HarvestDecisionPanel({
         </div>
 
         <div className={`decision-status-title ${flagConf.orbClass}`}>
-          {flagTitle}
+          {current.harvest_flag === "RED"
+            ? (lang === "en" ? "HARVEST URGENTLY" : "অবিলম্বে ফসল কর্তন করুন")
+            : current.harvest_flag === "AMBER"
+            ? (lang === "en" ? "PREPARE TO HARVEST" : "ফসল কাটার প্রস্তুতি নিন")
+            : (lang === "en" ? "CONTINUE MONITORING" : "নিয়মিত পর্যবেক্ষণ চালিয়ে যান")}
+        </div>
+
+        <div style={{ fontSize: "11px", fontWeight: 700, color: flagConf.color, letterSpacing: "0.06em", marginTop: "2px" }}>
+          {lang === "en" ? "OVERALL FLAG: " : "সামগ্রিক সংকেত: "}<strong>{current.harvest_flag}</strong> ({flagTitle})
         </div>
 
         <p className="decision-advisory-text">
