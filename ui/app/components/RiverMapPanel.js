@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import InteractiveMap from "./InteractiveMap";
 
 /**
  * CVD-Safe Cividis Colormap Interpolator
@@ -43,12 +44,16 @@ export default function RiverMapPanel({
   currentStage,
   dangerLevel,
   currentGaugeLevel,
+  currentRainfall = 0,
   onInspectReach,
 }) {
+  const [viewMode, setViewMode] = useState("geographic");
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showFlowAnim, setShowFlowAnim] = useState(true);
   const [showSwotSwath, setShowSwotSwath] = useState(true);
   const [showTerrain, setShowTerrain] = useState(true);
+  const [showSubbasins, setShowSubbasins] = useState(true);
+  const [showRainfallOverlay, setShowRainfallOverlay] = useState(true);
   const [hoveredReach, setHoveredReach] = useState(null);
 
   const riskColor = (id) => {
@@ -132,6 +137,69 @@ export default function RiverMapPanel({
           </div>
         </div>
 
+        {/* View Mode Segmented Switch (§4.1 / P7) */}
+        <div
+          role="radiogroup"
+          aria-label={lang === "en" ? "Map display mode" : "মানচিত্র প্রদর্শনের ধরন"}
+          style={{
+            display: "inline-flex",
+            background: "rgba(18, 35, 57, 0.78)",
+            borderRadius: "var(--radius-pill)",
+            padding: "3px",
+            border: "1px solid rgba(177, 221, 255, 0.16)",
+            gap: "3px",
+          }}
+        >
+          <button
+            type="button"
+            role="radio"
+            aria-checked={viewMode === "geographic"}
+            style={{
+              padding: "4px 12px",
+              fontSize: "11px",
+              fontWeight: 600,
+              borderRadius: "var(--radius-pill)",
+              border: "none",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "5px",
+              background: viewMode === "geographic" ? "var(--cyan-400)" : "transparent",
+              color: viewMode === "geographic" ? "#050A12" : "var(--text-secondary)",
+              transition: "all var(--motion-fast)",
+            }}
+            onClick={() => setViewMode("geographic")}
+            title={lang === "en" ? "Geographic GIS Map with real SWOT reaches & satellite basemap" : "ভৌগোলিক GIS মানচিত্র (স্যাটেলাইট বেসম্যাপ)"}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+            <span>{lang === "en" ? "Geographic GIS" : "ভৌগোলিক GIS"}</span>
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={viewMode === "schematic"}
+            style={{
+              padding: "4px 12px",
+              fontSize: "11px",
+              fontWeight: 600,
+              borderRadius: "var(--radius-pill)",
+              border: "none",
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "5px",
+              background: viewMode === "schematic" ? "var(--cyan-400)" : "transparent",
+              color: viewMode === "schematic" ? "#050A12" : "var(--text-secondary)",
+              transition: "all var(--motion-fast)",
+            }}
+            onClick={() => setViewMode("schematic")}
+            title={lang === "en" ? "Hydraulic flow schematic diagram" : "হাইড্রোলিক প্রবাহ স্কিম্যাটিক"}
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg>
+            <span>{lang === "en" ? "Hydraulic Flow" : "হাইড্রোলিক প্রবাহ"}</span>
+          </button>
+        </div>
+
         {/* Selected Reach Indicator Badge */}
         {selectedReach && (
           <div className="selected-reach-chip">
@@ -163,37 +231,42 @@ export default function RiverMapPanel({
       <div className="map-viewport">
         {/* Floating Tool Controls */}
         <div className="map-floating-toolbar" role="toolbar" aria-label="Map Visual Controls">
-          <button
-            className="map-tool-btn"
-            onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.15))}
-            title="Zoom In"
-            aria-label="Zoom In"
-          >
-            +
-          </button>
-          <button
-            className="map-tool-btn"
-            onClick={() => setZoomLevel((z) => Math.max(0.85, z - 0.15))}
-            title="Zoom Out"
-            aria-label="Zoom Out"
-          >
-            −
-          </button>
-          <button
-            className="map-tool-btn"
-            onClick={() => setZoomLevel(1)}
-            title="Reset Map Orientation"
-            aria-label="Reset Map Orientation"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-              <path d="M3 3v5h5" />
-            </svg>
-          </button>
+          {viewMode === "schematic" && (
+            <>
+              <button
+                className="map-tool-btn"
+                onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.15))}
+                title="Zoom In"
+                aria-label="Zoom In"
+              >
+                +
+              </button>
+              <button
+                className="map-tool-btn"
+                onClick={() => setZoomLevel((z) => Math.max(0.85, z - 0.15))}
+                title="Zoom Out"
+                aria-label="Zoom Out"
+              >
+                −
+              </button>
+              <button
+                className="map-tool-btn"
+                onClick={() => setZoomLevel(1)}
+                title="Reset Map Orientation"
+                aria-label="Reset Map Orientation"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+              </button>
+            </>
+          )}
+
           <button
             className={`map-tool-btn ${showFlowAnim ? "active" : ""}`}
             onClick={() => setShowFlowAnim(!showFlowAnim)}
-            title={lang === "en" ? "Toggle River Flow Vector Motion" : "নদী प्रवाह অ্যানিমেশন চালু/বন্ধ"}
+            title={lang === "en" ? "Toggle River Flow Vector Motion" : "নদী প্রবাহ অ্যানিমেশন চালু/বন্ধ"}
             aria-label="Toggle Flow Animation"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -201,10 +274,11 @@ export default function RiverMapPanel({
               <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" />
             </svg>
           </button>
+
           <button
             className={`map-tool-btn ${showSwotSwath ? "active" : ""}`}
             onClick={() => setShowSwotSwath(!showSwotSwath)}
-            title={lang === "en" ? "Toggle SWOT Orbital Swath (120km swath)" : "SWOT উপগ্রহ কক্ষপথ ওভারলে"}
+            title={lang === "en" ? "Toggle SWOT Orbital Swaths" : "SWOT উপগ্রহ কক্ষপথ ওভারলে"}
             aria-label="Toggle SWOT Orbit Swath"
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -215,23 +289,74 @@ export default function RiverMapPanel({
               <path d="M9 21a6 6 0 0 0-6-6" />
             </svg>
           </button>
-          <button
-            className={`map-tool-btn ${showTerrain ? "active" : ""}`}
-            onClick={() => setShowTerrain(!showTerrain)}
-            title={lang === "en" ? "Toggle Meghalaya Topography Shading" : "পাহাড় ও হাওর ভূপ্রকৃতি ওভারলে"}
-            aria-label="Toggle Terrain Shading"
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-            </svg>
-          </button>
+
+          {viewMode === "geographic" ? (
+            <>
+              <button
+                className={`map-tool-btn ${showSubbasins ? "active" : ""}`}
+                onClick={() => setShowSubbasins(!showSubbasins)}
+                title={lang === "en" ? "Toggle HydroSHEDS Sub-Basins" : "হাইড্রোশেডস উপ-অববাহিকা সীমানা"}
+                aria-label="Toggle Subbasins"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 2 7 12 12 22 7 12 2" />
+                  <polyline points="2 17 12 22 22 17" />
+                  <polyline points="2 12 12 17 22 12" />
+                </svg>
+              </button>
+
+              <button
+                className={`map-tool-btn ${showRainfallOverlay ? "active" : ""}`}
+                onClick={() => setShowRainfallOverlay(!showRainfallOverlay)}
+                title={lang === "en" ? "Toggle NASA GPM IMERG Rainfall Heatmap Plume" : "নাসা আইমার্জ বৃষ্টিপাত মেঘ ওভারলে"}
+                aria-label="Toggle IMERG Rainfall Overlay"
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9" />
+                  <path d="M16 14v6" />
+                  <path d="M8 14v6" />
+                  <path d="M12 16v6" />
+                </svg>
+              </button>
+            </>
+          ) : (
+            <button
+              className={`map-tool-btn ${showTerrain ? "active" : ""}`}
+              onClick={() => setShowTerrain(!showTerrain)}
+              title={lang === "en" ? "Toggle Meghalaya Topography Shading" : "পাহাড় ও হাওর ভূপ্রকৃতি ওভারলে"}
+              aria-label="Toggle Terrain Shading"
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+              </svg>
+            </button>
+          )}
         </div>
 
-        {/* Scalable SVG Cartographic Presentation */}
-        <svg
-          className="map-svg-canvas"
-          viewBox="0 0 460 300"
-          preserveAspectRatio="xMidYMid meet"
+        {viewMode === "geographic" ? (
+          <InteractiveMap
+            reaches={reaches}
+            riskFn={riskFn}
+            lang={lang}
+            selectedReachId={selectedReachId}
+            setSelectedReachId={setSelectedReachId}
+            currentStage={currentStage}
+            dangerLevel={dangerLevel}
+            currentGaugeLevel={currentGaugeLevel}
+            currentRainfall={currentRainfall}
+            onInspectReach={onInspectReach}
+            showFlowAnim={showFlowAnim}
+            showSwotSwath={showSwotSwath}
+            showTerrain={showTerrain}
+            showSubbasins={showSubbasins}
+            showRainfallOverlay={showRainfallOverlay}
+          />
+        ) : (
+          /* Scalable SVG Cartographic Presentation */
+          <svg
+            className="map-svg-canvas"
+            viewBox="0 0 460 300"
+            preserveAspectRatio="xMidYMid meet"
           style={{
             transform: `scale(${zoomLevel})`,
             transformOrigin: "center center",
@@ -522,6 +647,7 @@ export default function RiverMapPanel({
             </text>
           </g>
         </svg>
+        )}
       </div>
 
       {/* Map Bottom Legend & Controls Bar */}

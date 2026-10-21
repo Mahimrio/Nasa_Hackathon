@@ -1616,3 +1616,171 @@ body::before {
   outline-offset: 2px !important;
 }
 
+/* ============================================================
+   Interactive Leaflet Map (P7 Enhancements)
+   ============================================================ */
+.interactive-leaflet-wrapper {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid rgba(177, 221, 255, 0.12);
+  background: var(--bg-950);
+}
+
+.leaflet-container {
+  background: #050a12 !important;
+  font-family: var(--font-body), sans-serif !important;
+}
+
+/* 44x44px touch targets for zoom controls */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6) !important;
+}
+
+.leaflet-control-zoom a {
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  font-size: 18px !important;
+  background: rgba(14, 27, 45, 0.92) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(177, 221, 255, 0.2) !important;
+  backdrop-filter: blur(8px);
+  transition: all var(--motion-fast);
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(24, 43, 68, 0.95) !important;
+  color: var(--cyan-400) !important;
+  border-color: rgba(53, 216, 242, 0.5) !important;
+}
+
+.leaflet-control-zoom a:first-child {
+  border-top-left-radius: var(--radius-sm) !important;
+  border-top-right-radius: var(--radius-sm) !important;
+  margin-bottom: 2px;
+}
+
+.leaflet-control-zoom a:last-child {
+  border-bottom-left-radius: var(--radius-sm) !important;
+  border-bottom-right-radius: var(--radius-sm) !important;
+}
+
+/* Glassmorphic tooltips */
+.map-glass-tooltip {
+  background: rgba(8, 17, 31, 0.95) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid rgba(177, 221, 255, 0.25) !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 8px 12px !important;
+}
+
+.map-glass-tooltip::before {
+  border-top-color: rgba(8, 17, 31, 0.95) !important;
+}
+
+/* Animated flow dashes */
+.leaflet-flow-path {
+  stroke-dasharray: 8 12;
+  animation: leaflet-flow 3.5s linear infinite;
+}
+
+@keyframes leaflet-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+/* Pulsating Sonar Gauge Marker */
+.leaflet-gauge-marker-container {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-sonar-pin {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.leaflet-sonar-core {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #050a12;
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(255, 196, 92, 0.9);
+  z-index: 5;
+}
+
+.leaflet-sonar-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #ffc45c;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: leaflet-sonar-anim 2.8s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+.leaflet-sonar-ring.ring-2 {
+  animation-delay: 1.4s;
+}
+
+@keyframes leaflet-sonar-anim {
+  0% {
+    transform: scale(0.4);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+.leaflet-gauge-label {
+  position: absolute;
+  top: -6px;
+  left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(5, 10, 18, 0.94);
+  border: 1px solid rgba(255, 196, 92, 0.6);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.station-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--amber-400);
+}
+
+.station-val {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaflet-flow-path {
+    animation: none !important;
+  }
+  .leaflet-sonar-ring {
+    animation: none !important;
+    opacity: 0.3 !important;
+  }
+}
+

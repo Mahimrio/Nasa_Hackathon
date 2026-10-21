@@ -1,0 +1,165 @@
+{
+  "study_area": {
+    "center": [24.95, 92.05],
+    "default_zoom": 10,
+    "min_zoom": 8,
+    "max_zoom": 14,
+    "bounds": [
+      [24.50, 91.40],
+      [25.40, 92.70]
+    ]
+  },
+  "reaches": [
+    {
+      "reach_id": "22211000011",
+      "river_name": "Surma",
+      "reach_name": "Surma Upper (Kanaighat)",
+      "reach_name_bn": "সুরমা উচ্চ (কানাইঘাট)",
+      "swot_pass": "SWOT Pass 018* (14-Apr)",
+      "slope_quality": "good",
+      "center": [25.035, 92.26],
+      "width_mean_m": 160.0,
+      "length_m": 12500,
+      "has_gauge": true,
+      "gauge_station": "SW108 Kanaighat",
+      "coordinates": [
+        [24.985, 92.410],
+        [25.002, 92.365],
+        [25.025, 92.320],
+        [25.045, 92.285],
+        [25.058, 92.245],
+        [25.060, 92.228],
+        [25.048, 92.185],
+        [25.035, 92.140]
+      ]
+    },
+    {
+      "reach_id": "22211000012",
+      "river_name": "Surma",
+      "reach_name": "Surma Mid (Sylhet)",
+      "reach_name_bn": "সুরমা মধ্য (সিলেট)",
+      "swot_pass": "SWOT Pass 018* (14-Apr)",
+      "slope_quality": "good",
+      "center": [24.94, 91.95],
+      "width_mean_m": 190.0,
+      "length_m": 14200,
+      "has_gauge": false,
+      "gauge_station": null,
+      "coordinates": [
+        [25.035, 92.140],
+        [25.015, 92.080],
+        [24.985, 92.025],
+        [24.955, 91.970],
+        [24.920, 91.925],
+        [24.895, 91.875],
+        [24.875, 91.820],
+        [24.850, 91.765]
+      ]
+    },
+    {
+      "reach_id": "22211000021",
+      "river_name": "Kushiyara",
+      "reach_name": "Kushiyara Upper (Amalshid)",
+      "reach_name_bn": "কুশিয়ারা উচ্চ (আমলশীদ)",
+      "swot_pass": "SWOT Pass 042* (16-Apr)",
+      "slope_quality": "good",
+      "center": [24.91, 92.21],
+      "width_mean_m": 175.0,
+      "length_m": 13800,
+      "has_gauge": false,
+      "gauge_station": null,
+      "coordinates": [
+        [24.871, 92.483],
+        [24.885, 92.420],
+        [24.905, 92.345],
+        [24.925, 92.270],
+        [24.945, 92.180],
+        [24.950, 92.100],
+        [24.935, 92.020],
+        [24.910, 91.940]
+      ]
+    },
+    {
+      "reach_id": "22211000022",
+      "river_name": "Kushiyara",
+      "reach_name": "Kushiyara Mid (Sherpur)",
+      "reach_name_bn": "কুশিয়ারা মধ্য (শেরপুর)",
+      "swot_pass": "SWOT Pass 042* (16-Apr)",
+      "slope_quality": "good",
+      "center": [24.80, 91.75],
+      "width_mean_m": 210.0,
+      "length_m": 15000,
+      "has_gauge": false,
+      "gauge_station": null,
+      "coordinates": [
+        [24.910, 91.940],
+        [24.885, 91.870],
+        [24.850, 91.800],
+        [24.820, 91.720],
+        [24.780, 91.660],
+        [24.730, 91.610],
+        [24.670, 91.560]
+      ]
+    }
+  ],
+  "gauge_stations": [
+    {
+      "station_id": "SW108",
+      "name": "Kanaighat Gauge",
+      "name_bn": "কানাইঘাট গেজ স্টেশন",
+      "river": "Surma",
+      "reach_id": "22211000011",
+      "lat": 25.060,
+      "lon": 92.228,
+      "danger_level_m": 13.20,
+      "datum": "PWD"
+    }
+  ],
+  "meghalaya_border": [
+    [25.18, 91.45],
+    [25.19, 91.65],
+    [25.18, 91.85],
+    [25.20, 92.05],
+    [25.21, 92.20],
+    [25.22, 92.40],
+    [25.20, 92.55],
+    [25.17, 92.70]
+  ],
+  "subbasins": [
+    {
+      "id": "upper_surma_meghalaya",
+      "name": "Upper Surma - Meghalaya Escarpment",
+      "name_bn": "উচ্চ সুরমা - মেঘালয় খাড়া ঢাল",
+      "area_km2": 185.0,
+      "country": "IN/BD",
+      "coordinates": [
+        [25.00, 92.10],
+        [25.18, 92.15],
+        [25.32, 92.28],
+        [25.35, 92.45],
+        [25.22, 92.55],
+        [25.05, 92.48],
+        [24.98, 92.35],
+        [24.96, 92.20],
+        [25.00, 92.10]
+      ]
+    },
+    {
+      "id": "kushiyara_transboundary",
+      "name": "Kushiyara - Transboundary Barak Headwaters",
+      "name_bn": "কুশিয়ারা - আন্তঃসীমান্ত বরাক উৎসভূমি",
+      "area_km2": 210.0,
+      "country": "IN/BD",
+      "coordinates": [
+        [24.75, 92.30],
+        [24.90, 92.40],
+        [25.05, 92.65],
+        [24.95, 92.80],
+        [24.78, 92.75],
+        [24.65, 92.55],
+        [24.68, 92.35],
+        [24.75, 92.30]
+      ]
+    }
+  ]
+}
