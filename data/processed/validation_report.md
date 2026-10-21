@@ -36,15 +36,15 @@
 ## 3. Diagnostic Validation Figures
 
 ### Figure 1: Test-Period Hydrograph & Uncertainty Envelope
-![Validation Hydrograph](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/hydrograph_test_period.png)
+![Validation Hydrograph](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/hydrograph_test_period.png)
 *Figure 1: Comparison between HydroSense modelled stage (cyan curve with shaded $\pm 0.18\text{ m}$ SWOT uncertainty envelope), observed BWDB gauge readings (white points), and BWDB Danger Level ($13.20\text{ m PWD}$). Inverted hyetograph shows 30-minute IMERG Early Run rainfall.*
 
 ### Figure 2: Simulated vs Observed Scatter Plot
-![Scatter Plot](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/scatter_sim_vs_obs.png)
+![Scatter Plot](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/scatter_sim_vs_obs.png)
 *Figure 2: 1:1 scatter plot of simulated versus observed water level on the April-May 2026 test period ($N=1464$).*
 
 ### Figure 3: Residual & Error Distribution Analysis
-![Residual Analysis](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/residual_analysis.png)
+![Residual Analysis](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/residual_analysis.png)
 *Figure 3: Residual time series $e(t) = Sim(t) - Obs(t)$ and histogram of residual distribution.*
 
 ---
