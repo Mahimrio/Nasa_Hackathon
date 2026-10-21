@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useLocale } from "../hooks/useLocale";
 
 export default function AppHeader({
@@ -10,6 +12,7 @@ export default function AppHeader({
   onOpenModelInfo,
 }) {
   const { lang, setLang, t } = useLocale();
+  const pathname = usePathname();
   const [liveUtc, setLiveUtc] = useState("");
   const [isOnline, setIsOnline] = useState(true);
 
@@ -39,10 +42,14 @@ export default function AppHeader({
     };
   }, []);
 
+  const isDashboardActive = pathname === "/" || pathname === "/dashboard";
+  const isForecastActive = pathname === "/forecast";
+  const isAdvisoryActive = pathname === "/advisory";
+
   return (
     <header className="app-topbar" role="banner">
       {/* Brand & Mission Identification */}
-      <div className="topbar-brand">
+      <Link href="/" className="topbar-brand">
         <div className="brand-glyph" aria-hidden="true">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
@@ -57,7 +64,37 @@ export default function AppHeader({
             {t("app.subtitle")}
           </div>
         </div>
-      </div>
+      </Link>
+
+      {/* Primary Route Navigation Tabs (§1 Dashboard, §2 Forecast, §3 Advisory) */}
+      <nav className="topbar-nav" aria-label="Core User Journey Navigation">
+        <Link
+          href="/dashboard"
+          className={`topbar-nav-link ${isDashboardActive ? "active" : ""}`}
+          aria-current={isDashboardActive ? "page" : undefined}
+        >
+          <span className="nav-step-badge">1</span>
+          <span>{lang === "en" ? "Dashboard" : "ড্যাশবোর্ড"}</span>
+        </Link>
+
+        <Link
+          href="/forecast"
+          className={`topbar-nav-link ${isForecastActive ? "active" : ""}`}
+          aria-current={isForecastActive ? "page" : undefined}
+        >
+          <span className="nav-step-badge">2</span>
+          <span>{lang === "en" ? "Forecast & Analysis" : "পূর্বাভাস ও বিশ্লেষণ"}</span>
+        </Link>
+
+        <Link
+          href="/advisory"
+          className={`topbar-nav-link ${isAdvisoryActive ? "active" : ""}`}
+          aria-current={isAdvisoryActive ? "page" : undefined}
+        >
+          <span className="nav-step-badge">3</span>
+          <span>{lang === "en" ? "Harvest Advisory" : "ফসল কর্তন পরামর্শ"}</span>
+        </Link>
+      </nav>
 
       {/* Central Telemetry & Freshness Indicator */}
       <div className="topbar-center-status">

@@ -1,22 +1,18 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useLocale } from "./hooks/useLocale";
+import { useTelemetry } from "./context/TelemetryContext";
 import AppHeader from "./components/AppHeader";
 import PageContextBar from "./components/PageContextBar";
 import RiverMapPanel from "./components/RiverMapPanel";
 import HarvestDecisionPanel from "./components/HarvestDecisionPanel";
-import HydrographPanel from "./components/HydrographPanel";
-import ValidationMetricsPanel from "./components/ValidationMetricsPanel";
-import OperationalLimitsPanel from "./components/OperationalLimitsPanel";
-import CoreJourneyBar from "./components/CoreJourneyBar";
 import FiveSecondTriageStrip from "./components/FiveSecondTriageStrip";
-import HarvestAdvisorySection from "./components/HarvestAdvisorySection";
 import DashboardSkeleton from "./components/DashboardSkeleton";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-// Code-split heavy interactive modals so they are loaded on-demand only (Guard P10 Bundle Optimization)
+// Code-split heavy interactive modals so they are loaded on-demand only (P10)
 const ReachInspectorModal = dynamic(
   () => import("./components/ReachInspectorModal"),
   { ssr: false }
@@ -31,145 +27,34 @@ const ModelArchitectureModal = dynamic(
 );
 
 export default function DashboardPage() {
-  const { lang, setLang, t, isBangla, formatNumber } = useLocale();
-  const [eventData, setEventData] = useState(null);
-  const [gaugeData, setGaugeData] = useState(null);
-  const [metrics, setMetrics] = useState(null);
-  const [reachMeta, setReachMeta] = useState(null);
-  const [calibration, setCalibration] = useState(null);
-  const [sliderIdx, setSliderIdx] = useState(0);
-  const [selectedReachId, setSelectedReachId] = useState("22211000011");
-  const [inspectingReach, setInspectingReach] = useState(null);
-  const [showBulletin, setShowBulletin] = useState(false);
-  const [showModelInfo, setShowModelInfo] = useState(false);
-  const [activeJourneyStep, setActiveJourneyStep] = useState("all");
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const { lang, setLang, t } = useLocale();
+  const {
+    eventData,
+    reachMeta,
+    calibration,
+    sliderIdx,
+    setSliderIdx,
+    peakIdx,
+    current,
+    currentGaugeLevel,
+    selectedReachId,
+    setSelectedReachId,
+    selectedReach,
+    reachRiskLevel,
+    dangerLevel,
+    dateStr,
+    timeStr,
+    inspectingReach,
+    setInspectingReach,
+    showBulletin,
+    setShowBulletin,
+    showModelInfo,
+    setShowModelInfo,
+    loading,
+    fetchData,
+    metrics,
+  } = useTelemetry();
 
-  // ---- RESILIENT DATA FETCHING WITH RETRY ----
-  const fetchData = useCallback(() => {
-    setLoading(true);
-    setLoadError(null);
-
-    Promise.all([
-      fetch("/data/event_timeseries.json").then((r) => {
-        if (!r.ok) throw new Error("Failed to load event_timeseries.json");
-        return r.json();
-      }),
-      fetch("/data/gauge_observations.json").then((r) => {
-        if (!r.ok) throw new Error("Failed to load gauge_observations.json");
-        return r.json();
-      }),
-      fetch("/data/metrics_summary.json").then((r) => {
-        if (!r.ok) throw new Error("Failed to load metrics_summary.json");
-        return r.json();
-      }),
-      fetch("/data/reach_metadata.json").then((r) => {
-        if (!r.ok) throw new Error("Failed to load reach_metadata.json");
-        return r.json();
-      }),
-      fetch("/data/calibration_summary.json").then((r) => {
-        if (!r.ok) throw new Error("Failed to load calibration_summary.json");
-        return r.json();
-      }),
-    ])
-      .then(([ev, ga, met, rm, cal]) => {
-        setEventData(ev);
-        setGaugeData(ga);
-        setMetrics(met);
-        setReachMeta(rm);
-        setCalibration(cal);
-
-        // Find peak stage index dynamically from data
-        const pIdx = ev.reduce(
-          (best, d, i) => (d.modelled_stage > ev[best].modelled_stage ? i : best),
-          0
-        );
-        // Start ~1 day before peak for immediate interesting context
-        setSliderIdx(Math.max(0, pIdx - 36));
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to load HydroSense pipeline data:", err);
-        setLoadError(err.message || "Failed to load telemetry datasets");
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
-
-  // ---- PEAK INDEX ----
-  const peakIdx = useMemo(() => {
-    if (!eventData || !eventData.length) return 0;
-    return eventData.reduce(
-      (best, d, i) => (d.modelled_stage > eventData[best].modelled_stage ? i : best),
-      0
-    );
-  }, [eventData]);
-
-  // ---- CURRENT TIMELINE SNAPSHOT ----
-  const current = useMemo(() => {
-    if (!eventData || sliderIdx >= eventData.length) return null;
-    return eventData[sliderIdx];
-  }, [eventData, sliderIdx]);
-
-  // ---- CHART WINDOW (Show ±3 days around slider) ----
-  const chartWindow = useMemo(() => {
-    if (!eventData || !gaugeData) return [];
-    const windowSize = 144; // 144 hourly points ≈ 6 days window
-    const start = Math.max(0, sliderIdx - 72);
-    const end = Math.min(eventData.length, start + windowSize);
-    const sliced = eventData.slice(start, end);
-
-    // Index gauge observations by timestamp
-    const gaugeMap = {};
-    gaugeData.forEach((g) => {
-      gaugeMap[g.timestamp] = g.water_level_m;
-    });
-
-    return sliced.map((d) => ({
-      time: d.timestamp.slice(5, 16).replace("T", " "),
-      timestamp: d.timestamp,
-      modelled: d.modelled_stage,
-      lower: d.stage_lower,
-      upper: d.stage_upper,
-      observed: gaugeMap[d.timestamp] ?? null,
-      baseline: d.baseline_stage ?? (7.74 + (d.baseline_rain_6h ?? 0) * 0.045),
-      rainfall: d.imerg_map_mmh,
-      flag: d.harvest_flag,
-    }));
-  }, [eventData, gaugeData, sliderIdx]);
-
-  // ---- CURRENT GAUGE READING ----
-  const currentGaugeLevel = useMemo(() => {
-    if (!gaugeData || !current) return null;
-    const match = gaugeData.find((g) => g.timestamp === current.timestamp);
-    return match ? match.water_level_m : null;
-  }, [gaugeData, current]);
-
-  // ---- CURRENT SELECTED REACH ----
-  const selectedReach = useMemo(() => {
-    if (!reachMeta) return null;
-    return reachMeta.find((r) => r.reach_id === selectedReachId) || null;
-  }, [reachMeta, selectedReachId]);
-
-  // ---- DYNAMIC REACH RISK CALCULATION ----
-  const reachRiskLevel = useCallback(
-    (reachId) => {
-      if (!current) return "GREEN";
-      if (reachId === "22211000011") return current.harvest_flag;
-      // Secondary reaches derived from upstream wave propagation
-      if (current.future_stage >= 13.2) return "RED";
-      if (current.future_stage >= 13.2 * 0.8) return "AMBER";
-      return "GREEN";
-    },
-    [current]
-  );
-
-  // ---- SHIMMER LOADING SKELETON (Guard P10: CLS < 0.1, instantaneous perceived load) ----
   if (loading) {
     return (
       <>
@@ -184,103 +69,42 @@ export default function DashboardPage() {
     );
   }
 
-  // ---- ERROR SCREEN WITH RETRY ACTION ----
   if (!eventData || !current) {
     return (
       <div className="loading-screen-wrap" role="alert">
-        <svg
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="var(--red-400)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="8" x2="12" y2="12" />
-          <line x1="12" y1="16" x2="12.01" y2="16" />
-        </svg>
         <div className="loading-headline" style={{ color: "var(--red-400)", marginTop: "12px" }}>
           {lang === "en" ? "Failed to Load Pipeline Datasets" : "টেলিম্যাট্রি ডেটাসেট লোড করা যায়নি"}
-        </div>
-        <div className="loading-subtext" style={{ maxWidth: "480px", marginBottom: "18px" }}>
-          {lang === "en"
-            ? "Could not read static JSON telemetry from /public/data. Check network connectivity or local files."
-            : "পাবলিক ফোল্ডারের স্ট্যাটিক JSON ফাইল পড়তে ব্যর্থ হয়েছে। ফাইল বা সংযোগ যাচাই করুন।"}
         </div>
         <button
           className="btn-standard btn-primary"
           onClick={fetchData}
           style={{ minHeight: "44px", padding: "0 22px", fontSize: "13px", fontWeight: 700 }}
         >
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-            <path d="M3 3v5h5" />
-          </svg>
-          <span>{lang === "en" ? "Retry Loading Telemetry" : "পুনরায় চেষ্টা করুন"}</span>
+          {lang === "en" ? "Retry Loading Telemetry" : "পুনরায় চেষ্টা করুন"}
         </button>
       </div>
     );
   }
 
-  const dangerLevel = 13.2;
-  const currentDate = new Date(current.timestamp);
-  const dateStr = currentDate.toLocaleDateString("en-GB", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-  const timeStr = currentDate.toLocaleTimeString("en-GB", {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "UTC",
-  });
-
-  const startDateStr = new Date(eventData[0].timestamp).toLocaleDateString("en-GB", {
-    month: "short",
-    day: "numeric",
-  });
-  const endDateStr = new Date(eventData[eventData.length - 1].timestamp).toLocaleDateString(
-    "en-GB",
-    {
-      month: "short",
-      day: "numeric",
-    }
-  );
-
   return (
     <ErrorBoundary lang={lang} onRetry={fetchData}>
-      {/* Skip to Main Content Link (§8 Accessibility) */}
+      {/* Skip to Main Content */}
       <a href="#main-content" className="skip-to-content">
         {lang === "en" ? "Skip to Main Content" : "মূল বিষয়বস্তুতে যান"}
       </a>
 
-      {/* Top Application Bar */}
+      {/* Top Application Bar with Route Navigation */}
       <AppHeader
-        lang={lang}
-        setLang={setLang}
         currentDateStr={dateStr}
         currentTimeStr={timeStr}
         onOpenBulletin={() => setShowBulletin(true)}
         onOpenModelInfo={() => setShowModelInfo(true)}
       />
 
-      {/* Main Dashboard Application Shell */}
+      {/* Main Dashboard Application Shell (§1. Dashboard — Detect Risk) */}
       <main id="main-content" className="dashboard-shell" role="main" tabIndex="-1">
         {/* Context Strip & Quick Timeline Jumps */}
         <PageContextBar
-          lang={lang}
           reaches={reachMeta}
           selectedReachId={selectedReachId}
           setSelectedReachId={setSelectedReachId}
@@ -289,14 +113,7 @@ export default function DashboardPage() {
           eventDataLength={eventData.length}
         />
 
-        {/* 1. Core Decision Journey Stepper (Detect Risk -> Understand Why -> Decide What to Do) */}
-        <CoreJourneyBar
-          activeStep={activeJourneyStep}
-          setActiveStep={setActiveJourneyStep}
-          currentFlag={current.harvest_flag}
-        />
-
-        {/* 2. Winning UX Principle: 5-Second Executive Triage Strip (Where, When, Why, What to Do) */}
+        {/* 5-Second Executive Triage Strip: Where, When, Why, What to Do */}
         <FiveSecondTriageStrip
           current={current}
           dangerLevel={dangerLevel}
@@ -304,13 +121,8 @@ export default function DashboardPage() {
           selectedReach={selectedReach}
         />
 
-        {/* SECTION 1: Dashboard — Detect Risk (Interactive Map & Real-time Risk Triage) */}
-        <section
-          id="journey-detect-risk"
-          className="dashboard-hero-row"
-          aria-label="Phase 1: Detect Flood Risk"
-          style={{ scrollMarginTop: "80px" }}
-        >
+        {/* Hero Row: 8-col Reach Map + 4-col Harvest Decision Rail (§1. Dashboard — Detect Risk) */}
+        <div className="dashboard-hero-row">
           <RiverMapPanel
             reaches={reachMeta}
             riskFn={reachRiskLevel}
@@ -332,48 +144,42 @@ export default function DashboardPage() {
             lang={lang}
             selectedReach={selectedReach}
           />
-        </section>
+        </div>
 
-        {/* SECTION 2: Forecast & Analysis — Understand Why (Hydrograph, Danger Crossing, Metrics, Limitations) */}
-        <section
-          id="journey-forecast-analysis"
-          aria-label="Phase 2: Forecast and Analysis"
-          style={{ scrollMarginTop: "80px" }}
-        >
-          {/* Hydrograph and Timeline Scrubber Row (Full 12/12 Width) */}
-          <div className="dashboard-full-row">
-            <HydrographPanel
-              chartData={chartWindow}
-              current={current}
-              dangerLevel={dangerLevel}
-              sliderIdx={sliderIdx}
-              setSliderIdx={setSliderIdx}
-              eventDataLength={eventData.length}
-              startDateStr={startDateStr}
-              endDateStr={endDateStr}
-              dateStr={dateStr}
-              timeStr={timeStr}
-              lang={lang}
-              peakIdx={peakIdx}
-              selectedReach={selectedReach}
-            />
-          </div>
+        {/* Cross-Route Decision Journey Pathway Navigation */}
+        <div className="journey-pathway-banner" aria-label="Next Steps in User Journey">
+          <Link href="/forecast" className="pathway-card neu-raised">
+            <div>
+              <div className="pathway-title">
+                {lang === "en" ? "2. Understand Why: Forecast & Analysis ➔" : "২. পূর্বাভাসের কারণ জানুন: হাইড্রো বিশ্লেষণ ➔"}
+              </div>
+              <div className="pathway-desc">
+                {lang === "en"
+                  ? "Inspect observed vs predicted hydrograph crest, 13.20m danger crossing time, and NSE/KGE validation benchmarks."
+                  : "পর্যবেক্ষিত বনাম পূর্বাভাস হাইড্রোগ্রাফ, ১৩.২০ মি বিপদসীমা অতিক্রমের সময় এবং বৈজ্ঞানিক যাচাই মানদণ্ড দেখুন।"}
+              </div>
+            </div>
+            <div className="pathway-arrow" aria-hidden="true">
+              ➔
+            </div>
+          </Link>
 
-          {/* Scientific Validation Benchmark Metrics Row (Full 12/12 Width) */}
-          <ValidationMetricsPanel metrics={metrics} lang={lang} />
-
-          {/* Permanent Operational Limitations & Methodological Bounds */}
-          <OperationalLimitsPanel lang={lang} metrics={metrics} />
-        </section>
-
-        {/* SECTION 3: Harvest Advisory — Decide What to Do (Location Recommendations, Warning Window, Farmer Actions) */}
-        <HarvestAdvisorySection
-          current={current}
-          dangerLevel={dangerLevel}
-          metrics={metrics}
-          selectedReach={selectedReach}
-          onOpenBulletin={() => setShowBulletin(true)}
-        />
+          <Link href="/advisory" className="pathway-card neu-raised">
+            <div>
+              <div className="pathway-title">
+                {lang === "en" ? "3. Decide What to Do: Harvest Advisory ➔" : "৩. কী সিদ্ধান্ত নেবেন: ফসল কর্তন নির্দেশিকা ➔"}
+              </div>
+              <div className="pathway-desc">
+                {lang === "en"
+                  ? "View location-specific directives, 22.0h warning window, affected haor areas, and field checklists for farmers & DAE officers."
+                  : "এলাকা-ভিত্তিক সুপারিশ, ২২.০ ঘণ্টা সতর্কবার্তা সময়সীমা, প্লাবিত হাওর এবং কৃষক ও কৃষি কর্মকর্তাদের নির্দেশিকা দেখুন।"}
+              </div>
+            </div>
+            <div className="pathway-arrow" aria-hidden="true">
+              ➔
+            </div>
+          </Link>
+        </div>
       </main>
 
       {/* Global Application Footer */}
