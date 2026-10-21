@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useLocale } from "../hooks/useLocale";
 
-export default function ModelArchitectureModal({ lang, onClose }) {
+export default function ModelArchitectureModal({ onClose }) {
+  const { lang, t } = useLocale();
   const closeBtnRef = useRef(null);
 
   useEffect(() => {
@@ -31,92 +33,173 @@ export default function ModelArchitectureModal({ lang, onClose }) {
           ref={closeBtnRef}
           className="modal-close-btn"
           onClick={onClose}
-          aria-label={lang === "en" ? "Close model info (Press Escape)" : "মডেল তথ্য বন্ধ করুন (Escape চাপুন)"}
+          aria-label={t("architecture.closeBtn")}
         >
-
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
-          <div style={{
-            width: "40px",
-            height: "40px",
-            borderRadius: "8px",
-            background: "rgba(56, 189, 248, 0.12)",
-            border: "1px solid rgba(56, 189, 248, 0.3)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--cyan-400)",
-            flexShrink: 0
-          }}>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <div
+            style={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "8px",
+              background: "rgba(56, 189, 248, 0.12)",
+              border: "1px solid rgba(56, 189, 248, 0.3)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--cyan-400)",
+              flexShrink: 0,
+            }}
+          >
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
             </svg>
           </div>
           <div>
-            <h2 id="model-info-title" style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)" }}>
-              {lang === "en" ? "HydroSense-SWOT Scientific Architecture" : "হাইড্রোসেন্স-SWOT বৈজ্ঞানিক স্থাপত্য"}
+            <h2
+              id="model-info-title"
+              style={{ fontSize: "18px", fontWeight: 800, color: "var(--text-primary)" }}
+            >
+              {t("architecture.title")}
             </h2>
+            <div style={{ fontSize: "12px", color: "var(--text-muted)" }}>
+              {t("architecture.subtitle")}
+            </div>
           </div>
         </div>
 
-        <p style={{ fontSize: "13px", color: "var(--text-secondary)", lineHeight: 1.6, marginBottom: "20px" }}>
-          {lang === "en"
-            ? "HydroSense couples NASA SWOT KaRIn radar altimetry with GPM IMERG satellite precipitation to deliver actionable flash flood early warnings for Boro rice farmers in the Haor basin of northeastern Bangladesh."
-            : "হাইড্রোসেন্স নাসা SWOT উপগ্রহের রাডার আল্টিমেট্রি এবং GPM IMERG বৃষ্টিপাত ডেটার সমন্বয়ে হাওর অঞ্চলের বোরো ধান রক্ষায় আগাম সতর্কবার্তা প্রদান করে।"}
-        </p>
-
         {/* 4 Tiers of Pipeline */}
         <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "22px" }}>
-          <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(14,27,45,0.7)", border: "1px solid var(--glass-stroke)" }}>
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "rgba(14,27,45,0.7)",
+              border: "1px solid var(--glass-stroke)",
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--cyan-300)", fontSize: "13px" }}>
-                Tier 1: SWOT River Roughness Calibration
+              <strong style={{ color: "var(--cyan-300)", fontSize: "13.5px" }}>
+                {t("architecture.offlineTitle")}
               </strong>
-              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Offline / 21-day orbit</span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {lang === "en" ? "Offline / 21-day orbit" : "অফলাইন / ২১ দিন কক্ষপথ"}
+              </span>
             </div>
-            <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
-              Calibrates Manning&apos;s roughness coefficient (n) and bed elevation (z_bed) for each SWORD reach using SWOT L2 HR RiverSP water surface elevation (WSE), width (W), and longitudinal slope.
+            <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6 }}>
+              {t("architecture.offlineText")}
             </p>
           </div>
 
-          <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(14,27,45,0.7)", border: "1px solid var(--glass-stroke)" }}>
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "rgba(14,27,45,0.7)",
+              border: "1px solid var(--glass-stroke)",
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--blue-500)", fontSize: "13px" }}>
-                Tier 2: IMERG Catchment Precipitation Inflow
+              <strong style={{ color: "var(--blue-400)", fontSize: "13.5px" }}>
+                {t("architecture.onlineTitle")}
               </strong>
-              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>30-min latency: ~4h</span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {lang === "en" ? "Latency: ~4h" : "বিলম্বকাল: ~৪ ঘণ্টা"}
+              </span>
             </div>
-            <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
-              Integrates GPM IMERG Early Run half-hourly precipitation over the 185 km² upper Meghalaya catchment into boundary hydrograph inflow Q via SCS-CN calibrated runoff coefficients.
+            <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6 }}>
+              {t("architecture.onlineText")}
             </p>
           </div>
 
-          <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(14,27,45,0.7)", border: "1px solid var(--glass-stroke)" }}>
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "rgba(14,27,45,0.7)",
+              border: "1px solid var(--glass-stroke)",
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--violet-500)", fontSize: "13px" }}>
-                Tier 3: Muskingum-Cunge Flood Wave Routing
+              <strong style={{ color: "var(--violet-400)", fontSize: "13.5px" }}>
+                {t("architecture.routingTitle")}
               </strong>
-              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>~26h Travel Time</span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {lang === "en" ? "~26h Travel Time" : "~২৬ ঘণ্টা তরঙ্গ গতি"}
+              </span>
             </div>
-            <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
-              Physically-based variable-parameter flood routing through the Surma-Kushiyara river network, tracking wave attenuation, celerity, and stage hydrographs down to the Haor rim.
+            <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6 }}>
+              {t("architecture.routingText")}
             </p>
           </div>
 
-          <div style={{ padding: "12px 14px", borderRadius: "10px", background: "rgba(14,27,45,0.7)", border: "1px solid var(--glass-stroke)" }}>
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: "10px",
+              background: "rgba(14,27,45,0.7)",
+              border: "1px solid var(--glass-stroke)",
+            }}
+          >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--green-400)", fontSize: "13px" }}>
-                Tier 4: Early Warning & Harvest Advisory Engine
+              <strong style={{ color: "var(--green-400)", fontSize: "13.5px" }}>
+                {t("architecture.decisionTitle")}
               </strong>
-              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Lead time: 21.0h</span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  color: "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {lang === "en" ? "Lead time: 22.0h" : "অগ্রিম সময়: ২২.০ ঘণ্টা"}
+              </span>
             </div>
-            <p style={{ fontSize: "12px", color: "var(--text-secondary)", margin: 0 }}>
-              Evaluates future stage vs 13.20m PWD danger level with ±0.18m uncertainty bands, triggering actionable GREEN / AMBER / RED flags with bilingual operational guidance.
+            <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6 }}>
+              {t("architecture.decisionText")}
             </p>
           </div>
         </div>
@@ -126,9 +209,10 @@ export default function ModelArchitectureModal({ lang, onClose }) {
           style={{ width: "100%", justifyContent: "center" }}
           onClick={onClose}
         >
-          {lang === "en" ? "Got It" : "বুঝেছি"}
+          {lang === "en" ? "Close" : "বুঝেছি (বন্ধ করুন)"}
         </button>
       </div>
     </div>
   );
 }
+

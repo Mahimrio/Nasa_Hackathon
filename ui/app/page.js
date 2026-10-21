@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useLocale } from "./hooks/useLocale";
 import AppHeader from "./components/AppHeader";
 import PageContextBar from "./components/PageContextBar";
 import RiverMapPanel from "./components/RiverMapPanel";
@@ -13,13 +14,13 @@ import AdvisoryBulletinModal from "./components/AdvisoryBulletinModal";
 import ModelArchitectureModal from "./components/ModelArchitectureModal";
 
 export default function DashboardPage() {
+  const { lang, setLang, t, isBangla, formatNumber } = useLocale();
   const [eventData, setEventData] = useState(null);
   const [gaugeData, setGaugeData] = useState(null);
   const [metrics, setMetrics] = useState(null);
   const [reachMeta, setReachMeta] = useState(null);
   const [calibration, setCalibration] = useState(null);
   const [sliderIdx, setSliderIdx] = useState(0);
-  const [lang, setLang] = useState("en");
   const [selectedReachId, setSelectedReachId] = useState("22211000011");
   const [inspectingReach, setInspectingReach] = useState(null);
   const [showBulletin, setShowBulletin] = useState(false);
@@ -267,14 +268,28 @@ export default function DashboardPage() {
       {/* Global Application Footer */}
       <footer className="dashboard-footer" role="contentinfo">
         <div>
-          HydroSense-SWOT · NASA Space Apps Challenge 2026 · Tier 4 User Delivery Interface
+          {lang === "en"
+            ? "HydroSense-SWOT · NASA Space Apps Challenge 2026 · Tier 4 User Delivery Interface"
+            : "হাইড্রোসেন্স-SWOT · নাসা স্পেস অ্যাপস চ্যালেঞ্জ ২০২৬ · টিয়ার ৪ ইন্টারফেস"}
         </div>
         <div className="footer-citations">
-          <span>NASA SWOT L2 HR RiverSP 2.0 (KaRIn Altimetry)</span>
+          <span>
+            {lang === "en"
+              ? "NASA SWOT L2 HR RiverSP 2.0 (KaRIn Altimetry)"
+              : "নাসা SWOT L2 HR RiverSP 2.0 (KaRIn অলটিমেট্রি)"}
+          </span>
           <span>•</span>
-          <span>GPM IMERG Early Run V07 (0.1° Half-Hourly)</span>
+          <span>
+            {lang === "en"
+              ? "GPM IMERG Early Run V07 (0.1° Half-Hourly)"
+              : "GPM IMERG আর্লি রান V07 (০.১° আধা-ঘণ্টা)"}
+          </span>
           <span>•</span>
-          <span>BWDB SW108 Kanaighat Hydrometric Gauge</span>
+          <span>
+            {lang === "en"
+              ? "BWDB SW108 Kanaighat Hydrometric Gauge"
+              : "বাপাউবো SW১০৮ কানাইঘাট হাইড্রোগ্রাফিক গেজ"}
+          </span>
         </div>
       </footer>
 

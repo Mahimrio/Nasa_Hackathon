@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale } from "../hooks/useLocale";
 import InteractiveMap from "./InteractiveMap";
 
 /**
@@ -38,7 +39,7 @@ export function getCividisColor(ratio) {
 export default function RiverMapPanel({
   reaches,
   riskFn,
-  lang,
+  lang: propLang,
   selectedReachId,
   setSelectedReachId,
   currentStage,
@@ -47,7 +48,10 @@ export default function RiverMapPanel({
   currentRainfall = 0,
   onInspectReach,
 }) {
+  const { lang: ctxLang } = useLocale();
+  const lang = propLang || ctxLang || "bn";
   const [viewMode, setViewMode] = useState("geographic");
+
   const [zoomLevel, setZoomLevel] = useState(1);
   const [showFlowAnim, setShowFlowAnim] = useState(true);
   const [showSwotSwath, setShowSwotSwath] = useState(true);

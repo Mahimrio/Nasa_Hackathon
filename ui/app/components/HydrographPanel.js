@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale } from "../hooks/useLocale";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -25,10 +26,10 @@ export default function HydrographPanel({
   endDateStr,
   dateStr,
   timeStr,
-  lang,
   peakIdx,
   selectedReach,
 }) {
+  const { lang, t, formatNumber } = useLocale();
   const [isPlaying, setIsPlaying] = useState(false);
   const [playSpeed, setPlaySpeed] = useState(1); // 1x, 2x, 5x
 
@@ -54,31 +55,36 @@ export default function HydrographPanel({
     ? lang === "en"
       ? selectedReach.name
       : selectedReach.name_bn
-    : "SW108 Kanaighat";
+    : (lang === "en" ? "SW108 Kanaighat" : "SW১০৮ কানাইঘাট");
+
+  const corridorText = selectedReach?.river === "Kushiyara"
+    ? t("hydrograph.corridorKushiyara")
+    : t("hydrograph.corridorSurma");
 
   return (
     <section className="glass-panel card-padding hydrograph-panel" aria-label="Hydrologic Time-Series Analysis">
       {/* Screen Reader Chart Summary Alternative (§8 Accessibility) */}
       <div className="sr-only" role="region" aria-label="Hydrograph Accessible Summary">
-        {lang === "en"
-          ? `Dual-axis hydrograph for ${reachDisplayName}. Event period: ${startDateStr} to ${endDateStr}. Current modelled water level is ${current?.modelled_stage?.toFixed(2)} meters PWD compared to danger level of ${dangerLevel.toFixed(2)} meters PWD. Use arrow keys on the timeline scrubber below to step through hourly flood simulation time steps.`
-          : `${reachDisplayName}-এর জন্য দ্বৈত অক্ষীয় হাইড্রোগ্রাফ। সময়সীমা: ${startDateStr} থেকে ${endDateStr}। বর্তমান মডেলকৃত পানি স্তর ${current?.modelled_stage?.toFixed(2)} মিটার এবং বিপৎসীমা ${dangerLevel.toFixed(2)} মিটার। টাইমলাইন স্ক্রাবারে অ্যারো কি চেপে প্রতি ঘণ্টার সিমুলেশন পর্যায় দেখুন।`}
+        {t("hydrograph.srSummary", {
+          reachName: reachDisplayName,
+          startDate: startDateStr,
+          endDate: endDateStr,
+          stage: current?.modelled_stage?.toFixed(2),
+          danger: dangerLevel.toFixed(2),
+        })}
       </div>
 
       {/* Panel Header */}
       <div className="card-header-bar">
         <div className="card-title-group">
           <div className="card-icon" aria-hidden="true">
-
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
           </div>
           <div>
             <div className="card-title">
-              {lang === "en"
-                ? `Hydrograph — ${reachDisplayName} (Surma River Corridor)`
-                : `হাইড্রোগ্রাফ — ${reachDisplayName} (সুরমা নদী)`}
+              {t("hydrograph.title")} {reachDisplayName} {corridorText}
             </div>
           </div>
         </div>
@@ -88,27 +94,27 @@ export default function HydrographPanel({
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "14px", fontSize: "12px", color: "var(--text-secondary)" }}>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "14px", height: "3px", background: "#35D8F2", borderRadius: "2px" }} />
-              {lang === "en" ? "Modelled Stage" : "মডেল স্তর"}
+              {t("hydrograph.modelledStage")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #F8FAFC" }} />
-              {lang === "en" ? "BWDB Observed" : "পর্যবেক্ষিত"}
+              {t("hydrograph.bwdbObserved")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "14px", height: "0px", borderTop: "2px dotted #94A3B8" }} />
-              {lang === "en" ? "Rainfall Baseline" : "বেসলাইন"}
+              {t("hydrograph.rainfallBaseline")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "10px", height: "8px", background: "rgba(53, 216, 242, 0.2)", borderRadius: "2px" }} />
-              {lang === "en" ? "±0.18m Uncertainty" : "±০.১৮ মি অনিশ্চয়তা"}
+              {t("hydrograph.uncertaintyBand")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "10px", height: "8px", background: "rgba(56, 189, 248, 0.6)", borderRadius: "2px" }} />
-              {lang === "en" ? "IMERG Rain (mm/h)" : "বৃষ্টি (মিমি/ঘ)"}
+              {t("hydrograph.imergRain")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #FFC45C" }} />
-              {lang === "en" ? `Danger (${dangerLevel.toFixed(2)}m)` : `বিপদসীমা (${dangerLevel.toFixed(2)}m)`}
+              {t("hydrograph.dangerLevel")} ({formatNumber(dangerLevel.toFixed(2))}m)
             </span>
           </div>
         </div>
@@ -125,7 +131,7 @@ export default function HydrographPanel({
               domain={[0, "auto"]}
               tick={{ fontSize: 10, fill: "#94A3B8", fontFamily: "var(--font-mono)" }}
               label={{
-                value: lang === "en" ? "Rain (mm/h)" : "বৃষ্টি (mm/h)",
+                value: t("hydrograph.rainAxis"),
                 angle: -90,
                 position: "insideLeft",
                 fontSize: 10,
@@ -156,7 +162,7 @@ export default function HydrographPanel({
               domain={["auto", "auto"]}
               tick={{ fontSize: 10.5, fill: "#71849C", fontFamily: "var(--font-mono)" }}
               label={{
-                value: lang === "en" ? "Water Level (m PWD)" : "পানির স্তর (m PWD)",
+                value: t("hydrograph.waterLevelAxis"),
                 angle: -90,
                 position: "insideLeft",
                 fontSize: 11,
@@ -174,7 +180,7 @@ export default function HydrographPanel({
               fill="rgba(53, 216, 242, 0.14)"
               activeDot={false}
               isAnimationActive={false}
-              name={lang === "en" ? "Upper 95% Bound" : "ঊর্ধ্ব সীমা"}
+              name={t("hydrograph.upperBound")}
             />
             <Area
               type="monotone"
@@ -183,7 +189,7 @@ export default function HydrographPanel({
               fill="#060c16"
               activeDot={false}
               isAnimationActive={false}
-              name={lang === "en" ? "Lower 95% Bound" : "নিম্ন সীমা"}
+              name={t("hydrograph.lowerBound")}
             />
 
             {/* Danger Level Reference Line (Amber Dashed at 13.20m) */}
@@ -193,7 +199,7 @@ export default function HydrographPanel({
               strokeDasharray="6 4"
               strokeWidth={1.8}
               label={{
-                value: lang === "en" ? `Danger ${dangerLevel.toFixed(2)}m` : `বিপদসীমা ${dangerLevel.toFixed(2)}m`,
+                value: `${t("hydrograph.dangerLabel")} ${formatNumber(dangerLevel.toFixed(2))}m`,
                 position: "right",
                 fontSize: 10,
                 fill: "#FFC45C",
@@ -201,34 +207,35 @@ export default function HydrographPanel({
               }}
             />
 
-            {/* Active Current Time Cursor */}
+            {/* Current Slider Timestamp Cursor Indicator */}
             {currentTimeFormatted && (
               <ReferenceLine
                 x={currentTimeFormatted}
-                stroke="#35D8F2"
+                stroke="#38BDF8"
                 strokeWidth={2}
+                strokeDasharray="4 2"
                 label={{
-                  value: "▲ Current",
+                  value: `${currentTimeFormatted} UTC`,
                   position: "top",
-                  fontSize: 9.5,
-                  fill: "#35D8F2",
-                  fontWeight: 700,
+                  fontSize: 10,
+                  fill: "#38BDF8",
+                  fontWeight: 600,
                 }}
               />
             )}
 
-            {/* Modelled Water Stage (Cyan Solid Line with Soft Glow) */}
+            {/* Modelled Hydrograph (Cyan Solid Line with Soft Ambient Glow) */}
             <Line
               type="monotone"
               dataKey="modelled"
-              stroke="#35D8F2"
-              strokeWidth={2.5}
+              stroke="#38BDF8"
+              strokeWidth={2.8}
               dot={false}
-              activeDot={{ r: 5, fill: "#35D8F2", stroke: "#F2F7FF", strokeWidth: 2 }}
-              name={lang === "en" ? "Modelled Stage" : "মডেল স্তর"}
+              activeDot={{ r: 5, fill: "#38BDF8", stroke: "#050A12", strokeWidth: 2 }}
+              name={t("hydrograph.modelledStage")}
             />
 
-            {/* Observed Water Stage (White Dashed Line with Soft Points) */}
+            {/* BWDB Observed Gauge (White Dashed Line) */}
             <Line
               type="monotone"
               dataKey="observed"
@@ -236,8 +243,8 @@ export default function HydrographPanel({
               strokeWidth={2}
               strokeDasharray="5 3"
               dot={false}
-              activeDot={{ r: 4, fill: "#F8FAFC", stroke: "#050A12", strokeWidth: 1.5 }}
-              name={lang === "en" ? "BWDB Observed" : "BWDB পর্যবেক্ষণ"}
+              activeDot={{ r: 4, fill: "#F8FAFC", stroke: "#050A12", strokeWidth: 2 }}
+              name={t("hydrograph.bwdbObserved")}
               connectNulls={false}
             />
 
@@ -250,12 +257,12 @@ export default function HydrographPanel({
               strokeDasharray="2 3"
               dot={false}
               activeDot={{ r: 3, fill: "#94A3B8", stroke: "#050A12", strokeWidth: 1.5 }}
-              name={lang === "en" ? "Rainfall Baseline" : "বৃষ্টি বেসলাইন"}
+              name={t("hydrograph.rainfallBaseline")}
               connectNulls={false}
             />
 
             {/* Glassmorphic Chart Tooltip */}
-            <Tooltip content={<CustomHydrographTooltip lang={lang} dangerLevel={dangerLevel} />} />
+            <Tooltip content={<CustomHydrographTooltip lang={lang} dangerLevel={dangerLevel} t={t} formatNumber={formatNumber} />} />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
@@ -268,8 +275,8 @@ export default function HydrographPanel({
             <button
               className="timeline-play-btn"
               onClick={() => setIsPlaying(!isPlaying)}
-              title={isPlaying ? "Pause Replay" : "Play Flood Simulation Replay"}
-              aria-label={isPlaying ? "Pause Timeline Replay" : "Start Timeline Replay"}
+              title={isPlaying ? t("hydrograph.pauseAnimation") : t("hydrograph.playAnimation")}
+              aria-label={isPlaying ? t("hydrograph.pauseAnimation") : t("hydrograph.playAnimation")}
             >
               {isPlaying ? (
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
@@ -287,8 +294,8 @@ export default function HydrographPanel({
               className="btn-standard neu-inset"
               style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
               onClick={() => setSliderIdx((i) => Math.max(0, i - 1))}
-              title={lang === "en" ? "Step Backward 1 hour (Arrow Left)" : "১ ঘণ্টা পিছিয়ে যান"}
-              aria-label="Step Backward 1 hour"
+              title={t("hydrograph.stepBackward")}
+              aria-label={t("hydrograph.stepBackward")}
             >
               -1h
             </button>
@@ -296,8 +303,8 @@ export default function HydrographPanel({
               className="btn-standard neu-inset"
               style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
               onClick={() => setSliderIdx((i) => Math.min(eventDataLength - 1, i + 1))}
-              title={lang === "en" ? "Step Forward 1 hour (Arrow Right)" : "১ ঘণ্টা এগিয়ে যান"}
-              aria-label="Step Forward 1 hour"
+              title={t("hydrograph.stepForward")}
+              aria-label={t("hydrograph.stepForward")}
             >
               +1h
             </button>
@@ -305,8 +312,8 @@ export default function HydrographPanel({
               className="btn-standard neu-inset"
               style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px" }}
               onClick={() => setSliderIdx(peakIdx)}
-              title={lang === "en" ? "Jump Directly to Peak Water Level" : "শীর্ষ পানি স্তরে যান"}
-              aria-label="Jump Directly to Peak Water Level"
+              title={t("hydrograph.jumpToPeak")}
+              aria-label={t("hydrograph.jumpToPeak")}
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -315,16 +322,16 @@ export default function HydrographPanel({
             </button>
 
             {/* Speed Selector */}
-            <div className="timeline-speed-selector" role="group" aria-label="Playback Speed">
+            <div className="timeline-speed-selector" role="group" aria-label={t("hydrograph.playbackSpeed")}>
               {[1, 2, 5].map((speed) => (
                 <button
                   key={speed}
                   className={`speed-btn ${playSpeed === speed ? "active" : ""}`}
                   onClick={() => setPlaySpeed(speed)}
                   aria-pressed={playSpeed === speed}
-                  aria-label={`${speed}x Playback Speed`}
+                  aria-label={`${speed}x ${t("hydrograph.playbackSpeed")}`}
                 >
-                  {speed}x
+                  {formatNumber(speed)}x
                 </button>
               ))}
             </div>
@@ -340,7 +347,7 @@ export default function HydrographPanel({
             </svg>
             <span>{dateStr} — {timeStr} UTC</span>
             <span style={{ fontSize: "12px", color: "var(--text-muted)" }}>
-              (Step {sliderIdx + 1}/{eventDataLength})
+              ({lang === "en" ? "Step" : "পর্যায়"} {formatNumber(sliderIdx + 1)}/{formatNumber(eventDataLength)})
             </span>
           </div>
         </div>
@@ -353,7 +360,7 @@ export default function HydrographPanel({
             min={0}
             max={eventDataLength - 1}
             value={sliderIdx}
-            aria-label={lang === "en" ? "Event flood simulation timeline scrubber" : "বন্যা সিমুলেশন টাইমলাইন স্ক্রাবার"}
+            aria-label={t("hydrograph.timelineScrubber")}
             aria-valuemin={0}
             aria-valuemax={eventDataLength - 1}
             aria-valuenow={sliderIdx}
@@ -392,19 +399,20 @@ export default function HydrographPanel({
           />
         </div>
 
-
         {/* Start / End Date Extents */}
         <div className="timeline-date-extents">
-          <span>{startDateStr} (Event Start)</span>
-          <span style={{ color: "var(--cyan-400)" }}>April 2026 Flash Flood Replay Event</span>
-          <span>{endDateStr} (Event End)</span>
+          <span>{startDateStr} ({lang === "en" ? "Event Start" : "শুরু"})</span>
+          <span style={{ color: "var(--cyan-400)" }}>
+            {lang === "en" ? "April 2026 Flash Flood Replay Event" : "এপ্রিল ২০২৬ পাহাড়ি ঢল সিমুলেশন ইভেন্ট"}
+          </span>
+          <span>{endDateStr} ({lang === "en" ? "Event End" : "সমাপ্তি"})</span>
         </div>
       </div>
     </section>
   );
 }
 
-function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel }) {
+function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel, formatNumber }) {
   if (!active || !payload?.length) return null;
 
   return (
@@ -421,6 +429,7 @@ function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel }) 
         if (p.value == null) return null;
         const color = p.stroke || p.fill || "#35D8F2";
         const val = typeof p.value === "number" ? p.value.toFixed(2) : p.value;
+        const formattedVal = formatNumber ? formatNumber(val) : val;
         const isRain = p.dataKey === "rainfall";
 
         return (
@@ -430,15 +439,15 @@ function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel }) 
               <span style={{ color: "var(--text-secondary)" }}>{p.name}:</span>
             </span>
             <strong style={{ fontFamily: "var(--font-mono)", color: "var(--text-primary)" }}>
-              {val} {isRain ? "mm/h" : "m PWD"}
+              {formattedVal} {isRain ? (lang === "en" ? "mm/h" : "মিমি/ঘ") : "m PWD"}
             </strong>
           </div>
         );
       })}
 
       <div style={{ marginTop: 6, paddingTop: 4, borderTop: "1px solid rgba(177,221,255,0.1)", fontSize: "10.5px", color: "var(--text-muted)" }}>
-        <span>Danger Level: </span>
-        <strong style={{ color: "#FF647C" }}>{dangerLevel} m</strong>
+        <span>{lang === "en" ? "Danger Level: " : "বিপদসীমা: "}</span>
+        <strong style={{ color: "#FF647C" }}>{formatNumber ? formatNumber(dangerLevel) : dangerLevel} m</strong>
       </div>
     </div>
   );
