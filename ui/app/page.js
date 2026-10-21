@@ -10,6 +10,9 @@ import HarvestDecisionPanel from "./components/HarvestDecisionPanel";
 import HydrographPanel from "./components/HydrographPanel";
 import ValidationMetricsPanel from "./components/ValidationMetricsPanel";
 import OperationalLimitsPanel from "./components/OperationalLimitsPanel";
+import CoreJourneyBar from "./components/CoreJourneyBar";
+import FiveSecondTriageStrip from "./components/FiveSecondTriageStrip";
+import HarvestAdvisorySection from "./components/HarvestAdvisorySection";
 import DashboardSkeleton from "./components/DashboardSkeleton";
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -39,6 +42,7 @@ export default function DashboardPage() {
   const [inspectingReach, setInspectingReach] = useState(null);
   const [showBulletin, setShowBulletin] = useState(false);
   const [showModelInfo, setShowModelInfo] = useState(false);
+  const [activeJourneyStep, setActiveJourneyStep] = useState("all");
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
 
@@ -285,8 +289,28 @@ export default function DashboardPage() {
           eventDataLength={eventData.length}
         />
 
-        {/* Hero Row: 8-col Reach Map + 4-col Harvest Decision Engine (§3.1) */}
-        <div className="dashboard-hero-row">
+        {/* 1. Core Decision Journey Stepper (Detect Risk -> Understand Why -> Decide What to Do) */}
+        <CoreJourneyBar
+          activeStep={activeJourneyStep}
+          setActiveStep={setActiveJourneyStep}
+          currentFlag={current.harvest_flag}
+        />
+
+        {/* 2. Winning UX Principle: 5-Second Executive Triage Strip (Where, When, Why, What to Do) */}
+        <FiveSecondTriageStrip
+          current={current}
+          dangerLevel={dangerLevel}
+          metrics={metrics}
+          selectedReach={selectedReach}
+        />
+
+        {/* SECTION 1: Dashboard — Detect Risk (Interactive Map & Real-time Risk Triage) */}
+        <section
+          id="journey-detect-risk"
+          className="dashboard-hero-row"
+          aria-label="Phase 1: Detect Flood Risk"
+          style={{ scrollMarginTop: "80px" }}
+        >
           <RiverMapPanel
             reaches={reachMeta}
             riskFn={reachRiskLevel}
@@ -308,32 +332,48 @@ export default function DashboardPage() {
             lang={lang}
             selectedReach={selectedReach}
           />
-        </div>
+        </section>
 
-        {/* Hydrograph and Timeline Scrubber Row (Full 12/12 Width) */}
-        <div className="dashboard-full-row">
-          <HydrographPanel
-            chartData={chartWindow}
-            current={current}
-            dangerLevel={dangerLevel}
-            sliderIdx={sliderIdx}
-            setSliderIdx={setSliderIdx}
-            eventDataLength={eventData.length}
-            startDateStr={startDateStr}
-            endDateStr={endDateStr}
-            dateStr={dateStr}
-            timeStr={timeStr}
-            lang={lang}
-            peakIdx={peakIdx}
-            selectedReach={selectedReach}
-          />
-        </div>
+        {/* SECTION 2: Forecast & Analysis — Understand Why (Hydrograph, Danger Crossing, Metrics, Limitations) */}
+        <section
+          id="journey-forecast-analysis"
+          aria-label="Phase 2: Forecast and Analysis"
+          style={{ scrollMarginTop: "80px" }}
+        >
+          {/* Hydrograph and Timeline Scrubber Row (Full 12/12 Width) */}
+          <div className="dashboard-full-row">
+            <HydrographPanel
+              chartData={chartWindow}
+              current={current}
+              dangerLevel={dangerLevel}
+              sliderIdx={sliderIdx}
+              setSliderIdx={setSliderIdx}
+              eventDataLength={eventData.length}
+              startDateStr={startDateStr}
+              endDateStr={endDateStr}
+              dateStr={dateStr}
+              timeStr={timeStr}
+              lang={lang}
+              peakIdx={peakIdx}
+              selectedReach={selectedReach}
+            />
+          </div>
 
-        {/* Scientific Validation Benchmark Metrics Row (Full 12/12 Width) */}
-        <ValidationMetricsPanel metrics={metrics} lang={lang} />
+          {/* Scientific Validation Benchmark Metrics Row (Full 12/12 Width) */}
+          <ValidationMetricsPanel metrics={metrics} lang={lang} />
 
-        {/* Permanent Operational Limitations & Methodological Bounds */}
-        <OperationalLimitsPanel lang={lang} metrics={metrics} />
+          {/* Permanent Operational Limitations & Methodological Bounds */}
+          <OperationalLimitsPanel lang={lang} metrics={metrics} />
+        </section>
+
+        {/* SECTION 3: Harvest Advisory — Decide What to Do (Location Recommendations, Warning Window, Farmer Actions) */}
+        <HarvestAdvisorySection
+          current={current}
+          dangerLevel={dangerLevel}
+          metrics={metrics}
+          selectedReach={selectedReach}
+          onOpenBulletin={() => setShowBulletin(true)}
+        />
       </main>
 
       {/* Global Application Footer */}

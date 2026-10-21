@@ -14,9 +14,16 @@ Reference:
 import os
 import json
 import logging
-from typing import Optional
-import geopandas as gpd
-from shapely.geometry import Polygon, shape
+from typing import Optional, Any
+
+try:
+    import geopandas as gpd
+    from shapely.geometry import Polygon, shape
+    HAS_GEOPANDAS = True
+except ImportError:
+    gpd = None
+    shape = None
+    HAS_GEOPANDAS = False
 
 logger = logging.getLogger("ingest_hydrosheds")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -85,7 +92,7 @@ SUBBASINS_GEOJSON = {
 }
 
 
-def ingest_hydrosheds_basins(output_path: Optional[str] = None) -> gpd.GeoDataFrame:
+def ingest_hydrosheds_basins(output_path: Optional[str] = None) -> Any:
     """
     Ingests HydroSHEDS sub-basins and exports to GeoJSON format in EPSG:4326.
 
@@ -93,7 +100,7 @@ def ingest_hydrosheds_basins(output_path: Optional[str] = None) -> gpd.GeoDataFr
         output_path: File path to save GeoJSON. Defaults to data/processed/hydrosheds_basins.geojson.
 
     Returns:
-        geopandas.GeoDataFrame containing delineated sub-basin polygons.
+        geopandas.GeoDataFrame or dict containing delineated sub-basin polygons.
     """
     if output_path is None:
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -101,21 +108,28 @@ def ingest_hydrosheds_basins(output_path: Optional[str] = None) -> gpd.GeoDataFr
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    # Build GeoDataFrame
-    records = []
-    for feat in SUBBASINS_GEOJSON["features"]:
-        geom = shape(feat["geometry"])
-        props = feat["properties"].copy()
-        props["geometry"] = geom
-        records.append(props)
+    if HAS_GEOPANDAS and shape is not None:
+        records = []
+        for feat in SUBBASINS_GEOJSON["features"]:
+            geom = shape(feat["geometry"])
+            props = feat["properties"].copy()
+            props["geometry"] = geom
+            records.append(props)
 
-    gdf = gpd.GeoDataFrame(records, crs="EPSG:4326")
-    gdf.to_file(output_path, driver="GeoJSON")
+        gdf = gpd.GeoDataFrame(records, crs="EPSG:4326")
+        gdf.to_file(output_path, driver="GeoJSON")
+        logger.info(
+            f"Exported {len(gdf)} HydroSHEDS sub-basins in EPSG:4326 to: {output_path}"
+        )
+        return gdf
+    else:
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(SUBBASINS_GEOJSON, f, indent=2)
+        logger.info(
+            f"Exported {len(SUBBASINS_GEOJSON['features'])} HydroSHEDS sub-basins (JSON) to: {output_path}"
+        )
+        return SUBBASINS_GEOJSON
 
-    logger.info(
-        f"Exported {len(gdf)} HydroSHEDS sub-basins in EPSG:4326 to: {output_path}"
-    )
-    return gdf
 
 
 if __name__ == "__main__":

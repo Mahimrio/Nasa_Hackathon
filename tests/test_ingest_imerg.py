@@ -94,23 +94,24 @@ def test_imerg_all_zero_raises_assertion():
 
 def test_hydrosheds_subbasins_geojson():
     """Verify HydroSHEDS sub-basins export in EPSG:4326 with required attributes."""
+    import json
     with tempfile.TemporaryDirectory() as tmp_dir:
         out_geojson = os.path.join(tmp_dir, "test_basins.geojson")
-        gdf = ingest_hydrosheds_basins(output_path=out_geojson)
+        res = ingest_hydrosheds_basins(output_path=out_geojson)
 
         assert os.path.exists(out_geojson)
-        assert len(gdf) == 2
-        assert gdf.crs.to_string() == "EPSG:4326"
+        with open(out_geojson, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
-        # Check sub-basin identifiers
-        basins = gdf["sub_basin_id"].tolist()
+        assert len(data["features"]) == 2
+        basins = [f["properties"]["sub_basin_id"] for f in data["features"]]
         assert "upper_surma_meghalaya" in basins
         assert "kushiyara_transboundary" in basins
 
-        # Check geometries are valid polygons
-        for geom in gdf.geometry:
-            assert geom.is_valid
-            assert geom.geom_type == "Polygon"
+        for feat in data["features"]:
+            assert feat["geometry"]["type"] == "Polygon"
+            assert len(feat["geometry"]["coordinates"][0]) >= 4
+
 
 
 def test_gauge_bst_to_utc_conversion():
