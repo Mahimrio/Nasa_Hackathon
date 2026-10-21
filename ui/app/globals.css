@@ -727,6 +727,43 @@ body::before {
   mix-blend-mode: screen;
 }
 
+.flow-animation-dash-primary {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-dasharray: 10 22;
+  stroke-linecap: round;
+  pointer-events: none;
+  animation: river-flow-dash 2.2s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.flow-animation-dash-secondary {
+  fill: none;
+  stroke: rgba(53, 216, 242, 0.75);
+  stroke-dasharray: 6 16;
+  stroke-linecap: round;
+  pointer-events: none;
+  animation: river-flow-dash 1.6s linear infinite;
+  mix-blend-mode: screen;
+}
+
+.hydraulic-confluence-pulse {
+  animation: confluence-pulse 2.2s cubic-bezier(0.1, 0.6, 0.3, 1) infinite;
+}
+
+@keyframes confluence-pulse {
+  0% {
+    r: 4;
+    opacity: 0.9;
+    stroke-width: 2;
+  }
+  100% {
+    r: 22;
+    opacity: 0;
+    stroke-width: 0.5;
+  }
+}
+
 @keyframes river-flow-dash {
   to {
     stroke-dashoffset: -48;
@@ -736,13 +773,11 @@ body::before {
 /* Sonar pulse at Gauge Station (Kanaighat) */
 .gauge-sonar-pulse-1 {
   animation: sonar-ring 2.8s cubic-bezier(0.1, 0.6, 0.3, 1) infinite;
-  transform-origin: 240px 120px;
 }
 
 .gauge-sonar-pulse-2 {
   animation: sonar-ring 2.8s cubic-bezier(0.1, 0.6, 0.3, 1) infinite;
   animation-delay: 1.4s;
-  transform-origin: 240px 120px;
 }
 
 @keyframes sonar-ring {
