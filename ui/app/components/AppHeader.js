@@ -11,6 +11,7 @@ export default function AppHeader({
 }) {
   const { lang, setLang, t } = useLocale();
   const [liveUtc, setLiveUtc] = useState("");
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
     const updateTime = () => {
@@ -21,7 +22,21 @@ export default function AppHeader({
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
+
+    const updateOnline = () => {
+      if (typeof navigator !== "undefined") {
+        setIsOnline(navigator.onLine);
+      }
+    };
+    updateOnline();
+    window.addEventListener("online", updateOnline);
+    window.addEventListener("offline", updateOnline);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("online", updateOnline);
+      window.removeEventListener("offline", updateOnline);
+    };
   }, []);
 
   return (
@@ -46,13 +61,31 @@ export default function AppHeader({
 
       {/* Central Telemetry & Freshness Indicator */}
       <div className="topbar-center-status">
-        <div className="status-pill" title="Hydrologic routing engine running on 30-min GPM IMERG cycle">
-          <div className="status-beacon" />
+        <div
+          className="status-pill"
+          title="Hydrologic routing engine running on 30-min GPM IMERG cycle (Offline-ready with local static JSON)"
+        >
+          <div
+            className="status-beacon"
+            style={{
+              background: isOnline ? "var(--green-400)" : "var(--amber-400)",
+              boxShadow: isOnline
+                ? "0 0 8px var(--green-400)"
+                : "0 0 8px var(--amber-400)",
+            }}
+          />
           <span style={{ color: "var(--text-secondary)", fontSize: "12px" }}>
             {t("app.statusLabel")}
           </span>
-          <strong style={{ color: "var(--green-400)", letterSpacing: "0.04em" }}>
-            {t("app.statusReplay")}
+          <strong
+            style={{
+              color: isOnline ? "var(--green-400)" : "var(--amber-400)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {isOnline
+              ? t("app.statusReplay")
+              : (lang === "en" ? "OFFLINE · CACHED TELEMETRY" : "অফলাইন · লোকাল ক্যাশ")}
           </strong>
         </div>
 

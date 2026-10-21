@@ -54,6 +54,22 @@ export default function InteractiveMapLeaflet({
   const [geoData, setGeoData] = useState(null);
   const [hoveredReachId, setHoveredReachId] = useState(null);
   const [basemapType, setBasemapType] = useState("dark"); // "dark" | "satellite"
+  const [isOffline, setIsOffline] = useState(false);
+
+  useEffect(() => {
+    const handleNetChange = () => {
+      if (typeof navigator !== "undefined") {
+        setIsOffline(!navigator.onLine);
+      }
+    };
+    handleNetChange();
+    window.addEventListener("online", handleNetChange);
+    window.addEventListener("offline", handleNetChange);
+    return () => {
+      window.removeEventListener("online", handleNetChange);
+      window.removeEventListener("offline", handleNetChange);
+    };
+  }, []);
 
   // Fetch geographic polylines and sub-basin polygons
   useEffect(() => {
@@ -109,6 +125,32 @@ export default function InteractiveMapLeaflet({
 
   return (
     <div className="interactive-leaflet-wrapper" style={{ width: "100%", height: "100%", minHeight: "420px", position: "relative" }}>
+      {/* Offline Mode Alert Badge */}
+      {isOffline && (
+        <div
+          style={{
+            position: "absolute",
+            top: "12px",
+            left: "50px",
+            zIndex: 1000,
+            background: "rgba(14, 27, 45, 0.94)",
+            border: "1px solid rgba(255, 196, 92, 0.4)",
+            borderRadius: "var(--radius-pill)",
+            padding: "4px 12px",
+            fontSize: "11px",
+            color: "var(--amber-400)",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            backdropFilter: "blur(8px)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
+          }}
+        >
+          <span>⚡</span>
+          <span>{lang === "en" ? "Offline Mode · Cached SWOT Telemetry Active" : "অফলাইন মোড · লোকাল সোয়াট ডেটা সক্রিয়"}</span>
+        </div>
+      )}
+
       {/* Floating Basemap Style Switcher (Dark Telemetry / Satellite View) */}
       <div style={{ position: "absolute", top: "12px", right: "12px", zIndex: 1000, display: "flex", gap: "6px" }}>
         <button
