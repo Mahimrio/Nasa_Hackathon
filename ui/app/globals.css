@@ -1840,3 +1840,46 @@ body::before {
   }
 }
 
+/* ============================================================
+   Prompt 10: Performance Optimization & Offline Resilience
+   ============================================================ */
+
+/* Below-the-fold content optimization: skip rendering until scrolled near view */
+.dashboard-full-row {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 420px;
+}
+
+.operational-limits-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 160px;
+}
+
+.dashboard-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 100px;
+}
+
+/* will-change strictly on continuously animated transform/stroke elements */
+.flow-animation-dash-primary,
+.flow-animation-dash-secondary,
+.leaflet-flow-path {
+  will-change: stroke-dashoffset;
+}
+
+.gauge-sonar-pulse-1,
+.gauge-sonar-pulse-2,
+.leaflet-sonar-ring,
+.hydraulic-confluence-pulse {
+  will-change: transform, opacity;
+}
+
+/* GPU acceleration for maps and charts to eliminate jank during scrubber drags */
+.map-svg-canvas,
+.interactive-leaflet-wrapper,
+.recharts-wrapper {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+

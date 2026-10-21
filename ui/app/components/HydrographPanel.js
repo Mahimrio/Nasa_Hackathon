@@ -231,6 +231,7 @@ export default function HydrographPanel({
               stroke="#38BDF8"
               strokeWidth={2.8}
               dot={false}
+              isAnimationActive={false}
               activeDot={{ r: 5, fill: "#38BDF8", stroke: "#050A12", strokeWidth: 2 }}
               name={t("hydrograph.modelledStage")}
             />
@@ -243,6 +244,7 @@ export default function HydrographPanel({
               strokeWidth={2}
               strokeDasharray="5 3"
               dot={false}
+              isAnimationActive={false}
               activeDot={{ r: 4, fill: "#F8FAFC", stroke: "#050A12", strokeWidth: 2 }}
               name={t("hydrograph.bwdbObserved")}
               connectNulls={false}
@@ -256,6 +258,7 @@ export default function HydrographPanel({
               strokeWidth={1.8}
               strokeDasharray="2 3"
               dot={false}
+              isAnimationActive={false}
               activeDot={{ r: 3, fill: "#94A3B8", stroke: "#050A12", strokeWidth: 1.5 }}
               name={t("hydrograph.rainfallBaseline")}
               connectNulls={false}

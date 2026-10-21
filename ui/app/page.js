@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { useLocale } from "./hooks/useLocale";
 import AppHeader from "./components/AppHeader";
 import PageContextBar from "./components/PageContextBar";
@@ -9,9 +10,22 @@ import HarvestDecisionPanel from "./components/HarvestDecisionPanel";
 import HydrographPanel from "./components/HydrographPanel";
 import ValidationMetricsPanel from "./components/ValidationMetricsPanel";
 import OperationalLimitsPanel from "./components/OperationalLimitsPanel";
-import ReachInspectorModal from "./components/ReachInspectorModal";
-import AdvisoryBulletinModal from "./components/AdvisoryBulletinModal";
-import ModelArchitectureModal from "./components/ModelArchitectureModal";
+import DashboardSkeleton from "./components/DashboardSkeleton";
+import ErrorBoundary from "./components/ErrorBoundary";
+
+// Code-split heavy interactive modals so they are loaded on-demand only (Guard P10 Bundle Optimization)
+const ReachInspectorModal = dynamic(
+  () => import("./components/ReachInspectorModal"),
+  { ssr: false }
+);
+const AdvisoryBulletinModal = dynamic(
+  () => import("./components/AdvisoryBulletinModal"),
+  { ssr: false }
+);
+const ModelArchitectureModal = dynamic(
+  () => import("./components/ModelArchitectureModal"),
+  { ssr: false }
+);
 
 export default function DashboardPage() {
   const { lang, setLang, t, isBangla, formatNumber } = useLocale();
@@ -26,15 +40,34 @@ export default function DashboardPage() {
   const [showBulletin, setShowBulletin] = useState(false);
   const [showModelInfo, setShowModelInfo] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
-  // ---- DATA FETCHING ----
-  useEffect(() => {
+  // ---- RESILIENT DATA FETCHING WITH RETRY ----
+  const fetchData = useCallback(() => {
+    setLoading(true);
+    setLoadError(null);
+
     Promise.all([
-      fetch("/data/event_timeseries.json").then((r) => r.json()),
-      fetch("/data/gauge_observations.json").then((r) => r.json()),
-      fetch("/data/metrics_summary.json").then((r) => r.json()),
-      fetch("/data/reach_metadata.json").then((r) => r.json()),
-      fetch("/data/calibration_summary.json").then((r) => r.json()),
+      fetch("/data/event_timeseries.json").then((r) => {
+        if (!r.ok) throw new Error("Failed to load event_timeseries.json");
+        return r.json();
+      }),
+      fetch("/data/gauge_observations.json").then((r) => {
+        if (!r.ok) throw new Error("Failed to load gauge_observations.json");
+        return r.json();
+      }),
+      fetch("/data/metrics_summary.json").then((r) => {
+        if (!r.ok) throw new Error("Failed to load metrics_summary.json");
+        return r.json();
+      }),
+      fetch("/data/reach_metadata.json").then((r) => {
+        if (!r.ok) throw new Error("Failed to load reach_metadata.json");
+        return r.json();
+      }),
+      fetch("/data/calibration_summary.json").then((r) => {
+        if (!r.ok) throw new Error("Failed to load calibration_summary.json");
+        return r.json();
+      }),
     ])
       .then(([ev, ga, met, rm, cal]) => {
         setEventData(ev);
@@ -54,9 +87,15 @@ export default function DashboardPage() {
       })
       .catch((err) => {
         console.error("Failed to load HydroSense pipeline data:", err);
+        setLoadError(err.message || "Failed to load telemetry datasets");
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
 
   // ---- PEAK INDEX ----
   const peakIdx = useMemo(() => {
@@ -126,34 +165,67 @@ export default function DashboardPage() {
     [current]
   );
 
-  // ---- LOADING SCREEN ----
+  // ---- SHIMMER LOADING SKELETON (Guard P10: CLS < 0.1, instantaneous perceived load) ----
   if (loading) {
     return (
-      <div className="loading-screen-wrap" role="status" aria-live="polite">
-        <div className="spinner-gyro" aria-hidden="true" />
-        <div className="loading-headline">Initializing HydroSense-SWOT Pipeline Telemetry…</div>
-        <div className="loading-subtext">
-          Loading SWOT orbital reach calibration and GPM IMERG hydrologic routing datasets
-        </div>
-      </div>
+      <>
+        <AppHeader
+          currentDateStr="-- --- 2026"
+          currentTimeStr="--:--"
+          onOpenBulletin={() => {}}
+          onOpenModelInfo={() => {}}
+        />
+        <DashboardSkeleton lang={lang} />
+      </>
     );
   }
 
-  // ---- ERROR SCREEN ----
+  // ---- ERROR SCREEN WITH RETRY ACTION ----
   if (!eventData || !current) {
     return (
       <div className="loading-screen-wrap" role="alert">
-        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="var(--red-400)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--red-400)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="8" x2="12" y2="12" />
           <line x1="12" y1="16" x2="12.01" y2="16" />
         </svg>
-        <div className="loading-headline" style={{ color: "var(--red-400)" }}>
-          Failed to load pipeline datasets
+        <div className="loading-headline" style={{ color: "var(--red-400)", marginTop: "12px" }}>
+          {lang === "en" ? "Failed to Load Pipeline Datasets" : "টেলিম্যাট্রি ডেটাসেট লোড করা যায়নি"}
         </div>
-        <div className="loading-subtext">
-          Verify static data files in public/data or run `python scripts/export_json.py`.
+        <div className="loading-subtext" style={{ maxWidth: "480px", marginBottom: "18px" }}>
+          {lang === "en"
+            ? "Could not read static JSON telemetry from /public/data. Check network connectivity or local files."
+            : "পাবলিক ফোল্ডারের স্ট্যাটিক JSON ফাইল পড়তে ব্যর্থ হয়েছে। ফাইল বা সংযোগ যাচাই করুন।"}
         </div>
+        <button
+          className="btn-standard btn-primary"
+          onClick={fetchData}
+          style={{ minHeight: "44px", padding: "0 22px", fontSize: "13px", fontWeight: 700 }}
+        >
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          <span>{lang === "en" ? "Retry Loading Telemetry" : "পুনরায় চেষ্টা করুন"}</span>
+        </button>
       </div>
     );
   }
@@ -184,7 +256,7 @@ export default function DashboardPage() {
   );
 
   return (
-    <>
+    <ErrorBoundary lang={lang} onRetry={fetchData}>
       {/* Skip to Main Content Link (§8 Accessibility) */}
       <a href="#main-content" className="skip-to-content">
         {lang === "en" ? "Skip to Main Content" : "মূল বিষয়বস্তুতে যান"}
@@ -202,7 +274,6 @@ export default function DashboardPage() {
 
       {/* Main Dashboard Application Shell */}
       <main id="main-content" className="dashboard-shell" role="main" tabIndex="-1">
-
         {/* Context Strip & Quick Timeline Jumps */}
         <PageContextBar
           lang={lang}
@@ -318,6 +389,6 @@ export default function DashboardPage() {
       {showModelInfo && (
         <ModelArchitectureModal lang={lang} onClose={() => setShowModelInfo(false)} />
       )}
-    </>
+    </ErrorBoundary>
   );
 }
