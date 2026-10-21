@@ -1,5 +1,6 @@
 import "./globals.css";
 import { LocaleProvider } from "./hooks/useLocale";
+import { TelemetryProvider } from "./context/TelemetryContext";
 
 export const metadata = {
   title: "HydroSense-SWOT — Haor Basin Flood & Harvest Early Warning",
@@ -32,7 +33,9 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <LocaleProvider>{children}</LocaleProvider>
+        <LocaleProvider>
+          <TelemetryProvider>{children}</TelemetryProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
