@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLocale } from "../hooks/useLocale";
 
 export default function AppHeader({
-  lang,
-  setLang,
   currentDateStr,
   currentTimeStr,
   onOpenBulletin,
   onOpenModelInfo,
 }) {
+  const { lang, setLang, t } = useLocale();
   const [liveUtc, setLiveUtc] = useState("");
 
   useEffect(() => {
@@ -35,13 +35,11 @@ export default function AppHeader({
         </div>
         <div className="brand-text">
           <div className="brand-name">
-            HydroSense
-            <span className="brand-badge">SWOT</span>
+            {t("app.title")}
+            <span className="brand-badge">{t("app.badge")}</span>
           </div>
           <div className="brand-sub">
-            {lang === "en"
-              ? "Haor Basin Flood Early Warning System"
-              : "হাওর অববাহিকা বন্যা আগাম সতর্কবার্তা"}
+            {t("app.subtitle")}
           </div>
         </div>
       </div>
@@ -51,10 +49,10 @@ export default function AppHeader({
         <div className="status-pill" title="Hydrologic routing engine running on 30-min GPM IMERG cycle">
           <div className="status-beacon" />
           <span style={{ color: "var(--text-secondary)", fontSize: "12px" }}>
-            {lang === "en" ? "STATUS:" : "অবস্থা:"}
+            {t("app.statusLabel")}
           </span>
           <strong style={{ color: "var(--green-400)", letterSpacing: "0.04em" }}>
-            {lang === "en" ? "OPERATIONAL REPLAY" : "সক্রিয় সিমুলেশন"}
+            {t("app.statusReplay")}
           </strong>
         </div>
 
@@ -82,7 +80,7 @@ export default function AppHeader({
             aria-checked={lang === "en"}
             title="English"
           >
-            EN
+            {t("app.langEn")}
           </button>
           <button
             className={`lang-option ${lang === "bn" ? "active" : ""}`}
@@ -91,7 +89,7 @@ export default function AppHeader({
             aria-checked={lang === "bn"}
             title="বাংলা (Bengali)"
           >
-            বাংলা
+            {t("app.langBn")}
           </button>
         </div>
 
@@ -100,14 +98,14 @@ export default function AppHeader({
           className="btn-standard neu-raised"
           onClick={onOpenBulletin}
           title={lang === "en" ? "Generate Agricultural Advisory Bulletin" : "কৃষি বুলেটিন তৈরি করুন"}
-          aria-label="Generate Agricultural Advisory Bulletin"
+          aria-label={t("app.advisoryBulletinBtn")}
           style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1 2-2h2" />
             <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
           </svg>
-          <span>{lang === "en" ? "Advisory Bulletin" : "পরামর্শ বুলেটিন"}</span>
+          <span>{t("app.advisoryBulletinBtn")}</span>
         </button>
 
         {/* Model Architecture Info */}
@@ -115,7 +113,7 @@ export default function AppHeader({
           className="btn-icon neu-raised"
           onClick={onOpenModelInfo}
           title={lang === "en" ? "About SWOT Hydrologic Model Architecture" : "মডেল তথ্য"}
-          aria-label="Model Information"
+          aria-label={t("app.modelInfoBtn")}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10" />

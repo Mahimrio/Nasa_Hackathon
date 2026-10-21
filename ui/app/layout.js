@@ -1,4 +1,5 @@
 import "./globals.css";
+import { LocaleProvider } from "./hooks/useLocale";
 
 export const metadata = {
   title: "HydroSense-SWOT — Haor Basin Flood & Harvest Early Warning",
@@ -23,14 +24,16 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="bn">
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>{children}</body>
+      <body>
+        <LocaleProvider>{children}</LocaleProvider>
+      </body>
     </html>
   );
 }

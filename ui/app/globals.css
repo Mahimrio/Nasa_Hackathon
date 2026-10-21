@@ -173,6 +173,27 @@ body {
   position: relative;
 }
 
+/* ---- Bangla Typography Specifics (§4 / P8) ---- */
+body.lang-bn,
+.lang-bn {
+  font-family: 'Noto Sans Bengali', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.68;
+}
+
+body.lang-bn h1,
+body.lang-bn h2,
+body.lang-bn h3,
+body.lang-bn .card-title,
+.lang-bn .card-title {
+  line-height: 1.45;
+}
+
+body.lang-bn p,
+body.lang-bn span,
+body.lang-bn div {
+  letter-spacing: normal;
+}
+
 /* Themed Browser Surfaces (Impeccable Craft Floor) */
 ::selection {
   background: rgba(53, 216, 242, 0.3);
