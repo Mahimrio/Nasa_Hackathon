@@ -53,6 +53,7 @@ export default function InteractiveMapLeaflet({
 }) {
   const [geoData, setGeoData] = useState(null);
   const [hoveredReachId, setHoveredReachId] = useState(null);
+  const [basemapType, setBasemapType] = useState("dark"); // "dark" | "satellite"
 
   // Fetch geographic polylines and sub-basin polygons
   useEffect(() => {
@@ -108,6 +109,38 @@ export default function InteractiveMapLeaflet({
 
   return (
     <div className="interactive-leaflet-wrapper" style={{ width: "100%", height: "100%", minHeight: "420px", position: "relative" }}>
+      {/* Floating Basemap Style Switcher (Dark Telemetry / Satellite View) */}
+      <div style={{ position: "absolute", top: "12px", right: "12px", zIndex: 1000, display: "flex", gap: "6px" }}>
+        <button
+          type="button"
+          onClick={() => setBasemapType(basemapType === "dark" ? "satellite" : "dark")}
+          style={{
+            background: "rgba(14, 27, 45, 0.90)",
+            color: "var(--text-primary)",
+            border: "1px solid rgba(177, 221, 255, 0.25)",
+            borderRadius: "var(--radius-pill)",
+            padding: "4px 12px",
+            fontSize: "11px",
+            fontWeight: 600,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            backdropFilter: "blur(10px)",
+            boxShadow: "0 4px 14px rgba(0,0,0,0.5)",
+            transition: "all var(--motion-fast)",
+          }}
+          title={lang === "en" ? "Toggle Dark Canvas / Satellite Imagery" : "ডার্ক ক্যানভাস / স্যাটেলাইট ইমেজারি পরিবর্তন"}
+        >
+          <span>{basemapType === "dark" ? "🛰️" : "🌑"}</span>
+          <span>
+            {basemapType === "dark"
+              ? (lang === "en" ? "Satellite View" : "স্যাটেলাইট ভিউ")
+              : (lang === "en" ? "Dark Telemetry" : "ডার্ক ক্যানভাস")}
+          </span>
+        </button>
+      </div>
+
       <MapContainer
         center={DEFAULT_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -118,12 +151,20 @@ export default function InteractiveMapLeaflet({
       >
         <MapController selectedCoords={selectedReachCoords} />
 
-        {/* CartoDB Dark Matter Basemap */}
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          subdomains="abcd"
-          maxZoom={19}
-        />
+        {/* Clean, 100% Watermark-Free Esri Basemap Layers */}
+        {basemapType === "satellite" ? (
+          <TileLayer
+            key="esri-satellite"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={18}
+          />
+        ) : (
+          <TileLayer
+            key="esri-dark"
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+            maxZoom={16}
+          />
+        )}
 
         {/* Scale bar control */}
         <ScaleControl position="bottomleft" imperial={false} />
@@ -138,7 +179,7 @@ export default function InteractiveMapLeaflet({
               weight: 1.5,
               dashArray: "4, 6",
               fillColor: basin.id === "upper_surma_meghalaya" ? "#35D8F2" : "#10B981",
-              fillOpacity: showTerrain ? 0.07 : 0.03,
+              fillOpacity: showTerrain ? 0.08 : 0.03,
             }}
           >
             <Tooltip sticky className="map-glass-tooltip">
@@ -178,25 +219,28 @@ export default function InteractiveMapLeaflet({
         {showRainfallOverlay && currentRainfall > 0.1 && (
           <Polygon
             positions={[
-              [25.08, 91.50],
-              [25.15, 91.75],
-              [25.32, 92.15],
-              [25.36, 92.45],
+              [25.10, 91.60],
+              [25.18, 91.85],
+              [25.26, 92.05],
+              [25.32, 92.25],
+              [25.35, 92.45],
               [25.28, 92.65],
-              [25.16, 92.55],
-              [25.04, 92.25],
-              [25.02, 91.80],
+              [25.18, 92.60],
+              [25.12, 92.40],
+              [25.07, 92.15],
+              [25.04, 91.85],
+              [25.06, 91.65],
             ]}
             pathOptions={{
               color: currentRainfall > 15 ? "#EF4444" : currentRainfall > 5 ? "#F59E0B" : "#38BDF8",
-              weight: 1,
-              dashArray: "2, 4",
+              weight: 1.2,
+              dashArray: "3, 6",
               fillColor: currentRainfall > 15 ? "#EF4444" : currentRainfall > 5 ? "#F59E0B" : "#38BDF8",
-              fillOpacity: Math.min(0.55, 0.12 + (currentRainfall / 30) * 0.40),
+              fillOpacity: Math.min(0.24, 0.06 + (currentRainfall / 40) * 0.18),
             }}
           >
             <Tooltip sticky className="map-glass-tooltip">
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#38BDF8" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: currentRainfall > 15 ? "#EF4444" : currentRainfall > 5 ? "#F59E0B" : "#38BDF8" }}>
                 {lang === "en" ? "NASA GPM IMERG Early Run Plume" : "নাসা জিপিএম আইমার্জ প্রাক-বৃষ্টিপাত বলয়"}
               </div>
               <div style={{ fontSize: "11px", fontFamily: "var(--font-mono)", color: "#F8FAFC" }}>
@@ -266,8 +310,8 @@ export default function InteractiveMapLeaflet({
                 positions={reach.coordinates}
                 pathOptions={{
                   color: reachColor,
-                  weight: isSelected ? 12 : 7,
-                  opacity: isSelected ? 0.5 : 0.22,
+                  weight: isSelected ? 16 : 10,
+                  opacity: isSelected ? 0.7 : 0.36,
                   lineCap: "round",
                   lineJoin: "round",
                 }}
@@ -286,8 +330,8 @@ export default function InteractiveMapLeaflet({
                 }}
                 pathOptions={{
                   color: reachColor,
-                  weight: isSelected ? 5.5 : 3.5,
-                  opacity: 0.95,
+                  weight: isSelected ? 6.5 : 4.5,
+                  opacity: 1.0,
                   lineCap: "round",
                   lineJoin: "round",
                   className: showFlowAnim ? "leaflet-flow-path" : "",
