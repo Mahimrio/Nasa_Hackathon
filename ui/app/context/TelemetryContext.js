@@ -20,6 +20,31 @@ export function TelemetryProvider({ children }) {
   const [showModelInfo, setShowModelInfo] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return localStorage.getItem("hydrosense_theme") || "mocha";
+      } catch {
+        return "mocha";
+      }
+    }
+    return "mocha";
+  });
+
+  // ---- THEME DOM SYNC ----
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "mocha" ? "light" : "mocha";
+      try {
+        localStorage.setItem("hydrosense_theme", next);
+      } catch {}
+      return next;
+    });
+  }, []);
 
   // ---- RESILIENT DATA FETCHING WITH RETRY ----
   const fetchData = useCallback(() => {
@@ -217,6 +242,9 @@ export function TelemetryProvider({ children }) {
     loading,
     loadError,
     fetchData,
+    theme,
+    setTheme,
+    toggleTheme,
   };
 
   return <TelemetryContext.Provider value={value}>{children}</TelemetryContext.Provider>;

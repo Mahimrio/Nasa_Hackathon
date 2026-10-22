@@ -177,7 +177,7 @@ export default function HarvestDecisionPanel({
             </svg>
             {t("decision.modelledStage")}
           </span>
-          <span className="param-value" style={{ color: "var(--cyan-300)" }}>
+          <span className="param-value" style={{ color: "var(--blue-deep)" }}>
             {formatNumber(stage.toFixed(2))} m PWD
           </span>
         </div>

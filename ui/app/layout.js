@@ -25,12 +25,22 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="bn">
+    <html lang="bn" data-theme="mocha" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                var theme = localStorage.getItem('hydrosense_theme') || 'mocha';
+                document.documentElement.setAttribute('data-theme', theme);
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body>
         <LocaleProvider>

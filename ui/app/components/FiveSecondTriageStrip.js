@@ -181,7 +181,7 @@ export default function FiveSecondTriageStrip({
         {/* 3. WHY */}
         <div className="triage-pillar-card" tabIndex={0}>
           <div className="pillar-header">
-            <span className="pillar-icon" style={{ color: "var(--cyan-300)" }} aria-hidden="true">
+            <span className="pillar-icon" style={{ color: "var(--blue-primary)" }} aria-hidden="true">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="16" x2="12" y2="12" />
@@ -190,7 +190,7 @@ export default function FiveSecondTriageStrip({
             </span>
             <span className="pillar-tag">{t("triage.whyLabel")}</span>
           </div>
-          <div className="pillar-main-val" style={{ color: "var(--cyan-300)" }}>
+          <div className="pillar-main-val" style={{ color: "var(--blue-deep)" }}>
             {lang === "en"
               ? `Rain: ${rain.toFixed(1)} mm/h + SWOT Channel`
               : `বৃষ্টি: ${formatNumber(rain.toFixed(1))} মিমি/ঘ + SWOT চ্যানেল`}

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "../hooks/useLocale";
+import { useTelemetry } from "../context/TelemetryContext";
 
 export default function AppHeader({
   currentDateStr,
@@ -12,6 +13,7 @@ export default function AppHeader({
   onOpenModelInfo,
 }) {
   const { lang, setLang, t } = useLocale();
+  const { theme, toggleTheme } = useTelemetry();
   const pathname = usePathname();
   const [isOnline, setIsOnline] = useState(true);
 
@@ -165,6 +167,24 @@ export default function AppHeader({
               {t("app.langBn")}
             </button>
           </div>
+
+          {/* Theme Switcher: Mocha Earth vs Light Field */}
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={toggleTheme}
+            title={
+              theme === "mocha"
+                ? (lang === "en" ? "Switch to Light Field Theme" : "লাইট ফিল্ড থিমে পরিবর্তন করুন")
+                : (lang === "en" ? "Switch to Mocha Earth Theme" : "মোখা আর্থ থিমে পরিবর্তন করুন")
+            }
+            aria-label={theme === "mocha" ? "Switch to Light theme" : "Switch to Mocha theme"}
+          >
+            <span className="theme-toggle-icon" aria-hidden="true">{theme === "mocha" ? "☕" : "☀️"}</span>
+            <span className="theme-toggle-label">
+              {theme === "mocha" ? (lang === "en" ? "Mocha" : "মোখা") : (lang === "en" ? "Light" : "লাইট")}
+            </span>
+          </button>
 
           {/* Advisory Bulletin Button */}
           <button
