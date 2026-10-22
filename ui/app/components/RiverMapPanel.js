@@ -172,7 +172,7 @@ export default function RiverMapPanel({
           aria-label={lang === "en" ? "Map display mode" : "মানচিত্র প্রদর্শনের ধরন"}
           style={{
             display: "inline-flex",
-            background: "#F0F4F8",
+            background: "var(--surface-850)",
             borderRadius: "var(--radius-pill)",
             padding: "3px",
             border: "1px solid var(--border-subtle)",
