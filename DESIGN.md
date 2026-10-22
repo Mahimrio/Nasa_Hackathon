@@ -1,53 +1,57 @@
 ---
 name: HydroSense-SWOT
-description: Cinematic scientific telemetry and harvest decision dashboard for transboundary flash-flood early warning in the Haor basin
+description: Restrained, professional scientific telemetry and harvest decision-support tool for transboundary flash-flood early warning in the Haor basin of Bangladesh
 colors:
-  bg-canvas: "#050A12"
-  bg-viewport: "#08111F"
-  surface-glass: "rgba(14, 27, 45, 0.88)"
-  surface-raised: "rgba(18, 35, 57, 0.78)"
-  surface-active: "rgba(24, 43, 68, 0.72)"
-  glass-stroke: "rgba(177, 221, 255, 0.14)"
-  glass-stroke-strong: "rgba(126, 213, 255, 0.34)"
-  cyan-primary: "#35D8F2"
-  cyan-glow: "rgba(53, 216, 242, 0.45)"
-  blue-deep: "#1A56DB"
-  emerald-safe: "#10B981"
-  amber-caution: "#F59E0B"
-  crimson-danger: "#EF4444"
-  text-primary: "#F8FAFC"
-  text-secondary: "#94A3B8"
-  text-muted: "#64748B"
+  bg-canvas: "#F5F8FA"
+  surface-card: "#FFFFFF"
+  surface-subtle: "#F8FAFC"
+  border-default: "#DCE5EA"
+  border-subtle: "rgba(220, 229, 234, 0.7)"
+  text-primary: "#173B57"
+  text-secondary: "#566B7C"
+  text-muted: "#7A8F9E"
+  blue-primary: "#287BB5"
+  blue-deep: "#175A85"
+  blue-light: "#EBF3F8"
+  green-safe: "#34805A"
+  green-light: "#E9F4EC"
+  amber-caution: "#B7791F"
+  amber-light: "#FEF9EE"
+  red-danger: "#B4232F"
+  red-light: "#FDF2F2"
 typography:
   display:
     fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif"
-    fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)"
+    fontSize: "clamp(1.625rem, 3vw, 2rem)"
     fontWeight: 700
-    lineHeight: 1.15
-    letterSpacing: "-0.02em"
+    lineHeight: 1.2
+    letterSpacing: "-0.015em"
   title:
     fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 600
-    lineHeight: 1.3
+    fontSize: "1.125rem"
+    fontWeight: 650
+    lineHeight: 1.35
     letterSpacing: "-0.01em"
   body:
     fontFamily: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif"
-    fontSize: "0.875rem"
+    fontSize: "1rem"
     fontWeight: 400
-    lineHeight: 1.5
+    lineHeight: 1.55
     letterSpacing: "normal"
+  bangla:
+    fontFamily: "'Noto Sans Bengali', -apple-system, sans-serif"
+    fontSize: "1rem"
+    lineHeight: 1.65
   mono:
     fontFamily: "'JetBrains Mono', monospace"
-    fontSize: "0.8125rem"
-    fontWeight: 500
-    lineHeight: 1.4
+    fontSize: "0.875rem"
+    fontWeight: 550
+    lineHeight: 1.45
     letterSpacing: "-0.01em"
 rounded:
-  sm: "6px"
-  md: "10px"
-  lg: "16px"
-  xl: "24px"
+  sm: "4px"
+  md: "8px"
+  lg: "12px"
   pill: "9999px"
 spacing:
   xs: "4px"
@@ -57,97 +61,93 @@ spacing:
   xl: "32px"
 components:
   panel-card:
-    backgroundColor: "{colors.surface-glass}"
+    backgroundColor: "{colors.surface-card}"
     textColor: "{colors.text-primary}"
+    borderColor: "{colors.border-default}"
     rounded: "{rounded.lg}"
     padding: "20px 24px"
+    boxShadow: "0 1px 3px rgba(23, 59, 87, 0.05)"
   button-primary:
-    backgroundColor: "{colors.cyan-primary}"
-    textColor: "{colors.bg-canvas}"
+    backgroundColor: "{colors.blue-primary}"
+    textColor: "#FFFFFF"
     rounded: "{rounded.md}"
-    padding: "8px 16px"
+    padding: "10px 18px"
+    minHeight: "44px"
   badge-status:
-    backgroundColor: "{colors.surface-raised}"
-    textColor: "{colors.text-primary}"
     rounded: "{rounded.pill}"
     padding: "4px 12px"
+    fontSize: "13px"
 ---
 
 # Design System — HydroSense-SWOT
 
-## Overview
+## 1. Overview & Visual Philosophy
 
-HydroSense-SWOT is a high-precision scientific telemetry instrument tailored for transboundary flash-flood early warning in the Haor basin of northeastern Bangladesh. Its aesthetic balances deep atmospheric space-science immersion with critical agricultural decision support.
+HydroSense-SWOT is a high-precision scientific telemetry and harvest decision-support instrument tailored for transboundary flash-flood early warning in the Haor basin of northeastern Bangladesh. It is used by Upazila agricultural extension officers (DAE) and Boro rice farming communities.
 
-The system fuses five tactile aesthetic disciplines:
-- **Glassmorphism:** Layered translucent instrument panels (`backdrop-filter: blur(16px)`), sub-pixel top highlights, and micro-grooved inset strokes.
-- **Restrained Neumorphism:** Soft, dual-shadowed interactive wells, timeline sliders, and segmented toggle states that feel physically machined.
-- **Atmospheric Glow ("Blustmorphism"):** Radiant ambient cyan and navy light blooms that give depth to high-priority alerts without compromising text legibility.
-- **Infomorphism:** Information-dense, scannable KPI hierarchy with tabular monospace telemetry, uncertainty envelopes, and unambiguous danger thresholds.
-- **River & Vector Motion:** Smooth SVG hydrodynamic water trails, sonar-style gauge pulses, and synchronized timeline scrubbing.
+The design adheres to a **calm, readable, trustworthy professional light visual language**:
+- **Clean Solid Surfaces:** High-legibility white surfaces (`#FFFFFF`) on a soft neutral blue-gray canvas (`#F5F8FA`) with delicate perimeter dividers (`#DCE5EA`).
+- **No Unnecessary Decoration:** Glassmorphism, translucent backdrops, neumorphic buttons, heavy drop shadows, neon cyan blooms, and continuous pulsing animations have been removed to prioritize clarity, contrast, and operational trust.
+- **Scientific Credibility:** Primary decisions (GREEN / AMBER / RED) and modelled gauge water levels are visually anchored with high prominence, while secondary hydrological validation and assumptions remain accessible without competing for visual attention.
+- **First-Class Bilingualism:** Full parity between English and Bengali (`Noto Sans Bengali`), with comfortable line heights (1.6–1.7) ensuring vowel markers and conjuncts render crisply without clipping or crowding.
 
-## Colors
+---
 
-### Surface Hierarchy
-- `bg-canvas` (`#050A12`): The deepest void layer beneath all components.
-- `bg-viewport` (`#08111F`): Atmospheric viewport background with subtle radial gradient illumination.
-- `surface-glass` (`rgba(14, 27, 45, 0.88)`): Primary instrument card base with 16px backdrop blur.
-- `surface-raised` (`rgba(18, 35, 57, 0.78)`): Elevated cards, modals, and metric wells.
-- `surface-active` (`rgba(24, 43, 68, 0.72)`): Hover and active states for interactive controls.
+## 2. Palette & Semantic Color System
 
-### Functional Accents
-- `cyan-primary` (`#35D8F2`): Primary telemetry indicator, active river reach highlights, and radar sweeps.
-- `blue-deep` (`#1A56DB`): Modeled hydrograph line and secondary hydraulic conveyance.
-- `emerald-safe` (`#10B981`): GREEN Harvest Flag; indicates safe stage (< 80% danger level) allowing Boro crops to mature.
-- `amber-caution` (`#F59E0B`): AMBER Harvest Flag; indicates caution (80%–100% danger level); mobilize machinery.
-- `crimson-danger` (`#EF4444`): RED Harvest Flag; indicates imminent breach (≥ 13.20 m PWD); emergency harvest order.
+### 2.1 Core Surfaces & Text
+- **Canvas Background (`#F5F8FA`):** Soft, eye-friendly light backdrop that prevents glare while sustaining contrast.
+- **Card Surfaces (`#FFFFFF`):** Crisp, solid surface providing maximum typographic contrast.
+- **Subtle Wells (`#F8FAFC`):** Light recessed areas for parameter listings and telemetry breakdowns.
+- **Borders & Dividers (`#DCE5EA`):** 1px structural bounds preventing card ambiguity without heavy visual noise.
+- **Primary Text (`#173B57`):** Deep navy with > 9:1 contrast ratio against white surfaces for effortless scannability.
+- **Secondary Text (`#566B7C`):** Calibrated slate-blue for descriptions, subtitles, and metadata (> 4.5:1 contrast).
+- **Muted Text (`#7A8F9E`):** Reserved strictly for non-critical timestamps and unit tags.
 
-## Typography
+### 2.2 Semantic Status & Hydrology
+- **Interface & River Blue (`#287BB5`):** Interactive actions, primary river pathways, and calibrated reach vectors.
+- **Deep Blue (`#175A85`):** Modeled hydrograph trajectory and major metrics.
+- **Green Safe (`#34805A` / `#E9F4EC`):** NORMAL status — stage well below danger threshold (< 80%), safe for maturing Boro rice.
+- **Amber Caution (`#B7791F` / `#FEF9EE`):** CAUTION / WATCH — stage at 80%–100% of danger level; farmers and extension officers mobilize harvest machinery.
+- **Red Danger (`#B4232F` / `#FDF2F2`):** BREACH / FLOOD RISK — stage reaching or exceeding 13.20 m PWD; immediate harvest order.
 
-- **Display & Headings:** `Outfit`, sans-serif. Geometric precision, high legibility, modern scientific authority.
-- **Body & Controls:** `Outfit`, sans-serif. Balanced x-height, clear letterforms in dense layouts.
-- **Bilingual Bengali Support:** `Noto Sans Bengali`, sans-serif. Seamless rendering of Bengali advisory bulletins and directives.
-- **Telemetry & Numbers:** `JetBrains Mono`, monospace. Tabular digits (`font-variant-numeric: tabular-nums`) ensuring stable alignment across live updates and scrubber transitions.
+---
 
-## Layout
+## 3. Typography Architecture
 
-- **Desktop (≥ 1280px):** 12-column responsive grid with a 7:5 split between the hero river reach map and the primary harvest decision panel, anchored by a full-width hydrograph and lower telemetry metrics.
-- **Tablet (768px – 1279px):** Adaptive 2-column stacked layout with synchronized timeline controls.
-- **Mobile (< 768px):** Single-column stacked telemetry stream prioritizing the Harvest Decision flag and immediate advisories at the viewport top.
-- **Density:** High information density with strict 8px/16px/24px spacing tokens.
+### Minimum Hierarchy Targets
+| Element | Target Size | Line Height | Weight |
+|---|---|---|---|
+| **Main Page Heading** | 26–32 px desktop; 24–28 px mobile | 1.25 | 700 |
+| **Major Decision / Status Value** | 28–36 px | 1.2 | 750–800 |
+| **Section & Card Headings** | 18–20 px | 1.35 | 650–700 |
+| **Main Body Text** | 16 px baseline | 1.55 (EN), 1.65 (BN) | 400 |
+| **Supporting Descriptions** | 14–16 px | 1.5 | 400–500 |
+| **Form Labels & Metric Metadata** | 14 px | 1.4 | 600 |
+| **Secondary Metadata & Chips** | 12.5–13.5 px | 1.4 | 600 |
+| **Chart Axes & Tick Labels** | 12–12.5 px | 1.2 | 500 (Mono) |
+| **Interactive Buttons & Nav** | 14–16 px | 1.3 | 600–700 (min 44px touch) |
 
-## Elevation & Depth
+*Rule:* No user-facing data or label is rendered below 12px. Uppercase text is strictly confined to short telemetry codes and station abbreviations.
 
-- **Ambient Layer (z-0):** Subtle cosmic blooms with low opacity (0.10–0.25) positioned strategically behind hero charts.
-- **Instrument Surface (z-10):** Semi-opaque glass cards with `box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08)`.
-- **Raised Controls (z-20):** Neumorphic buttons with dual soft shadows (`-2px -2px 6px rgba(255, 255, 255, 0.04), 3px 3px 8px rgba(0, 0, 0, 0.6)`).
-- **Overlays & Modals (z-50):** Deep backdrop blur (`24px`) with high-contrast perimeter strokes.
+---
 
-## Shapes
+## 4. Map & Visualization Layers
 
-- **Cards & Modals:** 16px corner radius (`rounded-lg`) balancing sleek curvature with compact telemetry density.
-- **Controls & Buttons:** 10px corner radius (`rounded-md`).
-- **Badges & Pills:** Fully rounded pill shapes (`rounded-pill`, 9999px) for status indicators and chip toggles.
+- **Interactive Reach Map:** Renders verified coordinates for the Kanaighat SW266 gauge (`[24.9980, 92.2594]`, danger 13.20m PWD) and the Surma/Kushiyara river geometry.
+- **Layer Disclosure Accordions:** The map layer control provides individual toggle-down disclosure panels for all 4 GIS layers:
+  1. River Flow Motion (vector trajectories)
+  2. SWOT Satellite Swaths (KaRIn radar tracks)
+  3. HydroSHEDS Basins (drainage divides)
+  4. IMERG Rainfall Heatmap (satellite precipitation plume)
+- **CVD-Safe Color Palettes:** Cividis and Viridis color ramps for continuous discharge and rainfall fields to ensure accessibility for color-vision-deficient users.
 
-## Components
+---
 
-- **App Header:** Global brand bar with active reach status, satellite pass countdown, bilingual toggle, and modal shortcuts.
-- **River Reach Map Panel:** Interactive SVG schematic tracing 4 SWOT reaches (2128000001 to 2128000004), flow trails, and the Kanaighat gauge station.
-- **Harvest Decision Panel:** The visual anchor; displays the instantaneous decision state (GREEN / AMBER / RED), modeled stage, danger clearance, and actionable Bengali advisory.
-- **Hydrograph Panel:** Recharts time-series displaying observed BWDB stage, Muskingum-Cunge routed forecast, SWOT ±0.18m uncertainty envelope, and danger level (13.20m).
-- **Validation Metrics Panel:** Live scientific accuracy scorecard (NSE, KGE, PBIAS, lead time).
-- **Operational Limits Panel:** Transparent disclaimer card detailing SWOT repeat cycle, IMERG latency, and hydraulic assumptions.
+## 5. Layout & Information Architecture
 
-## Do's and Don'ts
-
-### Do
-- Always use tabular numbers (`tabular-nums`) for gauge levels, discharges, and timestamps.
-- Use CVD-safe palette mappings and pair all color statuses with explicit icons and text.
-- Maintain subtle perimeter glow highlights rather than heavy solid card borders.
-- Keep the Harvest Decision flag visible and unambiguous at every breakpoint.
-
-### Don't
-- Never use heavy single-sided colored card borders (`border-left: 3px solid color`) — use refined perimeter styling and subtle elevation.
-- Never use generic, unstyled sans-serif fonts; rely strictly on `Outfit`, `JetBrains Mono`, and `Noto Sans Bengali`.
-- Never plaster decorative grid lines across non-data background areas; confine coordinate grids strictly to maps and chart axes.
-- Never animate elements in a way that interferes with reading numerical hydrological values.
+- **Three Dedicated Pages:**
+  1. `/dashboard` — 5-Second Triage, Primary Harvest Decision, River Map, Hydrograph, Accuracy Scorecard, and Operational Limits.
+  2. `/forecast` — Detailed 72h Muskingum-Cunge hydrological forecast and parameter controls.
+  3. `/advisory` — Actionable harvest advisories, printable field bulletin, and farmer/officer directives.
+- **Responsive Viewport Targets:** Verified across 1440×900 (desktop), 1366×768 (laptop), 390×844 (mobile), and 360×800 (narrow mobile). No horizontal overflow.

@@ -5,7 +5,7 @@
 [![NASA Space Apps 2026](https://img.shields.io/badge/NASA%20Space%20Apps-2026-orange.svg)](https://spaceappschallenge.org)
 
 ## What it does
-HydroSense-SWOT delivers an actionable early-warning harvest decision tool for Upazila Agriculture Officers and Boro rice farmers in the flood-vulnerable Haor basin of north-east Bangladesh (Surma-Kushiyara rivers). When sudden pre-monsoon convective rain falls over the steep Meghalaya hills across the Indian border, our system routes near-real-time NASA GPM IMERG Early Run rainfall through river reaches whose channel geometry and hydraulic roughness ($n$) are calibrated offline from NASA SWOT satellite reach measurements. Rather than a generic water level chart, the tool generates a high-contrast **Harvest Flag (GREEN / AMBER / RED)** with ~21–26 hours of advance warning—giving officers and farmers the critical window needed to mobilize labor and harvest mature Boro before embankments breach.
+HydroSense-SWOT delivers an actionable early-warning harvest decision tool for Upazila Agriculture Officers and Boro rice farmers in the flood-vulnerable Haor basin of north-east Bangladesh (Surma-Kushiyara rivers). When sudden pre-monsoon convective rain falls over the steep Meghalaya hills across the Indian border, our system routes near-real-time NASA GPM IMERG Early Run rainfall through river reaches whose channel geometry and hydraulic roughness ($n$) are calibrated offline from NASA SWOT satellite reach measurements. Rather than a generic water level chart, the tool generates a high-contrast **Harvest Flag (GREEN / AMBER / RED)** with ~21–26 hours of advance warning—giving officers and farmers the critical window needed to mobilize labor and harvest mature Boro before embankments breach. The Forecast & Analysis view adds a day-level event rail, a selected-day readout, a single editable hour-skip control, and a pinned current replay date above the chart for fast navigation across the full 61-day replay. The topbar consolidates the HydroSense/SWOT brand, the Surma-Kushiyara page context, and a layout-stable English/Bengali switch, with the page title, HAOR BASIN badge, and one-line tagline sitting under the brand instead of repeating in a separate title block.
 
 ## How to run (5 steps)
 1. **Install dependencies:**  
@@ -22,7 +22,7 @@ HydroSense-SWOT delivers an actionable early-warning harvest decision tool for U
    python pipeline/run_pipeline.py
    python scripts/export_json.py
    ```
-4. **Run test suite (33 unit tests):**  
+4. **Run test suite (40 unit tests):**  
    ```bash
    python -m pytest tests/ -v
    ```
@@ -35,8 +35,9 @@ HydroSense-SWOT delivers an actionable early-warning harvest decision tool for U
 ## Data sources
 - **NASA SWOT L2 HR RiverSP 2.0:** Water Surface Elevation (WSE), width, and reach-averaged slope (`slope2`) from NASA PO.DAAC (`SWOT_L2_HR_RIVERSP_2.0`). Used for offline Manning roughness calibration ($n \in [0.025, 0.10]$).
 - **NASA GPM IMERG Early Run V07:** Calibrated half-hourly precipitation (`precipitationCal`, `GPM_3IMERGHHE`) at 0.1° resolution (~4-hour observation latency) driving hydrologic routing.
-- **BWDB / FFWC Gauge Records:** Hourly water level observations at Kanaighat on the Surma River (Station `SW108`, Danger Level: 13.20 m PWD).
+- **BWDB / FFWC Gauge Records:** Hourly water level observations at Kanaighat on the Surma River (Official Station ID: `SW266`, Internal Pipeline Alias: `SW108`, Danger Level: 13.20 m PWD / equivalent to 12.75 m MSL via +0.45m datum shift).
 - **SWORD v16 & HydroSHEDS v1:** River network topology, reach boundaries, and catchment area delineation (`hydrosheds.org`).
+- **OpenStreetMap & OpenFreeMap:** Authoritative high-density river centerline geometry (OSM relations `5904030` Surma, `5904029` Kushiyara) rendered on the colorblind-accessible OpenFreeMap Positron basemap.
 
 ## Scientific Results (Replay of April 2026 Event)
 All metrics evaluated on the independent test period (April 1 – May 31, 2026) using 15-minute tolerance alignment against BWDB Kanaighat gauge records:
