@@ -122,7 +122,7 @@ export default function ValidationMetricsPanel({ metrics }) {
   ];
 
   return (
-    <section className="glass-panel card-padding dashboard-full-row" aria-label="Scientific Model Validation Metrics">
+    <section className="glass-panel card-padding dashboard-full-row" aria-label={lang === "en" ? "Scientific Model Validation Metrics" : "বৈজ্ঞানিক মডেল যাচাইকরণ মেট্রিক্স"}>
       {/* Panel Header */}
       <div className="card-header-bar">
         <div className="card-title-group">
@@ -139,13 +139,13 @@ export default function ValidationMetricsPanel({ metrics }) {
             <div className="card-title">
               {t("metrics.title")}
             </div>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "2px" }}>
+            <div style={{ fontSize: "14px", color: "var(--text-muted)", marginTop: "2px" }}>
               {t("metrics.subtitle")}
             </div>
           </div>
         </div>
 
-        <div style={{ fontSize: "12px", fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>
+        <div style={{ fontSize: "13px", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", fontWeight: 550 }}>
           {lang === "en" ? "Calibration:" : "ক্রমাঙ্কন:"} {metrics.calibration_period} → {lang === "en" ? "Test:" : "পরীক্ষা:"} {metrics.test_period}
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function ValidationMetricsPanel({ metrics }) {
               <div className="metric-card-top">
                 <span className="metric-tag-label">{m.label}</span>
                 <span className="metric-info-icon" title={m.def.desc}>
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="12" y1="16" x2="12" y2="12" />
                     <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -183,14 +183,14 @@ export default function ValidationMetricsPanel({ metrics }) {
               <div className="metric-card-bottom">
                 <div className="metric-full-name">{m.name}</div>
                 <div className="metric-benchmark-chip">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                   <span>{lang === "en" ? m.def.benchmark : m.def.benchmarkBn}</span>
                 </div>
               </div>
 
-              {/* Tooltip on Hover / Focus */}
+              {/* Tooltip on Hover / Focus (Light Professional Card) */}
               {isHovered && (
                 <div
                   style={{
@@ -198,26 +198,26 @@ export default function ValidationMetricsPanel({ metrics }) {
                     bottom: "105%",
                     left: "50%",
                     transform: "translateX(-50%)",
-                    width: "250px",
-                    background: "rgba(8, 17, 31, 0.96)",
-                    border: "1px solid var(--glass-stroke-strong)",
+                    width: "270px",
+                    background: "#FFFFFF",
+                    border: "1px solid var(--border-subtle)",
                     borderRadius: "8px",
-                    padding: "10px 12px",
-                    boxShadow: "0 12px 30px rgba(0,0,0,0.6)",
+                    padding: "12px 14px",
+                    boxShadow: "0 8px 24px rgba(23, 59, 87, 0.14)",
                     zIndex: 30,
-                    fontSize: "12px",
+                    fontSize: "13px",
                     lineHeight: "1.45",
-                    color: "var(--text-secondary)",
+                    color: "var(--text-primary)",
                     pointerEvents: "none",
                   }}
                 >
-                  <div style={{ color: "var(--cyan-300)", fontWeight: 700, marginBottom: "4px", fontSize: "12.5px" }}>
+                  <div style={{ color: "var(--blue-deep)", fontWeight: 750, marginBottom: "4px", fontSize: "14px" }}>
                     {m.name}
                   </div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-secondary)", marginBottom: "6px" }}>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--blue-primary)", fontWeight: 600, marginBottom: "6px" }}>
                     Formula: {m.def.formula}
                   </div>
-                  <div>{m.def.desc}</div>
+                  <div style={{ color: "var(--text-secondary)", fontSize: "12.5px" }}>{m.def.desc}</div>
                 </div>
               )}
             </div>

@@ -68,7 +68,7 @@ export default function HarvestDecisionPanel({
             <div className="card-title">
               {t("decision.title")}
             </div>
-            <div style={{ fontSize: "11px", color: "var(--text-muted)", marginTop: "1px" }}>
+            <div style={{ fontSize: "13px", color: "var(--text-muted)", marginTop: "2px" }}>
               {reachDisplayName}
             </div>
           </div>
@@ -76,10 +76,11 @@ export default function HarvestDecisionPanel({
 
         <span
           style={{
-            fontSize: "12px",
+            fontSize: "13px",
             fontFamily: "var(--font-mono)",
+            fontWeight: 700,
             color: flagConf.color,
-            padding: "2px 8px",
+            padding: "3px 10px",
             borderRadius: "4px",
             background: `rgba(${flagConf.color === "#30E08A" ? "48,224,138" : flagConf.color === "#FFC45C" ? "255,196,92" : "255,100,124"}, 0.12)`,
             border: `1px solid ${flagConf.color}44`,
@@ -122,7 +123,7 @@ export default function HarvestDecisionPanel({
             : (lang === "en" ? "CONTINUE MONITORING" : "নিয়মিত পর্যবেক্ষণ চালিয়ে যান")}
         </div>
 
-        <div style={{ fontSize: "11px", fontWeight: 700, color: flagConf.color, letterSpacing: "0.06em", marginTop: "2px" }}>
+        <div style={{ fontSize: "13.5px", fontWeight: 700, color: flagConf.color, letterSpacing: "0.04em", marginTop: "3px" }}>
           {lang === "en" ? "OVERALL FLAG: " : "সামগ্রিক সংকেত: "}<strong>{current.harvest_flag}</strong> ({flagTitle})
         </div>
 

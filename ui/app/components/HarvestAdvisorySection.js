@@ -23,7 +23,7 @@ export default function HarvestAdvisorySection({
     ? lang === "en"
       ? selectedReach.name
       : selectedReach.name_bn
-    : (lang === "en" ? "Surma Upper Reach (SW108 Kanaighat)" : "সুরমা আপার রিচ (SW১০৮ কানাইঘাট)");
+    : (lang === "en" ? "Surma Upper Reach (SW266 / SW108 Kanaighat)" : "সুরমা আপার রিচ (SW২৬৬ / SW১০৮ কানাইঘাট)");
 
   const recTitle = flag === "RED"
     ? t("advisorySection.actionHarvestUrgently")
@@ -72,14 +72,14 @@ export default function HarvestAdvisorySection({
           </div>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span className="brand-badge" style={{ fontSize: "11px", background: "rgba(56, 189, 248, 0.15)", color: "var(--cyan-300)" }}>
+              <span className="brand-badge" style={{ fontSize: "12.5px", background: "var(--blue-50)", color: "var(--blue-deep)", border: "1px solid var(--border-subtle)" }}>
                 {t("advisorySection.sectionBadge")}
               </span>
               <h2 className="card-title" style={{ fontSize: "18px" }}>
                 {t("advisorySection.sectionTitle")}
               </h2>
             </div>
-            <p style={{ fontSize: "12px", color: "var(--text-muted)", marginTop: "2px" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "2px" }}>
               {t("advisorySection.sectionSubtitle")}
             </p>
           </div>
@@ -88,7 +88,7 @@ export default function HarvestAdvisorySection({
         <button
           className="btn-standard btn-primary"
           onClick={onOpenBulletin}
-          style={{ minHeight: "44px", padding: "0 18px", fontSize: "13px", fontWeight: 700 }}
+          style={{ minHeight: "44px", height: "auto", padding: "8px 16px", fontSize: "14px", fontWeight: 700, lineHeight: "1.35", whiteSpace: "normal" }}
           aria-label={t("advisorySection.openBulletinBtn")}
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -128,13 +128,13 @@ export default function HarvestAdvisorySection({
         </div>
 
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", fontWeight: 700 }}>
+          <div style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)", fontWeight: 700 }}>
             {t("advisorySection.recommendationTitle")} · {reachName}
           </div>
           <div style={{ fontSize: "22px", fontWeight: 800, color: flagColor, marginTop: "2px" }}>
             {recTitle}
           </div>
-          <div style={{ fontSize: "13.5px", color: "var(--text-primary)", marginTop: "4px", lineHeight: "1.5" }}>
+          <div style={{ fontSize: "15px", color: "var(--text-primary)", marginTop: "4px", lineHeight: "1.55" }}>
             {lang === "en" ? current.advisory_en : current.advisory_bn}
           </div>
         </div>
@@ -142,19 +142,19 @@ export default function HarvestAdvisorySection({
         <div className="advisory-hero-stats">
           <div className="advisory-stat-box">
             <span className="stat-label">{lang === "en" ? "Modelled Stage" : "মডেল পানি স্তর"}</span>
-            <span className="stat-val" style={{ color: "var(--cyan-300)" }}>
+            <span className="stat-val" style={{ color: "var(--blue-deep)" }}>
               {formatNumber(stage.toFixed(2))} m PWD
             </span>
           </div>
           <div className="advisory-stat-box">
             <span className="stat-label">{lang === "en" ? "Danger Clearance" : "বিপদসীমা ব্যবধান"}</span>
-            <span className="stat-val" style={{ color: isDanger ? "var(--red-400)" : "var(--green-400)" }}>
+            <span className="stat-val" style={{ color: isDanger ? "var(--red-critical)" : "var(--green-600)" }}>
               {isDanger ? `+${formatNumber((stage - dangerLevel).toFixed(2))}m` : `${formatNumber(clearance)}m`}
             </span>
           </div>
           <div className="advisory-stat-box">
             <span className="stat-label">{lang === "en" ? "Lead Window" : "সতর্কতা সময়"}</span>
-            <span className="stat-val" style={{ color: "var(--amber-400)" }}>
+            <span className="stat-val" style={{ color: "var(--amber-caution)" }}>
               {formatNumber("22.0")} h
             </span>
           </div>
@@ -166,7 +166,7 @@ export default function HarvestAdvisorySection({
         {/* Left Column: Why this recommendation was triggered */}
         <div className="advisory-subcard glass-panel" style={{ padding: "18px" }}>
           <h3 className="advisory-subcard-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-400)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="16" x2="12" y2="12" />
               <line x1="12" y1="8" x2="12.01" y2="8" />
@@ -213,7 +213,7 @@ export default function HarvestAdvisorySection({
         {/* Right Column: Estimated Warning Window & Affected Haor Areas */}
         <div className="advisory-subcard glass-panel" style={{ padding: "18px" }}>
           <h3 className="advisory-subcard-title">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber-400)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber-caution)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10" />
               <polyline points="12 6 12 12 16 14" />
             </svg>
@@ -228,7 +228,7 @@ export default function HarvestAdvisorySection({
 
           {/* Affected Areas List */}
           <div style={{ marginTop: "16px" }}>
-            <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text-secondary)", marginBottom: "8px" }}>
+            <div style={{ fontSize: "13.5px", fontWeight: 700, color: "var(--text-secondary)", marginBottom: "8px" }}>
               {t("advisorySection.affectedAreasTitle")}
             </div>
             <div className="affected-areas-tags">
@@ -251,7 +251,7 @@ export default function HarvestAdvisorySection({
         {/* Farmers Column */}
         <div className="advisory-action-box farmer-box">
           <div className="action-box-header">
-            <div className="action-box-icon" style={{ color: "var(--cyan-300)" }}>
+            <div className="action-box-icon" style={{ color: "var(--blue-deep)" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
               </svg>
@@ -277,7 +277,7 @@ export default function HarvestAdvisorySection({
         {/* Agricultural Officers Column */}
         <div className="advisory-action-box officer-box">
           <div className="action-box-header">
-            <div className="action-box-icon" style={{ color: "var(--amber-400)" }}>
+            <div className="action-box-icon" style={{ color: "var(--amber-caution)" }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
