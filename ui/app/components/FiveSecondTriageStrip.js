@@ -56,7 +56,7 @@ export default function FiveSecondTriageStrip({
     ? lang === "en"
       ? selectedReach.name
       : selectedReach.name_bn
-    : (lang === "en" ? "Surma Upper (SW108 Kanaighat)" : "সুরমা আপার (SW১০৮ কানাইঘাট)");
+    : (lang === "en" ? "Surma Upper (SW266 / SW108 Kanaighat)" : "সুরমা আপার (SW২৬৬ / SW১০৮ কানাইঘাট)");
 
   // Action Directives based on flag
   const actionTitle = flag === "RED"
@@ -88,7 +88,7 @@ export default function FiveSecondTriageStrip({
   return (
     <section
       className="five-second-triage-panel glass-panel"
-      aria-label="5-Second Executive Triage Strip: Where, When, Why, What to Do"
+      aria-label={lang === "en" ? "5-Second Executive Triage Strip: Where, When, Why, What to Do" : "৫-সেকেন্ড এক্সিকিউটিভ ট্রায়াজ: কোথায়, কখন, কেন এবং করণীয়"}
     >
       {/* Top Banner with Flag Badge & 5-Second Motto */}
       <div className="triage-banner-header">
@@ -99,7 +99,16 @@ export default function FiveSecondTriageStrip({
           >
             <span className="triage-flag-pulse" style={{ background: flagColor }} aria-hidden="true" />
             <span className="triage-flag-text">
-              {lang === "en" ? "HARVEST FLAG:" : "ফসল কর্তন সংকেত:"} <strong>{flag}</strong>
+              {lang === "en" ? "HARVEST FLAG:" : "ফসল কর্তন সংকেত:"}{" "}
+              <strong>
+                {lang === "en"
+                  ? flag
+                  : flag === "RED"
+                  ? "জরুরি (RED)"
+                  : flag === "AMBER"
+                  ? "সতর্কতা (AMBER)"
+                  : "স্বাভাবিক (GREEN)"}
+              </strong>
             </span>
           </div>
 
@@ -115,14 +124,14 @@ export default function FiveSecondTriageStrip({
 
         {/* Data Trust & Freshness */}
         <div className="triage-trust-badge">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-400)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cyan-400)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
           <div>
-            <div style={{ color: "var(--text-secondary)", fontWeight: 700, fontSize: "11px" }}>
+            <div style={{ color: "var(--text-secondary)", fontWeight: 700, fontSize: "13px" }}>
               {t("triage.trustLabel")}
             </div>
-            <div style={{ color: "var(--text-muted)", fontSize: "10.5px", fontFamily: "var(--font-mono)" }}>
+            <div style={{ color: "var(--text-muted)", fontSize: "12px", fontFamily: "var(--font-mono)", marginTop: "1px" }}>
               {t("triage.trustSub")}
             </div>
           </div>

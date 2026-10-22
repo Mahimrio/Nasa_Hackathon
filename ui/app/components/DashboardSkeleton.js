@@ -117,13 +117,13 @@ export default function DashboardSkeleton({ lang = "bn" }) {
         .skeleton-shimmer {
           background: linear-gradient(
             90deg,
-            rgba(14, 27, 45, 0.7) 0%,
-            rgba(56, 189, 248, 0.12) 50%,
-            rgba(14, 27, 45, 0.7) 100%
+            #FFFFFF 0%,
+            #F0F4F8 50%,
+            #FFFFFF 100%
           );
           background-size: 200% 100%;
           animation: shimmerPulse 1.6s infinite ease-in-out;
-          border: 1px solid rgba(177, 221, 255, 0.08);
+          border: 1px solid var(--border-subtle, #DCE5EA);
         }
 
         @media (max-width: 1100px) {

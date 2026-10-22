@@ -72,12 +72,12 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "rgba(56, 189, 248, 0.12)",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
+              background: "#EAF3F9",
+              border: "1px solid rgba(40, 123, 181, 0.25)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "var(--cyan-400)",
+              color: "var(--blue-primary)",
               flexShrink: 0,
             }}
           >
@@ -185,8 +185,12 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             style={{ flexDirection: "column", alignItems: "flex-start", padding: "10px 12px" }}
           >
             <span className="param-label">{t("inspector.riverCorridor")}</span>
-            <span className="param-value" style={{ fontSize: "14px", color: "var(--cyan-300)" }}>
-              {reach.river}
+            <span className="param-value" style={{ fontSize: "14px", color: "var(--blue-primary)" }}>
+              {reach.river === "Surma"
+                ? (lang === "en" ? "Surma" : "সুরমা")
+                : reach.river === "Kushiyara"
+                ? (lang === "en" ? "Kushiyara" : "কুশিয়ারা")
+                : reach.river}
             </span>
           </div>
 
@@ -195,7 +199,7 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             style={{ flexDirection: "column", alignItems: "flex-start", padding: "10px 12px" }}
           >
             <span className="param-label">{t("inspector.calibratedN")}</span>
-            <span className="param-value" style={{ fontSize: "16px", color: "var(--cyan-300)" }}>
+            <span className="param-value" style={{ fontSize: "16px", color: "var(--blue-deep)" }}>
               {formatNumber(reach.calibrated_n ?? (cal ? cal.n : "0.0310"))}
             </span>
           </div>
@@ -256,29 +260,35 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             style={{
               padding: "12px",
               borderRadius: "8px",
-              background: "rgba(255, 196, 92, 0.08)",
-              border: "1px solid rgba(255, 196, 92, 0.25)",
+              background: "#FEF7EE",
+              border: "1px solid rgba(183, 121, 31, 0.3)",
               marginBottom: "16px",
             }}
           >
             <div
               style={{
-                color: "var(--amber-400)",
+                color: "var(--amber-600, #B7791F)",
                 fontWeight: 700,
                 fontSize: "12.5px",
                 marginBottom: "4px",
               }}
             >
-              {lang === "en" ? `BWDB Station: ${reach.gauge_station} (Co-located Gauge)` : `বিডব্লিউডিবি স্টেশন: ${reach.gauge_station} (সংযুক্ত গেজ)`}
+              {(() => {
+                const rawName = reach.gauge_station || "Kanaighat Gauge (SW266 / Model SW108)";
+                const cleanName = rawName.includes("SW266") ? rawName : rawName.replace("SW108", "SW266 / Model SW108");
+                return lang === "en"
+                  ? `BWDB Station: ${cleanName} (Co-located Gauge)`
+                  : `বাপাউবো স্টেশন: ${cleanName} (সংযুক্ত গেজ)`;
+              })()}
             </div>
             <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               {lang === "en" ? (
                 <>
-                  Danger Level: <strong>{reach.danger_level_m} m PWD</strong>. Direct stage observations from Bangladesh Water Development Board (BWDB) are assimilated here for real-time validation.
+                  Danger Level: <strong>{reach.danger_level_m} m PWD (12.75 m MSL)</strong>. Direct stage observations from Bangladesh Water Development Board (BWDB Station SW266) are assimilated here for real-time validation.
                 </>
               ) : (
                 <>
-                  বিপৎসীমা: <strong>{formatNumber(reach.danger_level_m)} মি PWD</strong>। বাংলাদেশ পানি উন্নয়ন বোর্ডের (BWDB) প্রত্যক্ষ গেজ পর্যবেক্ষণ সরাসরি এখানে যাচাইকরণের জন্য সমন্বিত।
+                  বিপৎসীমা: <strong>{formatNumber(reach.danger_level_m)} মি PWD (১২.৭৫ মি MSL)</strong>। বাংলাদেশ পানি উন্নয়ন বোর্ডের (BWDB স্টেশন SW২৬৬) প্রত্যক্ষ গেজ পর্যবেক্ষণ সরাসরি এখানে যাচাইকরণের জন্য সমন্বিত।
                 </>
               )}
             </div>

@@ -159,7 +159,7 @@ export default function AdvisoryPage() {
 
         {/* 2. Reach-Specific Hydraulic Warning Telemetry Table */}
         {reachMeta && (
-          <section className="glass-panel card-padding dashboard-full-row" aria-label="Reach Telemetry Table">
+          <section className="glass-panel card-padding dashboard-full-row" aria-label={lang === "en" ? "Reach Telemetry Table" : "রিচ টেলিমেট্রি টেবিল"}>
             <div className="card-header-bar">
               <div className="card-title-group">
                 <div className="card-icon" style={{ color: "var(--cyan-400)" }}>
@@ -186,7 +186,7 @@ export default function AdvisoryPage() {
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12.5px" }}>
                 <thead>
-                  <tr style={{ borderBottom: "1px solid var(--glass-stroke)", textAlign: "left", color: "var(--text-muted)" }}>
+                  <tr style={{ borderBottom: "1px solid var(--border-subtle)", textAlign: "left", color: "var(--text-secondary)", background: "var(--surface-850)" }}>
                     <th style={{ padding: "10px 12px" }}>{t("bulletin.colReach")}</th>
                     <th style={{ padding: "10px 12px" }}>{t("bulletin.colCorridor")}</th>
                     <th style={{ padding: "10px 12px" }}>{t("bulletin.colStage")}</th>
@@ -202,13 +202,19 @@ export default function AdvisoryPage() {
                     const isAmber = rRisk === "AMBER";
                     const rColor = isRed ? "var(--red-400)" : isAmber ? "var(--amber-400)" : "var(--green-400)";
                     const rStage = r.reach_id === "22211000011" ? current.modelled_stage : (current.modelled_stage - 0.45);
+                    const localizedRiver = lang === "en" ? r.river : (r.river === "Surma" ? "সুরমা" : r.river === "Kushiyara" ? "কুশিয়ারা" : r.river);
+                    const localizedRisk = rRisk === "RED"
+                      ? (lang === "en" ? "CRITICAL (RED)" : "বিপদ (লাল)")
+                      : rRisk === "AMBER"
+                      ? (lang === "en" ? "WATCH (AMBER)" : "সতর্কতা (হলুদ)")
+                      : (lang === "en" ? "NORMAL (GREEN)" : "স্বাভাবিক (সবুজ)");
 
                     return (
                       <tr
                         key={r.reach_id}
                         style={{
-                          borderBottom: "1px solid rgba(177,221,255,0.06)",
-                          background: selectedReachId === r.reach_id ? "rgba(56, 189, 248, 0.08)" : "transparent",
+                          borderBottom: "1px solid var(--border-subtle)",
+                          background: selectedReachId === r.reach_id ? "var(--surface-active)" : "transparent",
                           cursor: "pointer",
                         }}
                         onClick={() => setSelectedReachId(r.reach_id)}
@@ -219,7 +225,7 @@ export default function AdvisoryPage() {
                             SWORD: {r.reach_id}
                           </span>
                         </td>
-                        <td style={{ padding: "12px", color: "var(--cyan-300)" }}>{r.river}</td>
+                        <td style={{ padding: "12px", color: "var(--blue-primary)", fontWeight: 600 }}>{localizedRiver}</td>
                         <td style={{ padding: "12px", fontFamily: "var(--font-mono)" }}>{formatNumber(rStage.toFixed(2))} m</td>
                         <td style={{ padding: "12px", fontFamily: "var(--font-mono)", color: "var(--red-400)" }}>{formatNumber(dangerLevel.toFixed(2))} m</td>
                         <td style={{ padding: "12px" }}>
@@ -234,7 +240,7 @@ export default function AdvisoryPage() {
                               border: `1px solid ${rColor}44`,
                             }}
                           >
-                            {rRisk}
+                            {localizedRisk}
                           </span>
                         </td>
                         <td style={{ padding: "12px", color: "var(--text-secondary)" }}>
@@ -254,7 +260,7 @@ export default function AdvisoryPage() {
         )}
 
         {/* Pathway Navigation Footer */}
-        <div className="journey-pathway-banner" aria-label="Next Steps in User Journey">
+        <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
           <Link href="/forecast" className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
@@ -311,8 +317,8 @@ export default function AdvisoryPage() {
           <span>•</span>
           <span>
             {lang === "en"
-              ? "BWDB SW108 Kanaighat Hydrometric Gauge"
-              : "বাপাউবো SW১০৮ কানাইঘাট হাইড্রোগ্রাফিক গেজ"}
+              ? "BWDB SW266 (Model SW108) Kanaighat Gauge"
+              : "বাপাউবো SW২৬৬ (মডেল SW১০৮) কানাইঘাট গেজ"}
           </span>
         </div>
       </footer>

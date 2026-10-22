@@ -147,7 +147,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Cross-Route Decision Journey Pathway Navigation */}
-        <div className="journey-pathway-banner" aria-label="Next Steps in User Journey">
+        <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
           <Link href="/forecast" className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
@@ -204,8 +204,8 @@ export default function DashboardPage() {
           <span>•</span>
           <span>
             {lang === "en"
-              ? "BWDB SW108 Kanaighat Hydrometric Gauge"
-              : "বাপাউবো SW১০৮ কানাইঘাট হাইড্রোগ্রাফিক গেজ"}
+              ? "BWDB SW266 (Model SW108) Kanaighat Gauge"
+              : "বাপাউবো SW২৬৬ (মডেল SW১০৮) কানাইঘাট গেজ"}
           </span>
         </div>
       </footer>

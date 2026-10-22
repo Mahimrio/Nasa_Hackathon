@@ -25,14 +25,33 @@ logger = logging.getLogger("ingest_gauge")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 # BWDB Gauge Stations metadata in Surma-Kushiyara Basin
+# Station ID Reconciliation:
+# In the official BWDB/FFWC station directory, Kanaighat on the Surma River is SW266.
+# (Official SW108 in BWDB national registry is Chardoani tidal station in Barguna).
+# In this repository, SW108 is retained as an internal pipeline alias for fixture compatibility.
+# Danger level: 13.20m PWD = 12.75m MSL/SOB via +0.45m datum offset in Sylhet.
 GAUGE_STATIONS = {
     "SW108": {
         "station_name": "Kanaighat",
+        "official_catalog_id": "SW266",
+        "legacy_alias": "SW108",
         "river": "Surma",
         "reach_id": "22211000011",
         "danger_level_m": 13.20,
+        "danger_level_msl_m": 12.75,
         "warning_level_m": 12.20,
-        "datum": "PWD",
+        "datum": "PWD (13.20m PWD = 12.75m MSL)",
+    },
+    "SW266": {
+        "station_name": "Kanaighat",
+        "official_catalog_id": "SW266",
+        "legacy_alias": "SW108",
+        "river": "Surma",
+        "reach_id": "22211000011",
+        "danger_level_m": 13.20,
+        "danger_level_msl_m": 12.75,
+        "warning_level_m": 12.20,
+        "datum": "PWD (13.20m PWD = 12.75m MSL)",
     },
     "SW109": {
         "station_name": "Amalshid",

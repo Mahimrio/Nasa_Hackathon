@@ -1,8 +1,8 @@
 # HydroSense Dashboard — Visual & Interaction Design Architecture
 
-> **Purpose:** Implementation-ready redesign specification for the HydroSense/NASA hackathon dashboard shown in the supplied screenshot. The design combines **glassmorphism + neumorphism + blur/mist (“blustmorphism”) + infomorphism + 3D motion + image motion + animated map visualization** into one consistent system.
+> **Purpose:** Implementation-ready visual and interaction design specification for the HydroSense-SWOT scientific telemetry and harvest decision-support tool in northeastern Bangladesh.
 >
-> **Primary design principle:** *A cinematic scientific instrument, not a toy.* Effects create depth and hierarchy; data, warnings, axes, labels, and status decisions remain crisp and trustworthy.
+> **Primary design principle:** *A trustworthy, readable, carefully crafted scientific instrument for agricultural officers and Boro rice farmers.* The interface uses a calm, restrained light visual language with high typographic contrast, solid surfaces, crisp structural boundaries, and no distracting neon blooms or heavy glassmorphism.
 
 ---
 
@@ -10,191 +10,87 @@
 
 ### 1.1 Product context inferred from the supplied UI
 
-The current dashboard communicates a river/hydrology monitoring workflow. Visible areas include:
+The dashboard communicates a transboundary river/hydrology monitoring and harvest decision workflow. Visible areas include:
 
-- A compact HydroSense header with environment/status, language controls, and a date/time label.
-- A main river/reach map/diagram with named reaches and a gauge marker.
-- A **Harvest Decision** panel with a prominent NORMAL status and modeled values.
-- A hydrograph/time-series panel with observed series, uncertainty/range shading, thresholds, date/time and timeline control.
-- A scientific-validation row (the screenshot shows values labelled NSE, KGE, PBIAS, timing, and warning lead).
-- An operational-limits/assumptions panel.
+- A balanced HydroSense header with environment/telemetry status, page navigation, language controls, and timestamp.
+- A 5-second triage strip communicating immediate risk, trigger rationale, and core telemetry.
+- An interactive river/reach map with named reaches, gauge station marker (Kanaighat SW266), and GIS layer disclosure accordions.
+- A **Harvest Decision** panel with prominent status (NORMAL / WATCH / FLOOD RISK), modeled stage, danger clearance, and Bengali directives.
+- A hydrograph/time-series panel with observed BWDB stage, Muskingum-Cunge routed forecast, SWOT uncertainty envelope, thresholds, and timeline control.
+- A scientific-validation row (NSE, KGE, PBIAS, timing, and warning lead).
+- An operational-limits and assumptions panel.
 
-Keep these information roles. Redesign their visual language and responsive organization rather than inventing new hydrological meaning. Exact data labels, units, thresholds, or model semantics must come from the application/API; do not hard-code screenshot values as production data.
+Keep these information roles. Maintain scientific and product requirements documented in the repository; exact data labels, units, thresholds, and model semantics come from the application/API.
 
-### 1.2 Desired visual result
+### 1.2 Visual result
 
-A calm, near-black navy dashboard with atmospheric blue/cyan illumination, a small amount of violet in ambient lighting, restrained emerald for healthy conditions, and amber/red only for caution or danger. Panels look like translucent, layered instrument glass. Small inset controls and gauges use soft neumorphic depth. The map becomes the hero visualization, with animated river paths and a live gauge marker. Charts animate on first load and on data refresh, but never animate so aggressively that values become hard to read.
+A calm, readable professional light interface:
+- **Canvas:** Soft, eye-friendly light backdrop (`#F5F8FA`).
+- **Surfaces:** Crisp white solid cards (`#FFFFFF`) with subtle, clean structural borders (`#DCE5EA`).
+- **Typography:** 16 px body baseline, 18–20 px card headings, 26–32 px page titles, 28–36 px major decision values, and ≥12 px chart ticks/axes.
+- **Accents:** Professional river blue (`#287BB5`) and deep blue (`#175A85`), with semantic green (`#34805A`), amber (`#B7791F`), and red (`#B4232F`) reserved strictly for hydrological states.
+- **No Unnecessary Decoration:** Glassmorphism, heavy backdrop blur, neumorphism, cyan ambient glows, and persistent pulsing animations are eliminated to ensure maximum trust and legibility.
 
-### 1.3 Style mixture and boundaries
+### 1.3 Style boundaries
 
-| Design language | Apply it to | Avoid |
+| Design language | Direction | Rationale |
 |---|---|---|
-| **Glassmorphism** | Main panels, nav, floating tooltips, overlays, filter popovers | Low-contrast text over busy map imagery; blur on every nested element |
-| **Neumorphism** | Small circular controls, segmented toggles, compact metric wells, timeline thumb | Large low-contrast buttons; using inset shadows as the only affordance |
-| **Blustmorphism / atmospheric blur** | Background haze, large light blooms behind hero visualization, edge gradients | Blur behind dense numbers, chart axes, map labels, or status text |
-| **Infomorphism** | KPI hierarchy, labels, comparisons, trend direction, confidence ranges, semantic badges | Decorative widgets that do not explain a real value or state |
-| **3D animation** | Gentle card tilt, depth/parallax for hero map, selected gauge/marker, loading skeleton | Rotating the entire dashboard, continuous high-amplitude motion, parallax on every card |
-| **Image animation** | Satellite/terrain layer crossfade, subtle cloud/flow texture, animated thumbnails | Strobing, looping unrelated stock imagery, animation behind small body text |
-| **Map animation** | River flow traces, gauge pulse, reach highlight, time-scrub interpolation | Moving geography itself, changing station coordinates as decoration, unexplained flashing |
-
-**Effect budget:** At any moment, only one dominant animation (usually the map flow or hydrograph reveal), plus a few tiny ambient indicators, should attract attention. Data comes first.
+| **Surfaces** | Solid white cards (`#FFFFFF`) on `#F5F8FA` canvas | Maximum contrast and readability across daytime field conditions |
+| **Borders** | Clean 1px solid borders (`#DCE5EA`) | Clear boundary delineation without visual noise or dual shadows |
+| **Color Semantics** | Green (`#34805A`), Amber (`#B7791F`), Red (`#B4232F`) | Universal agricultural decision indicators paired with icons and labels |
+| **Typography** | 16 px body baseline, Noto Sans Bengali with 1.6–1.7 line height | Zero text clipping, comfortable conjuncts, scannable for extension officers |
+| **Motion** | Gentle, purposeful interactions; no infinite pulsing rings | Calibrated vector flows and hydrograph reveal without distracting jitter |
 
 ---
 
 ## 2. Design tokens
 
-Define tokens centrally (CSS variables, theme file, or design-system config). Components should consume tokens; avoid scattering raw values through styles.
+### 2.1 Professional Light Color Palette
 
-### 2.1 Color palette
-
-Use these as initial design tokens and tune from the actual screen and dataset. All colors are suggestions for the redesign, not scientific thresholds.
-
-| Token | Hex / value | Intended use |
+| Token | Hex / Value | Intended Use |
 |---|---|---|
-| `bg-950` | `#050A12` | App canvas / deepest backdrop |
-| `bg-900` | `#08111F` | Main viewport behind panels |
-| `surface-900` | `rgba(14, 27, 45, 0.88)` | Default glass panel base |
-| `surface-850` | `rgba(18, 35, 57, 0.78)` | Raised cards / side panels |
-| `surface-800` | `rgba(24, 43, 68, 0.72)` | Hover / selected surface |
-| `glass-stroke` | `rgba(177, 221, 255, 0.14)` | Default panel border |
-| `glass-stroke-strong` | `rgba(126, 213, 255, 0.34)` | Focus / selected border |
-| `text-primary` | `#F2F7FF` | Main headings and numeric values |
-| `text-secondary` | `#A9BAD0` | Supporting labels |
-| `text-muted` | `#71849C` | Metadata and low-priority labels; never tiny critical data |
-| `cyan-400` | `#35D8F2` | Interactive accent, river flow, primary chart line |
-| `cyan-300` | `#74ECFF` | Highlight / bright glint |
-| `blue-500` | `#3185FF` | Secondary series, selected tabs, range glow |
-| `violet-500` | `#8172FF` | Sparse ambient bloom or secondary visualization |
-| `green-400` | `#30E08A` | Normal/healthy state, positive change |
-| `amber-400` | `#FFC45C` | Watch/caution state and meaningful thresholds |
-| `red-400` | `#FF647C` | Danger/critical state only |
-| `map-water` | `#0C2131` | Dark map/ocean base if the layer is custom-rendered |
-| `map-land` | `#172B40` | Map land mass |
-| `grid-line` | `rgba(159, 191, 224, 0.10)` | Chart grid |
+| `bg-canvas` | `#F5F8FA` | App canvas background |
+| `surface-card` | `#FFFFFF` | Primary content and instrument surfaces |
+| `surface-subtle` | `#F8FAFC` | Recessed telemetry wells and parameter blocks |
+| `border-default` | `#DCE5EA` | Standard card and table borders |
+| `border-subtle` | `rgba(220, 229, 234, 0.7)` | Inner dividers and secondary item separators |
+| `text-primary` | `#173B57` | Main headings, primary values (>9:1 contrast) |
+| `text-secondary` | `#566B7C` | Supporting labels, descriptions, subtitles (>4.5:1 contrast) |
+| `text-muted` | `#7A8F9E` | Secondary metadata and unit annotations |
+| `blue-primary` | `#287BB5` | River pathways, active links, primary buttons |
+| `blue-deep` | `#175A85` | Modeled stage hydrograph, high-emphasis metrics |
+| `blue-light` | `#EBF3F8` | Information chips and active tab fills |
+| `green-safe` | `#34805A` | NORMAL status (<80% danger level; crop maturing) |
+| `green-light` | `#E9F4EC` | Safe status background fills |
+| `amber-caution` | `#B7791F` | CAUTION / WATCH (80%–100% danger level; mobilize machinery) |
+| `amber-light` | `#FEF9EE` | Caution status background fills |
+| `red-danger` | `#B4232F` | BREACH / FLOOD RISK (≥13.20m PWD; immediate harvest) |
+| `red-light` | `#FDF2F2` | Danger status background fills |
 
-#### Color use rules
+### 2.2 Typography Hierarchy
 
-1. Keep at least 4.5:1 contrast for normal-size text where possible. Essential text must remain readable over the glass background at all times.
-2. Use green/amber/red only for status semantics; do not recolor arbitrary components for decoration.
-3. Cyan is the action/data accent, not the universal color of every icon, title, and border.
-4. Gradients should be subtle and directional; avoid rainbow gradients across text.
-5. Add non-color status cues: icon + text + shape/pattern where practical.
+| Role | Target Size | Line Height | Weight | Notes |
+|---|---|---|---|---|
+| Main page heading | 26–32 px desktop; 24–28 px mobile | 1.25 | 700 | Primary title |
+| Major decision/status value | 28–36 px | 1.2 | 750–800 | Harvest decision card |
+| Card & section headings | 18–20 px | 1.35 | 650–700 | Panel titles |
+| Main body text | 16 px baseline | 1.55 (EN), 1.65 (BN) | 400 | General reading |
+| Supporting descriptions | 14–16 px | 1.5 | 400–500 | Context and footnotes |
+| Form labels & key metadata | 14 px | 1.4 | 600 | Parameter labels |
+| Secondary metadata | 12.5–13.5 px | 1.4 | 600 | Tag chips, small indicators |
+| Chart axis labels & ticks | 12–12.5 px | 1.2 | 500 (Mono) | High-contrast tick labels |
+| Button & navigation labels | 14–16 px | 1.3 | 600–700 | Min 44 px touch height |
 
-### 2.2 Gradients and atmospheric lighting
-
-```css
-:root {
-  --gradient-canvas:
-    radial-gradient(65rem 42rem at 14% 8%, rgba(34, 115, 190, .19), transparent 68%),
-    radial-gradient(48rem 36rem at 88% 20%, rgba(91, 75, 194, .13), transparent 65%),
-    linear-gradient(145deg, #050A12 0%, #08111F 55%, #06101B 100%);
-
-  --gradient-glass: linear-gradient(145deg,
-    rgba(31, 57, 84, .78) 0%,
-    rgba(12, 25, 42, .76) 52%,
-    rgba(17, 36, 57, .68) 100%);
-
-  --gradient-cyan-glow: linear-gradient(105deg, #35D8F2 0%, #3185FF 58%, #8172FF 100%);
-  --gradient-good: linear-gradient(90deg, rgba(48,224,138,.88), rgba(53,216,242,.82));
-}
-```
-
-Atmospheric blooms belong on the app background pseudo-elements, not on each card. Keep a fixed background during scroll to avoid distracting movement.
-
-### 2.3 Typography
-
-Recommended: **Inter** or **Manrope** for interface text; optionally **IBM Plex Mono** for timestamps, coordinates, IDs, and scientific numbers. If external fonts are not bundled, use a system fallback.
-
-| Role | Desktop size / line height | Weight | Tracking | Use |
-|---|---:|---:|---:|---|
-| Display / page title | 28 / 36 px | 650–700 | `-0.025em` | One primary title only |
-| Section title | 16 / 22 px | 600 | `-0.01em` | Panel headings |
-| Card title | 14 / 20 px | 600 | `0` | KPI/chart/map card titles |
-| Metric value large | 28–36 / 1.1 | 650–700 | `-0.03em` | Main decision or hero KPI |
-| Metric value standard | 22–28 / 1.15 | 600–700 | `-0.02em` | Validation scores |
-| Body | 14 / 21 px | 400–450 | `0` | Explanations and notes |
-| Supporting label | 12 / 16 px | 500 | `0.01em` | Labels; use sentence case |
-| Eyebrow / overline | 10–11 / 14 px | 600 | `0.08em` | Section metadata, compact caps |
-| Timestamp / datum | 11–12 / 16 px | 500 | `0.02em` | Time, coordinates, sample values |
-
-#### Type rules
-
-- Body copy should usually be 14 px or larger; chart ticks may be 11–12 px if readable at the actual target size.
-- Use tabular numerals (`font-variant-numeric: tabular-nums`) for live measurements, counters and score rows to prevent layout jitter.
-- Numeric value and label are separate visual levels. Never make a unit look like the value itself.
-- Limit uppercase to small overlines and compact technical metadata. Panel titles are sentence/title case.
-- Use 4 px minimum visual gap between a label and its value; usually 8 px is better.
-
-### 2.4 Spacing scale
-
-Use a base unit of 4 px, with primary layout rhythm built on 8 px.
-
-| Token | Value | Intended use |
-|---|---:|---|
-| `space-0` | 0 px | Flush alignment |
-| `space-1` | 4 px | Icon-to-label micro-gap, tight label/value gap |
-| `space-2` | 8 px | Common content gap, compact stack |
-| `space-3` | 12 px | Dense form / legend spacing |
-| `space-4` | 16 px | Standard inner gap and compact panel padding |
-| `space-5` | 20 px | Medium inner gap |
-| `space-6` | 24 px | Standard panel padding and column gap |
-| `space-8` | 32 px | Section gap |
-| `space-10` | 40 px | Large section separation |
-| `space-12` | 48 px | Hero spacing / large desktop gutters |
-| `space-16` | 64 px | Only for open editorial / empty states |
-
-**Precise spacing requirements**
-
-- App outer gutter: 24 px at 1440 px+; 20 px at 1024–1439 px; 16 px on tablet; 12–16 px on small mobile.
-- Top bar inner horizontal padding: 20–24 px desktop; 16 px tablet; 12 px mobile.
-- Gap between title and subtitle: 6 px.
-- Gap from page header to dashboard grid: 24 px desktop, 16 px tablet/mobile.
-- Gap between dashboard cards: 16 px default; 12 px when constrained; never below 10 px except intentionally dense control groups.
-- Card padding: 20 px standard desktop; 16 px at tablet; 14–16 px mobile. Hero map and hydrograph may use 20–24 px on desktop.
-- Card title to card content: 16 px; compact KPI cards: 12 px.
-- Icon to adjacent text: 8 px; icon to a numeric-only badge: 6 px.
-- Label to value: 6–8 px; value to delta/comparison: 6 px.
-- Legend item gap: 12–16 px horizontal, 8 px vertical.
-- Chart title to chart plotting area: 16 px; axis labels need 8–12 px breathing room from plotting area.
-- Button horizontal padding: 12–16 px; vertical padding: 9–11 px for 40–44 px total height.
-- Form label to control: 6 px; separate form rows by 16 px.
-- Tooltip padding: 10–12 px; icon/text gap 8 px.
-- Body paragraph line spacing: 1.45–1.6; paragraph gap: 10–12 px.
-- Do not use multiple spaces to align text. Use layout primitives/grid, never literal spaces.
-
-### 2.5 Radius, borders, elevation
+### 2.3 Radius, Borders & Elevation
 
 | Token | Value | Use |
-|---|---:|---|
-| `radius-xs` | 6 px | Small chips / inline labels |
-| `radius-sm` | 10 px | Inputs, compact buttons |
-| `radius-md` | 14 px | Standard cards and popovers |
-| `radius-lg` | 18 px | Hero map, hydrograph, decision panel |
-| `radius-xl` | 24 px | Optional floating overlay / command sheet |
-| `radius-pill` | 999 px | Chips, segmented statuses, avatars |
-| Border default | 1 px solid `var(--glass-stroke)` | All glass cards |
-| Focus border | 1 px solid `var(--glass-stroke-strong)` | Focus/selected states |
-
-Use a modest border plus one diffuse outer shadow and one subtle inner highlight. Avoid stacking more than three shadows on the same surface.
-
-```css
-.glass-panel {
-  background: var(--gradient-glass);
-  border: 1px solid var(--glass-stroke);
-  border-radius: var(--radius-lg, 18px);
-  box-shadow:
-    0 18px 44px rgba(0, 0, 0, .22),
-    inset 0 1px 0 rgba(225, 246, 255, .075);
-  backdrop-filter: blur(18px) saturate(125%);
-  -webkit-backdrop-filter: blur(18px) saturate(125%);
-}
-```
-
-- Standard card blur: 14–20 px.
-- Floating popover blur: 20–28 px.
-- Background haze blur: 48–90 px.
-- Use a mostly opaque fallback (`rgba(10, 20, 34, .96)`) when `backdrop-filter` is unsupported.
-- Neumorphism must be restrained and confined to small controls. A suggested inset pair is `inset 2px 2px 5px rgba(0,0,0,.25)` plus `inset -1px -1px 4px rgba(180,220,255,.06)`. Keep a visible border as well.
+|---|---|---|
+| `radius-sm` | 4–6 px | Badges, small chips, inputs |
+| `radius-md` | 8–10 px | Buttons, control groups |
+| `radius-lg` | 12–14 px | Cards, hydrograph panel, map container |
+| `radius-pill` | 9999 px | Status indicators, toggle pills |
+| Card surface shadow | `0 1px 3px rgba(23, 59, 87, 0.05)` | Subtle depth without visual heaviness |
+| Dropdown/modal shadow | `0 8px 24px rgba(23, 59, 87, 0.12)` | Floating menus and dialog elevation |
 
 ### 2.6 Layout and grid tokens
 

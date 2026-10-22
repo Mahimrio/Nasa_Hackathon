@@ -158,6 +158,7 @@ export default function ForecastPage() {
         <div className="dashboard-full-row">
           <HydrographPanel
             chartData={chartWindow}
+            eventData={eventData}
             current={current}
             dangerLevel={dangerLevel}
             sliderIdx={sliderIdx}
@@ -180,7 +181,7 @@ export default function ForecastPage() {
         <OperationalLimitsPanel lang={lang} metrics={metrics} />
 
         {/* Pathway Navigation Footer */}
-        <div className="journey-pathway-banner" aria-label="Next Steps in User Journey">
+        <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
           <Link href="/dashboard" className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
@@ -237,8 +238,8 @@ export default function ForecastPage() {
           <span>•</span>
           <span>
             {lang === "en"
-              ? "BWDB SW108 Kanaighat Hydrometric Gauge"
-              : "বাপাউবো SW১০৮ কানাইঘাট হাইড্রোগ্রাফিক গেজ"}
+              ? "BWDB SW266 (Model SW108) Kanaighat Gauge"
+              : "বাপাউবো SW২৬৬ (মডেল SW১০৮) কানাইঘাট গেজ"}
           </span>
         </div>
       </footer>

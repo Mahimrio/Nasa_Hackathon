@@ -57,12 +57,12 @@ export default function ModelArchitectureModal({ onClose }) {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "rgba(56, 189, 248, 0.12)",
-              border: "1px solid rgba(56, 189, 248, 0.3)",
+              background: "#EAF3F9",
+              border: "1px solid rgba(40, 123, 181, 0.25)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "var(--cyan-400)",
+              color: "var(--blue-primary)",
               flexShrink: 0,
             }}
           >
@@ -99,12 +99,12 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "rgba(14,27,45,0.7)",
-              border: "1px solid var(--glass-stroke)",
+              background: "#F8FAFC",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--cyan-300)", fontSize: "13.5px" }}>
+              <strong style={{ color: "var(--blue-deep)", fontSize: "13.5px" }}>
                 {t("architecture.offlineTitle")}
               </strong>
               <span
@@ -126,12 +126,12 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "rgba(14,27,45,0.7)",
-              border: "1px solid var(--glass-stroke)",
+              background: "#F8FAFC",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--blue-400)", fontSize: "13.5px" }}>
+              <strong style={{ color: "var(--blue-primary)", fontSize: "13.5px" }}>
                 {t("architecture.onlineTitle")}
               </strong>
               <span
@@ -153,12 +153,12 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "rgba(14,27,45,0.7)",
-              border: "1px solid var(--glass-stroke)",
+              background: "#F8FAFC",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--violet-400)", fontSize: "13.5px" }}>
+              <strong style={{ color: "#5B67CA", fontSize: "13.5px" }}>
                 {t("architecture.routingTitle")}
               </strong>
               <span
@@ -180,12 +180,12 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "rgba(14,27,45,0.7)",
-              border: "1px solid var(--glass-stroke)",
+              background: "#F8FAFC",
+              border: "1px solid var(--border-subtle)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "var(--green-400)", fontSize: "13.5px" }}>
+              <strong style={{ color: "var(--green-600)", fontSize: "13.5px" }}>
                 {t("architecture.decisionTitle")}
               </strong>
               <span
