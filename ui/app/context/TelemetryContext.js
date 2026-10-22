@@ -1,10 +1,13 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import { useLocale } from "../hooks/useLocale";
 
 const TelemetryContext = createContext(null);
 
 export function TelemetryProvider({ children }) {
+  const { lang } = useLocale();
+  const intlLocale = lang === "bn" ? "bn-BD" : "en-GB";
   const [eventData, setEventData] = useState(null);
   const [gaugeData, setGaugeData] = useState(null);
   const [metrics, setMetrics] = useState(null);
@@ -69,7 +72,10 @@ export function TelemetryProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    fetchData();
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchData]);
 
   // ---- PEAK INDEX ----
@@ -145,37 +151,41 @@ export function TelemetryProvider({ children }) {
   // Formatted date strings
   const dateStr = useMemo(() => {
     if (!current) return "";
-    return new Date(current.timestamp).toLocaleDateString("en-GB", {
+    return new Date(current.timestamp).toLocaleDateString(intlLocale, {
       year: "numeric",
       month: "short",
       day: "numeric",
+      timeZone: "UTC",
     });
-  }, [current]);
+  }, [current, intlLocale]);
 
   const timeStr = useMemo(() => {
     if (!current) return "";
-    return new Date(current.timestamp).toLocaleTimeString("en-GB", {
+    return new Date(current.timestamp).toLocaleTimeString(intlLocale, {
       hour: "2-digit",
       minute: "2-digit",
+      hourCycle: "h23",
       timeZone: "UTC",
     });
-  }, [current]);
+  }, [current, intlLocale]);
 
   const startDateStr = useMemo(() => {
     if (!eventData || !eventData.length) return "";
-    return new Date(eventData[0].timestamp).toLocaleDateString("en-GB", {
+    return new Date(eventData[0].timestamp).toLocaleDateString(intlLocale, {
       month: "short",
       day: "numeric",
+      timeZone: "UTC",
     });
-  }, [eventData]);
+  }, [eventData, intlLocale]);
 
   const endDateStr = useMemo(() => {
     if (!eventData || !eventData.length) return "";
-    return new Date(eventData[eventData.length - 1].timestamp).toLocaleDateString("en-GB", {
+    return new Date(eventData[eventData.length - 1].timestamp).toLocaleDateString(intlLocale, {
       month: "short",
       day: "numeric",
+      timeZone: "UTC",
     });
-  }, [eventData]);
+  }, [eventData, intlLocale]);
 
   const value = {
     eventData,

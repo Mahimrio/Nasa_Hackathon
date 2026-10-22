@@ -21,17 +21,20 @@ export function LocaleProvider({ children }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    try {
-      const saved = localStorage.getItem("hydrosense_locale");
-      if (saved === "en" || saved === "bn") {
-        setLangState(saved);
-      } else {
-        setLangState("bn");
+    const timer = setTimeout(() => {
+      setMounted(true);
+      try {
+        const saved = localStorage.getItem("hydrosense_locale");
+        if (saved === "en" || saved === "bn") {
+          setLangState(saved);
+        } else {
+          setLangState("bn");
+        }
+      } catch {
+        // localStorage may fail in restricted contexts
       }
-    } catch {
-      // localStorage may fail in restricted contexts
-    }
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const setLang = useCallback((newLang) => {
