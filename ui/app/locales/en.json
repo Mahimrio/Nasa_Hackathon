@@ -129,6 +129,9 @@
     "skipHours": "Skip duration in hours",
     "hoursShort": "h",
     "leadTimeBadge": "Advance Lead Time",
+    "yearLabel": "Year:",
+    "selectYearTitle": "Select Year",
+    "yearMenuTitle": "Select Year (2020–2026)",
     "srSummary": "Dual-axis hydrograph for {reachName}. Event period: {startDate} to {endDate}. Current modelled water level is {stage} meters PWD compared to danger level of {danger} meters PWD. Use arrow keys on the timeline scrubber below to step through hourly flood simulation time steps."
   },
   "metrics": {

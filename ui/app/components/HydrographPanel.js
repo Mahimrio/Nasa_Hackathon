@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useLocale } from "../hooks/useLocale";
+import { useTelemetry } from "../context/TelemetryContext";
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -29,8 +30,50 @@ export default function HydrographPanel({
   timeStr,
   peakIdx,
   selectedReach,
+  selectedYear: propSelectedYear,
+  setSelectedYear: propSetSelectedYear,
+  availableYears: propAvailableYears,
 }) {
   const { lang, t, formatNumber } = useLocale();
+  const telemetry = useTelemetry?.() || {};
+  const selectedYear = propSelectedYear ?? telemetry?.selectedYear ?? 2026;
+  const setSelectedYear = propSetSelectedYear ?? telemetry?.setSelectedYear ?? (() => {});
+  const availableYears = propAvailableYears ?? telemetry?.availableYears ?? [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const yearDropdownRef = useRef(null);
+
+  // Close year dropdown when clicking outside or pressing Escape
+  useEffect(() => {
+    if (!isYearDropdownOpen) return;
+    const handleClickOutside = (e) => {
+      if (yearDropdownRef.current && !yearDropdownRef.current.contains(e.target)) {
+        setIsYearDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsYearDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isYearDropdownOpen]);
+
+  const yearMeta = {
+    2020: { en: "Monsoon Inflow", bn: "বর্ষা প্লাবন" },
+    2021: { en: "Moderate Event", bn: "মাঝারি ঢল" },
+    2022: { en: "Historic Megaflood", bn: "ঐতিহাসিক সিলেট বন্যা" },
+    2023: { en: "Normal Season", bn: "স্বাভাবিক মৌসুম" },
+    2024: { en: "Flash Flood", bn: "পাহাড়ি ঢল" },
+    2025: { en: "Pre-Monsoon", bn: "প্রাক-বর্ষা" },
+    2026: { en: "Live Simulation", bn: "লাইভ সিমুলেশন" },
+  };
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [playSpeed, setPlaySpeed] = useState(1); // 1x, 2x, 5x
   const [skipHours, setSkipHours] = useState("6");
@@ -151,8 +194,8 @@ export default function HydrographPanel({
 
       {/* Panel Header */}
       <div className="card-header-bar">
-        <div className="card-title-group">
-          <div className="card-icon" aria-hidden="true">
+        <div className="card-title-group" style={{ alignItems: "flex-start" }}>
+          <div className="card-icon" style={{ marginTop: "3px" }} aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
@@ -160,6 +203,264 @@ export default function HydrographPanel({
           <div>
             <div className="card-title">
               {t("hydrograph.title")} {reachDisplayName} {corridorText}
+            </div>
+
+            {/* Dropdown button for years (2020 to 2026) under the title text */}
+            <div
+              className="year-dropdown-container"
+              ref={yearDropdownRef}
+              style={{
+                position: "relative",
+                marginTop: "8px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <button
+                type="button"
+                id="hydrograph-year-dropdown-btn"
+                onClick={() => setIsYearDropdownOpen((prev) => !prev)}
+                className="btn-standard neu-inset year-dropdown-btn"
+                aria-haspopup="listbox"
+                aria-expanded={isYearDropdownOpen}
+                aria-label={
+                  lang === "en"
+                    ? `Selected Year: ${selectedYear}. Click to change year.`
+                    : `নির্বাচিত বছর: ${formatNumber(selectedYear)}। বছর পরিবর্তন করতে ক্লিক করুন।`
+                }
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "7px",
+                  padding: "5px 12px",
+                  fontSize: "12px",
+                  borderRadius: "var(--radius-pill, 9999px)",
+                  cursor: "pointer",
+                  color: "var(--text-primary)",
+                  fontWeight: 600,
+                  transition: "all 0.2s ease",
+                  border: isYearDropdownOpen
+                    ? "1px solid var(--cyan-400)"
+                    : "1px solid var(--border-subtle)",
+                  boxShadow: isYearDropdownOpen
+                    ? "0 0 0 3px rgba(40, 123, 181, 0.2)"
+                    : undefined,
+                }}
+              >
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--cyan-400)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>
+                  {t("hydrograph.yearLabel") || (lang === "en" ? "Year: " : "বছর: ")}
+                  <strong
+                    style={{
+                      color: "var(--cyan-400)",
+                      fontFamily: "var(--font-mono, monospace)",
+                    }}
+                  >
+                    {formatNumber(selectedYear)}
+                  </strong>
+                </span>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    padding: "2px 6px",
+                    borderRadius: "4px",
+                    background:
+                      selectedYear === 2026
+                        ? "rgba(40, 123, 181, 0.16)"
+                        : "rgba(183, 121, 31, 0.16)",
+                    color:
+                      selectedYear === 2026 ? "var(--cyan-400)" : "var(--amber-400)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  {selectedYear === 2026
+                    ? (lang === "en" ? "Live" : "সিমুলেশন")
+                    : (lang === "en" ? "Historic" : "ঐতিহাসিক")}
+                </span>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                  style={{
+                    transform: isYearDropdownOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s ease",
+                    marginLeft: "2px",
+                  }}
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              {/* Dropdown Menu List */}
+              {isYearDropdownOpen && (
+                <div
+                  role="listbox"
+                  aria-label={t("hydrograph.selectYearTitle") || (lang === "en" ? "Select Year" : "বছর নির্বাচন করুন")}
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 6px)",
+                    left: 0,
+                    zIndex: 100,
+                    minWidth: "240px",
+                    background: "var(--surface-card, #FFFFFF)",
+                    border: "1px solid var(--border-subtle, #BDCFDA)",
+                    borderRadius: "10px",
+                    boxShadow:
+                      "0 12px 28px -6px rgba(0, 0, 0, 0.25), 0 8px 16px -8px rgba(0, 0, 0, 0.15)",
+                    padding: "6px",
+                    backdropFilter: "blur(12px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "2px",
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: "6px 10px 4px",
+                      fontSize: "11px",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      color: "var(--text-muted)",
+                      borderBottom: "1px solid var(--border-subtle)",
+                      marginBottom: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <span>
+                      {t("hydrograph.yearMenuTitle") ||
+                        (lang === "en"
+                          ? "Select Year (2020–2026)"
+                          : "বছর নির্বাচন (২০২০–২০২৬)")}
+                    </span>
+                    <span style={{ fontSize: "10px", opacity: 0.8 }}>SW108</span>
+                  </div>
+
+                  {availableYears.map((yr) => {
+                    const isSelected = yr === selectedYear;
+                    const meta = yearMeta[yr] || {};
+                    return (
+                      <button
+                        key={yr}
+                        type="button"
+                        role="option"
+                        aria-selected={isSelected}
+                        onClick={() => {
+                          setSelectedYear(yr);
+                          setIsYearDropdownOpen(false);
+                        }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          gap: "10px",
+                          padding: "8px 12px",
+                          borderRadius: "6px",
+                          border: "none",
+                          background: isSelected
+                            ? "rgba(40, 123, 181, 0.15)"
+                            : "transparent",
+                          color: isSelected
+                            ? "var(--cyan-400)"
+                            : "var(--text-primary)",
+                          cursor: "pointer",
+                          fontSize: "13px",
+                          fontWeight: isSelected ? 700 : 500,
+                          textAlign: "left",
+                          transition: "background 0.15s ease",
+                          width: "100%",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background =
+                              "var(--surface-active, rgba(0, 0, 0, 0.05))";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = "transparent";
+                          }
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: "var(--font-mono, monospace)",
+                              fontSize: "13.5px",
+                              fontWeight: isSelected ? 800 : 600,
+                            }}
+                          >
+                            {formatNumber(yr)}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "10.5px",
+                              padding: "1px 5px",
+                              borderRadius: "4px",
+                              background:
+                                yr === 2026
+                                  ? "rgba(40, 123, 181, 0.18)"
+                                  : "rgba(128, 128, 128, 0.14)",
+                              color:
+                                yr === 2026
+                                  ? "var(--cyan-400)"
+                                  : "var(--text-muted)",
+                            }}
+                          >
+                            {lang === "en" ? meta.en : meta.bn}
+                          </span>
+                        </div>
+                        {isSelected && (
+                          <svg
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="var(--cyan-400)"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -237,7 +538,7 @@ export default function HydrographPanel({
           <span>
             {lang === "en" ? "Estimated Crossing Time:" : "বিপদসীমা অতিক্রমের পূর্বাভাস সময়:"}{" "}
             <strong style={{ color: "var(--text-primary)" }}>
-              {lang === "en" ? "13 Apr 2026 · 01:00 UTC" : "১৩ এপ্রিল ২০২৬ · ০১:০০ UTC"}
+              {lang === "en" ? `13 Apr ${selectedYear} · 01:00 UTC` : `১৩ এপ্রিল ${formatNumber(selectedYear)} · ০১:০০ UTC`}
             </strong>
           </span>
         </div>
@@ -640,7 +941,9 @@ export default function HydrographPanel({
         <div className="timeline-date-extents">
           <span>{startDateStr} ({lang === "en" ? "Event Start" : "শুরু"})</span>
           <span style={{ color: "var(--cyan-400)" }}>
-            {lang === "en" ? "April 2026 Flash Flood Replay Event" : "এপ্রিল ২০২৬ পাহাড়ি ঢল সিমুলেশন ইভেন্ট"}
+            {lang === "en"
+              ? `April ${selectedYear} Flash Flood Replay Event`
+              : `এপ্রিল ${formatNumber(selectedYear)} পাহাড়ি ঢল সিমুলেশন ইভেন্ট`}
           </span>
           <span>{endDateStr} ({lang === "en" ? "Event End" : "সমাপ্তি"})</span>
         </div>

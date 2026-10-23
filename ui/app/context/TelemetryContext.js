@@ -8,8 +8,10 @@ const TelemetryContext = createContext(null);
 export function TelemetryProvider({ children }) {
   const { lang } = useLocale();
   const intlLocale = lang === "bn" ? "bn-BD" : "en-GB";
-  const [eventData, setEventData] = useState(null);
-  const [gaugeData, setGaugeData] = useState(null);
+  const [rawEventData, setRawEventData] = useState(null);
+  const [rawGaugeData, setRawGaugeData] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(2026);
+  const availableYears = useMemo(() => [2020, 2021, 2022, 2023, 2024, 2025, 2026], []);
   const [metrics, setMetrics] = useState(null);
   const [reachMeta, setReachMeta] = useState(null);
   const [calibration, setCalibration] = useState(null);
@@ -74,18 +76,19 @@ export function TelemetryProvider({ children }) {
       }),
     ])
       .then(([ev, ga, met, rm, cal]) => {
-        setEventData(ev);
-        setGaugeData(ga);
+        setRawEventData(ev);
+        setRawGaugeData(ga);
         setMetrics(met);
         setReachMeta(rm);
         setCalibration(cal);
 
-        // Find peak stage index dynamically from data
-        const pIdx = ev.reduce(
-          (best, d, i) => (d.modelled_stage > ev[best].modelled_stage ? i : best),
+        // Initial slider index placed ~36h before 2026 peak
+        const initial2026 = ev.filter((d) => d.timestamp && d.timestamp.startsWith("2026-"));
+        const evToUse = initial2026.length > 0 ? initial2026 : ev;
+        const pIdx = evToUse.reduce(
+          (best, d, i) => (d.modelled_stage > evToUse[best].modelled_stage ? i : best),
           0
         );
-        // Start ~1 day before peak for immediate interesting context
         setSliderIdx(Math.max(0, pIdx - 36));
         setLoading(false);
       })
@@ -95,6 +98,45 @@ export function TelemetryProvider({ children }) {
         setLoading(false);
       });
   }, []);
+
+  // Filter genuine routed hydrodynamic model predictions for the selected year
+  const eventData = useMemo(() => {
+    if (!rawEventData || !rawEventData.length) return null;
+    const prefix = `${selectedYear}-`;
+    const filtered = rawEventData.filter((d) => d.timestamp && d.timestamp.startsWith(prefix));
+    return filtered.length > 0 ? filtered : rawEventData;
+  }, [rawEventData, selectedYear]);
+
+  // Filter genuine observed BWDB gauge readings for the selected year
+  const gaugeData = useMemo(() => {
+    if (!rawGaugeData || !rawGaugeData.length) return null;
+    const prefix = `${selectedYear}-`;
+    const filtered = rawGaugeData.filter((g) => g.timestamp && g.timestamp.startsWith(prefix));
+    return filtered.length > 0 ? filtered : rawGaugeData;
+  }, [rawGaugeData, selectedYear]);
+
+  // Dynamic scientific validation metrics tailored to the active year
+  const activeMetrics = useMemo(() => {
+    if (!metrics) return null;
+    if (metrics.by_year && metrics.by_year[selectedYear]) {
+      return {
+        ...metrics,
+        ...metrics.by_year[selectedYear],
+        active_year: selectedYear,
+      };
+    }
+    return metrics;
+  }, [metrics, selectedYear]);
+
+  // When selectedYear changes, dynamically focus slider to ~36 hours before that year's peak
+  useEffect(() => {
+    if (!eventData || !eventData.length) return;
+    const pIdx = eventData.reduce(
+      (best, d, i) => (d.modelled_stage > eventData[best].modelled_stage ? i : best),
+      0
+    );
+    setSliderIdx(Math.max(0, pIdx - 36));
+  }, [selectedYear, eventData]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -215,7 +257,7 @@ export function TelemetryProvider({ children }) {
   const value = {
     eventData,
     gaugeData,
-    metrics,
+    metrics: activeMetrics || metrics,
     reachMeta,
     calibration,
     sliderIdx,
@@ -245,6 +287,9 @@ export function TelemetryProvider({ children }) {
     theme,
     setTheme,
     toggleTheme,
+    selectedYear,
+    setSelectedYear,
+    availableYears,
   };
 
   return <TelemetryContext.Provider value={value}>{children}</TelemetryContext.Provider>;

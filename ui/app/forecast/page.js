@@ -55,6 +55,9 @@ export default function ForecastPage() {
     setShowModelInfo,
     loading,
     fetchData,
+    selectedYear,
+    setSelectedYear,
+    availableYears,
   } = useTelemetry();
 
   if (loading) {
@@ -171,6 +174,9 @@ export default function ForecastPage() {
             lang={lang}
             peakIdx={peakIdx}
             selectedReach={selectedReach}
+            selectedYear={selectedYear}
+            setSelectedYear={setSelectedYear}
+            availableYears={availableYears}
           />
         </div>
 

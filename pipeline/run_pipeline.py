@@ -126,36 +126,56 @@ def main():
     # -------------------------------------------------------------
     # Step 5: Run Muskingum-Cunge routing -> assert modelled level rises
     # -------------------------------------------------------------
-    print(f"\n[Step 5] Running Muskingum-Cunge Routing for April-May 2026 flood event...")
+    print(f"\n[Step 5] Running Muskingum-Cunge Routing for All Years (2020-2026)...")
     surma_rain = ds_imerg["precipitationCal"].sel(sub_basin="upper_surma_meghalaya").values
     time_index = pd.to_datetime(ds_imerg["time"].values, utc=True)
     target_params = calibrated_params[target_reach_id]
 
-    df_routed = route_catchment_flow(
-        map_series=surma_rain,
-        time_index=time_index,
-        reach_params=target_params,
-        catchment_area_km2=185.0,
-        runoff_coeff=0.62,
-        baseflow_m3s=35.0
-    )
+    years = sorted(list(set(time_index.year)))
+    routed_dfs = []
+    baseline_dfs = []
+
+    for y in years:
+        mask = time_index.year == y
+        sub_rain = surma_rain[mask]
+        sub_times = time_index[mask]
+
+        df_y = route_catchment_flow(
+            map_series=sub_rain,
+            time_index=sub_times,
+            reach_params=target_params,
+            catchment_area_km2=185.0,
+            runoff_coeff=0.62,
+            baseflow_m3s=35.0,
+        )
+        df_y = compute_harvest_flags(df_y, danger_level_m=13.20, lead_steps=48)
+        df_base_y = run_rainfall_baseline(df_y, threshold_watch=35.0, threshold_act=65.0)
+        df_y["baseline_flag"] = df_base_y["baseline_flag"]
+        df_y["baseline_rain_6h"] = df_base_y["baseline_rain_6h"]
+        df_y["baseline_stage"] = np.round(7.74 + df_base_y["baseline_rain_6h"] * 0.045, 2)
+
+        routed_dfs.append(df_y)
+        baseline_dfs.append(df_base_y)
+        rise_y = df_y["modelled_stage"].max() - df_y["modelled_stage"].min()
+        print(f"         Year {y}: Base {df_y['modelled_stage'].min():.2f}m -> Peak {df_y['modelled_stage'].max():.2f}m (Rise: {rise_y:.2f}m)")
+
+    df_routed = pd.concat(routed_dfs, ignore_index=True)
+    df_baseline = pd.concat(baseline_dfs, ignore_index=True)
 
     stage_rise = df_routed["modelled_stage"].max() - df_routed["modelled_stage"].min()
     assert stage_rise > 3.0, f"Modelled stage failed to rise significantly ({stage_rise:.2f} m <= 3.0 m)"
-    print(f"         Routing complete. Base stage: {df_routed['modelled_stage'].min():.2f} m -> Peak: {df_routed['modelled_stage'].max():.2f} m (Rise: {stage_rise:.2f} m)")
-
-    # Compute Harvest Flags
-    df_routed = compute_harvest_flags(df_routed, danger_level_m=13.20, lead_steps=48)
     flag_counts = df_routed["harvest_flag"].value_counts().to_dict()
-    print(f"         Harvest Flags generated: {flag_counts}")
+    print(f"         Total Harvest Flags across 2020-2026: {flag_counts}")
 
     # -------------------------------------------------------------
     # Step 6: Compute NSE, KGE, peak_timing_error -> print to console (2dp)
     # -------------------------------------------------------------
-    print(f"\n[Step 6] Computing Scientific Validation Metrics (2 decimal places max)...")
-    metrics = evaluate_all_metrics(df_routed, df_gauge, danger_level_m=13.20)
-    fmt = metrics["formatted"]
+    print(f"\n[Step 6] Computing Scientific Validation Metrics across Years...")
+    # 2026 test period benchmark
+    metrics_2026 = evaluate_all_metrics(df_routed, df_gauge, danger_level_m=13.20, test_period_only=True)
+    fmt = metrics_2026["formatted"]
     print("         -----------------------------------------")
+    print(f"         [2026 Test Period Benchmark]")
     print(f"         Nash-Sutcliffe Efficiency (NSE):  {fmt['nse']}")
     print(f"         Kling-Gupta Efficiency (KGE):     {fmt['kge']}")
     print(f"         Percent Bias (PBIAS):             {fmt['pbias']}")
@@ -163,32 +183,40 @@ def main():
     print(f"         Warning Lead Time:                {fmt['lead_time']}")
     print("         -----------------------------------------")
 
+    # Evaluate by year
+    print("         [Validation Metrics by Year]")
+    for y in years:
+        df_r_y = df_routed[df_routed["timestamp"].dt.year == y]
+        df_g_y = df_gauge[df_gauge["timestamp"].dt.year == y]
+        m_y = evaluate_all_metrics(df_r_y, df_g_y, danger_level_m=13.20, test_period_only=False)
+        fmt_y = m_y["formatted"]
+        print(f"         {y}: NSE={fmt_y['nse']}, KGE={fmt_y['kge']}, PBIAS={fmt_y['pbias']}, Peak Error={fmt_y['timing_error']}, Lead={fmt_y['lead_time']}")
+
     # -------------------------------------------------------------
     # Step 7: Run baseline (rainfall threshold) -> print transitions
     # -------------------------------------------------------------
     print(f"\n[Step 7] Running Rainfall-Only Threshold Baseline...")
-    df_baseline = run_rainfall_baseline(df_routed, threshold_watch=35.0, threshold_act=65.0)
     baseline_counts = df_baseline["baseline_flag"].value_counts().to_dict()
-    print(f"         Baseline Flag distribution: {baseline_counts}")
+    print(f"         Total Baseline Flag distribution: {baseline_counts}")
 
-    # Compare first RED flag timing between baseline and HydroSense model
-    model_red = df_routed[df_routed["harvest_flag"] == "RED"]
-    base_red = df_baseline[df_baseline["baseline_flag"] == "RED"]
+    # Compare first RED flag timing for 2026 event
+    df_routed_2026 = df_routed[df_routed["timestamp"].dt.year == 2026]
+    df_base_2026 = df_baseline[df_baseline["timestamp"].dt.year == 2026]
+    model_red = df_routed_2026[df_routed_2026["harvest_flag"] == "RED"]
+    base_red = df_base_2026[df_base_2026["baseline_flag"] == "RED"]
 
     if not model_red.empty and not base_red.empty:
         t_m_red = pd.to_datetime(model_red.iloc[0]["timestamp"])
         t_b_red = pd.to_datetime(base_red.iloc[0]["timestamp"])
         lead_gain_h = (t_b_red - t_m_red).total_seconds() / 3600.0
-        print(f"         First Model RED Flag:    {t_m_red.strftime('%Y-%m-%d %H:%M UTC')}")
-        print(f"         First Baseline RED Flag: {t_b_red.strftime('%Y-%m-%d %H:%M UTC')}")
-        print(f"         Lead Time Gain over Baseline: {lead_gain_h:+.1f} hours")
+        print(f"         First Model RED Flag (2026):    {t_m_red.strftime('%Y-%m-%d %H:%M UTC')}")
+        print(f"         First Baseline RED Flag (2026): {t_b_red.strftime('%Y-%m-%d %H:%M UTC')}")
+        print(f"         Lead Time Gain over Baseline:   {lead_gain_h:+.1f} hours")
 
     # Save processed event results for UI loading
     out_results_path = os.path.join(PROCESSED_DIR, "event_results.csv")
-    df_routed["baseline_flag"] = df_baseline["baseline_flag"]
-    df_routed["baseline_rain_6h"] = df_baseline["baseline_rain_6h"]
     df_routed.to_csv(out_results_path, index=False)
-    print(f"\nSaved processed event results to {out_results_path}")
+    print(f"\nSaved processed event results to {out_results_path} ({len(df_routed)} records)")
 
     # Generate formal scientific validation report and figures (Prompt 5)
     from pipeline.validation_report import run_scientific_validation

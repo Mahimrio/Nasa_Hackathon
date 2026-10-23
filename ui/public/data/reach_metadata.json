@@ -9,11 +9,9 @@
     "width_mean_m": 160,
     "length_m": 12500,
     "has_gauge": true,
-    "gauge_station": "Kanaighat Gauge (SW266 / Model SW108)",
-    "bwdb_catalog_id": "SW266",
-    "legacy_alias": "SW108",
+    "gauge_station": "SW108 Kanaighat",
     "danger_level_m": 13.2,
-    "calibrated_n": 0.0294,
+    "calibrated_n": 0.0303,
     "z_bed": 6.82,
     "slope_quality": "good"
   },
@@ -29,8 +27,8 @@
     "has_gauge": false,
     "gauge_station": null,
     "danger_level_m": null,
-    "calibrated_n": 0.0339,
-    "z_bed": 4.99,
+    "calibrated_n": 0.0337,
+    "z_bed": 5.06,
     "slope_quality": "good"
   },
   {
@@ -45,8 +43,8 @@
     "has_gauge": false,
     "gauge_station": null,
     "danger_level_m": null,
-    "calibrated_n": 0.0333,
-    "z_bed": 6.07,
+    "calibrated_n": 0.0332,
+    "z_bed": 6.04,
     "slope_quality": "good"
   },
   {
@@ -61,8 +59,8 @@
     "has_gauge": false,
     "gauge_station": null,
     "danger_level_m": null,
-    "calibrated_n": 0.0337,
-    "z_bed": 4.95,
+    "calibrated_n": 0.0334,
+    "z_bed": 4.87,
     "slope_quality": "good"
   }
 ]

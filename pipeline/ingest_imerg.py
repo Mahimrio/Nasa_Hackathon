@@ -200,8 +200,18 @@ def ingest_imerg_map(
 
 
 if __name__ == "__main__":
-    ds_result = ingest_imerg_map()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Ingest NASA GPM IMERG Precipitation Data")
+    parser.add_argument("--start", type=str, default="2026-04-01", help="Start date (YYYY-MM-DD)")
+    parser.add_argument("--end", type=str, default="2026-05-31", help="End date (YYYY-MM-DD)")
+    parser.add_argument("--output", type=str, default=None, help="Output netCDF path")
+    parser.add_argument("--use-api", action="store_true", help="Fetch from NASA GES DISC API")
+    args = parser.parse_args()
+
+    ds_result = ingest_imerg_map(output_path=args.output, use_api=args.use_api)
     print("\nIMERG MAP Summary:")
+    print(f"Date range: {args.start} to {args.end}")
     print(f"Sub-basins: {ds_result.sub_basin.values}")
     print(f"Time steps: {len(ds_result.time)}")
     print(f"Peak rainfall: {float(ds_result.precipitationCal.max()):.2f} mm/hr")

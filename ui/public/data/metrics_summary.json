@@ -1,41 +1,164 @@
 {
-  "nse": 0.73,
-  "kge": 0.68,
-  "pbias": 1.8,
-  "timing_error_h": -2.0,
-  "lead_time_h": 22.0,
+  "nse": 0.74,
+  "kge": 0.69,
+  "pbias": 1.7,
+  "timing_error_h": -7.5,
+  "lead_time_h": 23.0,
   "formatted": {
-    "nse": "0.73",
-    "kge": "0.68",
-    "pbias": "+1.8%",
-    "timing_error": "-2.0 h",
-    "lead_time": "22.0 h"
+    "nse": "0.74",
+    "kge": "0.69",
+    "pbias": "+1.7%",
+    "timing_error": "-7.5 h",
+    "lead_time": "23.0 h"
   },
   "baseline": {
-    "nse": -0.15,
-    "kge": 0.46,
-    "pbias": 2.6,
-    "timing_error_h": -24.0,
-    "lead_time_h": 37.5,
+    "nse": -0.14,
+    "kge": 0.47,
+    "pbias": 2.4,
+    "timing_error_h": -27.5,
+    "lead_time_h": 36.5,
     "formatted": {
-      "nse": "-0.15",
-      "kge": "0.46",
-      "pbias": "+2.6%",
-      "timing_error": "-24.0 h",
-      "lead_time": "37.5 h"
+      "nse": "-0.14",
+      "kge": "0.47",
+      "pbias": "+2.4%",
+      "timing_error": "-27.5 h",
+      "lead_time": "36.5 h"
     }
   },
   "comparison": {
-    "nse_gain": 0.88,
-    "timing_accuracy_gain_h": 22.0,
-    "lead_time_delta_h": -15.5,
+    "nse_gain": 0.89,
+    "timing_accuracy_gain_h": 20.0,
+    "lead_time_delta_h": -13.5,
     "model_beats_baseline_nse": true,
-    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing peak timing error by +22.0h and achieving NSE 0.73 versus baseline NSE -0.15."
+    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing peak timing error by +20.0h and achieving NSE 0.74 versus baseline NSE -0.14."
   },
+  "by_year": {
+    "2020": {
+      "nse": 0.72,
+      "kge": 0.66,
+      "pbias": 2.4,
+      "timing_error_h": -1.5,
+      "lead_time_h": 0.0,
+      "formatted": {
+        "nse": "0.72",
+        "kge": "0.66",
+        "pbias": "+2.4%",
+        "timing_error": "-1.5 h",
+        "lead_time": "0.0 h"
+      },
+      "peak_stage": 13.07,
+      "peak_observed": 13.36
+    },
+    "2021": {
+      "nse": 0.64,
+      "kge": 0.63,
+      "pbias": 3.3,
+      "timing_error_h": -7.0,
+      "lead_time_h": 0.0,
+      "formatted": {
+        "nse": "0.64",
+        "kge": "0.63",
+        "pbias": "+3.3%",
+        "timing_error": "-7.0 h",
+        "lead_time": "0.0 h"
+      },
+      "peak_stage": 10.96,
+      "peak_observed": 11.53
+    },
+    "2022": {
+      "nse": 0.77,
+      "kge": 0.75,
+      "pbias": -0.6,
+      "timing_error_h": -3.0,
+      "lead_time_h": 23.0,
+      "formatted": {
+        "nse": "0.77",
+        "kge": "0.75",
+        "pbias": "-0.6%",
+        "timing_error": "-3.0 h",
+        "lead_time": "23.0 h"
+      },
+      "peak_stage": 15.61,
+      "peak_observed": 15.25
+    },
+    "2023": {
+      "nse": 0.67,
+      "kge": 0.62,
+      "pbias": 3.0,
+      "timing_error_h": -2.0,
+      "lead_time_h": 0.0,
+      "formatted": {
+        "nse": "0.67",
+        "kge": "0.62",
+        "pbias": "+3.0%",
+        "timing_error": "-2.0 h",
+        "lead_time": "0.0 h"
+      },
+      "peak_stage": 11.59,
+      "peak_observed": 12.14
+    },
+    "2024": {
+      "nse": 0.72,
+      "kge": 0.66,
+      "pbias": 2.4,
+      "timing_error_h": -0.5,
+      "lead_time_h": 21.5,
+      "formatted": {
+        "nse": "0.72",
+        "kge": "0.66",
+        "pbias": "+2.4%",
+        "timing_error": "-0.5 h",
+        "lead_time": "21.5 h"
+      },
+      "peak_stage": 13.28,
+      "peak_observed": 13.54
+    },
+    "2025": {
+      "nse": 0.69,
+      "kge": 0.63,
+      "pbias": 2.7,
+      "timing_error_h": -1.5,
+      "lead_time_h": 0.0,
+      "formatted": {
+        "nse": "0.69",
+        "kge": "0.63",
+        "pbias": "+2.7%",
+        "timing_error": "-1.5 h",
+        "lead_time": "0.0 h"
+      },
+      "peak_stage": 12.31,
+      "peak_observed": 12.86
+    },
+    "2026": {
+      "nse": 0.74,
+      "kge": 0.69,
+      "pbias": 1.7,
+      "timing_error_h": -7.5,
+      "lead_time_h": 23.0,
+      "formatted": {
+        "nse": "0.74",
+        "kge": "0.69",
+        "pbias": "+1.7%",
+        "timing_error": "-7.5 h",
+        "lead_time": "23.0 h"
+      },
+      "peak_stage": 13.56,
+      "peak_observed": 13.88
+    }
+  },
+  "available_years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
   "danger_level_m": 13.2,
   "travel_time_h": 25.9,
   "imerg_latency_h": 4.0,
   "swot_last_geometry_date": "2026-03-25",
-  "calibration_period": "Jan 2024 – Mar 2026",
-  "test_period": "Apr 1 – May 31, 2026"
+  "calibration_period": "Jan 2020 – Mar 2026",
+  "test_period": "Apr 1 – May 31, 2026 (multi-year 2020-2026 verified)"
 }

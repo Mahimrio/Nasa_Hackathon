@@ -9,4 +9,4 @@ requests>=2.31.0
 rioxarray>=0.17.0
 geopandas>=1.0.0
 h5netcdf>=1.4.0
-
+matplotlib>=3.8.0
