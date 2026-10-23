@@ -36,6 +36,7 @@
 | [x] | **Uncertainty Quantified** | Propagate SWOT $\pm 0.18\text{ m}$ WSE analytical uncertainty band onto stage predictions. | **PASS** | Hydrograph plots shaded $\pm 0.18\text{ m}$ uncertainty band around modelled water level. |
 | [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Permanently visible [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) on dashboard. |
 | [x] | **Clean JSON Exports** | Static JSON bridge contains zero `NaN` or `-999999.0` fill values. | **PASS** | Verified across all 5 JSON files in `ui/public/data/`. |
+| [!] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **UNDER AUDIT** | Active scientific audit confirmed script parameter issues in `validation_report.py` and `run_pipeline.py`. Baseline comparison metrics marked unresolved pending re-benchmarking. |
 
 ---
 
@@ -91,12 +92,14 @@ npm run dev
 - [x] **Project Title:** HydroSense-SWOT
 - [x] **Team Name:** AUSTrology
 - [x] **Public GitHub Repository URL:** [https://github.com/Mahimrio/Nasa_Hackathon](https://github.com/Mahimrio/Nasa_Hackathon)
+- [x] **Challenge Category:** Candidate: *Be An Earth System Trend Detective!* `[PROVISIONAL — awaiting release of official resource packages and 2026 participation terms]`
 - [x] **Incognito Browser Test:** Verified repository is public, README renders cleanly, and all markdown links resolve.
 - [x] **Data Sources Declared:**
-  1. NASA SWOT L2 HR RiverSP 2.0 (`SWOT_L2_HR_RIVERSP_2.0`)
-  2. NASA GPM IMERG Early Run V07 (`GPM_3IMERGHHE`)
-  3. BWDB Kanaighat River Gauge Record (`SW108`)
-  4. SWORD v16 & HydroSHEDS v1 (`hydrosheds.org`)
+  1. NASA SWOT L2 HR RiverSP 2.0 (`SWOT_L2_HR_RIVERSP_2.0`, Module 1)
+  2. NASA GPM IMERG Early Run V07 (`GPM_3IMERGHHE`, Module 1)
+  3. BWDB Kanaighat River Gauge Record (`SW108`/`SW266`, Module 1)
+  4. SWORD v16 & HydroSHEDS v1 (`hydrosheds.org`, Module 1)
+  5. NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF` / `GPM_3IMERGM`, Module 2 MVP)
 
 ---
 

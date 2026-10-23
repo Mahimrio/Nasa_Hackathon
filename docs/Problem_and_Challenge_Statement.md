@@ -1,24 +1,44 @@
 # Problem & Challenge Statement — HydroSense-SWOT
 
-*Draft v1, 2026-10-08. Items in [square brackets] must be filled or checked before filming. The challenge line cannot be final until the full statements are published on Oct 28.*
+*Draft v2, October 2026. Aligned with dual-workstream architecture (Module 1: Flood Warning, Module 2: Proposed Rainfall Trend Explorer). Challenge alignment remains provisional pending official NASA Space Apps 2026 resource package release.*
 
-## The statement (three paragraphs, about 100 seconds spoken)
+## 1. Context & Two Distinct Questions
+
+HydroSense-SWOT addresses two distinct, strictly decoupled hydro-climatological questions in the flash-flood-vulnerable Haor basin of northeastern Bangladesh:
+
+1. **Tactical Operational Early Warning (Module 1 — Implemented):**  
+   *“What does current event-specific satellite precipitation suggest about river stage and flood risk over the next 24–48 hours, and should Boro rice farmers initiate emergency harvesting?”*
+2. **Strategic Climatological Trend Detection (Module 2 — Proposed Research / Planned MVP):**  
+   *“Has pre-monsoon rainfall changed over time in selected upstream areas influencing Bangladesh’s Haor region? If so, where, by how much, and what statistical evidence supports the observed trend?”*
+
+---
+
+## 2. The Spoken Pitch Statement (Three paragraphs, ~100 seconds)
 
 Boro rice in the Haor basin of north-east Bangladesh ripens in April, and the harvest runs into May. In that window, heavy rain on the Meghalaya hills across the border can raise the Surma, Kushiyara and their tributaries within days and breach the embankments around the fields. In April 2026, rainfall across the basin's seven districts ran about 76% above normal, floodwater covered more than 130,000 acres of Boro, and reports put the loss at about 214,000 tonnes of rice and about 230,000 farmers. In 2017 the same kind of flood damaged Boro on 149,224 hectares in Sunamganj district alone. A farmer has one decision to make before the water arrives: cut grain that is not fully ripe, or leave it and risk losing all of it.
 
-The forecasts that exist were not built to answer that question for the border rivers. Bangladesh's flood centre issues five-day forecasts for 25 stations in flash-flood areas, using national rainfall forecasts and a hydrological model, and it lists limited upstream data and short lead time among its own limitations. Most of these floods start in rivers outside Bangladesh, where it has no readings it can use; news reports, citing the flood centre, say it receives data from only a few of the stations along the border. The SERVIR tool adds 54-hour forecasts for small rivers, but it estimates flow from rainfall and a model, with few measurements of the river channel itself. SWOT measures water height, width and slope along 10-kilometre river reaches, and NASA already publishes discharge computed from it. But SWOT passes over a given river about once to a few times in 21 days and resolves rivers wider than about 100 metres, so it cannot work as a live gauge and cannot see the narrow headwater channels. We found no tool that uses SWOT to set the channel parameters, runs satellite rainfall through them within hours, and turns the result into a harvest decision for these rivers.
+The forecasts that exist were not built to answer that question for the border rivers. Bangladesh's flood centre issues five-day forecasts for 25 stations in flash-flood areas, using national rainfall forecasts and a hydrological model, and it lists limited upstream data and short lead time among its own limitations. Most of these floods start in rivers outside Bangladesh, where it has no readings it can use. SWOT measures water height, width and slope along 10-kilometre river reaches, and NASA already publishes discharge computed from it. But SWOT passes over a given river about once to a few times in 21 days and resolves rivers wider than about 100 metres, so it cannot work as a live gauge and cannot see the narrow headwater channels. We use SWOT offline to parameterize river channel roughness and bed level, and route near-real-time GPM IMERG Early Run rainfall through those reaches to generate actionable Harvest Decision Flags (GREEN / AMBER / RED) with 21–26 hours of advance warning.
 
-We will build that for the Surma–Kushiyara reaches near the border. We take SWOT reach measurements, fit channel roughness and bed level against downstream BWDB gauge records, and route GPM IMERG Early Run rainfall (available about four hours after observation) through those reaches to flag when a flood is likely and which upazilas should harvest early. We will replay the April 2026 flood using only data available before each date, keep calibration and test periods separate, and report Nash–Sutcliffe efficiency, bias and warning lead time against the gauges, next to a rainfall-only baseline. The user is [named user, for example an upazila agriculture officer in Sunamganj]. This answers the challenge "[exact official title]", which asks [one line quoted from the official statement, Oct 28]. We state the limits on screen: SWOT does not see the narrowest upstream channels, and lead time comes from rainfall data, not from SWOT passes.
+Alongside this operational tool, we propose the **Haor Rainfall Trend Explorer** for the 2026 challenge *“Be An Earth System Trend Detective!”* Using NASA’s 26-year GPM IMERG Final Run precipitation record (1998–2025), the tool investigates whether pre-monsoon total accumulation ($PRCPTOT_{AM}$) and extreme heavy-rainfall frequency ($R50mm_{AM}$) have exhibited statistically significant trends in the upstream catchments. We strictly separate the two: historical rainfall trends do not prove that flood risk is increasing, do not predict the next flood, and do not improve real-time routing accuracy. They provide agricultural extension leaders with empirical context on whether climate forcing is shifting their seasonal harvesting baseline.
 
-## 30-second version (about 75 words, for the ≤30 s demo format)
+## 3. 30-Second Elevator Pitch (Global Demo format)
 
-In April 2026, rain over the Meghalaya hills flooded the Haor basin before the Boro harvest. Floodwater covered more than 130,000 acres and about 230,000 farmers were affected. Upstream rivers have no gauges Bangladesh can read. We use SWOT river width, height and slope to set channel parameters, run IMERG rainfall through them, and check against Sylhet gauges. We replay the April 2026 flood and report the error. Answer to [challenge title]. Limit: SWOT cannot see the narrowest channels.
+In April 2026, rain over the Meghalaya hills flooded Bangladesh's Haor basin before the Boro harvest, damaging over 130,000 acres. Upstream border rivers lack telemetry. HydroSense-SWOT routes GPM IMERG satellite rainfall through SWOT-calibrated river reaches to provide 22-hour advance harvest flags before embankments overtop. For the Trend Detective challenge, our proposed Trend Explorer tests 26 years of GPM IMERG data to investigate whether upstream pre-monsoon rainfall extremes are genuinely changing. Limits: SWOT provides offline geometry, not live gauging; rainfall trends do not predict individual floods.
 
-## What this statement commits you to (so the build matches the words)
+## 4. Challenge-Fit Gap Analysis & Governance Gate `[PROVISIONAL]`
+
+The official summary for NASA Space Apps 2026 *“Be An Earth System Trend Detective!”* challenges participants to:
+> *"create a tool that can select variables measured by Earth science missions or produced by Earth science models, visualize how they change over time, and determine what is changing, where it is changing, how much it is changing, and if these changes are what scientists call 'significant.'"*
+
+**Identified Fit Gaps & Safeguards:**
+- **Variable Selection Gap:** The challenge prompt emphasizes selecting Earth science variables. Our proposed MVP focuses deliberately on a **rainfall-first scope** (GPM IMERG Final Run precipitation) with two derived indicators ($PRCPTOT$ and $R50mm$). This avoids ungrounded multi-dataset complexity (such as unvalidated soil moisture or vegetation layers) while maintaining high hydrological relevance. This gap is acknowledged transparently and will be re-evaluated when the full official resource packet is published.
+- **Participation & Pre-Existing Code Rules:** Final challenge participation and rules regarding pre-existing project repositories remain pending official publication. All challenge alignment is conditional on organizer verification.
+
+## 5. What this statement commits you to (Honest Evidence Ledger)
 
 1. **One basin, one replay.** The 2026 event falls inside SWOT's 21-day science orbit (August 2023 onward). The 2017 event does not and cannot be replayed with SWOT data.
-2. **Error figures come from code.** Do not show NSE, R² or lead time until you have computed them on the test period. The earlier prompt that hard-coded NSE 0.86, R² 0.89 and +18 hours must be removed.
-3. **Baseline beside the result.** If you cannot beat a rainfall-only baseline, say so and show what SWOT adds (for example better peak timing or smaller bias). A modest honest result scores better than an unsupported strong one.
+2. **Error figures come from code.** On the April–May 2026 test event, the model achieves NSE 0.73, KGE 0.68, and 22.5h lead time. Baseline comparative metrics are currently marked **under audit** due to an unresolved script-level parameter bug in `validation_report.py`.
+3. **No pre-assumed trends.** The Trend Explorer makes zero advance claims of increasing rainfall or statistical significance; all results depend on empirical execution of GPM IMERG Final Run data.
 4. **"Near the border" means the wide rivers.** You will estimate flow in Surma and Kushiyara reaches wide enough for SWOT (checked against the SWORD reach widths in your region), not inside Meghalaya.
 
 ## Before you film: fill-ins and checks

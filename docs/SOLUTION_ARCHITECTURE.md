@@ -339,6 +339,12 @@ peak_date = modelled_level.idxmax()  # computed, not hardcoded to "Apr 12"
 
 **Uncertainty band:** ±0.18 m WSE propagated through Manning analytically. Shown as shaded fill on hydrograph.
 
+> **Scientific Audit Notice `[PARTIALLY IMPLEMENTED / UNDER AUDIT]`:**  
+> A read-only scientific audit confirmed two script-level issues in the validation scripts:
+> 1. In `pipeline/validation_report.py:393`, `df_sim` was passed for both simulated and baseline dataframes, corrupting the baseline comparison metrics.
+> 2. In `pipeline/run_pipeline.py:148`, `lead_steps=48` (24h) was hardcoded, overriding the dynamic travel time $K = 25.9\text{ h}$.
+> Comparative claims against the rainfall baseline (+0.88 NSE gain, lead-time delta) remain **unresolved pending re-benchmarking**. The core hydrodynamic model metrics on the test event ($NSE = 0.73$, $KGE = 0.68$, $Lead = 22.5\text{ h}$) are computed directly from simulation outputs.
+
 ---
 
 ## TIER 4 — User Delivery Interface
@@ -471,7 +477,51 @@ peak_date = modelled_level.idxmax()  # computed, not hardcoded to "Apr 12"
 ## License: MIT
 ## Citation: [team, Space Apps 2026, challenge title]
 ## Limitations: [link to Limits panel documentation]
-`
+---
+
+## TIER 5 — MODULE 2: PROPOSED HAOR RAINFALL TREND EXPLORER (RAINFALL-FIRST MVP) `[PLANNED / PROPOSED RESEARCH]`
+
+### 5.1 Scientific Objective & Decoupling
+Module 2 addresses the long-term retrospective question:
+> **“Has pre-monsoon rainfall changed over time in selected upstream areas influencing Bangladesh’s Haor region? If so, where, by how much, and what statistical evidence supports the observed trend?”**
+
+It is strictly decoupled from Module 1:
+- Module 1 operates on near-real-time 30-min steps (IMERG Early Run) for tactical 24–48h flood warning.
+- Module 2 operates on annual aggregations of 26+ years of research-grade data (IMERG Final Run) for strategic decadal context.
+- Historical rainfall trends do NOT prove increasing flood risk, do NOT predict upcoming flood dates, and do NOT alter routing model accuracy.
+
+### 5.2 Data Ingestion: NASA GPM IMERG Final Run V07 `[VERIFIED: NASA GES DISC]`
+- **Product:** `GPM_3IMERGDF` (Daily) and `GPM_3IMERGM` (Monthly), Version 07B.
+- **Coverage:** January 1, 1998 to 2025 (26+ continuous years).
+- **Latency & Calibration:** ~3.5 months latency; calibrated against monthly GPCC ground rain gauges. (Early Run is strictly prohibited for multi-decadal trends due to constellation drift and lack of surface calibration).
+- **Format:** NetCDF4 / HDF5 at 0.1° × 0.1° resolution.
+
+### 5.3 Study Area & Contributing Hydrological Catchments `[PROPOSED]`
+- **Geographic Download Bounding Box:** Lat 24.0°N – 26.0°N, Lon 90.0°E – 93.5°E.
+- **Catchment Distinction:** The rectangular bounding box is an API query envelope, NOT a hydrological watershed. Within this domain, analysis evaluates three predefined, documented sub-basins:
+  1. *Meghalaya Escarpment Sub-basin:* Steep orographic zone generating rapid flash-flood runoff into northern Haors.
+  2. *Upper Barak / Surma Corridor:* Transboundary headwaters feeding the main river channels.
+  3. *Haor Wetland Lowlands:* Internal depression storage sink in Sunamganj/Sylhet.
+- Pixel-by-pixel 0.1° grid trend analysis is also supported across the bounding box.
+
+### 5.4 Rainfall Indicators (Rainfall-First Scope) `[PLANNED MVP]`
+To avoid ungrounded complexity, the initial MVP is restricted to two rigorous indicators computed using a **cell-first aggregation protocol** ($0.1^\circ$ grid cells aggregated after indicator computation to prevent spatial dilution of convective peaks):
+1. **Primary: Pre-Monsoon Total Accumulation ($PRCPTOT_{AM}$):**  
+   Sum of daily `precipitation` (mm/day) from April 1 to May 31 for wet days ($P \ge 1.0\text{ mm/day}$). Captures seasonal volume.
+2. **Secondary: Heavy Rainfall Day Frequency ($R50mm_{AM}$):**  
+   Annual count of days in April–May where daily rainfall $\ge 50\text{ mm/day}$ at cell level. Directly captures convective storm frequency.
+
+### 5.5 Statistical Analysis & Quality-Control Workflow `[PLANNED MVP]`
+1. **Data Completeness & Quality Masking (100% Season Rule):** Assert exactly 61 valid calendar days ($61/61$) for April 1 – May 31 across each analyzed year (2001–2025 primary record, 1998–2025 sensitivity). Zero-filling or proportional scaling of missing days is strictly prohibited.
+2. **Serial Autocorrelation Audit:** Compute sample lag-1 autocorrelation $r_1$. If $|r_1| \ge 1.96/\sqrt{N} \approx 0.392$, statistical significance is governed strictly by **Modified Mann-Kendall (MMK Hamed & Rao 1998)** with variance correction factor $\text{Var}^*(S)$. Standard MK is reported alongside as sensitivity. (TFPW pre-whitening is rejected due to severe sample bias in $N=25$).
+3. **Trend Magnitude:** Calculate **Theil-Sen slope estimator** ($\beta$, mm/yr or days/decade) with analytical 95% Sen-Kendall confidence intervals (Gilbert 1987) adjusted by the MMK variance correction factor.
+4. **Constellation Diagnostic:** Run Pettitt’s non-parametric changepoint test as an optional post-hoc diagnostic across the 2014 TRMM-to-GPM transition (does not prove sensor artifact without in-situ corroboration).
+5. **Honest Reporting Rule:** Make zero pre-assumptions of trend direction or significance. If $p \ge 0.05$, report as *“No statistically significant trend detected ($p = \dots$)”*. Non-significant trends are fully reported.
+
+### 5.6 Challenge-Fit Gap Analysis `[PROVISIONAL]`
+The official challenge summary for *“Be An Earth System Trend Detective!”* describes a tool to *“select variables measured by Earth science missions or produced by Earth science models...”*
+- Our rainfall-only MVP satisfies the analytical core (detecting what is changing, where, how much, and significance) but does not yet support arbitrary multi-variable selection.
+- Secondary variables (e.g., NASA GLDAS-2.1 root-zone soil moisture proxy) are categorized as **Planned Extensions** pending release of the full challenge resource packet.
 
 ---
 
@@ -482,6 +532,8 @@ peak_date = modelled_level.idxmax()  # computed, not hardcoded to "Apr 12"
 - NOT resolving narrow headwater channels (< 100 m wide)
 - NOT modelling floodplain inundation extent — flags threshold-crossing timing only
 - NOT promising NSE >= 0.80 before the code runs
+- NOT claiming that historical rainfall trends prove worsening floods or predict the next flood date
+- NOT claiming that the Trend Explorer improves real-time hydrodynamic warning accuracy
 - NOT the first satellite flood tool for Bangladesh — novelty is the harvest-timing flag for this ungauged transboundary corridor
 
 All of the above are in the Limits panel, always visible. Every team member must be able to say this from memory.

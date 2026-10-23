@@ -14,3 +14,5 @@ These fixtures provide quality-gated offline datasets for testing and judging de
 - Missing values: Checked and masked (fill values `-999999.0` handled).
 - Calibration split: Jan 2024 - Mar 2026 (offline parameter estimation only).
 - Test event: April 1 - May 31 2026.
+
+> **Note:** These fixtures serve **Module 1 (Operational Flood Warning)**. Module 2 (Haor Rainfall Trend Explorer) operates on 26-year historical NASA GPM IMERG Final Run V07 data, which will reside in an isolated `data/trends/` directory to preserve these operational fixtures intact.

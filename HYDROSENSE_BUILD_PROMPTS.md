@@ -200,19 +200,19 @@ Each prompt below is a self-contained work unit. Execute them **in order**. Each
 This prompt replaces synthetic/mock SWOT data with real NASA SWOT L2 HR RiverSP 2.0 satellite observations. It implements two pathways (earthaccess bulk download OR Hydrocron API) for pulling SWOT reach measurements (water surface elevation, width, slope) for the Surma-Kushiyara corridor. Critical quality gates filter out noisy/unreliable observations — especially the slope quality filter which is essential for low-gradient Bangladesh rivers where SWOT slope uncertainty can exceed the actual signal.
 
 **✅ Checklist:**
-- [ ] `pipeline/ingest_swot.py` created with earthaccess authentication
-- [ ] Hydrocron API query implemented as alternative pathway
-- [ ] Fill values `-999999.0` replaced with NaN after every data pull
-- [ ] Reach IDs stored as strings (never float64)
-- [ ] `slope2` used everywhere, never `slope`
-- [ ] All 6 quality gates applied (quality_f, dark_frac, width, wse_u, slope2 signal-to-noise, slope2 minimum)
-- [ ] `pipeline/ingest_sword.py` created with width > 100m pre-screening
-- [ ] Quality-gated data exported to `data/fixtures/swot_reaches.nc`
-- [ ] `earthaccess.login()` called ONCE at top, never inside loops
-- [ ] `import netCDF4` appears before `import xarray`
-- [ ] All timestamps are UTC ISO8601
-- [ ] `requirements.txt` updated with `earthaccess` and `requests`
-- [ ] Unit test added in `tests/test_ingest_swot.py`
+- [x] `pipeline/ingest_swot.py` created with earthaccess authentication
+- [x] Hydrocron API query implemented as alternative pathway
+- [x] Fill values `-999999.0` replaced with NaN after every data pull
+- [x] Reach IDs stored as strings (never float64)
+- [x] `slope2` used everywhere, never `slope`
+- [x] All 6 quality gates applied (quality_f, dark_frac, width, wse_u, slope2 signal-to-noise, slope2 minimum)
+- [x] `pipeline/ingest_sword.py` created with width > 100m pre-screening
+- [x] Quality-gated data exported to `data/fixtures/swot_reaches.nc`
+- [x] `earthaccess.login()` called ONCE at top, never inside loops
+- [x] `import netCDF4` appears before `import xarray`
+- [x] All timestamps are UTC ISO8601
+- [x] `requirements.txt` updated with `earthaccess` and `requests`
+- [x] Unit test added in `tests/test_ingest_swot.py`
 
 ---
 
@@ -272,20 +272,20 @@ This prompt replaces synthetic/mock SWOT data with real NASA SWOT L2 HR RiverSP 
 This prompt implements real NASA GPM IMERG Early Run V07 rainfall data ingestion and BWDB gauge data acquisition. IMERG provides the operational rainfall forcing for the Muskingum-Cunge routing — it is the "engine" that drives the 30-minute time steps. The gauge data provides ground truth for scientific validation. Critical guards handle IMERG timestamp conventions (end-of-interval), CRS alignment, orographic bias acknowledgement, and timezone conversion for Bangladesh gauge data.
 
 **✅ Checklist:**
-- [ ] `pipeline/ingest_imerg.py` created with GES DISC OPeNDAP access
-- [ ] `precipitationCal` variable used (not `precipitation`)
-- [ ] IMERG timestamps shifted back 30 minutes (end-of-interval correction)
-- [ ] `ds.rio.write_crs('EPSG:4326', inplace=True)` called after opening
-- [ ] MAP assertion: `max > 0` checked before proceeding
-- [ ] Sub-basin spatial aggregation with HydroSHEDS polygons
-- [ ] Exported to `data/fixtures/imerg_map.nc`
-- [ ] `pipeline/ingest_gauge.py` created with BST to UTC conversion
-- [ ] Timezone awareness asserted on all gauge timestamps
-- [ ] Rolling median filter applied to gauge data
-- [ ] `pipeline/ingest_hydrosheds.py` created
-- [ ] `requirements.txt` updated with `rioxarray`, `geopandas`, `h5netcdf`
-- [ ] IMERG orographic bias documented in SOURCES.md
-- [ ] Unit test added in `tests/test_ingest_imerg.py`
+- [x] `pipeline/ingest_imerg.py` created with GES DISC OPeNDAP access
+- [x] `precipitationCal` variable used (not `precipitation`)
+- [x] IMERG timestamps shifted back 30 minutes (end-of-interval correction)
+- [x] `ds.rio.write_crs('EPSG:4326', inplace=True)` called after opening
+- [x] MAP assertion: `max > 0` checked before proceeding
+- [x] Sub-basin spatial aggregation with HydroSHEDS polygons
+- [x] Exported to `data/fixtures/imerg_map.nc`
+- [x] `pipeline/ingest_gauge.py` created with BST to UTC conversion
+- [x] Timezone awareness asserted on all gauge timestamps
+- [x] Rolling median filter applied to gauge data
+- [x] `pipeline/ingest_hydrosheds.py` created
+- [x] `requirements.txt` updated with `rioxarray`, `geopandas`, `h5netcdf`
+- [x] IMERG orographic bias documented in SOURCES.md
+- [x] Unit test added in `tests/test_ingest_imerg.py`
 
 ---
 
@@ -344,18 +344,18 @@ This prompt implements real NASA GPM IMERG Early Run V07 rainfall data ingestion
 This prompt upgrades Manning's roughness calibration from synthetic data to handle the irregularity and noise characteristics of real SWOT observations. Key additions: stage-dependent calibration filtering (mid-to-high flow only), inverse-variance weighting, strict time-split discipline (calibration vs test period), and slope quality gating — which is the single most important guard for low-gradient Bangladesh rivers where SWOT slope noise can exceed the actual signal.
 
 **✅ Checklist:**
-- [ ] Calibration uses only mid-to-high flow passes (`wse > z_bed + 0.5m`)
-- [ ] `minimize_scalar` uses `bounds=(0.025, 0.10)` AND `method='bounded'`
-- [ ] Inverse-variance weighting `1/wse_u^2` applied
-- [ ] Slope quality filter: `slope2 > 2 * slope_u` enforced
-- [ ] Calibration period locked to Jan 2024 – Mar 2026
-- [ ] `n` is frozen before test period (Apr 2026)
-- [ ] Bound-hitting reaches flagged with widened error bands
-- [ ] Calibration diagnostics with Q-Q plot and n-sensitivity curve
-- [ ] Excluded passes logged with reasons
-- [ ] Calibration results exported to JSON
-- [ ] All reach_ids handled as strings
-- [ ] Unit tests updated in `tests/test_pipeline.py`
+- [x] Calibration uses only mid-to-high flow passes (`wse > z_bed + 0.5m`)
+- [x] `minimize_scalar` uses `bounds=(0.025, 0.10)` AND `method='bounded'`
+- [x] Inverse-variance weighting `1/wse_u^2` applied
+- [x] Slope quality filter: `slope2 > 2 * slope_u` enforced
+- [x] Calibration period locked to Jan 2024 – Mar 2026
+- [x] `n` is frozen before test period (Apr 2026)
+- [x] Bound-hitting reaches flagged with widened error bands
+- [x] Calibration diagnostics with Q-Q plot and n-sensitivity curve
+- [x] Excluded passes logged with reasons
+- [x] Calibration results exported to JSON
+- [x] All reach_ids handled as strings
+- [x] Unit tests updated in `tests/test_pipeline.py` and `tests/test_calibration_real.py`
 
 ---
 
@@ -414,18 +414,18 @@ This prompt upgrades Manning's roughness calibration from synthetic data to hand
 This prompt upgrades the hydrological routing engine from synthetic to real data. The key architectural constraint is that SWOT provides offline channel parameters while IMERG drives all operational 30-minute time steps — these must never be confused. The routing produces stage predictions with quantified uncertainty bands (+/-0.18m from SWOT WSE uncertainty). Sensitivity analysis tests the robustness of results to routing parameter choices.
 
 **✅ Checklist:**
-- [ ] Muskingum-Cunge routing uses calibrated `n` from real data
-- [ ] 30-minute IMERG time steps drive all routing (SWOT never referenced in routing loop)
-- [ ] Wave celerity `c = (5/3) * V_mean` computed from data
-- [ ] Travel time computed from reach parameters (not hardcoded)
-- [ ] +/-0.18m uncertainty band propagated at each time step
-- [ ] Harvest flag uses look-ahead with computed travel time
-- [ ] Peak date driven from `modelled_level.idxmax()` (never hardcoded)
-- [ ] Bilingual advisory text generated (EN + Bangla)
-- [ ] Baseline uses 6h rolling IMERG accumulation
-- [ ] Sensitivity analysis for X (0.2-0.35) and n (+/-10%)
-- [ ] Sensitivity results exported to CSV
-- [ ] All unit tests pass
+- [x] Muskingum-Cunge routing uses calibrated `n` from real data
+- [x] 30-minute IMERG time steps drive all routing (SWOT never referenced in routing loop)
+- [x] Wave celerity `c = (5/3) * V_mean` computed from data
+- [x] Travel time computed from reach parameters (not hardcoded)
+- [x] +/-0.18m uncertainty band propagated at each time step
+- [x] Harvest flag uses look-ahead with computed travel time
+- [x] Peak date driven from `modelled_level.idxmax()` (never hardcoded)
+- [x] Bilingual advisory text generated (EN + Bangla)
+- [x] Baseline uses 6h rolling IMERG accumulation
+- [x] Sensitivity analysis for X (0.2-0.35) and n (+/-10%)
+- [x] Sensitivity results exported to CSV
+- [x] All unit tests pass
 
 ---
 
@@ -474,16 +474,16 @@ This prompt upgrades the hydrological routing engine from synthetic to real data
 This prompt implements rigorous scientific validation comparing model predictions against real gauge observations. The strict time-split discipline ensures no data leakage from calibration to test. The honest reporting approach — showing metrics even when unfavorable, comparing against baseline, and limiting decimal precision — builds credibility with judges and satisfies the Validity scoring criterion.
 
 **✅ Checklist:**
-- [ ] Metrics computed only on test period (Apr-May 2026)
-- [ ] Time series aligned with 15-minute tolerance
-- [ ] All 5 metrics computed: NSE, KGE, PBIAS, timing error, lead time
-- [ ] Display precision: NSE/KGE to 2dp, PBIAS to 1dp, timing/lead to 1dp
-- [ ] NSE < 0 handled gracefully (no crash, report value)
-- [ ] HydroSense vs Baseline comparison implemented
-- [ ] Validation report with plots generated
-- [ ] Real metrics exported to `metrics_summary.json`
-- [ ] No hardcoded metric values anywhere in the codebase
-- [ ] Uncertainty bands shown on validation plots
+- [x] Metrics computed only on test period (Apr-May 2026)
+- [x] Time series aligned with 15-minute tolerance
+- [x] All 5 metrics computed: NSE, KGE, PBIAS, timing error, lead time
+- [x] Display precision: NSE/KGE to 2dp, PBIAS to 1dp, timing/lead to 1dp
+- [x] NSE < 0 handled gracefully (no crash, report value)
+- [x] HydroSense vs Baseline comparison implemented
+- [x] Validation report with plots generated
+- [x] Real metrics exported to `metrics_summary.json`
+- [x] No hardcoded metric values anywhere in the codebase
+- [x] Uncertainty bands shown on validation plots
 
 ---
 
@@ -561,23 +561,23 @@ This prompt implements rigorous scientific validation comparing model prediction
 This prompt replaces all hardcoded/mock values in the dashboard with real computed data from the scientific pipeline. The key principle: the UI formats and displays the authoritative model result — it does not recompute the science. All dates, metrics, flags, and parameters must be driven from the JSON data files, never hardcoded strings. The dashboard must faithfully render the computed uncertainty, honestly display the limitations, and provide the "signature demo moment" where the slider reveals the flood warning ~21 hours before the gauge crosses danger level.
 
 **✅ Checklist:**
-- [ ] All 5 JSON data files loaded and consumed by components
-- [ ] Three hydrograph lines: modelled, observed, baseline
-- [ ] +/-0.18m uncertainty band rendered as shaded fill
-- [ ] Danger level line at 13.20m
-- [ ] Inverted rainfall hyetograph (dual-axis)
-- [ ] Timeline scrubber syncs all panels
-- [ ] Harvest flag updates dynamically with slider position
-- [ ] Reach colors update with slider (cividis scale)
-- [ ] SWOT overpass dates marked on map
-- [ ] Uncertain-slope reaches shown hatched
-- [ ] Validation metric values from JSON (no hardcoded numbers)
-- [ ] Metric tooltips with definitions
-- [ ] Limits panel text matches SOLUTION_ARCHITECTURE.md
-- [ ] Glassmorphism design tokens applied consistently
-- [ ] Responsive layout works at 360px
-- [ ] Bilingual EN/Bangla toggle functional
-- [ ] Zero console errors on load
+- [x] All 5 JSON data files loaded and consumed by components
+- [x] Three hydrograph lines: modelled, observed, baseline
+- [x] +/-0.18m uncertainty band rendered as shaded fill
+- [x] Danger level line at 13.20m
+- [x] Inverted rainfall hyetograph (dual-axis)
+- [x] Timeline scrubber syncs all panels
+- [x] Harvest flag updates dynamically with slider position
+- [x] Reach colors update with slider (cividis scale)
+- [x] SWOT overpass dates marked on map
+- [x] Uncertain-slope reaches shown hatched
+- [x] Validation metric values from JSON (no hardcoded numbers)
+- [x] Metric tooltips with definitions
+- [x] Limits panel text matches SOLUTION_ARCHITECTURE.md
+- [x] Glassmorphism design tokens applied consistently
+- [x] Responsive layout works at 360px
+- [x] Bilingual EN/Bangla toggle functional
+- [x] Zero console errors on load
 
 ---
 
