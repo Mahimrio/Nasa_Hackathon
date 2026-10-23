@@ -633,22 +633,22 @@ This prompt replaces all hardcoded/mock values in the dashboard with real comput
 This prompt upgrades the static SVG map to a real interactive geographic map with actual reach geometries, gauge locations, and real-time color updates based on model output. The map serves as the "hero visualization" — the first thing judges see. It communicates spatial context (where the rivers are relative to Meghalaya and Bangladesh), data quality (which reaches have reliable slope data), and current status (stage vs danger level) all in one view.
 
 **✅ Checklist:**
-- [ ] Mapping library installed (Leaflet or Mapbox)
-- [ ] Dark basemap tile layer configured
-- [ ] SWOT reaches rendered as colored polylines
-- [ ] Cividis colorscale for stage/danger ratio
-- [ ] Flow-direction dash animation (3-5s)
-- [ ] Gauge marker with pulsating sonar ring
-- [ ] Click-to-select reach functionality
-- [ ] Hover tooltip with reach data
-- [ ] Sub-basin boundaries shown
-- [ ] Slope-uncertain reaches hatched
-- [ ] Timeline-synced reach coloring
-- [ ] IMERG rainfall overlay
-- [ ] 44x44px touch targets on controls
-- [ ] Canvas renderer for performance
-- [ ] Reduced-motion preference honored
-- [ ] Map renders correctly on mobile (360px+)
+- [x] Mapping library installed (Leaflet or Mapbox)
+- [x] Dark basemap tile layer configured
+- [x] SWOT reaches rendered as colored polylines
+- [x] Cividis colorscale for stage/danger ratio
+- [x] Flow-direction dash animation (3-5s)
+- [x] Gauge marker with pulsating sonar ring
+- [x] Click-to-select reach functionality
+- [x] Hover tooltip with reach data
+- [x] Sub-basin boundaries shown
+- [x] Slope-uncertain reaches hatched
+- [x] Timeline-synced reach coloring
+- [x] IMERG rainfall overlay
+- [x] 44x44px touch targets on controls
+- [x] Canvas renderer for performance
+- [x] Reduced-motion preference honored
+- [x] Map renders correctly on mobile (360px+)
 
 ---
 

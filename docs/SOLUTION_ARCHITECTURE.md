@@ -504,20 +504,19 @@ It is strictly decoupled from Module 1:
   3. *Haor Wetland Lowlands:* Internal depression storage sink in Sunamganj/Sylhet.
 - Pixel-by-pixel 0.1° grid trend analysis is also supported across the bounding box.
 
-### 5.4 Rainfall Indicators (Rainfall-First Scope) `[PROPOSED]`
-To avoid ungrounded complexity, the initial MVP is restricted to two rigorous indicators:
+### 5.4 Rainfall Indicators (Rainfall-First Scope) `[PLANNED MVP]`
+To avoid ungrounded complexity, the initial MVP is restricted to two rigorous indicators computed using a **cell-first aggregation protocol** ($0.1^\circ$ grid cells aggregated after indicator computation to prevent spatial dilution of convective peaks):
 1. **Primary: Pre-Monsoon Total Accumulation ($PRCPTOT_{AM}$):**  
-   Sum of daily precipitationCal (mm) from April 1 to May 31 for wet days ($P \ge 1.0\text{ mm}$). Captures seasonal volume.
+   Sum of daily `precipitation` (mm/day) from April 1 to May 31 for wet days ($P \ge 1.0\text{ mm/day}$). Captures seasonal volume.
 2. **Secondary: Heavy Rainfall Day Frequency ($R50mm_{AM}$):**  
-   Annual count of days in April–May where daily rainfall $\ge 50\text{ mm/day}$. Directly captures convective storm frequency.
+   Annual count of days in April–May where daily rainfall $\ge 50\text{ mm/day}$ at cell level. Directly captures convective storm frequency.
 
-### 5.5 Statistical Analysis & Quality-Control Workflow `[PROPOSED]`
-1. **Data Completeness & Quality Masking:** Assert 100% complete daily records for April–May across all analyzed years.
-2. **Constellation Changepoint Test:** Run Pettitt’s non-parametric changepoint test on annual series to verify whether the 2014 TRMM-to-GPM transition introduced an artificial structural break.
-3. **Serial Autocorrelation Check:** Compute lag-1 autocorrelation $\rho_1$. If statistically significant at $\alpha = 0.05$, apply **Yue and Wang (2004) Trend-Free Pre-Whitening (TFPW)** before trend testing to prevent Type I false-positive detections.
-4. **Trend Magnitude:** Calculate **Theil-Sen slope estimator** ($\beta$, mm/yr or days/decade) with 95% non-parametric bootstrap confidence intervals (2,000 resamples).
-5. **Statistical Significance:** Compute standardized test statistic $Z_{MK}$ and two-tailed $p$-value from the (pre-whitened) **Mann-Kendall test**.
-6. **Honest Reporting Rule:** Make zero pre-assumptions of trend direction or significance. If $p \ge 0.05$, report as *“No statistically significant trend detected ($p = \dots$)”*.
+### 5.5 Statistical Analysis & Quality-Control Workflow `[PLANNED MVP]`
+1. **Data Completeness & Quality Masking (100% Season Rule):** Assert exactly 61 valid calendar days ($61/61$) for April 1 – May 31 across each analyzed year (2001–2025 primary record, 1998–2025 sensitivity). Zero-filling or proportional scaling of missing days is strictly prohibited.
+2. **Serial Autocorrelation Audit:** Compute sample lag-1 autocorrelation $r_1$. If $|r_1| \ge 1.96/\sqrt{N} \approx 0.392$, statistical significance is governed strictly by **Modified Mann-Kendall (MMK Hamed & Rao 1998)** with variance correction factor $\text{Var}^*(S)$. Standard MK is reported alongside as sensitivity. (TFPW pre-whitening is rejected due to severe sample bias in $N=25$).
+3. **Trend Magnitude:** Calculate **Theil-Sen slope estimator** ($\beta$, mm/yr or days/decade) with analytical 95% Sen-Kendall confidence intervals (Gilbert 1987) adjusted by the MMK variance correction factor.
+4. **Constellation Diagnostic:** Run Pettitt’s non-parametric changepoint test as an optional post-hoc diagnostic across the 2014 TRMM-to-GPM transition (does not prove sensor artifact without in-situ corroboration).
+5. **Honest Reporting Rule:** Make zero pre-assumptions of trend direction or significance. If $p \ge 0.05$, report as *“No statistically significant trend detected ($p = \dots$)”*. Non-significant trends are fully reported.
 
 ### 5.6 Challenge-Fit Gap Analysis `[PROVISIONAL]`
 The official challenge summary for *“Be An Earth System Trend Detective!”* describes a tool to *“select variables measured by Earth science missions or produced by Earth science models...”*

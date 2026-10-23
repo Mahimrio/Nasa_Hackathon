@@ -146,8 +146,11 @@ The design adheres to a **calm, readable, trustworthy professional light visual 
 
 ## 5. Layout & Information Architecture
 
-- **Three Dedicated Pages:**
+- **Three Dedicated Pages (Module 1 — Operational Flood Warning):**
   1. `/dashboard` — 5-Second Triage, Primary Harvest Decision, River Map, Hydrograph, Accuracy Scorecard, and Operational Limits.
   2. `/forecast` — Detailed 72h Muskingum-Cunge hydrological forecast and parameter controls.
   3. `/advisory` — Actionable harvest advisories, printable field bulletin, and farmer/officer directives.
+- **Analytical View (Module 2 — Historical Rainfall Trend Explorer):**
+  - Delivered via dedicated `TrendExplorerViewer.js` component activated via topbar segmented switcher (`🛰️ Real-Time Warning` vs `📊 Rainfall Trends`).
+  - Features 25-year Recharts multi-decadal time-series chart with solid navy Sen's slope line (`#175A85`), analytical 95% CI envelope (`rgba(40, 123, 181, 0.12)`), 4 factual statistical cards, and contextual climatological disclaimer well (`#F8FAFC`).
 - **Responsive Viewport Targets:** Verified across 1440×900 (desktop), 1366×768 (laptop), 390×844 (mobile), and 360×800 (narrow mobile). No horizontal overflow.

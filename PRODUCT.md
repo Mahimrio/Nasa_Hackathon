@@ -38,7 +38,7 @@ HydroSense-SWOT unifies two complementary Earth-observation capabilities into a 
 - **Partially Implemented / Under Audit `[UNRESOLVED]`:**
   - Validation report baseline comparison subroutine (`pipeline/validation_report.py`) and lookahead step configuration (`pipeline/run_pipeline.py`) are under active audit due to a script-level parameter bug; comparative gains vs baseline require re-benchmarking.
 - **Planned `[PLANNED]`:**
-  - Rainfall-first Trend Explorer MVP backend: Ingestion of NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF`), calculation of April–May $PRCPTOT$ and $R50mm$ indicators, Theil-Sen slope estimation, and Yue-Wang (2004) autocorrelation-corrected Mann-Kendall testing.
+  - Rainfall-first Trend Explorer MVP backend: Ingestion of NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF`), calculation of April–May $PRCPTOT$ and $R50mm$ indicators using cell-first protocol, Theil-Sen slope estimation with analytical 95% CI, and Modified Mann-Kendall (Hamed & Rao 1998) autocorrelation-corrected trend testing.
 - **Proposed Research `[PROPOSED RESEARCH]`:**
   - Analysis of spatial trend heterogeneity between the steep Meghalaya escarpment and lowland Haor wetlands, and evaluation of potential multi-variable challenge extensions (e.g., soil moisture proxies) upon full NASA challenge resource publication.
 
@@ -84,5 +84,5 @@ HydroSense-SWOT unifies two complementary Earth-observation capabilities into a 
 ## Accessibility & Inclusion
 
 - Color-vision deficiency (CVD) safety: Statuses communicate through distinct icons, shapes, and typography in addition to color.
-- High contrast dark-mode telemetry suitable for field operation under direct sunlight or dim power-outage environments.
+- High contrast agricultural light-theme telemetry (#F5F8FA canvas, #FFFFFF cards, #173B57 navy text) suitable for field operation under direct sunlight or dim power-outage environments.
 - Fully semantic HTML, ARIA dialog and live regions for screen readers, and clear Bengali typography via Noto Sans Bengali.

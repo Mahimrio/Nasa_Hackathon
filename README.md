@@ -75,8 +75,8 @@ Evaluated on the frozen test period (April 1 – May 31, 2026) using 15-minute t
 
 ### Module 2 Trend Explorer Methodology `[PROPOSED RESEARCH]`
 - **Indicators:** Primary: Pre-monsoon total accumulation ($PRCPTOT_{AM}$, April 1 – May 31). Secondary: Heavy rainfall day count ($R50mm_{AM}$, days with daily rainfall $\ge 50\text{ mm}$).
-- **Trend Estimation:** Non-parametric Theil-Sen slope estimator ($\beta$, mm/yr).
-- **Significance & QC:** Yue-Wang (2004) Modified Mann-Kendall test accounting for serial autocorrelation (TFPW), plus Pettitt changepoint testing across the 2014 TRMM-to-GPM constellation transition.
+- **Trend Estimation:** Non-parametric Theil-Sen slope estimator ($\beta$, mm/yr) with analytical 95% Sen-Kendall confidence intervals.
+- **Significance & QC:** Modified Mann-Kendall (MMK Hamed & Rao 1998) test with variance correction factor $\text{Var}^*(S)$ accounting for serial autocorrelation ($|r_1| \ge 0.392$), with standard MK reported as sensitivity.
 - **Findings Claim Boundary:** The project makes **no pre-supposition of trend direction or significance**. All outputs will reflect empirical execution on genuine GPM IMERG Final Run data.
 
 ## Limitations & Operational Boundaries
@@ -106,7 +106,10 @@ Distributed under the **MIT License**. See `LICENSE` for details.
 
 ## Documentation Links
 - [SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) — Pre-submission compliance and NASA Space Apps rules checklist
-- [HYDROSENSE_BUILD_PROMPTS.md](docs/HYDROSENSE_BUILD_PROMPTS.md) — Step-by-step verified engineering prompts
+- [PRODUCT.md](PRODUCT.md) — Product specification, users, mission, and module positioning
+- [DESIGN.md](DESIGN.md) — Calm, professional agrarian design system tokens and typography
+- [HYDROSENSE_BUILD_PROMPTS.md](docs/HYDROSENSE_BUILD_PROMPTS.md) — Module 1 verified engineering prompts (P1–P8)
+- [MODULE_2_BUILD_PROMPTS.md](docs/MODULE_2_BUILD_PROMPTS.md) — Module 2 verified engineering prompts (P-T1–P-T8)
 - [validation_report.md](data/processed/validation_report.md) — Formal scientific validation report with diagnostic figures
 - [SOLUTION_ARCHITECTURE.md](docs/SOLUTION_ARCHITECTURE.md) — Complete 4-Tier system architecture and failure-mode audit
 - [DESIGN_ARCHITECTURE.md](docs/DESIGN_ARCHITECTURE.md) — Visual & interaction design architecture specification for the delivery dashboard
