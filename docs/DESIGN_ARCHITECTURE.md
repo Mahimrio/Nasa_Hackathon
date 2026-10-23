@@ -913,3 +913,46 @@ The intended result should feel like a **premium scientific command center**: ne
 - This document is a visual/interaction specification based on the supplied references and visible dashboard screenshot. Repository source code was not successfully retrieved through the connected GitHub integration during preparation, so component names, framework-specific commands and dependency names above are intentionally framework-agnostic.
 - Before implementation, confirm the real source paths, CSS approach, installed chart/map libraries and data schema; adapt the architecture rather than replacing working domain logic.
 - Suggested file location in the repository: `docs/DESIGN_ARCHITECTURE.md` or root-level `DESIGN_ARCHITECTURE.md`.
+
+---
+
+## 18. Module 2: Historical Rainfall Trend Explorer UI Specification
+
+### 18.1 High-Level Component Architecture
+Module 2 is delivered within the existing Next.js 16 App Router application as a dedicated, decoupled view (`TrendExplorerViewer.js`) mounted conditionally in `ui/app/page.js`:
+
+```
+AppHeader (Top Bar) ──► Mode Switcher: [ 🛰️ Real-Time Warning ] | [ 📊 Rainfall Trends ]
+                              │
+         ┌────────────────────┴────────────────────┐
+         ▼                                         ▼
+[Mode = WARNING (Mod 1)]                  [Mode = TRENDS (Mod 2)]
+  ├─ 5-Second Triage Bar                    ├─ Sector / Indicator Controls Bar
+  ├─ 8:4 Hero (RiverMap + Decision Rail)     ├─ 25-Year Recharts Time-Series Chart
+  └─ Forecast Timeline Hydrograph           ├─ 4 Factual Statistical Readout Cards
+                                            └─ Contextual Climatological Disclaimer Box
+```
+
+### 18.2 UI Controls & Interaction Tokens
+1. **Header Segmented Control:**
+   - 32 px height segmented pill in `AppHeader.js`.
+   - Active state: `#287BB5` background with white text (`#FFFFFF`) and 2 px offset focus ring.
+   - Switches telemetry view in state without full page reload.
+2. **Controls Toolbar (`TrendExplorerViewer.js`):**
+   - **Zone Selector:** Dropdown selecting between *Zone A (Meghalaya Ridge)*, *Zone B (Eastern Inflow)*, and *Zone C (Central Haor Basin)*.
+   - **Indicator Segmented Toggle:** Compact button pair switching between `$PRCPTOT_{AM}$` (Total Rain, mm) and `$R50mm_{AM}$` (Heavy Rain Days $\ge 50\text{ mm}$).
+3. **Recharts Multi-Decadal Time Series:**
+   - Canvas backdrop: Crisp white card surface (`#FFFFFF`) with `#DCE5EA` border.
+   - Bar / Point elements: `#287BB5` river blue with subtle hover highlight.
+   - Sen's Slope Trend Line: Distinct solid navy line (`#175A85`, 2.5 px stroke).
+   - Analytical 95% Confidence Interval Envelope: Shaded band with `rgba(40, 123, 181, 0.12)` fill.
+   - Tooltip: Floating white card with 1 px border, displaying Year, Observed Metric, and Trend-Fitted Value.
+4. **4 Factual Statistical Scorecard Cards:**
+   - Card 1: **Trend Slope ($\beta$):** Displayed in mm/decade or days/decade with analytical 95% CI.
+   - Card 2: **Statistical Significance:** Governing $p$-value with clear status badge ("Statistically Significant ($p < 0.05$)" or "No Significant Trend ($p \ge 0.05$)").
+   - Card 3: **Autocorrelation Audit:** Sample lag-1 $r_1$ value and governing test badge (Standard MK vs Modified MK).
+   - Card 4: **Data Completeness:** Verified 100% complete seasons count ($25/25$ seasons).
+5. **Contextual Climatological Disclaimer:**
+   - Soft recessed well (`#F8FAFC`) with `#DCE5EA` border.
+   - Explicit disclaimer text: *"Historical rainfall trends reflect multi-decadal climatology and do not predict individual flood events."*
+
