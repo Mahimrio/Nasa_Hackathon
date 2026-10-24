@@ -1,11 +1,12 @@
 import "./globals.css";
 import { LocaleProvider } from "./hooks/useLocale";
 import { TelemetryProvider } from "./context/TelemetryContext";
+import ProvenanceNotice from "./components/ProvenanceNotice";
 
 export const metadata = {
-  title: "HydroSense-SWOT — Haor Basin Flood & Harvest Early Warning",
+  title: "HydroSense-SWOT — Synthetic Demo",
   description:
-    "SWOT-calibrated hydrologic routing of GPM IMERG rainfall for Boro rice harvest timing in the Surma-Kushiyara corridor, Bangladesh. NASA Space Apps 2026.",
+    "A synthetic engineering demonstration of hydrologic-routing software. It is not an operational warning or validated forecast.",
   keywords: [
     "NASA SWOT",
     "GPM IMERG",
@@ -44,7 +45,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <LocaleProvider>
-          <TelemetryProvider>{children}</TelemetryProvider>
+          <TelemetryProvider><ProvenanceNotice />{children}</TelemetryProvider>
         </LocaleProvider>
       </body>
     </html>

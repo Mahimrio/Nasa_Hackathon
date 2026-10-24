@@ -157,15 +157,13 @@ def ingest_bwdb_gauge(
         df_raw = pd.read_csv(raw_csv_path, dtype={"station_id": str, "reach_id": str})
         cleaned_df = sanitize_gauge_observations(df_raw)
     elif os.path.exists(output_csv_path):
-        logger.info(f"Loading existing verified gauge dataset from {output_csv_path}...")
+        logger.info(f"Loading existing gauge dataset from {output_csv_path}...")
         cleaned_df = pd.read_csv(output_csv_path, dtype={"station_id": str, "reach_id": str})
         cleaned_df = sanitize_gauge_observations(cleaned_df)
     else:
-        logger.warning(f"No existing gauge file found at {output_csv_path}; generating default record template.")
-        # Minimal template
-        cleaned_df = pd.DataFrame(columns=[
-            "timestamp", "station_id", "station_name", "river", "reach_id", "water_level_m", "danger_level_m"
-        ])
+        raise FileNotFoundError(
+            "No gauge source was supplied. Real-data ingestion fails closed and will not generate a substitute record."
+        )
 
     # Format output timestamps as UTC ISO8601 strings
     out_df = cleaned_df.copy()

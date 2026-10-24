@@ -4594,4 +4594,14 @@ body.lang-bn div {
     flex-wrap: wrap;
   }
 }
-
+ .provenance-notice {
+  position: relative;
+  z-index: 100;
+  padding: 9px 18px;
+  background: #fff4ce;
+  color: #503b00;
+  border-bottom: 2px solid #b7791f;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+}

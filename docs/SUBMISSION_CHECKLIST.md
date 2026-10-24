@@ -4,7 +4,7 @@
 > **Team:** AUSTrology  
 > **Repository:** [https://github.com/Mahimrio/Nasa_Hackathon](https://github.com/Mahimrio/Nasa_Hackathon)  
 > **Compliance Officer / QA Specialist:** Samia Rahman Arpita  
-> **Last Audited:** October 14, 2026
+> **Last Audited:** October 24, 2026
 
 ---
 
@@ -36,7 +36,7 @@
 | [x] | **Uncertainty Quantified** | Propagate SWOT $\pm 0.18\text{ m}$ WSE analytical uncertainty band onto stage predictions. | **PASS** | Hydrograph plots shaded $\pm 0.18\text{ m}$ uncertainty band around modelled water level. |
 | [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Expanded-by-default [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) with a persistent accessible heading and collapse control. |
 | [x] | **Clean JSON Exports** | Static JSON bridge contains zero `NaN` or `-999999.0` fill values. | **PASS** | Verified across all 5 JSON files in `ui/public/data/`. |
-| [!] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **UNDER AUDIT** | Active scientific audit confirmed script parameter issues in `validation_report.py` and `run_pipeline.py`. Baseline comparison metrics marked unresolved pending re-benchmarking. |
+| [x] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **PASS** | Completed. Corrected comparison logic in `validation_report.py` and `metrics.py`. Evaluated true persistence and threshold baselines; lead time honestly verified and reported in `docs/evidence/evaluation_split_baseline_and_metrics.md`. |
 
 ---
 
@@ -92,7 +92,7 @@ npm run dev
 - [x] **Project Title:** HydroSense-SWOT
 - [x] **Team Name:** AUSTrology
 - [x] **Public GitHub Repository URL:** [https://github.com/Mahimrio/Nasa_Hackathon](https://github.com/Mahimrio/Nasa_Hackathon)
-- [x] **Challenge Category:** Candidate: *Be An Earth System Trend Detective!* `[PROVISIONAL — awaiting release of official resource packages and 2026 participation terms]`
+- [x] **Challenge Category:** *Be An Earth System Trend Detective!* (Locked per `docs/DECISIONS.md` D-016 and mapped across all criteria in `docs/evidence/challenge_criteria_map.md`)
 - [x] **Incognito Browser Test:** Verified repository is public, README renders cleanly, and all markdown links resolve.
 - [x] **Data Sources Declared:**
   1. NASA SWOT L2 HR RiverSP 2.0 (`SWOT_L2_HR_RIVERSP_2.0`, Module 1)

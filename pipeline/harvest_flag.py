@@ -34,53 +34,49 @@ def compute_harvest_flags(
     lead_steps: Optional[int] = None,
 ) -> pd.DataFrame:
     """
-    Computes operational harvest flags using forward hydrodynamic look-ahead.
+    Computes flags from information available at each timestamp.
+
+    ``modelled_stage`` is a historical simulation unless callers provide a
+    separately generated, issue-time-stamped forecast.  Therefore this
+    function intentionally does not scan future rows: doing so would turn a
+    retrospective series into an invalid operational warning.
 
     Parameters:
         df_routing: DataFrame containing 'modelled_stage' and 'timestamp'.
         danger_level_m: Flood threshold (13.20 m PWD for Kanaighat SW108).
-        travel_time_hours: Hydrodynamic travel time in hours. If None, reads
-                           from df_routing.attrs['travel_time_hours'] or defaults to 26h.
-        lead_steps: Optional explicit look-ahead steps (for backwards compatibility).
+        travel_time_hours: Retained as explanatory hydraulic metadata only.
+        lead_steps: Deprecated. A positive value is rejected because it would
+                    use future model states not available at the issue time.
 
     Returns:
-        pd.DataFrame with 'future_stage', 'harvest_flag', 'advisory_en', 'advisory_bn',
+        pd.DataFrame with 'available_stage', 'harvest_flag', 'advisory_en', 'advisory_bn',
         and peak date metadata (Guard B10).
     """
     df = df_routing.copy()
     n_steps = len(df)
     stages = df["modelled_stage"].values
 
-    if lead_steps is not None:
-        lead_steps = max(int(lead_steps), 1)
-        if travel_time_hours is None:
-            travel_time_hours = lead_steps * 0.5
-    else:
-        # Determine look-ahead steps from hydrodynamic travel time
-        if travel_time_hours is None:
-            travel_time_hours = df.attrs.get("travel_time_hours", 26.0)
-        # 30-min steps -> steps = hours * 2
-        lead_steps = max(int(round(travel_time_hours * 2)), 1)
+    if lead_steps not in (None, 0):
+        raise ValueError("Future look-ahead is prohibited for operational flags; provide an issue-time forecast product instead.")
+    if travel_time_hours is None:
+        travel_time_hours = df.attrs.get("travel_time_hours", 26.0)
 
     amber_threshold_m = AMBER_RATIO * danger_level_m  # 10.56 m
 
-    future_stage = np.zeros(n_steps)
-    for i in range(n_steps):
-        end_idx = min(i + lead_steps, n_steps)
-        future_stage[i] = np.max(stages[i:end_idx])
+    available_stage = stages.copy()
 
     flags = []
     adv_en = []
     adv_bn = []
 
-    for f_lvl in future_stage:
+    for f_lvl in available_stage:
         if f_lvl >= danger_level_m:
             flags.append("RED")
             adv_en.append(
-                f"CRITICAL: Surge breach forecast within ~{travel_time_hours:.0f}h. Harvest mature Boro immediately."
+                "CRITICAL: simulated/observed stage is at or above the configured danger level. Verify local conditions before acting."
             )
             adv_bn.append(
-                f"জরুরি: আগামী ~{travel_time_hours:.0f} ঘণ্টার মধ্যে বাঁধ উপচে পড়ার আশঙ্কা। পাকা বোরো ধান অবিলম্বে কাটুন।"
+                "জরুরি: সিমুলেটেড/পর্যবেক্ষিত পানি নির্ধারিত বিপৎসীমায় বা তার উপরে। সিদ্ধান্তের আগে স্থানীয় অবস্থা যাচাই করুন।"
             )
         elif f_lvl >= amber_threshold_m:
             flags.append("AMBER")
@@ -99,7 +95,9 @@ def compute_harvest_flags(
                 "স্বাভাবিক: পানি নিরাপদ সীমার মধ্যে আছে। ধান পুরোপুরি পাকার জন্য অপেক্ষা করুন।"
             )
 
-    df["future_stage"] = np.round(future_stage, 2)
+    df["available_stage"] = np.round(available_stage, 2)
+    # Compatibility field carries no future value and is explicitly named in attrs.
+    df["future_stage"] = np.round(available_stage, 2)
     df["harvest_flag"] = flags
     df["advisory_en"] = adv_en
     df["advisory_bn"] = adv_bn
@@ -114,6 +112,7 @@ def compute_harvest_flags(
     df.attrs["danger_level_m"] = float(danger_level_m)
     df.attrs["amber_level_m"] = float(round(amber_threshold_m, 2))
     df.attrs["look_ahead_hours"] = float(round(travel_time_hours, 1))
+    df.attrs["forecast_status"] = "retrospective/current-state classification; no future look-ahead"
 
     return df
 

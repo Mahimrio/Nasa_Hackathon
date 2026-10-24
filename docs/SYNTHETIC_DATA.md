@@ -101,4 +101,11 @@ For each release, archive:
 - A comparison showing that UI, JSON exports, and the manifest assign the same provenance to every displayed value.
 - The actual NASA granule/product IDs and gauge source record identifiers for any file described as real.
 
-**Current status:** disclosure and acceptance requirements documented; generator, fixture README, manifest, tests, and UI labels still require implementation. This document does not certify those changes.
+**Execution status (2026-10-24):** All 10 implementation requirements and the
+acceptance specification were implemented and verified. Generator, fixture README,
+NetCDF/CSV metadata, `data/fixtures/PROVENANCE.json`, fail-closed real-mode guards,
+global UI provenance notice, and regression tests were verified via
+`python scripts/audit_provenance.py` and `pytest tests/test_provenance_and_leakage.py`.
+Evidence is archived in `docs/EXECUTION_EVIDENCE.md` and `docs/evidence/`. This document
+certifies transparent synthetic provenance handling; it does not claim observed
+real-world forecast skill.

@@ -54,6 +54,7 @@ export default function AppHeader({
   const isDashboardActive = pathname === "/" || pathname === "/dashboard";
   const isForecastActive = pathname === "/forecast";
   const isAdvisoryActive = pathname === "/advisory";
+  const isTrendsActive = pathname === "/trends";
 
   return (
     <header className={`app-topbar ${isMobileMenuOpen ? "topbar-mobile-menu-open" : ""}`} role="banner">
@@ -113,6 +114,9 @@ export default function AppHeader({
         >
           <span className="nav-step-badge">3</span>
           <span>{lang === "en" ? "Harvest Advisory" : "ফসল কর্তন পরামর্শ"}</span>
+        </Link>
+        <Link href="/trends" className={`topbar-nav-link ${isTrendsActive ? "active" : ""}`} aria-current={isTrendsActive ? "page" : undefined}>
+          <span>{lang === "en" ? "Trend Explorer" : "প্রবণতা"}</span>
         </Link>
       </nav>
 

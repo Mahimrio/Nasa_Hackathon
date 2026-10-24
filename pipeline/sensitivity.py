@@ -129,7 +129,7 @@ def run_routing_sensitivity_analysis(
                 "kge": round(metrics["kge"], 2),
                 "pbias_pct": round(metrics["pbias"], 1),
                 "timing_error_h": round(metrics["timing_error_h"], 1),
-                "lead_time_h": round(metrics["lead_time_h"], 1),
+                "lead_time_h": round(metrics["lead_time_h"], 1) if metrics["lead_time_h"] is not None else None,
             })
 
     df_results = pd.DataFrame(results)

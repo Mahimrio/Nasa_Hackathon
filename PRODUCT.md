@@ -25,7 +25,7 @@ HydroSense-SWOT bridges the critical upstream observational gap between transbou
 HydroSense-SWOT unifies two complementary Earth-observation capabilities into a single cohesive platform for Bangladesh's Haor region:
 
 1. **Module 1 — Operational Haor Flood-Warning System `[IMPLEMENTED]`:** Routes near-real-time NASA GPM IMERG Early Run satellite rainfall through un-gauged border river reaches whose physical hydraulic conveyance (Manning roughness, width, water surface elevation, and reach slope) is parameterized offline using NASA SWOT Ka-band radar interferometry, generating rapid 20–30h harvest decision advisories.
-2. **Module 2 — Haor Rainfall Trend Explorer `[PLANNED / PROPOSED RESEARCH]`:** Evaluates 26+ years of research-quality NASA GPM IMERG Final Run precipitation data (1998–2025) to determine whether pre-monsoon precipitation volume ($PRCPTOT_{AM}$) or extreme storm frequency ($R50mm_{AM}$) has changed with statistical significance in upstream catchments. (Provisional alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”*).
+2. **Module 2 — Haor Rainfall Trend Explorer `[IMPLEMENTED - FAIL-CLOSED ON REAL DATA]`:** Evaluates 26+ years of research-quality NASA GPM IMERG Final Run precipitation data (1998–2025) to determine whether pre-monsoon precipitation volume ($PRCPTOT_{AM}$) or extreme storm frequency ($R50mm_{AM}$) has changed with statistical significance in upstream catchments. (Locked alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* per `docs/DECISIONS.md`).
 
 ## Implementation & Validation Status
 
@@ -35,10 +35,9 @@ HydroSense-SWOT unifies two complementary Earth-observation capabilities into a 
   - Automated 3-tier Harvest Flag logic (GREEN: Normal, AMBER: Caution / 80% danger level, RED: Critical Harvest / 100% danger level at 13.20 m PWD).
   - Bilingual localization (English / বাংলা) across headers, metric cards, harvest directives, and modal dialogs.
   - Interactive event replay controls with day rail, custom skip, reach inspector, and live hydrodynamic verification statistics.
-- **Partially Implemented / Under Audit `[UNRESOLVED]`:**
-  - Validation report baseline comparison subroutine (`pipeline/validation_report.py`) and lookahead step configuration (`pipeline/run_pipeline.py`) are under active audit due to a script-level parameter bug; comparative gains vs baseline require re-benchmarking.
-- **Planned `[PLANNED]`:**
-  - Rainfall-first Trend Explorer MVP backend: Ingestion of NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF`), calculation of April–May $PRCPTOT$ and $R50mm$ indicators using cell-first protocol, Theil-Sen slope estimation with analytical 95% CI, and Modified Mann-Kendall (Hamed & Rao 1998) autocorrelation-corrected trend testing.
+  - Baseline comparison subroutine audited and re-benchmarked (WO-016 & Gate 4); true persistence and rainfall threshold baselines evaluated against the test event.
+  - Rainfall-first Trend Explorer MVP backend implemented in `trend_explorer/analysis.py` and `scripts/run_trend_analysis.py` with cell-first aggregation, Theil-Sen slope, and Modified Mann-Kendall test under autocorrelation. Unit-tested in `tests/test_trend_explorer.py` (48/48 tests pass).
+  - Frontend delivery dashboard at `/` and Trend Explorer view at `/trends` compiled cleanly in Next.js 16 App Router.
 - **Proposed Research `[PROPOSED RESEARCH]`:**
   - Analysis of spatial trend heterogeneity between the steep Meghalaya escarpment and lowland Haor wetlands, and evaluation of potential multi-variable challenge extensions (e.g., soil moisture proxies) upon full NASA challenge resource publication.
 

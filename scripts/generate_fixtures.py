@@ -1,13 +1,11 @@
-"""
-Script to generate scientifically grounded test fixtures for HydroSense-SWOT.
-Follows SOLUTION_ARCHITECTURE.md v3.0 specs:
-- swot_reaches.nc: Calibration passes (Jan 2024 - Mar 2026) for Surma-Kushiyara reaches
-- swot_event.nc: Test event passes (Apr 1 - May 31 2026)
-- imerg_map.nc: 30-minute interval GPM IMERG Early Run MAP over Meghalaya / Upper Surma
-- gauge_kanaighat.csv: Kanaighat BWDB gauge observations (UTC timestamps, str reach_id/station_id)
+"""Generate explicitly synthetic, deterministic fixtures for offline tests and demos.
+
+These values exercise SWOT-, IMERG-, and gauge-shaped interfaces; they are not
+mission retrievals or agency observations and must never be used as validation.
 """
 
 import os
+import json
 import sys
 
 # Ensure repository root is on sys.path
@@ -18,12 +16,12 @@ import pandas as pd
 import netCDF4  # MUST be before xarray (Trap B2)
 import xarray as xr
 
-FIXTURES_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "fixtures")
-os.makedirs(FIXTURES_DIR, exist_ok=True)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+FIXTURES_DIR = os.path.join(PROJECT_ROOT, "data", "fixtures")
+GENERATOR_VERSION = "2.0.0"
+DEFAULT_SEED = 42
 
-np.random.seed(42)
-
-def generate_swot_reaches():
+def generate_swot_reaches(fixtures_dir=FIXTURES_DIR):
     """
     Generates historical SWOT passes (Jan 2024 - Mar 2026) for 4 key Surma-Kushiyara reaches.
     Reach IDs are 11-digit strings (Trap B3).
@@ -84,18 +82,22 @@ def generate_swot_reaches():
             "time": pd.to_datetime(times).tz_localize(None),
         },
         attrs={
-            "title": "SWOT L2 HR RiverSP 2.0 Historical Calibration Reaches",
-            "source": "NASA PO.DAAC SWOT_L2_HR_RIVERSP_2.0",
+            "title": "Synthetic SWOT-shaped historical calibration scenarios",
+            "provenance": "SYNTHETIC",
+            "source": "HydroSense fixture generator; not a NASA retrieval",
+            "generator": "scripts/generate_fixtures.py",
+            "generator_version": GENERATOR_VERSION,
+            "random_seed": DEFAULT_SEED,
             "region": "Surma-Kushiyara Basin, Bangladesh",
         }
     )
 
-    out_path = os.path.join(FIXTURES_DIR, "swot_reaches.nc")
+    out_path = os.path.join(fixtures_dir, "swot_reaches.nc")
     ds.to_netcdf(out_path)
     print(f"Created {out_path} ({n_reaches} reaches, {n_passes} passes)")
 
 
-def generate_swot_event():
+def generate_swot_event(fixtures_dir=FIXTURES_DIR):
     """
     Generates SWOT passes during test events (April-May 2026).
     Revisit around April 5, April 16, April 27, May 8, May 19, 2026.
@@ -139,21 +141,25 @@ def generate_swot_event():
             "time": dates.tz_localize(None),
         },
         attrs={
-            "title": "SWOT L2 HR RiverSP 2.0 Test Event Passes (April-May 2026)",
-            "source": "NASA PO.DAAC",
+            "title": "Synthetic SWOT-shaped test-event scenarios (April-May 2026)",
+            "provenance": "SYNTHETIC",
+            "source": "HydroSense fixture generator; not a NASA retrieval",
+            "generator": "scripts/generate_fixtures.py",
+            "generator_version": GENERATOR_VERSION,
+            "random_seed": DEFAULT_SEED,
         }
     )
 
-    out_path = os.path.join(FIXTURES_DIR, "swot_event.nc")
+    out_path = os.path.join(fixtures_dir, "swot_event.nc")
     ds.to_netcdf(out_path)
     print(f"Created {out_path} ({n_passes} event passes)")
 
 
-def generate_imerg_map_and_gauge():
+def generate_imerg_map_and_gauge(fixtures_dir=FIXTURES_DIR):
     """
     Generates multi-year pre-monsoon datasets for 2020 through 2026:
     1. GPM IMERG Early Run MAP (30-min intervals) for April 1 - May 31 for each year (2020-2026).
-       Captures real pre-monsoon convective rain pulses over Meghalaya headwaters.
+       Contains authored rainfall scenarios, not observed precipitation.
        Labeled at UTC start-of-interval (Trap B4 corrected).
     2. BWDB Kanaighat gauge observations (hourly) for each year (2020-2026):
        - 2020: Flash flood peaking at 13.35m (crosses DL 13.20m)
@@ -342,14 +348,19 @@ def generate_imerg_map_and_gauge():
             "time": time_coords_30m,
         },
         attrs={
-            "title": "GPM IMERG Early Run V07 Mean Areal Precipitation (2020-2026)",
+            "title": "Synthetic IMERG-shaped mean-areal precipitation scenarios (2020-2026)",
+            "provenance": "SYNTHETIC",
+            "source": "HydroSense fixture generator; not a NASA retrieval",
+            "generator": "scripts/generate_fixtures.py",
+            "generator_version": GENERATOR_VERSION,
+            "random_seed": DEFAULT_SEED,
             "region": "Meghalaya & Surma-Kushiyara Basin",
             "spatial_aggregation": "HydroSHEDS polygons area-weighted mean",
             "time_convention": "UTC start-of-interval",
         }
     )
 
-    imerg_out_path = os.path.join(FIXTURES_DIR, "imerg_map.nc")
+    imerg_out_path = os.path.join(fixtures_dir, "imerg_map.nc")
     ds_imerg.to_netcdf(imerg_out_path)
     print(f"Created {imerg_out_path} ({len(all_times_30m)} 30-min time steps across 2020-2026)")
 
@@ -362,24 +373,29 @@ def generate_imerg_map_and_gauge():
         "reach_id": "22211000011",
         "water_level_m": np.round(all_gauge_levels, 2),
         "danger_level_m": 13.20,
+        "provenance": "SYNTHETIC",
+        "source": "HydroSense fixture generator; not a BWDB/FFWC observation",
     })
 
-    gauge_out_path = os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv")
+    gauge_out_path = os.path.join(fixtures_dir, "gauge_kanaighat.csv")
     df_gauge.to_csv(gauge_out_path, index=False)
     print(f"Created {gauge_out_path} ({len(df_gauge)} hourly observations across 2020-2026)")
 
     # Write data/fixtures/README.md
-    fixtures_readme = os.path.join(FIXTURES_DIR, "README.md")
+    fixtures_readme = os.path.join(fixtures_dir, "README.md")
     with open(fixtures_readme, "w", encoding="utf-8") as f:
         f.write("""# HydroSense-SWOT Data Fixtures
 
-These fixtures provide quality-gated offline datasets for testing and judging demonstrations.
+> **Synthetic demonstration data.** Rainfall, river levels, and SWOT-shaped
+> values in this directory were generated by this project. They are not NASA
+> retrievals or BWDB/FFWC gauge observations. Any metrics are engineering
+> checks against constructed scenarios, not forecast skill.
 
 ## Contents
-1. `swot_reaches.nc`: SWOT L2 HR RiverSP 2.0 historical reach passes (Jan 2024 - Mar 2026) for Surma & Kushiyara river reaches (`22211000011`, `22211000012`, `22211000021`, `22211000022`).
-2. `swot_event.nc`: SWOT overpass geometry for the April-May 2026 flood event.
-3. `imerg_map.nc`: GPM IMERG Early Run V07 30-minute Mean Areal Precipitation (MAP, mm/hr) over the Meghalaya upper catchment. Labeled at UTC start-of-interval.
-4. `gauge_kanaighat.csv`: Hourly observed water levels (m PWD) at BWDB Kanaighat gauge station on the Surma River (Danger Level: 13.20 m).
+1. `swot_reaches.nc`: synthetic reach-pass scenarios.
+2. `swot_event.nc`: synthetic event-pass scenarios.
+3. `imerg_map.nc`: synthetic 30-minute rainfall scenarios (mm/hr).
+4. `gauge_kanaighat.csv`: synthetic hourly stage scenarios (m PWD).
 
 ## Verification & Guardrails
 - Timestamps: UTC ISO8601 strings.
@@ -391,6 +407,22 @@ These fixtures provide quality-gated offline datasets for testing and judging de
     print(f"Created {fixtures_readme}")
 
 
+def write_provenance_manifest(fixtures_dir):
+    from pipeline.provenance import write_manifest
+    is_default = os.path.abspath(fixtures_dir) == os.path.abspath(FIXTURES_DIR)
+    root = PROJECT_ROOT if is_default else os.path.abspath(fixtures_dir)
+    rel = lambda name: os.path.relpath(os.path.join(fixtures_dir, name), root)
+    records = []
+    for name, variables, units, coverage in [
+        ("swot_reaches.nc", ["wse", "width", "slope2", "wse_u", "slope_u", "quality_f", "dark_frac"], {"wse": "m", "width": "m", "slope2": "m/m"}, "2020-01-10/2026-03-25 UTC"),
+        ("swot_event.nc", ["wse", "width", "slope2", "wse_u", "slope_u", "quality_f", "dark_frac"], {"wse": "m", "width": "m", "slope2": "m/m"}, "2026-04-05/2026-05-19 UTC"),
+        ("imerg_map.nc", ["precipitationCal"], {"precipitationCal": "mm/hr"}, "2020-04-01/2026-05-31 UTC"),
+        ("gauge_kanaighat.csv", ["water_level_m", "danger_level_m"], {"water_level_m": "m PWD", "danger_level_m": "m PWD"}, "2020-04-01/2026-05-31 UTC"),
+    ]:
+        records.append({"dataset_id": f"hydrosense-fixture-{name}", "provenance": "SYNTHETIC", "file_path": rel(name), "variables": variables, "units": units, "temporal_coverage": coverage, "spatial_coverage": "Synthetic Surma-Kushiyara scenario", "source_organization": "HydroSense project", "product_version": None, "source_url": None, "retrieval_timestamp": None, "source_identifiers": [], "license": "Repository LICENSE", "quality_control": "Scenario quality flags exercise ingestion checks", "processing_history": ["Generated by scripts/generate_fixtures.py"], "generator": "scripts/generate_fixtures.py", "generator_version": GENERATOR_VERSION, "random_seed": DEFAULT_SEED, "known_limitations": "Procedural scenario; not an observation or validation dataset", "limitations": "Procedural scenario; not an observation or validation dataset"})
+    write_manifest(os.path.join(fixtures_dir, "PROVENANCE.json"), records, root)
+
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Generate or ingest HydroSense-SWOT fixtures")
@@ -398,29 +430,21 @@ if __name__ == "__main__":
         "--mode",
         choices=["synthetic", "real"],
         default="synthetic",
-        help="Fixture generation mode: 'synthetic' (default) or 'real' (calls NASA ingestion pipeline)",
+        help="'synthetic' generates scenarios; 'real' requires all authentic source inputs and fails closed",
     )
+    parser.add_argument("--output-dir", default=FIXTURES_DIR, help="Output directory for synthetic fixtures")
+    parser.add_argument("--seed", type=int, default=DEFAULT_SEED, help="Deterministic NumPy seed")
     args = parser.parse_args()
+    fixtures_dir = os.path.abspath(args.output_dir)
+    os.makedirs(fixtures_dir, exist_ok=True)
+    np.random.seed(args.seed)
 
     if args.mode == "real":
-        print("Executing Real NASA Data Ingestion Pipeline (Prompt 1)...")
-        from pipeline.ingest_sword import ingest_sword_reaches
-        from pipeline.ingest_swot import ingest_swot_reaches
-
-        print("\nStep 1: Ingesting SWORD v16 reaches (width > 100m)...")
-        ingest_sword_reaches()
-
-        print("\nStep 2: Ingesting & Quality-Gating SWOT L2 HR RiverSP 2.0 data...")
-        ingest_swot_reaches(use_api=True)
-
-        print("\nStep 3: Ensuring event & gauge fixtures exist...")
-        generate_swot_event()
-        generate_imerg_map_and_gauge()
-        print("\n[SUCCESS] Real data ingestion & fixture synchronization complete!")
+        raise SystemExit("Real mode is fail-closed: use verified source-specific ingestion; this script never substitutes synthetic event, rainfall, or gauge records.")
     else:
         print("Generating synthetic fixtures for offline testing...")
-        generate_swot_reaches()
-        generate_swot_event()
-        generate_imerg_map_and_gauge()
+        generate_swot_reaches(fixtures_dir)
+        generate_swot_event(fixtures_dir)
+        generate_imerg_map_and_gauge(fixtures_dir)
+        write_provenance_manifest(fixtures_dir)
         print("\n[SUCCESS] All synthetic fixtures generated successfully!")
-

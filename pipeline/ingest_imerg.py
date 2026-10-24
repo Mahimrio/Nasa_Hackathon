@@ -182,9 +182,10 @@ def ingest_imerg_map(
         output_path = os.path.join(base_dir, "data", "fixtures", "imerg_map.nc")
 
     if use_api:
-        logger.info("Attempting NASA GES DISC IMERG Early Run download...")
-        # If API returns data, process it here.
-        # Otherwise fallback to existing fixture.
+        raise RuntimeError(
+            "Real IMERG retrieval is not configured with authenticated, verifiable granule access. "
+            "No synthetic or cached fixture fallback is permitted in real-data mode."
+        )
 
     if os.path.exists(output_path):
         logger.info(f"Loading and verifying existing IMERG MAP dataset from {output_path}...")

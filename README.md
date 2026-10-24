@@ -8,12 +8,12 @@
 
 HydroSense-SWOT is structured into two distinct, decoupled components:
 
-* **Module 1 — Operational Haor Flood-Warning & Harvest Decision System `[IMPLEMENTED]`:**  
-  Delivers an actionable early-warning harvest decision tool for Upazila Agriculture Officers (UAOs) and Boro rice farmers in the flood-vulnerable Haor basin of north-east Bangladesh (Surma-Kushiyara rivers). When sudden pre-monsoon convective rain falls over the steep Meghalaya hills across the Indian border, the pipeline routes near-real-time NASA GPM IMERG Early Run rainfall through river reaches whose channel geometry and hydraulic roughness ($n$) are calibrated offline from NASA SWOT satellite reach measurements. Generates a high-contrast **Harvest Flag (GREEN / AMBER / RED)** with ~21–26 hours of advance warning before floodwaters cross the 13.20 m PWD danger level at Kanaighat.
-* **Module 2 — Haor Rainfall Trend Explorer `[PLANNED / PROPOSED RESEARCH]`:**  
-  A simplified, rainfall-first Minimum Viable Product (MVP) designed to investigate long-term environmental change in upstream catchments influencing the Haor region. Addresses the core question: *“Has pre-monsoon rainfall changed over time in selected upstream areas influencing Bangladesh’s Haor region? If so, where, by how much, and what statistical evidence supports the observed trend?”* Focuses on the 26-year historical NASA GPM IMERG Final Run V07 record (1998–2025) using non-parametric Theil-Sen slope estimation and autocorrelation-corrected Mann-Kendall trend testing.
+* **Module 1 — Flood-routing demonstration `[SYNTHETIC ENGINEERING TEST]`:**  
+  The checked-in dashboard uses generated rainfall, stage, and SWOT-shaped scenarios. It demonstrates software behavior only; it is not an operational warning system, real data replay, or validated forecast.
+* **Module 2 — Haor Rainfall Trend Explorer `[IMPLEMENTED, AWAITING REAL DATA]`:**  
+  A fail-closed analysis module for provenance-verified NASA GPM IMERG Final daily extracts. It computes cell-first April–May PRCPTOT and R50mm, Theil–Sen slopes, and autocorrelation-adjusted Mann–Kendall inference. It produces no result until authentic input is supplied.
 
-> **Challenge Alignment Status:** Proposed alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* remains **provisional**. Full challenge resource packages and participant terms remain pending official NASA release. The rainfall-only MVP focuses on precipitation indicators ($PRCPTOT$ and $R50mm$); potential challenge gaps regarding multi-variable Earth science selection will be evaluated when official materials are published.
+> **Challenge Alignment Status:** Alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* is **locked and verified** (see [`docs/DECISIONS.md`](docs/DECISIONS.md) and [`docs/evidence/challenge_criteria_map.md`](docs/evidence/challenge_criteria_map.md)). The rainfall-first MVP focuses on precipitation indicators ($PRCPTOT$ and $R50mm$) using cell-first aggregation, Theil-Sen slope, and Modified Mann-Kendall trend testing under autocorrelation.
 
 ---
 
@@ -34,12 +34,13 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
    ```
 3. **Execute scientific pipeline & export UI data:**  
    ```bash
-   python pipeline/run_pipeline.py
-   python scripts/export_json.py
+   python3 pipeline/run_pipeline.py
+   python3 scripts/export_json.py
+   ./scripts/audit_provenance.py
    ```
-4. **Run test suite (40 unit tests):**  
+4. **Run test suite (48 unit tests):**  
    ```bash
-   python -m pytest tests/ -v
+   python3 -m pytest tests/ -v
    ```
 5. **Launch Next.js interactive dashboard:**  
    ```bash
@@ -50,33 +51,25 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
 
 ## Data Sources
 
-### Module 1: Operational Flood Warning `[IMPLEMENTED]`
-- **NASA SWOT L2 HR RiverSP 2.0:** Water Surface Elevation (WSE), width, and reach-averaged slope (`slope2`) from NASA PO.DAAC (`SWOT_L2_HR_RIVERSP_2.0`). Used for offline Manning roughness calibration ($n \in [0.025, 0.10]$).
-- **NASA GPM IMERG Early Run V07:** Calibrated half-hourly precipitation (`precipitationCal`, `GPM_3IMERGHHE`) at 0.1° resolution (~4-hour observation latency) driving near-real-time hydrologic routing.
-- **BWDB / FFWC Gauge Records:** Hourly water level observations at Kanaighat on the Surma River (Official Station ID: `SW266`, Internal Pipeline Alias: `SW108`, Danger Level: 13.20 m PWD / equivalent to 12.75 m MSL via +0.45m datum shift).
+### Module 1: Synthetic engineering fixtures
+- The bundled SWOT-, GPM-, and gauge-shaped files are all `SYNTHETIC`; see `data/fixtures/PROVENANCE.json`.
+- Candidate real sources are documented, but no bundled artifact represents a NASA, BWDB, or FFWC retrieval.
 - **SWORD v16 & HydroSHEDS v1:** River network topology, reach boundaries, and catchment area delineation (`hydrosheds.org`).
 - **OpenStreetMap & OpenFreeMap:** Authoritative high-density river centerline geometry (OSM relations `5904030` Surma, `5904029` Kushiyara) rendered on the colorblind-accessible OpenFreeMap Positron basemap.
 
-### Module 2: Haor Rainfall Trend Explorer `[PLANNED / PROPOSED RESEARCH]`
+### Module 2: Haor Rainfall Trend Explorer `[AWAITING VERIFIED INPUT]`
 - **NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF` / `GPM_3IMERGM`):** Research-grade daily and monthly global precipitation (0.1° grid, ~3.5-month latency), retrospectively reprocessed and gauge-adjusted via the Global Precipitation Climatology Centre (GPCC) from **January 1998 to 2025**. (Note: Early Run is invalid for multi-decadal climatological trends due to sensor drift and lack of monthly surface gauge adjustment).
 
 ## Scientific Performance & Audit Status
 
-### Module 1 Hydrologic Routing (Replay of April–May 2026 Test Event) `[IMPLEMENTED]`
-Evaluated on the frozen test period (April 1 – May 31, 2026) using 15-minute tolerance alignment against BWDB Kanaighat gauge records:
-* **Nash-Sutcliffe Efficiency (NSE):** `0.73`
-* **Kling-Gupta Efficiency (KGE):** `0.68`
-* **Percent Bias (PBIAS):** `+1.9%`
-* **Peak Timing Error:** `-2.0 h`
-* **Warning Lead Time:** `22.5 h` advance warning before observed gauge crossed danger level ($13.20\text{ m PWD}$)
+### Module 1 Hydrologic Routing `[SYNTHETIC ENGINEERING TEST]`
+Metrics produced from the bundled scenarios are engineering diagnostics only.
+They are not independent observations, predictive skill, or warning lead-time evidence.
 
-> **Scientific Audit Notice `[PARTIALLY IMPLEMENTED / UNDER AUDIT]`:**  
-> A recent read-only code audit identified two unresolved issues in the validation scripts:
-> 1. In `pipeline/validation_report.py`, the baseline comparison subroutine inadvertently evaluates the simulated series against itself (`df_sim` passed for both arguments), distorting the reported baseline NSE and timing delta.
-> 2. In `pipeline/run_pipeline.py`, a hardcoded `lead_steps=48` parameter overrides the calibrated physical travel time of 25.9 hours.
-> The reported model metrics above ($NSE = 0.73$, $KGE = 0.68$, $Lead = 22.5\text{ h}$) are computed directly from the fixture simulation, but comparative claims against the rainfall baseline remain **unresolved pending dedicated code re-benchmarking**.
+> **Scientific Audit Notice `[AUDITED & VERIFIED]`:**  
+> The baseline comparison subroutine was audited and re-benchmarked: the prior `df_sim` self-comparison in `pipeline/validation_report.py` was resolved, true persistence and threshold baselines are evaluated against the benchmark event, and warning lead time is reported honestly as N/A in the absence of an operational issue-time product. Detailed findings are documented in [`docs/evidence/evaluation_split_baseline_and_metrics.md`](docs/evidence/evaluation_split_baseline_and_metrics.md) and [`docs/evidence/leakage_prevention_and_lead_time_trace.md`](docs/evidence/leakage_prevention_and_lead_time_trace.md).
 
-### Module 2 Trend Explorer Methodology `[PROPOSED RESEARCH]`
+### Module 2 Trend Explorer Methodology `[IMPLEMENTED; REAL INPUT REQUIRED]`
 - **Indicators:** Primary: Pre-monsoon total accumulation ($PRCPTOT_{AM}$, April 1 – May 31). Secondary: Heavy rainfall day count ($R50mm_{AM}$, days with daily rainfall $\ge 50\text{ mm}$).
 - **Trend Estimation:** Non-parametric Theil-Sen slope estimator ($\beta$, mm/yr) with analytical 95% Sen-Kendall confidence intervals.
 - **Significance & QC:** Modified Mann-Kendall (MMK Hamed & Rao 1998) test with variance correction factor $\text{Var}^*(S)$ accounting for serial autocorrelation ($|r_1| \ge 0.392$), with standard MK reported as sensitivity.
@@ -125,4 +118,12 @@ Distributed under the **MIT License**. See `LICENSE` for details.
 - [AI_USE_LOG.md](docs/AI_USE_LOG.md) — Transparent disclosure of AI assistance
 - [AGENTS.md](docs/AGENTS.md) — AI agent operating instructions and ground rules
 - [STEERING_GUIDE_FINAL.md](docs/STEERING_GUIDE_FINAL.md) — Comprehensive steering guide and prompt protocols
+# Data-status correction (2026-10-24)
 
+The checked-in HydroSense fixtures are **SYNTHETIC**. They are generated
+scenarios, not NASA SWOT/GPM retrievals or BWDB/FFWC observations. Dashboard
+metrics are synthetic engineering checks, not independent validation or
+operational forecast skill. Run `./scripts/audit_provenance.py` or
+`python3 scripts/audit_provenance.py` to validate the fixture manifest and public
+metric label. Real-data ingestion currently fails closed when authenticated,
+verifiable source inputs are unavailable.

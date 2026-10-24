@@ -7,7 +7,7 @@ The dashboard provides Upazila Agriculture Officers in the flood-prone Haor basi
 
 > **Project Modules & UI Roadmap:**
 > - **Module 1 (Operational Flood Warning) `[IMPLEMENTED]`:** Currently active interface across `/dashboard`, `/forecast`, and `/advisory`, rendering 30-minute hydraulic routing replay, 5-second triage, and harvest directives.
-> - **Module 2 (Haor Rainfall Trend Explorer) `[PLANNED]`:** Planned integration (WO-018) as a top-level analytical mode exploring 26-year NASA GPM IMERG Final Run precipitation trends and heavy-rain frequency ($R50mm$) in upstream catchments.
+> - **Module 2 (Haor Rainfall Trend Explorer) `[IMPLEMENTED - FAIL-CLOSED ON REAL DATA]`:** Active interface at `/trends`, providing decadal retrospective analysis of NASA GPM IMERG Final Run precipitation data ($PRCPTOT$ and $R50mm$) with cell-first aggregation, Theil-Sen slope, and Modified Mann-Kendall test under serial autocorrelation.
 
 ### Core Features & Architecture
 - **Cartographic River Reach Map (`RiverMapPanel.js`):** Hero geospatial visualization of the Surma-Kushiyara river network featuring:
@@ -29,7 +29,7 @@ The dashboard provides Upazila Agriculture Officers in the flood-prone Haor basi
 - **Scientific Validation Benchmarks (`ValidationMetricsPanel.js`):** 5-column metric cards:
   - NSE (`0.73`), KGE (`0.68`), PBIAS (`+1.9%`), Peak Timing Error (`-2.0 h`), and Warning Lead Time (`22.5 h`).
   - Interactive infomorphism definition popovers explaining formulas and benchmark criteria on hover.
-  - *Audit note:* Comparative baseline gains are currently undergoing formal re-benchmarking.
+  - *Audit note:* Baseline comparison logic audited and verified against true persistence/threshold benchmark (`docs/evidence/evaluation_split_baseline_and_metrics.md`).
 - **Operational Limits Panel (`OperationalLimitsPanel.js`):** Expanded by default with a persistent, accessible heading and control; its physical constraints can be collapsed, covering SWOT spatial resolution (>100 m), slope noise filtering, IMERG orographic bias, and routing regime.
 - **Interactive Modals:**
   - `ReachInspectorModal.js`: Detailed SWOT hydraulic profile (Manning $n$, bed elevation $z_{bed}$, channel width, length, slope quality, overpass pass count).

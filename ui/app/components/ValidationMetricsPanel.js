@@ -9,7 +9,7 @@ function getMetricDefinitions(metrics, lang, t, formatNumber) {
     kge: "0.68",
     pbias: "+1.8%",
     timing_error: "-2.0 h",
-    lead_time: "22.0 h",
+    lead_time: "N/A",
   };
   const danger = metrics?.danger_level_m ?? 13.2;
 
@@ -17,7 +17,7 @@ function getMetricDefinitions(metrics, lang, t, formatNumber) {
   const kgeVal = lang === "bn" ? formatNumber(f.kge) : f.kge;
   const pbiasVal = lang === "bn" ? `+${formatNumber("1.8")}%` : f.pbias;
   const timingVal = lang === "bn" ? `-${formatNumber("2.0")} ঘণ্টা` : f.timing_error;
-  const leadVal = lang === "bn" ? `${formatNumber("22.0")} ঘণ্টা` : f.lead_time;
+  const leadVal = f.lead_time === "N/A" ? "N/A" : (lang === "bn" ? `${formatNumber(f.lead_time)} ঘণ্টা` : f.lead_time);
   const dangerVal = lang === "bn" ? formatNumber(danger.toFixed(2)) : danger.toFixed(2);
 
   return {
@@ -67,8 +67,8 @@ function getMetricDefinitions(metrics, lang, t, formatNumber) {
       benchmarkBn: "> ১৮ ঘণ্টা সুবর্ণ সময়",
       formula: "t_warning_flag - t_danger_exceed",
       desc: lang === "en"
-        ? `${f.lead_time} advance notice before water level reaches ${danger.toFixed(2)}m danger level — the golden window for Boro harvesting.`
-        : `বিপৎসীমায় (${dangerVal} মি) পৌঁছানোর ${leadVal} আগেই সংকেত — বোরো ধান কাটার সুবর্ণ সময়।`,
+        ? "Not reported: an issue-time forecast product and independent observations are required to measure warning lead time."
+        : "প্রদর্শিত নয়: সতর্কবার্তার সময় নির্ধারণে ইস্যু-সময়ের পূর্বাভাস ও স্বাধীন পর্যবেক্ষণ প্রয়োজন।",
       displayVal: leadVal,
     },
   };

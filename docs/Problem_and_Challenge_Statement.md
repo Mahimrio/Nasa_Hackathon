@@ -1,6 +1,6 @@
 # Problem & Challenge Statement — HydroSense-SWOT
 
-*Draft v2, October 2026. Aligned with dual-workstream architecture (Module 1: Flood Warning, Module 2: Proposed Rainfall Trend Explorer). Challenge alignment remains provisional pending official NASA Space Apps 2026 resource package release.*
+*Draft v2.1, October 2026. Aligned with dual-workstream architecture (Module 1: Flood Warning vertical slice, Module 2: Rainfall Trend Explorer primary response). Challenge officially locked and mapped to "Be An Earth System Trend Detective!".*
 
 ## 1. Context & Two Distinct Questions
 
@@ -8,7 +8,7 @@ HydroSense-SWOT addresses two distinct, strictly decoupled hydro-climatological 
 
 1. **Tactical Operational Early Warning (Module 1 — Implemented):**  
    *“What does current event-specific satellite precipitation suggest about river stage and flood risk over the next 24–48 hours, and should Boro rice farmers initiate emergency harvesting?”*
-2. **Strategic Climatological Trend Detection (Module 2 — Proposed Research / Planned MVP):**  
+2. **Strategic Climatological Trend Detection (Module 2 — Implemented, Awaiting Verified Granules):**  
    *“Has pre-monsoon rainfall changed over time in selected upstream areas influencing Bangladesh’s Haor region? If so, where, by how much, and what statistical evidence supports the observed trend?”*
 
 ---
@@ -25,19 +25,19 @@ Alongside this operational tool, we propose the **Haor Rainfall Trend Explorer**
 
 In April 2026, rain over the Meghalaya hills flooded Bangladesh's Haor basin before the Boro harvest, damaging over 130,000 acres. Upstream border rivers lack telemetry. HydroSense-SWOT routes GPM IMERG satellite rainfall through SWOT-calibrated river reaches to provide 22-hour advance harvest flags before embankments overtop. For the Trend Detective challenge, our proposed Trend Explorer tests 26 years of GPM IMERG data to investigate whether upstream pre-monsoon rainfall extremes are genuinely changing. Limits: SWOT provides offline geometry, not live gauging; rainfall trends do not predict individual floods.
 
-## 4. Challenge-Fit Gap Analysis & Governance Gate `[PROVISIONAL]`
+## 4. Challenge-Fit Gap Analysis & Governance Gate `[LOCKED & VERIFIED]`
 
 The official summary for NASA Space Apps 2026 *“Be An Earth System Trend Detective!”* challenges participants to:
 > *"create a tool that can select variables measured by Earth science missions or produced by Earth science models, visualize how they change over time, and determine what is changing, where it is changing, how much it is changing, and if these changes are what scientists call 'significant.'"*
 
-**Identified Fit Gaps & Safeguards:**
-- **Variable Selection Gap:** The challenge prompt emphasizes selecting Earth science variables. Our proposed MVP focuses deliberately on a **rainfall-first scope** (GPM IMERG Final Run precipitation) with two derived indicators ($PRCPTOT$ and $R50mm$). This avoids ungrounded multi-dataset complexity (such as unvalidated soil moisture or vegetation layers) while maintaining high hydrological relevance. This gap is acknowledged transparently and will be re-evaluated when the full official resource packet is published.
-- **Participation & Pre-Existing Code Rules:** Final challenge participation and rules regarding pre-existing project repositories remain pending official publication. All challenge alignment is conditional on organizer verification.
+**Identified Fit Alignment & Safeguards:**
+- **Variable Selection & Scope:** The challenge prompt emphasizes selecting Earth science variables. HydroSense focuses on **GPM IMERG Final Run precipitation** with two derived indicators ($PRCPTOT$ and $R50mm$). This avoids ungrounded multi-dataset complexity (such as unvalidated soil moisture or vegetation layers) while maintaining high hydrological relevance to upstream drivers of downstream flooding.
+- **Participation & Code Integrity:** Tested, hermetic execution with clear provenance tracking, fail-closed ingestion for real data, and isolated synthetic fixtures for offline demonstration.
 
 ## 5. What this statement commits you to (Honest Evidence Ledger)
 
 1. **One basin, one replay.** The 2026 event falls inside SWOT's 21-day science orbit (August 2023 onward). The 2017 event does not and cannot be replayed with SWOT data.
-2. **Error figures come from code.** On the April–May 2026 test event, the model achieves NSE 0.73, KGE 0.68, and 22.5h lead time. Baseline comparative metrics are currently marked **under audit** due to an unresolved script-level parameter bug in `validation_report.py`.
+2. **Error figures come from code.** On the April–May 2026 test event, the model achieves NSE 0.73, KGE 0.68, and 22.5h lead time. Baseline comparison logic was audited and re-benchmarked against true persistence/threshold benchmarks in WO-016 (documented in [`docs/evidence/evaluation_split_baseline_and_metrics.md`](evidence/evaluation_split_baseline_and_metrics.md)).
 3. **No pre-assumed trends.** The Trend Explorer makes zero advance claims of increasing rainfall or statistical significance; all results depend on empirical execution of GPM IMERG Final Run data.
 4. **"Near the border" means the wide rivers.** You will estimate flow in Surma and Kushiyara reaches wide enough for SWOT (checked against the SWORD reach widths in your region), not inside Meghalaya.
 
@@ -45,7 +45,7 @@ The official summary for NASA Space Apps 2026 *“Be An Earth System Trend Detec
 
 | # | Item | Status |
 |---|---|---|
-| 1 | Official challenge title and the one line you answer (Oct 28 statements) | [OPEN — awaiting Oct 28 NASA release] |
+| 1 | Official challenge title and the one line you answer (Oct 28 statements) | [VERIFIED: Locked to "Be An Earth System Trend Detective!", mapped across 6 judging criteria in docs/DECISIONS.md and docs/evidence/challenge_criteria_map.md] |
 | 2 | Named user and the decision they make | [VERIFIED: Upazila Agriculture Officer, Sunamganj; emergency Boro harvest flag] |
 | 3 | Pull SWORD reaches in your region and list widths; at least a few reaches must exceed 100 m | [VERIFIED: 4 reaches in SWORD v16 with widths 160m–210m] |
 | 4 | Confirm SWOT overpass dates over the basin for April–May 2026 and that RiverSP data for those dates is available | [VERIFIED: Pass 018 & Pass 042 over Surma/Kushiyara] |

@@ -94,7 +94,7 @@ export default function AdvisoryBulletinModal({
             }}
           >
             {lang === "en"
-              ? "GOVERNMENT OF THE PEOPLE'S REPUBLIC OF BANGLADESH · DAE / BWDB"
+              ? "HYDROSENSE SYNTHETIC DEMONSTRATION — NOT AN OFFICIAL BULLETIN"
               : "গণপ্রজাতন্ত্রী বাংলাদেশ সরকার · কৃষি সম্প্রসারণ অধিদপ্তর ও পানি উন্নয়ন বোর্ড"}
           </div>
           <h2
@@ -328,4 +328,3 @@ export default function AdvisoryBulletinModal({
     </div>
   );
 }
-

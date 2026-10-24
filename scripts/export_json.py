@@ -129,7 +129,7 @@ def main():
             reach_params=target_params,
             catchment_area_km2=185.0, runoff_coeff=0.62, baseflow_m3s=35.0,
         )
-        df_y = compute_harvest_flags(df_y, danger_level_m=13.20, lead_steps=48)
+        df_y = compute_harvest_flags(df_y, danger_level_m=13.20)
         df_base_y = run_rainfall_baseline(df_y, threshold_watch=35.0, threshold_act=65.0)
         df_y["baseline_flag"] = df_base_y["baseline_flag"]
         df_y["baseline_rain_6h"] = df_base_y["baseline_rain_6h"]
@@ -168,7 +168,7 @@ def main():
             "kge": round(hs_y["kge"], 2) if hs_y["kge"] is not None else None,
             "pbias": round(hs_y["pbias"], 1) if hs_y["pbias"] is not None else None,
             "timing_error_h": round(hs_y["timing_error_h"], 1),
-            "lead_time_h": round(hs_y["lead_time_h"], 1),
+            "lead_time_h": round(hs_y["lead_time_h"], 1) if hs_y["lead_time_h"] is not None else None,
             "formatted": hs_y["formatted"],
             "peak_stage": round(float(df_r_y["modelled_stage"].max()), 2),
             "peak_observed": round(float(df_g_y["water_level_m"].max()), 2),
@@ -210,18 +210,21 @@ def main():
 
     # D. Metrics Summary
     metrics_out = {
+        "provenance": "SYNTHETIC",
+        "validation_category": "synthetic_engineering_test",
+        "limitations": "Constructed fixture scenario only; not independent validation or operational forecast skill.",
         "nse": round(hs_m["nse"], 2) if hs_m["nse"] is not None else None,
         "kge": round(hs_m["kge"], 2) if hs_m["kge"] is not None else None,
         "pbias": round(hs_m["pbias"], 1) if hs_m["pbias"] is not None else None,
         "timing_error_h": round(hs_m["timing_error_h"], 1),
-        "lead_time_h": round(hs_m["lead_time_h"], 1),
+        "lead_time_h": round(hs_m["lead_time_h"], 1) if hs_m["lead_time_h"] is not None else None,
         "formatted": hs_m["formatted"],
         "baseline": {
             "nse": round(base_m["nse"], 2) if base_m["nse"] is not None else None,
             "kge": round(base_m["kge"], 2) if base_m["kge"] is not None else None,
             "pbias": round(base_m["pbias"], 1) if base_m["pbias"] is not None else None,
             "timing_error_h": round(base_m["timing_error_h"], 1),
-            "lead_time_h": round(base_m["lead_time_h"], 1),
+            "lead_time_h": round(base_m["lead_time_h"], 1) if base_m["lead_time_h"] is not None else None,
             "formatted": base_m["formatted"],
         },
         "comparison": comparison["comparison"],
@@ -231,8 +234,8 @@ def main():
         "travel_time_h": 25.9,
         "imerg_latency_h": 4.0,
         "swot_last_geometry_date": "2026-03-25",
-        "calibration_period": "Jan 2020 – Mar 2026",
-        "test_period": "Apr 1 – May 31, 2026 (multi-year 2020-2026 verified)",
+        "calibration_period": "Synthetic scenario calibration window",
+        "test_period": "Synthetic April-May scenario; not an independent holdout",
     }
     with open(os.path.join(JSON_DIR, "metrics_summary.json"), "w", encoding="utf-8") as f:
         json.dump(metrics_out, f, indent=2, ensure_ascii=False)

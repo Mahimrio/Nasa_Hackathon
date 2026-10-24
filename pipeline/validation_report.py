@@ -297,7 +297,12 @@ def generate_validation_markdown_report(
     hs_fmt = hs["formatted"]
     base_fmt = base["formatted"]
 
-    md_content = f"""# Scientific Validation Report — HydroSense-SWOT
+    md_content = f"""# Synthetic Engineering Report — HydroSense-SWOT
+
+> **Synthetic demonstration data.** The checked-in inputs are generated
+> scenarios, not NASA retrievals or BWDB/FFWC observations. These metrics are
+> software-engineering diagnostics only; they do not establish forecast skill,
+> independent validation, calibration, or warning lead time.
 
 **Event:** April–May 2026 Flash Flood Replay  
 **Evaluation Target:** BWDB River Gauge Station SW108 (Kanaighat, Surma River)  
@@ -368,6 +373,7 @@ def generate_validation_markdown_report(
 def run_scientific_validation(
     event_csv_path: Optional[str] = None,
     gauge_csv_path: Optional[str] = None,
+    output_dir: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Executes full Prompt 5 validation suite end-to-end:
@@ -406,13 +412,17 @@ def run_scientific_validation(
 
     hs_metrics = comparison["hydrosense"]
 
-    # 3. Generate diagnostic figures
-    plot_hydrograph_comparison(aligned, df_sim, hs_metrics["formatted"])
-    plot_scatter_sim_vs_obs(aligned, hs_metrics["formatted"])
-    plot_residual_analysis(aligned)
+    # 3. Generate diagnostic figures. Tests inject a temporary directory so
+    # that verification does not mutate tracked evidence artifacts.
+    target_dir = output_dir or OUTPUT_DIR
+    plots_dir = os.path.join(target_dir, "validation_plots")
+    os.makedirs(plots_dir, exist_ok=True)
+    plot_hydrograph_comparison(aligned, df_sim, hs_metrics["formatted"], output_path=os.path.join(plots_dir, "hydrograph_test_period.png"))
+    plot_scatter_sim_vs_obs(aligned, hs_metrics["formatted"], output_path=os.path.join(plots_dir, "scatter_sim_vs_obs.png"))
+    plot_residual_analysis(aligned, output_path=os.path.join(plots_dir, "residual_analysis.png"))
 
     # 4. Generate markdown report
-    generate_validation_markdown_report(comparison)
+    generate_validation_markdown_report(comparison, report_path=os.path.join(target_dir, "validation_report.md"))
 
     return comparison
 

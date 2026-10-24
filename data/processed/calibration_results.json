@@ -3,6 +3,23 @@
     "reach_id": "22211000011",
     "n": 0.025,
     "n_calibrated": 0.025,
+    "z_bed": 9.5,
+    "z_bed_m": 9.5,
+    "z_bed_uncertainty_m": 0.18,
+    "n_valid_passes": 8,
+    "mean_slope2": 4.5e-05,
+    "mean_width_m": 180.0,
+    "mean_width": 180.0,
+    "calibration_period": "2024-01-01 to 2026-03-31",
+    "passes_excluded_low_flow": 1,
+    "passes_excluded_slope_quality": 0,
+    "n_at_bound": true,
+    "rmse_m3s": 637.14
+  },
+  "22211000012": {
+    "reach_id": "22211000012",
+    "n": 0.025,
+    "n_calibrated": 0.025,
     "z_bed": 9.7,
     "z_bed_m": 9.7,
     "z_bed_uncertainty_m": 0.18,
@@ -14,23 +31,6 @@
     "passes_excluded_low_flow": 2,
     "passes_excluded_slope_quality": 0,
     "n_at_bound": true,
-    "rmse_m3s": 541.37
-  },
-  "22211000012": {
-    "reach_id": "22211000012",
-    "n": 0.025,
-    "n_calibrated": 0.025,
-    "z_bed": 9.37,
-    "z_bed_m": 9.37,
-    "z_bed_uncertainty_m": 0.18,
-    "n_valid_passes": 8,
-    "mean_slope2": 4.5e-05,
-    "mean_width_m": 180.0,
-    "mean_width": 180.0,
-    "calibration_period": "2024-01-01 to 2026-03-31",
-    "passes_excluded_low_flow": 1,
-    "passes_excluded_slope_quality": 0,
-    "n_at_bound": true,
-    "rmse_m3s": 517.96
+    "rmse_m3s": 590.36
   }
 }

@@ -148,7 +148,9 @@ def main():
             runoff_coeff=0.62,
             baseflow_m3s=35.0,
         )
-        df_y = compute_harvest_flags(df_y, danger_level_m=13.20, lead_steps=48)
+        # This is a retrospective synthetic engineering run, not an operational
+        # forecast. Flags are causal current-state classifications.
+        df_y = compute_harvest_flags(df_y, danger_level_m=13.20)
         df_base_y = run_rainfall_baseline(df_y, threshold_watch=35.0, threshold_act=65.0)
         df_y["baseline_flag"] = df_base_y["baseline_flag"]
         df_y["baseline_rain_6h"] = df_base_y["baseline_rain_6h"]
@@ -180,7 +182,7 @@ def main():
     print(f"         Kling-Gupta Efficiency (KGE):     {fmt['kge']}")
     print(f"         Percent Bias (PBIAS):             {fmt['pbias']}")
     print(f"         Peak Timing Error:                {fmt['timing_error']}")
-    print(f"         Warning Lead Time:                {fmt['lead_time']}")
+    print("         Warning Lead Time:                N/A (no issue-time forecast product)")
     print("         -----------------------------------------")
 
     # Evaluate by year
@@ -223,7 +225,7 @@ def main():
     run_scientific_validation(out_results_path, os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv"))
 
     print("\n" + "=" * 70)
-    print("  MVP PIPELINE PASSED ALL 7 GATES SUCCESSFULLY")
+    print("  SYNTHETIC ENGINEERING PIPELINE COMPLETED (NOT REAL-WORLD VALIDATION)")
     print("=" * 70 + "\n")
 
 

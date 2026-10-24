@@ -195,7 +195,7 @@ export default function ModelArchitectureModal({ onClose }) {
                   fontFamily: "var(--font-mono)",
                 }}
               >
-                {lang === "en" ? "Lead time: 22.0h" : "অগ্রিম সময়: ২২.০ ঘণ্টা"}
+                {lang === "en" ? "Lead time: not established" : "অগ্রিম সময়: প্রতিষ্ঠিত নয়"}
               </span>
             </div>
             <p style={{ fontSize: "12.5px", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6 }}>
@@ -215,4 +215,3 @@ export default function ModelArchitectureModal({ onClose }) {
     </div>
   );
 }
-

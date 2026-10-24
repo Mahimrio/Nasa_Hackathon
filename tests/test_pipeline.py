@@ -86,8 +86,10 @@ def test_harvest_flag_logic():
         "timestamp": pd.date_range("2026-04-01", periods=10, freq="1h", tz="UTC"),
         "modelled_stage": [8.0, 9.0, 10.0, 11.0, 13.3, 13.5, 12.0, 10.0, 9.0, 8.0],
     })
-    df_flags = compute_harvest_flags(df, danger_level_m=13.20, lead_steps=4)
-    # The timesteps preceding 13.3m should become RED
+    with pytest.raises(ValueError, match="Future look-ahead"):
+        compute_harvest_flags(df, danger_level_m=13.20, lead_steps=4)
+    df_flags = compute_harvest_flags(df, danger_level_m=13.20)
+    # A causal classification warns only when the current stage crosses threshold.
     assert "RED" in df_flags["harvest_flag"].values
     assert "AMBER" in df_flags["harvest_flag"].values
     assert "GREEN" in df_flags["harvest_flag"].values

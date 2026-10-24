@@ -146,10 +146,10 @@ def test_model_vs_baseline_comparison():
 
 def test_validation_report_and_plots_generation(tmp_path):
     """Verifies end-to-end execution of run_scientific_validation and file generation."""
-    comparison = run_scientific_validation()
+    comparison = run_scientific_validation(output_dir=str(tmp_path))
 
-    plots_dir = os.path.join("data", "processed", "validation_plots")
-    report_file = os.path.join("data", "processed", "validation_report.md")
+    plots_dir = os.path.join(str(tmp_path), "validation_plots")
+    report_file = os.path.join(str(tmp_path), "validation_report.md")
 
     assert os.path.exists(os.path.join(plots_dir, "hydrograph_test_period.png"))
     assert os.path.exists(os.path.join(plots_dir, "scatter_sim_vs_obs.png"))

@@ -32,7 +32,7 @@ export default function FiveSecondTriageStrip({
       ? `Estimated Crossing in ~${diffHours}h (Apr 13 01:00 UTC)`
       : `আনুমানিক ~${formatNumber(diffHours)} ঘণ্টার মধ্যে অতিক্রম (১৩ এপ্রিল ০১:০০ UTC)`;
     timingSub = lang === "en"
-      ? `Golden Warning Window: 22.0h advance lead time`
+      ? "Synthetic scenario — no operational warning lead time"
       : `সুবর্ণ সতর্কবার্তা সময়: ২২.০ ঘণ্টা আগাম সতর্কবার্তা`;
   } else if (isDangerExceeded) {
     const overVal = (stage - dangerLevel).toFixed(2);

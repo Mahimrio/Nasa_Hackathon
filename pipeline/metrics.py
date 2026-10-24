@@ -239,6 +239,7 @@ def evaluate_all_metrics(
     sim_col: str = "modelled_stage",
     obs_col: str = "water_level_m",
     flag_col: str = "harvest_flag",
+    operational_forecast: bool = False,
 ) -> Dict[str, Any]:
     """
     Evaluates the full 5-metric scientific suite on the test period using
@@ -282,21 +283,18 @@ def evaluate_all_metrics(
         s_period, o_period, sim_col=sim_col, obs_col=obs_col
     )
 
-    # 4. Warning lead time
-    lead_h = compute_warning_lead_time(
-        df_flags=s_period,
-        df_obs=o_period,
-        danger_level_m=danger_level_m,
-        flag_col=flag_col,
-        obs_col=obs_col,
-    )
+    # Warning lead time is meaningful only for issue-time forecast products.
+    # A reconstructed historical series cannot establish operational lead time.
+    lead_h = compute_warning_lead_time(df_flags=s_period, df_obs=o_period, danger_level_m=danger_level_m,
+                                       flag_col=flag_col, obs_col=obs_col) if operational_forecast else None
 
     return {
         "nse": float(nse) if not np.isnan(nse) else None,
         "kge": float(kge) if not np.isnan(kge) else None,
         "pbias": float(pbias) if not np.isnan(pbias) else None,
         "timing_error_h": float(dte),
-        "lead_time_h": float(lead_h),
+        "lead_time_h": float(lead_h) if lead_h is not None else None,
+        "warning_lead_status": "operational forecast required" if lead_h is None else "computed from issue-time alerts",
         "t_sim_peak": t_sim_p,
         "t_obs_peak": t_obs_p,
         "n_aligned_samples": len(aligned),
@@ -309,7 +307,7 @@ def evaluate_all_metrics(
             "kge": f"{kge:.2f}" if not np.isnan(kge) else "N/A",
             "pbias": f"{pbias:+.1f}%" if not np.isnan(pbias) else "N/A",
             "timing_error": f"{dte:+.1f} h",
-            "lead_time": f"{lead_h:.1f} h",
+            "lead_time": f"{lead_h:.1f} h" if lead_h is not None else "N/A",
         },
     }
 
@@ -360,7 +358,7 @@ def compare_model_vs_baseline(
     nse_gain = nse_model - nse_base
 
     timing_gain_h = abs(m_baseline["timing_error_h"]) - abs(m_hydrosense["timing_error_h"])
-    lead_gain_h = m_hydrosense["lead_time_h"] - m_baseline["lead_time_h"]
+    lead_gain_h = None
 
     return {
         "hydrosense": m_hydrosense,
@@ -368,12 +366,12 @@ def compare_model_vs_baseline(
         "comparison": {
             "nse_gain": round(nse_gain, 2),
             "timing_accuracy_gain_h": round(timing_gain_h, 1),
-            "lead_time_delta_h": round(lead_gain_h, 1),
+            "lead_time_delta_h": round(lead_gain_h, 1) if lead_gain_h is not None else None,
             "model_beats_baseline_nse": bool(nse_model > nse_base),
             "swot_value_add": (
                 "SWOT channel calibration routes flash-flood surges through physical channel geometry, "
-                f"reducing peak timing error by {timing_gain_h:+.1f}h and achieving NSE {m_hydrosense['formatted']['nse']} "
-                f"versus baseline NSE {m_baseline['formatted']['nse']}."
+                f"reducing retrospective peak timing error by {timing_gain_h:+.1f}h in this synthetic engineering scenario; "
+                "this is not independent or operational forecast validation."
             ),
         },
     }

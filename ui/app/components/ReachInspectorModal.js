@@ -284,7 +284,7 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               {lang === "en" ? (
                 <>
-                  Danger Level: <strong>{reach.danger_level_m} m PWD (12.75 m MSL)</strong>. Direct stage observations from Bangladesh Water Development Board (BWDB Station SW266) are assimilated here for real-time validation.
+                  Scenario threshold: <strong>{reach.danger_level_m} m PWD</strong>. This synthetic demonstration does not assimilate BWDB observations or provide real-time validation.
                 </>
               ) : (
                 <>
@@ -306,4 +306,3 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
     </div>
   );
 }
-

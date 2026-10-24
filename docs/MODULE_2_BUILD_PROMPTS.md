@@ -556,28 +556,28 @@ This prompt packages Module 2 for official submission. It crafts the video scrip
 Before final submission, verify that every item below passes:
 
 ### Scientific Integrity & Data:
-- [ ] NASA GPM IMERG Final Run V07 Daily (`GPM_3IMERGDF`) used exclusively.
-- [ ] Variable named `precipitation` (mm/day) verified.
-- [ ] Ingestion bounding box order: `(90.0, 24.0, 93.5, 26.0)`.
-- [ ] Zero synthetic data in `data/trends/`. Fail-closed error handling enforced.
-- [ ] Primary analysis strictly uses 100% complete seasons ($61/61$ days).
-- [ ] Cell-first indicator calculation protocol enforced.
-- [ ] Modified Mann-Kendall (Hamed & Rao 1998) governs significance when $|r_1| \ge 0.392$.
-- [ ] Analytical Sen-Kendall 95% CI computed using corrected variance.
-- [ ] Strict null reporting: if $p \ge 0.05$, output "No statistically significant trend detected".
+- [x] NASA GPM IMERG Final Run V07 Daily (`GPM_3IMERGDF`) used exclusively.
+- [x] Variable named `precipitation` (mm/day) verified.
+- [x] Ingestion bounding box order: `(90.0, 24.0, 93.5, 26.0)`.
+- [x] Zero synthetic data in `data/trends/`. Fail-closed error handling enforced.
+- [x] Primary analysis strictly uses 100% complete seasons ($61/61$ days).
+- [x] Cell-first indicator calculation protocol enforced.
+- [x] Modified Mann-Kendall (Hamed & Rao 1998) governs significance when $|r_1| \ge 0.392$.
+- [x] Analytical Sen-Kendall 95% CI computed using corrected variance.
+- [x] Strict null reporting: if $p \ge 0.05$, output "No statistically significant trend detected".
 
 ### Architecture & Reproducibility:
-- [ ] Module 2 code strictly isolated in `trend_explorer/` and `data/trends/`.
-- [ ] Module 1 operational code untouched (`run_pipeline.py`, fixtures, routing).
-- [ ] All 40 existing Module 1 unit tests continue to pass without regression.
-- [ ] Output JSON schema initializes as `"UNPROCESSED"`; $< 150\text{ KB}$ file size.
-- [ ] `cd ui && npm run build` succeeds with zero errors.
+- [x] Module 2 code strictly isolated in `trend_explorer/` and `data/trends/`.
+- [x] Module 1 operational code untouched (`run_pipeline.py`, fixtures, routing).
+- [x] All 48 unit tests pass without regression (`pytest tests/ -v`).
+- [x] Output JSON schema initializes as `"UNPROCESSED"`; $< 150\text{ KB}$ file size.
+- [x] `cd ui && npm run build` succeeds with zero errors.
 
 ### Hackathon Compliance & Storytelling:
-- [ ] "Trend-to-Action" narrative clearly connects Module 2 climatology to Module 1 warning.
-- [ ] 100% English and Bangla language parity across all UI strings.
-- [ ] WCAG AA accessibility compliance verified.
-- [ ] Space Apps branding rules honored (no NASA Meatball/Worm logo, no minors in video).
+- [x] "Trend-to-Action" narrative clearly connects Module 2 climatology to Module 1 warning.
+- [x] 100% English and Bangla language parity across all UI strings.
+- [x] WCAG AA accessibility compliance verified.
+- [x] Space Apps branding rules honored (no NASA Meatball/Worm logo, no minors in video).
 
 ---
 

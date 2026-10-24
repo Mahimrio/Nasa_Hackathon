@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from "react";
+import { createContext, useContext, useState, useEffect, useMemo, useCallback, startTransition } from "react";
 import { useLocale } from "../hooks/useLocale";
 
 const TelemetryContext = createContext(null);
@@ -99,7 +99,7 @@ export function TelemetryProvider({ children }) {
       });
   }, []);
 
-  // Filter genuine routed hydrodynamic model predictions for the selected year
+  // Filter synthetic retrospective routing scenarios for the selected year.
   const eventData = useMemo(() => {
     if (!rawEventData || !rawEventData.length) return null;
     const prefix = `${selectedYear}-`;
@@ -107,7 +107,7 @@ export function TelemetryProvider({ children }) {
     return filtered.length > 0 ? filtered : rawEventData;
   }, [rawEventData, selectedYear]);
 
-  // Filter genuine observed BWDB gauge readings for the selected year
+  // Filter synthetic gauge-shaped scenarios for the selected year.
   const gaugeData = useMemo(() => {
     if (!rawGaugeData || !rawGaugeData.length) return null;
     const prefix = `${selectedYear}-`;
@@ -135,7 +135,7 @@ export function TelemetryProvider({ children }) {
       (best, d, i) => (d.modelled_stage > eventData[best].modelled_stage ? i : best),
       0
     );
-    setSliderIdx(Math.max(0, pIdx - 36));
+    startTransition(() => setSliderIdx(Math.max(0, pIdx - 36)));
   }, [selectedYear, eventData]);
 
   useEffect(() => {

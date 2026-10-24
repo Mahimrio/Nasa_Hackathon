@@ -1,4 +1,9 @@
-# Scientific Validation Report — HydroSense-SWOT
+# Synthetic Engineering Report — HydroSense-SWOT
+
+> **Synthetic demonstration data.** The checked-in inputs are generated
+> scenarios, not NASA retrievals or BWDB/FFWC observations. These metrics are
+> software-engineering diagnostics only; they do not establish forecast skill,
+> independent validation, calibration, or warning lead time.
 
 **Event:** April–May 2026 Flash Flood Replay  
 **Evaluation Target:** BWDB River Gauge Station SW108 (Kanaighat, Surma River)  
@@ -16,7 +21,7 @@
 | **Kling-Gupta Efficiency (KGE)** | **0.69** | 0.47 | **+0.22** | $1 - \sqrt{(r-1)^2 + (\alpha-1)^2 + (\beta-1)^2}$ |
 | **Percent Bias (PBIAS)** | **+2.5%** | +2.4% | **Lower volume distortion** | $\frac{\sum (sim-obs)}{\sum obs} \times 100\%$ |
 | **Peak Timing Error** | **-7.5 h** | -27.5 h | **+20.0 h gain** | $(t_{sim\_peak} - t_{obs\_peak})$ in hours |
-| **Warning Lead Time** | **23.5 h** | 36.5 h | **Operational decision window** | Time from 1st RED flag to Danger Level |
+| **Warning Lead Time** | **N/A** | N/A | **Operational decision window** | Time from 1st RED flag to Danger Level |
 
 > **Scientific Ground Rule Enforced:** All evaluation metrics are strictly limited to two decimal places maximum (Category C2). Over-precision is disallowed.
 
@@ -27,7 +32,7 @@
 1. **Hydrodynamic Travel-Time Accounting:**
    A pure rainfall threshold triggers immediate alerts the moment rain falls on the Meghalaya escarpment, falsely signaling immediate downstream flooding. By contrast, HydroSense routes the flood wave through the 140 km Upper Surma river corridor with dynamic wave celerity ($c = \frac{5}{3} V_{mean} \approx 1.50\text{ m/s}$), accurately capturing the **~25.9-hour channel lag**.
 2. **Elimination of Premature Alarm Panic:**
-   The rainfall baseline prematurely fired an alert 15 hours before the channel water level surged, risking unnecessary cutting of unripe Boro rice. HydroSense provided **23.5 h** of reliable, actionable lead time with a peak timing error of only **-7.5 h**.
+   The rainfall baseline prematurely fired an alert 15 hours before the channel water level surged, risking unnecessary cutting of unripe Boro rice. HydroSense provided **N/A** of reliable, actionable lead time with a peak timing error of only **-7.5 h**.
 3. **Physical Channel Inversion:**
    Unlike empirical rainfall indexes, SWOT provides real satellite-measured reach width ($W > 100\text{ m}$) and longitudinal slope ($S > 10^{-5}$), enabling inverse calibration of Manning's roughness ($n = 0.0294$) and bed elevation ($z_{bed} = 6.82\text{ m PWD}$).
 

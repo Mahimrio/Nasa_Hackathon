@@ -1,36 +1,39 @@
 {
+  "provenance": "SYNTHETIC",
+  "validation_category": "synthetic_engineering_test",
+  "limitations": "Constructed fixture scenario only; not independent validation or operational forecast skill.",
   "nse": 0.74,
   "kge": 0.69,
   "pbias": 1.7,
   "timing_error_h": -7.5,
-  "lead_time_h": 23.0,
+  "lead_time_h": null,
   "formatted": {
     "nse": "0.74",
     "kge": "0.69",
     "pbias": "+1.7%",
     "timing_error": "-7.5 h",
-    "lead_time": "23.0 h"
+    "lead_time": "N/A"
   },
   "baseline": {
     "nse": -0.14,
     "kge": 0.47,
     "pbias": 2.4,
     "timing_error_h": -27.5,
-    "lead_time_h": 36.5,
+    "lead_time_h": null,
     "formatted": {
       "nse": "-0.14",
       "kge": "0.47",
       "pbias": "+2.4%",
       "timing_error": "-27.5 h",
-      "lead_time": "36.5 h"
+      "lead_time": "N/A"
     }
   },
   "comparison": {
     "nse_gain": 0.89,
     "timing_accuracy_gain_h": 20.0,
-    "lead_time_delta_h": -13.5,
+    "lead_time_delta_h": null,
     "model_beats_baseline_nse": true,
-    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing peak timing error by +20.0h and achieving NSE 0.74 versus baseline NSE -0.14."
+    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing retrospective peak timing error by +20.0h in this synthetic engineering scenario; this is not independent or operational forecast validation."
   },
   "by_year": {
     "2020": {
@@ -38,13 +41,13 @@
       "kge": 0.66,
       "pbias": 2.4,
       "timing_error_h": -1.5,
-      "lead_time_h": 0.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.72",
         "kge": "0.66",
         "pbias": "+2.4%",
         "timing_error": "-1.5 h",
-        "lead_time": "0.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 13.07,
       "peak_observed": 13.36
@@ -54,13 +57,13 @@
       "kge": 0.63,
       "pbias": 3.3,
       "timing_error_h": -7.0,
-      "lead_time_h": 0.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.64",
         "kge": "0.63",
         "pbias": "+3.3%",
         "timing_error": "-7.0 h",
-        "lead_time": "0.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 10.96,
       "peak_observed": 11.53
@@ -70,13 +73,13 @@
       "kge": 0.75,
       "pbias": -0.6,
       "timing_error_h": -3.0,
-      "lead_time_h": 23.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.77",
         "kge": "0.75",
         "pbias": "-0.6%",
         "timing_error": "-3.0 h",
-        "lead_time": "23.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 15.61,
       "peak_observed": 15.25
@@ -86,13 +89,13 @@
       "kge": 0.62,
       "pbias": 3.0,
       "timing_error_h": -2.0,
-      "lead_time_h": 0.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.67",
         "kge": "0.62",
         "pbias": "+3.0%",
         "timing_error": "-2.0 h",
-        "lead_time": "0.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 11.59,
       "peak_observed": 12.14
@@ -102,13 +105,13 @@
       "kge": 0.66,
       "pbias": 2.4,
       "timing_error_h": -0.5,
-      "lead_time_h": 21.5,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.72",
         "kge": "0.66",
         "pbias": "+2.4%",
         "timing_error": "-0.5 h",
-        "lead_time": "21.5 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 13.28,
       "peak_observed": 13.54
@@ -118,13 +121,13 @@
       "kge": 0.63,
       "pbias": 2.7,
       "timing_error_h": -1.5,
-      "lead_time_h": 0.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.69",
         "kge": "0.63",
         "pbias": "+2.7%",
         "timing_error": "-1.5 h",
-        "lead_time": "0.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 12.31,
       "peak_observed": 12.86
@@ -134,13 +137,13 @@
       "kge": 0.69,
       "pbias": 1.7,
       "timing_error_h": -7.5,
-      "lead_time_h": 23.0,
+      "lead_time_h": null,
       "formatted": {
         "nse": "0.74",
         "kge": "0.69",
         "pbias": "+1.7%",
         "timing_error": "-7.5 h",
-        "lead_time": "23.0 h"
+        "lead_time": "N/A"
       },
       "peak_stage": 13.56,
       "peak_observed": 13.88
@@ -159,6 +162,6 @@
   "travel_time_h": 25.9,
   "imerg_latency_h": 4.0,
   "swot_last_geometry_date": "2026-03-25",
-  "calibration_period": "Jan 2020 – Mar 2026",
-  "test_period": "Apr 1 – May 31, 2026 (multi-year 2020-2026 verified)"
+  "calibration_period": "Synthetic scenario calibration window",
+  "test_period": "Synthetic April-May scenario; not an independent holdout"
 }
