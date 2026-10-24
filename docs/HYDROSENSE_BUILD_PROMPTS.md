@@ -6,30 +6,46 @@
 > **Repository:** `https://github.com/Mahimrio/Nasa_Hackathon.git`  
 > **Submission Window:** Nov 14 09:00 – Nov 15 23:59 (local time, ~39 hours)
 
+> **Evidence and status warning:** This is a build-prompt collection, not proof that its claims or checklists are complete. Several sections below preserve the original project proposal and may contain unverified, stale, or scientifically questionable assumptions. Treat every claim as **UNKNOWN** until checked against current code, source records, and reproducible output. Do not copy proposed values, dates, dataset identifiers, thresholds, station metadata, result numbers, or “complete” checkmarks into a submission without verifying them. The evidence-based phase order and acceptance gates in **[SCORE_REMEDIATION_BUILD_PROMPTS.md](./SCORE_REMEDIATION_BUILD_PROMPTS.md)** govern when work can be marked verified and when claims may be made.
+
+**Implementation guard:** Product names and candidate products in old prompts are hypotheses until the official challenge, source catalogs, product documentation, licenses, variables, quality flags, units, geographic/temporal coverage, and access are checked. Do not apply a numeric filter, conversion, station threshold, uncertainty formula, calibration target, or model assumption solely because an old prompt specifies it; cite the source or scientific derivation and test it first. If unavailable, record `BLOCKED` or `UNKNOWN` rather than inventing a substitute.
+
+**Task status vocabulary (use consistently in this file, issue tracker, and evidence register):**
+
+| Status | Meaning |
+|---|---|
+| `NOT STARTED` | Work and verification have not begun. |
+| `IN PROGRESS` | Work is underway; no completion claim is allowed. |
+| `IMPLEMENTED, NOT VERIFIED` | Code or documentation exists, but required tests/evidence/review are incomplete. |
+| `VERIFIED` | Acceptance criteria passed, evidence is recorded, and an independent reviewer can reproduce or inspect it. |
+| `BLOCKED` | Cannot proceed; record the concrete blocker, owner, and safe fallback. |
+
+The legacy `[x]` marks and “COMPLETE” labels in this prompt file are historical statements, not current evidence. Re-audit them against the current checkout before relying on them; change a task to `VERIFIED` only after its gate passes. Do not fabricate data, metadata, reviewer approvals, test results, NASA or agency endorsement, or user-study results. Implementing this plan alone does not guarantee a 9+/10 internal score, NASA judging score, selection, nomination, or win.
+
 ---
 
 ## 📌 PROJECT CONTEXT
 
-**What HydroSense does:**  
-HydroSense is an early-warning harvest decision tool for Boro rice farmers and Upazila Agriculture Officers in the flood-vulnerable Haor basin of north-east Bangladesh (Surma–Kushiyara rivers). When pre-monsoon rain over the Meghalaya hills in India threatens to flood the basin before the Boro harvest, HydroSense routes near-real-time NASA GPM IMERG Early Run rainfall through river reaches whose channel geometry and hydraulic roughness are calibrated offline from NASA SWOT satellite measurements. The system produces a **Harvest Flag (GREEN / AMBER / RED)** with **~21–26 hours of advance warning** — enough time for officers and farmers to mobilize labor and harvest Boro rice before embankments breach.
+**Project intent (not a verified capability claim):**
+HydroSense-SWOT proposes decision support for Boro rice harvest planning in the Haor basin of north-east Bangladesh. The intended concept combines rainfall, river observations, hydrological calculations, and understandable risk information. The checked-in project was previously audited as a synthetic-data prototype: its current fixtures do not establish authentic GPM IMERG, SWOT, BWDB/FFWC observations, real-world forecast skill, or operational warning lead time. Do not describe it as a NASA-data-driven or operational warning system unless the provenance, causal forecasting, independent validation, and challenge-fit gates in this document and the score-remediation plan are passed with evidence.
 
-**The Real Problem:**  
-- In April 2026, basin rainfall ran ~76% above normal, flooding >130,000 acres of Boro rice.  
-- ~214,000 tonnes of rice lost. ~230,000 farmers affected.  
-- In 2017, 149,224 hectares of Boro damaged in Sunamganj district alone.  
-- The floods start in rivers **outside Bangladesh** where it has **no gauge readings**.  
-- FFWC forecasts have limited upstream data and insufficient lead time.  
-- No existing tool routes IMERG rainfall through SWOT-calibrated channels to produce harvest timing decisions.
+**Problem hypothesis — verify and cite before submission:**
+The following are legacy claims, not verified evidence. For each, record a primary source, date, geographic scope, definition, and reproduction/reference details in `docs/SOURCES.md`; omit any figure or comparative claim that cannot be verified.
+- April 2026 rainfall anomaly and affected Boro acreage.
+- Rice-loss tonnage and affected-farmer count.
+- 2017 Boro damage area in Sunamganj.
+- Upstream gauge coverage and where relevant flood-generating rivers are located.
+- FFWC forecast coverage/lead-time limitations.
+- Claim that no existing tool provides a specified workflow.
 
-**Our Solution — The Science:**
+**Proposed solution components — verify products, availability, and implementation before claiming:**
 1. **SWOT L2 HR RiverSP 2.0** — NASA satellite measures river width, height, and slope (`slope2`) on 10-km reaches. Used for **offline** Manning roughness (`n`) calibration on ungauged border rivers.
 2. **GPM IMERG Early Run V07** — Calibrated half-hourly precipitation (`precipitationCal`) at 0.1° resolution, available ~4 hours after satellite observation. Drives **online** Muskingum-Cunge routing.
-3. **BWDB Gauge Records** — Observed stage at Kanaighat (SW108, Danger Level: 13.20m PWD) for validation.
-4. **SWORD v16 + HydroSHEDS v1** — River network topology, reach boundaries, catchment delineation.
+3. **BWDB Gauge Records** — Candidate independent observation source; verify station identity, record authenticity, datum, units, coverage, and any danger threshold with authoritative metadata. The checked-in gauge fixture is synthetic and cannot validate the model.
+4. **SWORD + HydroSHEDS** — Candidate river-network/topographic sources; verify the exact release, licensing, geometry, attributes, and study-area coverage.
 
-**Key Formula:**  
-Manning's Equation: `Q = (1/n) × A × R^(2/3) × slope2^(1/2)`  
-Muskingum-Cunge routing with 4 sub-reach cascade, wave celerity `c = (5/3) × V_mean`, travel time `K = L/c ≈ 26 hours`.
+**Candidate equations — audit against implemented equations, units, parameter support, and numerical behavior before relying on them:**
+Candidate Manning and Muskingum-Cunge formulations are hypotheses to verify against the selected geometry, hydraulic regime, units, and documented assumptions. Do not assume a four-subreach cascade, a celerity formula, travel time, or roughness value is valid without deriving and testing it for the actual system.
 
 **API Endpoints & Data Links:**
 | Data Source | Short Name | Access Point |
@@ -91,9 +107,11 @@ cp .env.example .env
 
 ---
 
-## ✅ CURRENTLY IMPLEMENTED FEATURES (Mock Dashboard + Scientific Pipeline)
+## Historical implementation inventory (re-audit; not a completion certificate)
 
-### Pipeline (Python) — COMPLETE ✅
+The tables below are a prior inventory snapshot. Names and checkmarks identify claimed files/features only; they do not prove authentic data provenance, scientific validity, current behavior, successful tests, or release readiness. Mark each item with the status vocabulary above and attach evidence in the audit/evidence register.
+
+### Pipeline (Python) — historical snapshot; current status unverified
 | Module | File | Status |
 |---|---|---|
 | Fixture Generator | `scripts/generate_fixtures.py` | ✅ Generates `swot_reaches.nc`, `imerg_map.nc`, `gauge_kanaighat.csv` |
@@ -106,7 +124,7 @@ cp .env.example .env
 | JSON Exporter | `scripts/export_json.py` | ✅ Exports 5 JSON files to `ui/public/data/` |
 | Unit Tests | `tests/test_pipeline.py` | ✅ 6/6 passing |
 
-### Dashboard (Next.js 16) — MOCK UI ✅
+### Dashboard (Next.js 16) — historical snapshot; current status unverified
 | Component | File | Status |
 |---|---|---|
 | App Header | `ui/app/components/AppHeader.js` | ✅ Brand, language toggle, data timestamp |
@@ -123,18 +141,124 @@ cp .env.example .env
 | Main Page | `ui/app/page.js` | ✅ Orchestrates all components |
 | Layout | `ui/app/layout.js` | ✅ SEO meta, fonts |
 
-### Static JSON Data Files (Bridge) ✅
+### Static JSON Data Files (Bridge) — historical snapshot; inspect provenance
 | File | Contents |
 |---|---|
-| `ui/public/data/event_timeseries.json` | 1464 hourly records: modelled stage, flags, rainfall, baseline |
-| `ui/public/data/gauge_observations.json` | Observed gauge levels for hydrograph overlay |
-| `ui/public/data/calibration_summary.json` | Manning n, z_bed per reach |
-| `ui/public/data/metrics_summary.json` | NSE 0.74, KGE 0.68, PBIAS +1.8%, etc. |
-| `ui/public/data/reach_metadata.json` | 4 reaches with geographic positions |
+| `ui/public/data/event_timeseries.json` | Prior documentation described modelled stage, flags, rainfall, and baseline; verify row count, intervals, provenance, and generation commit. |
+| `ui/public/data/gauge_observations.json` | Prior label is not provenance: the audited checked-in gauge series is synthetic and must not be presented as observed. |
+| `ui/public/data/calibration_summary.json` | Verify parameter derivation, source data, units, and fit diagnostics; a value in JSON is not proof of calibration. |
+| `ui/public/data/metrics_summary.json` | Prior static metric snapshots conflict; do not quote them as validated skill. Regenerate from a named dataset and evaluation method. |
+| `ui/public/data/reach_metadata.json` | Verify IDs, spatial source, coordinate reference system, and whether each geometry is observed, sourced, approximate, or synthetic. |
 
-### Documentation ✅
+### Documentation — historical inventory; verify files and claims
 All located in `docs/`:
 `SOLUTION_ARCHITECTURE.md`, `DESIGN_ARCHITECTURE.md`, `Problem_and_Challenge_Statement.md`, `DECISIONS.md`, `SOURCES.md`, `VIDEO_SCRIPTS.md`, `RISK_REGISTER.md`, `TASKS.md`, `AI_USE_LOG.md`, `AGENTS.md`, `STEERING_GUIDE_FINAL.md`
+
+---
+
+## Authoritative evidence-based implementation sequence (Gates 0–8)
+
+These gates govern all prompts below. Execute in order; a prompt or checkbox is not a gate pass. The corresponding score rubric and the exact 9+ readiness calculation are maintained in **[SCORE_REMEDIATION_BUILD_PROMPTS.md](./SCORE_REMEDIATION_BUILD_PROMPTS.md)**. Use that document as the source of truth for scoring; this file is the source of truth for implementation tasks and technical acceptance. If any legacy prompt conflicts with a gate below, the gate controls. Record each task's status, owner, commit, test command, evidence path, reviewer, and unresolved limitations.
+
+### Gate 0 — Repository audit and official challenge lock
+
+- **Objective:** establish the actual starting state and the exact challenge this implementation answers.
+- **Tasks:** inventory tracked and relevant ignored files; inspect entry points, all model/data paths, tests, configuration, exports, UI routes, docs, generated artifacts, and dependencies. Record uninspected large/binary files and why. Verify the published challenge statement, judging criteria, rules, source URL, and access date. Team approves one challenge and maps each criterion to a working feature, evidence artifact, and demo step. Log conflicts, unknowns, and source-access blockers.
+- **Inspect:** `README.md`, `docs/DECISIONS.md`, `docs/SOURCES.md`, `docs/TASKS.md`, `docs/SUBMISSION_CHECKLIST.md`, `pipeline/`, `scripts/`, `data/`, `tests/`, `ui/`, CI/configuration and submission materials.
+- **Tests/evidence:** reproducible inventory/audit register; official prompt and rules citation; approved challenge-to-feature matrix; clean baseline test/build commands and outputs; list of claims to verify or withdraw.
+- **Pass:** every applicable judging criterion has an implemented answer, evidence location, and demo step—or is explicitly pending/out of scope with an owner and explanation. Decision is approved and recorded in `docs/DECISIONS.md`.
+- **Fail/block:** challenge selection is unknown, a capability is merely planned, or repository behavior cannot be traced. Do not claim challenge alignment or proceed to challenge-specific development.
+- **Depends on:** none. **Blocks:** all later gates and every challenge-fit claim.
+
+### Gate 1 — Data provenance and truthful claims
+
+- **Objective:** make every input, intermediate dataset, result, and displayed value traceable without conflating real and generated data.
+- **Tasks:** classify every data file and generated artifact as exactly `REAL`, `SYNTHETIC`, `MIXED`, or `UNKNOWN`. Maintain a source registry and generated manifest with dataset identity; NASA product and collection/version where applicable; source URL; download/access time; granule/asset/product/station IDs; license; spatial/temporal coverage; variables and units; QA decisions; transformation history; generator/version/seed when applicable; code revision; and SHA-256. Record provenance in file metadata where formats support it, plus CSV/documentation, manifests, model outputs, JSON/API exports, UI labels/cards/charts, data-download paths, README, and presentation scripts. Trace representative displayed values backward to source rows and processing steps. Keep synthetic fixtures in a separate offline path.
+- **Inspect:** `scripts/generate_fixtures.py`, `data/fixtures/`, `data/raw/`, `data/processed/`, NetCDF attributes, CSV/GeoJSON/JSON files, ingestion modules, exporters, `ui/public/data/`, UI components, `docs/SYNTHETIC_DATA.md`, `docs/SOURCES.md`, README and video scripts.
+- **Tests/evidence:** complete inventory and machine-readable manifest; hash verification; schema/completeness tests; tests for truthful labels and end-to-end provenance propagation; representative input-to-UI trace; synthetic-only UI/export screenshot or test report; clean `git status` after tests.
+- **Pass:** every discovered data artifact is classified; no missing/unsupported metadata is invented; all hashes verify; tests fail for missing provenance; synthetic records cannot be rendered or described as satellite/gauge observations or real-world forecasts.
+- **Fail/block:** any artifact has unknown provenance without a visible `UNKNOWN` status; any “real” label is unsupported; a UI/export source claim differs from the manifest. Keep claims withdrawn and block real-data readiness.
+- **Depends on:** Gate 0. **Blocks:** real-data and scientific skill claims in Gates 2–5.
+
+### Gate 2 — Real-data source verification and ingestion
+
+- **Objective:** obtain and ingest authentic, appropriate data only where required by the approved challenge and claims.
+- **Tasks:** verify source availability, product/collection version, license/access conditions, variables, units, QA semantics, spatial/temporal coverage, cadence, and fitness for purpose before choosing a product. Candidate sources may include GPM IMERG, SWOT RiverSP, SWORD, HydroSHEDS, and independently sourced BWDB/FFWC gauges; do not assume they are available or sufficient. Implement source retrieval/cache/versioning with IDs, dates, query parameters, hashes, and processing logs. Make `real` mode fail clearly for every unavailable required input; never synthesize a replacement under a real label. Keep separate real and synthetic paths and explicitly label any mixed result per record/file.
+- **Inspect:** `pipeline/ingest_*.py`, `scripts/`, product metadata, source registry, cache behavior, authentication/configuration, and data license notes.
+- **Tests/evidence:** offline/mocked source-contract tests; real integration tests against cited source records when access permits; cached-source manifest; exact ingest command and output; missing, malformed, unauthorized, and partial-source failure tests; no-secret checks.
+- **Pass:** authentic records are traceable to source IDs and reproducibly transformed; any unavailable source is reported as `BLOCKED` or `UNKNOWN`; required missing real inputs cause an explicit nonzero failure and cannot silently trigger fixtures.
+- **Fail/block:** source identity, license, variable meaning, or access is unverified; synthetic fallback is hidden; source access is unavailable. Continue only with clearly labeled synthetic development and make no real-data claim.
+- **Depends on:** Gates 0–1. **Blocks:** real-data validation claims.
+
+### Gate 3 — Scientific model and physical credibility
+
+- **Objective:** verify the actual implemented equations and assumptions before interpreting model results.
+- **Tasks:** audit dimensional consistency, units/conversions, time zones/cadence, spatial alignment, missingness, quality flags, boundary/initial conditions, river connectivity, parameter sources, and uncertainty. Review Manning or other discharge/stage relations, calibration inputs, rating curves, bed/slope/geometry assumptions, and the routing method actually used (including Muskingum-Cunge coefficient constraints, stability, conservation, reach/time-step compatibility, and physically plausible bounds). Confirm parameters are really passed through, not silently replaced by defaults. Test whether each input affects outputs with controlled ablations and physically meaningful cases. Repair invalid behavior or narrow/withdraw the claim; do not use a familiar model name as evidence of validity.
+- **Inspect:** `pipeline/manning_calibration.py`, `pipeline/muskingum_cunge.py`, `pipeline/harvest_flag.py`, `pipeline/run_pipeline.py`, constants/configuration, model tests, calibration plots/results, source metadata, and scientific assumptions docs.
+- **Tests/evidence:** dimensional/unit tests; coefficient bounds and numerical stability tests; conservation/limiting-case tests where applicable; hand-calculated representative cases; invalid/missing-input tests; parameter provenance; calibration diagnostics; uncertainty method and limitations; ablation report.
+- **Pass:** equations, inputs, units, parameters, and limitations are independently reviewed and reproducible; model passes physically justified tests; uncertainty is not represented by an arbitrary band as if calibrated.
+- **Fail/block:** invalid coefficients, unsupported calibration targets, incompatible units, hidden fallback, or a nonphysical response remains. Block scientific credibility and forecasting claims; do not mask results by clipping without a documented physical justification.
+- **Depends on:** Gates 0–2 for any real-data model claim. **Blocks:** Gate 4 skill/lead-time claims.
+
+### Gate 4 — Leakage-free evaluation and forecast verification
+
+- **Objective:** distinguish engineering tests, integration tests, hindcasts, independent validation, and operational forecasts.
+- **Tasks:** use chronological or independent-event splits; lock calibration and threshold selection before holdout evaluation; document event definitions and sample coverage. At prediction time `t`, allow only information available by `t` plus a named forecast product that was available then. Audit future rainfall, stages, observations, features, thresholds, imputation, and retrospective alert construction. Compute lead time from an observable warning trigger to an independently observed event crossing. Compare model and a defensible baseline on the same holdout. Recompute metrics from actual evaluation observations with uncertainty and sample counts; preserve negative/poor/null results. If data are synthetic or no independent gauges exist, call the output an engineering scenario only.
+- **Inspect:** `pipeline/metrics.py`, `pipeline/validation_report.py`, `pipeline/harvest_flag.py`, `pipeline/run_pipeline.py`, baseline implementation, split/threshold config, validation data, generated reports, and UI metric exports.
+- **Tests/evidence:** future-data access prevention tests; chronological backtest test; disjoint calibration/holdout assertions; baseline identity/hand-check tests; event timestamp and lead-time calculation test; reproducible metric command and report; independent metric recomputation; report/UI/export consistency test.
+- **Pass:** the evaluation is independent, leakage-free, reproducible, and claim-matched; baseline is evaluated on the same holdout; metrics include method, units, timestamps, sample size and uncertainty; negatives remain visible.
+- **Fail/block:** future values are accessed, holdout affects tuning, validation data are not independent, or source observations are synthetic/unverified. Block real-world skill and operational lead-time claims.
+- **Depends on:** Gates 1–3. **Blocks:** all prediction-performance claims.
+
+### Gate 5 — Approved challenge-specific capability
+
+- **Objective:** implement the capability the verified official challenge actually asks for, rather than inferring alignment from project topic.
+- **Official candidate pages to re-check:** [Be An Earth System Trend Detective!](https://www.spaceappschallenge.org/2026/challenges/be-an-earth-system-trend-detective/) and [Field Shift: Adapting Farms with NASA Data](https://www.spaceappschallenge.org/2026/challenges/field-shift-adapting-farms-with-nasa-data/). Verify the current prompt, rubric, and participant guide at implementation time; URLs alone do not prove the project's fit.
+- **Tasks:** use the approved Gate 0 criterion map. For **Be An Earth System Trend Detective!**, only if selected and required by the official prompt, build a central NASA-data trend workflow: variable/region coverage, robust temporal/spatial analysis, effect size, uncertainty, dependence and multiple-testing controls where applicable, power/coverage checks, and honest null/insufficient-evidence states. A plotted series or synthetic flood pulse is not trend detection. For **Field Shift: Adapting Farms with NASA Data**, confirm official requirements; if crop-rotation recommendations are required, support relevant local soil data, crop traits, farmer priorities and constraints, explainability, uncertainty, and validation. The current flood warning alone does not establish that answer. Build only prompt-required scope.
+- **Inspect:** official challenge sources, approved decision/matrix, relevant source data, analysis modules, UI routes/components, and user-facing copy.
+- **Tests/evidence:** one test/evidence item per criterion; verified-data example and reproducible command; null/edge cases; reviewer-visible demo steps; documented limitations and data coverage.
+- **Pass:** each applicable criterion is implemented, tested, evidenced, and demonstrated; no planned capability is marked complete; official prompt version is retained.
+- **Fail/block:** challenge fit relies on wording changes, logos, unrelated features, a synthetic trend, or a feature not connected to the judging criterion. Block alignment claims.
+- **Depends on:** Gate 0; Gates 1–4 for data/science claims. **Blocks:** challenge-readiness claims.
+
+### Gate 6 — QA, reproducibility, reliability, accessibility, and UX
+
+- **Objective:** prove the software works from a clean checkout and communicates limitations safely to intended users.
+- **Tasks:** make tests hermetic; validate data contracts/schemas; add CI for Python tests, UI lint/build, exports, and smoke routes; pin/lock dependencies; verify documented clean-checkout and intended offline workflows. Test core flows, invalid/missing/stale data, errors, responsive layouts, English/Bangla translations, keyboard/screen-reader operation, contrast, reduced motion, color-independent status, and mobile/low-connectivity behavior. Show provenance, time horizon, units, and uncertainty where decisions are made. Remove unsupported claims and government/agency endorsement cues. Conduct consent-based task testing with intended users or clearly described closest-reachable participants; report sample size and limitations. Fix security/reliability issues including TLS verification and secret handling.
+- **Inspect:** `tests/`, Python/UI manifests and locks, CI, startup/run docs, API/export schemas, all UI routes and components, localization, map dependencies, security-sensitive scripts, and submission materials.
+- **Tests/evidence:** exact test/lint/build commands and outputs; clean `git status`; browser smoke evidence at desktop/mobile; data/error-state tests; accessibility findings; anonymized user-task results; dependency/security review; offline rehearsal.
+- **Pass:** clean-checkout commands work; no unresolved critical/high software, security, provenance-display, or user-safety issue; screen output equals the validated export; tested users can identify source/status/uncertainty and intended next step without misleading certainty.
+- **Fail/block:** tests mutate tracked data, outputs disagree, UI hides errors, essential offline behavior depends on unverified network services, or users infer official/guaranteed warning from the UI. Block release.
+- **Depends on:** Gates 1–5. **Blocks:** release readiness.
+
+### Gate 7 — Independent review, red-team, and judge rehearsal
+
+- **Objective:** test claims and usability from the viewpoint of reviewers who did not build the system.
+- **Tasks:** assemble the evidence package and claims ledger; recruit at least three genuinely independent reviewers (not repeated runs by one model, agent, or developer). Provide the official challenge prompt and a clean demo. Include relevant science/statistics expertise and, where feasible, local practitioner/user perspective. Ask reviewers to attack provenance, challenge fit, equations, leakage, station/datum, baseline, uncertainty, accessibility, security, recommendations, and demo reproducibility. Collect individual scores before discussion and record differences; remediate or withdraw findings/claims.
+- **Inspect:** all prior gate evidence, source code, public-facing copy, video/demo, claims ledger, user test report, and known-risk register.
+- **Tests/evidence:** named reviewer roles and independence statement; dated review records; individual six-role scores and rationales; red-team findings with severity/evidence/disposition/retest; clean-checkout demo recording or signed checklist.
+- **Pass:** no critical/high issue is unresolved; reviewers reproduce core evidence and can distinguish observations, model outputs, forecasts, and synthetic scenarios; all feedback dispositions are documented.
+- **Fail/block:** reviewer independence is not real, evidence is inaccessible, any critical/high issue remains, or reviewer feedback is omitted. Block 9+ assessment.
+- **Depends on:** Gates 0–6. **Blocks:** Gate 8 sign-off.
+
+### Gate 8 — Final evidence and internal readiness decision
+
+- **Objective:** make a factual release decision and calculate internal scores only after verification.
+- **Six roles:** (1) NASA Space Apps Challenge Judge; (2) Earth Science & NASA Data Scientist; (3) Statistical Trend Analysis Specialist; (4) Senior Software Engineer & QA Auditor; (5) Human Impact & UX Evaluator; (6) Independent Red-Team Judge.
+- **Tasks:** audit all gate statuses and artifacts; confirm the current code/commit matches the reviewed evidence; obtain at least three independent reviewers' assessments; report each role score, reviewer ratings/spread, limitations, and blockers. Calculate `Overall internal score = (Role 1 + Role 2 + Role 3 + Role 4 + Role 5 + Role 6) / 6`. Mark NOT READY FOR 9+ ASSESSMENT if any mandatory gate fails, even if the arithmetic mean is high. Never translate internal readiness into a promised NASA result.
+- **Inspect:** `docs/SCORE_REMEDIATION_BUILD_PROMPTS.md`, `docs/SYNTHETIC_DATA.md`, `docs/DECISIONS.md`, claims ledger, gate evidence, current CI/test results, submission page and final demo.
+- **Tests/evidence:** final scorecard; status/evidence crosswalk; reproducible commands; public-claim review; version/commit and artifact hashes; approval record.
+- **Pass:** every mandatory gate is `VERIFIED`; each role's mean score across at least three independent reviewers is at least 9.0; the six-role arithmetic mean is at least 9.0; reviewers have examined the same evidence but made their own assessments; the evidence package is complete and consistent; no critical/high defect remains.
+- **Fail/block:** any required evidence is missing, stale, contradicted, or self-certified. Publish actual status and score, or state that assessment is pending; do not label 9+ ready.
+- **Depends on:** Gates 0–7. **Blocks:** only the internal 9+ readiness label; it does not predict external judging.
+
+**Evidence location:** use a single organized `docs/evidence/` release package (or an already approved equivalent) rather than duplicating records. Keep the repository audit register, challenge mapping, source registry/provenance manifest, commands and logs, model assumptions, independent evaluation/baseline, leakage tests, UI/export checks, user-test summary, red-team reviews, claims ledger, limitations register, and final scorecard. Each artifact must state what it proves, the exact verification method, commit/version, date, and status. Never create a report or approval before performing the corresponding work.
+
+**Task status:** for each task and gate use `NOT STARTED`, `IN PROGRESS`, `IMPLEMENTED, NOT VERIFIED`, `VERIFIED`, or `BLOCKED`. A task is `VERIFIED` only when its stated tests pass, evidence is stored, the reviewed commit is identified, and a reviewer other than the implementer can inspect or reproduce it. Record blockers and never imply a task is completed because a prompt or checklist exists.
+
+**9+ scoring rule:** a score may be called 9+ ready only if all six role scores are at least 9.0/10, the mean is at least 9.0/10 using the formula above, at least three genuinely independent reviewers who did not implement the audited changes have provided their own six-role assessments, no critical/high issue remains, every mandatory Gate 0–8 is `VERIFIED`, major claims have reproducible evidence, core application workflows have passed, feedback/remediation is recorded, and the evidence package is internally consistent. Do not count repeated assessments by one reviewer/model/agent as independent reviewers.
+
+**Score and competition honesty:** Implementing the workflow alone does not guarantee a score of 9/10. A high internal score requires genuine NASA data integration where relevant, independent scientific validation, leakage-free forecasting, strong challenge alignment, reproducible evidence, and successful independent review. Even a 9+/10 internal score does not guarantee the same score from NASA judges, selection, nomination, or winning.
 
 ---
 
@@ -305,14 +429,11 @@ This prompt implements real NASA GPM IMERG Early Run V07 rainfall data ingestion
 >
 > 1. Upgrade `pipeline/manning_calibration.py` to:
 >    - Accept real SWOT data with irregular time stamps (SWOT passes are ~every 7-10 days, not regular intervals).
->    - Compute `z_bed` = minimum WSE over quality-passed passes (Assumption A1). Uncertainty +/-0.18m.
->    - Calibrate ONLY on mid-to-high flow SWOT passes (`wse > z_bed + 0.5m`). Low-flow passes produce a different `n` because `n` is stage-dependent in alluvial channels.
->    - Use `scipy.optimize.minimize_scalar(func, bounds=(0.025, 0.10), method='bounded')` — the `method='bounded'` keyword is **REQUIRED** (Guard B8).
->    - Weight calibration observations by `1/wse_u^2` (inverse-variance weighting using WSE uncertainty).
->    - Apply slope2 quality filter: skip passes where `slope2 < 2 * slope_u` (the slope signal is unreliable).
->    - Calibration period: **Jan 2024 – Mar 2026** (pre-event). Lock `n` before test period starts.
->    - Test period: **Apr 1 – May 31, 2026**. n MUST NOT change during this period.
->    - If `n` hits a bound (0.025 or 0.10), flag the reach, widen the error band, and investigate slope quality.
+>    - Do not equate minimum observed water-surface elevation with channel bed elevation without independent evidence; obtain and verify bed/cross-section information and datum, or mark bed elevation unidentifiable.
+>    - Establish whether roughness is identifiable from available SWOT variables. Do not infer discharge from SWOT geometry alone without a defensible hydraulic relation and independent supporting observations.
+>    - Select flow regimes, quality filters, objective function, parameter bounds, and uncertainty weights from product documentation and justified assumptions. Treat stage-dependence and inverse-variance weighting as hypotheses to test, not fixed truths.
+>    - Choose calibration and test periods/events from verified coverage before fitting; lock parameters before the independent holdout and never change them after inspecting holdout results.
+>    - If optimization reaches a bound, flag and investigate identifiability, data quality, and model assumptions. Do not widen uncertainty bands arbitrarily to hide a poor fit.
 >
 > 2. Create `pipeline/calibration_diagnostics.py`:
 >    - Plot calibration fit: SWOT-derived Q vs gauge Q for each reach.
@@ -327,21 +448,19 @@ This prompt implements real NASA GPM IMERG Early Run V07 rainfall data ingestion
 >    ```json
 >    {
 >      "reach_id": "22211000011",
->      "n_calibrated": 0.0542,
->      "z_bed_m": 8.42,
->      "n_valid_passes": 12,
->      "mean_slope2": 4.2e-05,
->      "mean_width_m": 162.3,
->      "calibration_period": "2024-01-01 to 2026-03-31",
->      "passes_excluded_low_flow": 3,
->      "passes_excluded_slope_quality": 2,
->      "n_at_bound": false,
->      "rmse_m3s": 45.2
+>      "n_calibrated": "<computed value or null>",
+>      "z_bed_m": "<verified source or null>",
+>      "n_valid_observations": "<computed count>",
+>      "calibration_period": "<actual locked period>",
+>      "excluded_observations_by_reason": {},
+>      "parameter_at_bound": "<computed boolean>",
+>      "fit_diagnostics": "<computed values with units and method>",
+>      "provenance": "<manifest/reference>"
 >    }
 >    ```
 
 **Description:**  
-This prompt upgrades Manning's roughness calibration from synthetic data to handle the irregularity and noise characteristics of real SWOT observations. Key additions: stage-dependent calibration filtering (mid-to-high flow only), inverse-variance weighting, strict time-split discipline (calibration vs test period), and slope quality gating — which is the single most important guard for low-gradient Bangladesh rivers where SWOT slope noise can exceed the actual signal.
+This prompt is a proposal to audit and, only when identifiable, calibrate Manning roughness using traceable observations. SWOT values alone may not identify roughness or discharge without suitable geometry, boundary conditions, and independent data. Do not claim that an optimization routine or product-specific filter constitutes calibration; report non-identifiability and stop if supporting data are inadequate.
 
 **✅ Checklist:**
 - [x] Calibration uses only mid-to-high flow passes (`wse > z_bed + 0.5m`)
@@ -369,39 +488,31 @@ This prompt upgrades Manning's roughness calibration from synthetic data to hand
 
 **Prompt:**
 
-> You are the Systems & Backend Algorithm Developer for HydroSense-SWOT. Your task is to upgrade the Muskingum-Cunge routing module to handle real IMERG rainfall input and produce physically consistent stage predictions validated against BWDB gauge observations.
+> You are the Systems & Backend Algorithm Developer for HydroSense-SWOT. Audit the routing formulation and, only when authentic suitable inputs and independent observations are available, implement and evaluate a physically defensible model. A successful code path does not itself validate forecasts.
 >
 > **What to build:**
 >
 > 1. Upgrade `pipeline/muskingum_cunge.py` to:
->    - Use **calibrated n** from Prompt 3 (loaded from `data/processed/calibration_results.json`).
->    - Route IMERG MAP series at 30-minute intervals through the 4-sub-reach cascade.
->    - CRITICAL: SWOT and IMERG are DIFFERENT time series — NEVER inner-join them by timestamp. SWOT is offline calibration only. IMERG drives all 30-min routing steps.
+>    - Use calibrated parameters only if Gate 3 establishes their provenance and identifiability.
+>    - Use the verified precipitation time interval and spatial aggregation; do not assume a particular cadence or four-subreach cascade without evidence.
+>    - Keep observation products with different temporal sampling semantically distinct; do not inner-join unrelated observations as if simultaneous. Whether SWOT supplies calibration parameters and whether IMERG is model forcing must be justified by the approved design and available records.
 >    - Routing parameters:
->      - `V_mean = Q_SWOT / A` (at mid-flood-stage SWOT pass)
->      - `c = (5/3) * V_mean` (flood wave celerity)
->      - `K_reach = reach_length / c` (travel time in seconds)
->      - `X = 0.25` (Muskingum weighting — sensitivity-test 0.2-0.35)
->      - `K_total_hours = sum(K_per_reach) / 3600`
+>      - Derive velocity, celerity, reach travel time, and routing parameters from appropriate measured/estimated quantities with units and stated hydraulic assumptions; test sensitivity over scientifically justified ranges.
 >    - Valid regime: **rising limb, in-channel flow only**. Cannot model floodplain inundation, backwater, or full recession.
 >    - Invert stage from discharge using Manning's equation with calibrated parameters.
->    - Compute uncertainty band: +/-0.18m WSE propagated through Manning analytically.
+>    - Propagate input, parameter, structural, and observation uncertainty using a documented method; do not substitute a fixed WSE offset for uncertainty analysis.
 >    - Compute `modelled_stage_upper` and `modelled_stage_lower` at each time step.
 >
 > 2. Upgrade `pipeline/harvest_flag.py` to:
->    - Use `danger_level_m = 13.20` from BWDB Kanaighat station.
->    - Compute travel time from data: `K_total_hours` from routing parameters.
->    - Look-ahead using computed travel time: `future_level = modelled_level(t + travel_time)`.
->    - Flag rules:
->      - RED: `future_level >= danger_level`
->      - AMBER: `future_level >= 0.80 * danger_level`
->      - GREEN: below thresholds
+>    - Obtain the danger/event threshold, datum, and decision thresholds from verified local authority/source records; preserve source/version and units.
+>    - Generate a forecast at time `t` only from information available at `t` and a named forecast product available then. Never index into future realized rainfall, stages, or observations.
+>    - Define alert levels with locally justified thresholds and a documented decision process. Do not apply a percentage to an absolute stage unless its physical meaning is justified.
 >    - Generate bilingual advisory text (English + Bangla).
 >    - Peak date annotation driven from data: `peak_date = modelled_level.idxmax()` (Guard B10 — never hardcoded).
 >
 > 3. Upgrade `pipeline/baseline.py` to:
 >    - Use 6-hour rolling accumulation of IMERG rainfall over Meghalaya sub-basin.
->    - Threshold calibrated from historical events (if available) or sensitivity analysis.
+>    - Select and lock any threshold on training/calibration events only; evaluate it unchanged on independent holdout events.
 >    - Output baseline flag transitions for comparison with HydroSense model.
 >
 > 4. Sensitivity analysis module `pipeline/sensitivity.py`:
@@ -411,7 +522,7 @@ This prompt upgrades Manning's roughness calibration from synthetic data to hand
 >    - Export to `data/processed/sensitivity_results.csv`.
 
 **Description:**  
-This prompt upgrades the hydrological routing engine from synthetic to real data. The key architectural constraint is that SWOT provides offline channel parameters while IMERG drives all operational 30-minute time steps — these must never be confused. The routing produces stage predictions with quantified uncertainty bands (+/-0.18m from SWOT WSE uncertainty). Sensitivity analysis tests the robustness of results to routing parameter choices.
+This prompt proposes a routing/model audit. Use SWOT, rainfall, geometry, and gauges only for roles supported by verified source data and the selected model formulation. A retrospective series is not a forecast; the code must not use future realized rainfall or stages. Uncertainty must follow a documented propagation/estimation method, not a fixed offset.
 
 **✅ Checklist:**
 - [x] Muskingum-Cunge routing uses calibrated `n` from real data
@@ -471,7 +582,7 @@ This prompt upgrades the hydrological routing engine from synthetic to real data
 > 4. Update JSON export (`scripts/export_json.py`) with real computed metrics.
 
 **Description:**  
-This prompt implements rigorous scientific validation comparing model predictions against real gauge observations. The strict time-split discipline ensures no data leakage from calibration to test. The honest reporting approach — showing metrics even when unfavorable, comparing against baseline, and limiting decimal precision — builds credibility with judges and satisfies the Validity scoring criterion.
+This prompt describes the intended validation workflow; it is not evidence that authentic gauge observations, an independent split, or leakage-free metrics currently exist. Verify the official judging criteria rather than assuming a “Validity” category. Report metrics as real-data skill only after Gates 1–4 pass; otherwise label them as synthetic engineering results or omit them.
 
 **✅ Checklist:**
 - [x] Metrics computed only on test period (Apr-May 2026)
@@ -510,8 +621,8 @@ This prompt implements rigorous scientific validation comparing model prediction
 >
 > 2. Upgrade `HydrographPanel.js`:
 >    - Plot **three** lines: modelled stage (cyan), observed gauge (white dashed), baseline (grey dotted).
->    - Add **uncertainty band** (+/-0.18m) as shaded fill around modelled line.
->    - Add **danger level** as horizontal amber dashed line at 13.20m.
+>    - Add an uncertainty display only when supported by the validated uncertainty method and label its meaning.
+>    - Add a danger threshold only when its source, station, datum, units, and applicability are verified.
 >    - X-axis: date labels driven from data.
 >    - Y-axis: "Water Level (m PWD)".
 >    - Inverted rainfall hyetograph above the stage chart (dual-axis).
@@ -547,7 +658,7 @@ This prompt implements rigorous scientific validation comparing model prediction
 >      - Low-slope reaches excluded where slope uncertainty exceeds signal
 >      - IMERG may overestimate orographic rain over Meghalaya
 >      - Routing models rising limb only — inundation extent not modelled
->      - Lead time: ~22-30h from observed rain to flag
+>      - Include a lead-time claim only after Gate 4 passes; otherwise label the display as a retrospective scenario or omit it.
 >      - Computed NSE, KGE, timing error values
 >
 > 7. Ensure all components follow `DESIGN_ARCHITECTURE.md` tokens:
@@ -558,7 +669,7 @@ This prompt implements rigorous scientific validation comparing model prediction
 >    - Responsive: works at 360px minimum viewport
 
 **Description:**  
-This prompt replaces all hardcoded/mock values in the dashboard with real computed data from the scientific pipeline. The key principle: the UI formats and displays the authoritative model result — it does not recompute the science. All dates, metrics, flags, and parameters must be driven from the JSON data files, never hardcoded strings. The dashboard must faithfully render the computed uncertainty, honestly display the limitations, and provide the "signature demo moment" where the slider reveals the flood warning ~21 hours before the gauge crosses danger level.
+This prompt aims to make the UI render versioned pipeline outputs without inventing values. Real-data wording is allowed only for provenance-verified records; uncertainty, thresholds, flags, and dates must come from validated outputs and metadata. Do not promise an operational warning or a lead-time “demo moment” unless Gate 4 independently verifies it.
 
 **✅ Checklist:**
 - [x] All 5 JSON data files loaded and consumed by components
@@ -699,7 +810,7 @@ This prompt upgrades the static SVG map to a real interactive geographic map wit
 >    - Or: "AMBER — Cut within 12 hours if level keeps rising" (English)
 
 **Description:**  
-This prompt implements complete bilingual support for the dashboard. The target user is a Bangla-speaking agriculture officer, so Bangla is the default language. This directly addresses the Influence scoring criterion — judges want to see that the tool is designed for the actual end user, not just for the English-speaking hackathon judges. The language toggle allows judges to switch to English for evaluation while demonstrating that the real product serves Bangla speakers.
+This prompt proposes bilingual support. Confirm language needs and terminology with intended users or qualified local reviewers. Localization is not evidence of user impact by itself, and no challenge scoring category should be assumed until verified from the official prompt/rubric.
 
 **✅ Checklist:**
 - [ ] `en.json` and `bn.json` locale files created with all strings
@@ -774,7 +885,7 @@ This prompt implements complete bilingual support for the dashboard. The target 
 > 7. Minimum viewport: 360px width.
 
 **Description:**  
-This prompt ensures the dashboard meets WCAG AA accessibility standards. Beyond compliance, good accessibility directly supports the Presentation scoring criterion — judges notice when a tool is thoughtfully designed for all users. The cividis colormap, multi-modal status indicators (icon+text+color), and keyboard navigation demonstrate that the team considered the full spectrum of users, including those with visual or motor impairments.
+This prompt specifies accessibility work to test against the stated WCAG 2.2 AA criteria. Do not claim conformance until an appropriate audit has passed; a color palette or checklist alone is not conformance evidence. Accessibility supports usability but is not a substitute for challenge requirements or user testing.
 
 **✅ Checklist:**
 - [ ] All text passes WCAG AA contrast (4.5:1 / 3:1)
@@ -840,7 +951,7 @@ This prompt ensures the dashboard meets WCAG AA accessibility standards. Beyond 
 >    - Largest Contentful Paint < 2.5s.
 
 **Description:**  
-This prompt ensures the dashboard performs flawlessly during the live judging demo. The number 1 risk at hackathons is venue WiFi failure — by making everything offline-first (static JSON data, self-hosted fonts, pre-cached/inline map), we eliminate this risk entirely. Performance optimization ensures the "signature demo moment" (dragging the slider across the flood event) feels smooth and responsive, which directly impacts the Presentation scoring criterion.
+This prompt proposes offline and performance testing; it cannot guarantee flawless operation or eliminate all network/device risks. Verify the actual demo environment, test the clean offline path, and provide explicit missing-data/network failure states. A polished demo supports communication but does not establish scientific skill or challenge fit.
 
 **✅ Checklist:**
 - [ ] Zero live API calls during demo
@@ -898,19 +1009,19 @@ This prompt ensures the dashboard performs flawlessly during the live judging de
 > 4. Pre-video team alignment:
 >    - Create `docs/TEAM_ALIGNMENT.md` — one-pager every team member reads before filming:
 >      - What HydroSense does (one paragraph).
->      - What HydroSense does NOT claim (memorize these 6 points).
->      - The one number to remember: ~21 hours lead time.
+>      - What HydroSense does NOT claim (memorize the evidence-backed limitations).
+>      - One result that has passed the evidence gates, or an explicit statement that no real-world performance result is yet available.
 >      - The one user: Upazila Agriculture Officer, Sunamganj.
 >
-> 5. **30-second script (final, verbatim):**
->    - 0-5s: "230,000 farmers. One decision. Cut the rice — or wait."
->    - 5-12s: Slider drags. Meghalaya rain pulses. Flag turns RED. "The flood is still ~26 hours away. Our model sees it coming."
->    - 12-20s: Hydrograph. Two lines. Timing arrow. "SWOT's channel data added ~[computed] hours over a rainfall-only alert."
->    - 20-26s: Limits panel on screen. "SWOT cannot see every channel. We say that. Always."
->    - 26-30s: Team name. Challenge title. "For the Haor."
+> 5. **30-second evidence-gated script outline (not pre-approved copy):**
+>    - 0-5s: State the verified user problem with a primary citation, or describe it qualitatively without unsupported impact figures.
+>    - 5-12s: Show a reproducible demo scenario. Label synthetic data prominently; if a forecast result is not independently validated, call it a model demonstration, not an operational warning.
+>    - 12-20s: Show a result only if its source, method, holdout, baseline, uncertainty, and reproduction command are in the claims ledger. Otherwise explain what the prototype computes without presenting a skill metric.
+>    - 20-26s: Show limitations, data provenance, and what the model cannot infer.
+>    - 26-30s: State the approved official challenge title and team/project identity without implying NASA or agency endorsement.
 
 **Description:**  
-This prompt prepares everything needed for the remaining video submissions (Video 2 Local Demo & Video 3 Global Demo — Video 1 Prescreening is already completed). The key insight: the video IS the product as far as judges are concerned — most will never visit the GitHub repo. The "signature demo moment" (slider crossing the flood event, flag turning RED before gauge moves) must be rehearsed and polished. Every claim in the video maps to a verified source. The honest limitations segment builds trust with technical judges who know SWOT's constraints.
+This prompt prepares video and pitch materials, but prior claims about completed videos, user impact, flood lead time, and a “signature demo moment” must be re-verified. Rehearse only behavior supported by the current build. Every spoken or displayed number and source claim must map to verified evidence; clearly identify synthetic scenarios, and do not imply an operational warning or agency endorsement.
 
 **✅ Checklist:**
 - [ ] Remaining video scripts (Video 2 & Video 3) finalized in VIDEO_SCRIPTS.md
@@ -1164,14 +1275,27 @@ This prompt merges all work into main, performs final cleanup, runs the complete
 
 ## FINAL MASTER CHECKLIST
 
-Use this checklist to verify that ALL prompts have been correctly implemented before submission.
+Use this as a release checklist, not as a feature-count score. Mark an item complete only when status is `VERIFIED` and its evidence path/command/reviewer are recorded. Historical prompt checkmarks elsewhere in this file do not count. A feature is required only if the approved official challenge and project scope require it; any excluded feature must be documented with rationale rather than built to chase score points. The Gate 0–8 sequence below is authoritative and must agree with `SCORE_REMEDIATION_BUILD_PROMPTS.md`.
+
+### Gate acceptance record (all mandatory gates must be VERIFIED for 9+)
+- [ ] **Gate 0 — Repository audit and official challenge lock:** audit register, baseline commands, official challenge source/access date, approved criterion-to-feature/evidence/demo map.
+- [ ] **Gate 1 — Data provenance and truthful claims:** each data/artifact classified REAL/SYNTHETIC/MIXED/UNKNOWN; complete manifest and hashes; provenance tests; source-to-display trace; no unsupported real-data claim.
+- [ ] **Gate 2 — Real-data source verification and ingestion:** candidate product/source suitability and licenses verified; authentic records and reproducible cache where available; missing-source fail-closed tests; no synthetic substitution.
+- [ ] **Gate 3 — Scientific model and physical credibility:** equations/units/parameters/uncertainty reviewed; physical, stability, and numerical tests; ablation and calibration evidence.
+- [ ] **Gate 4 — Leakage-free evaluation and forecast verification:** independent chronological/event evaluation, no future data, baseline on same holdout, reproducible metrics and lead-time trace; otherwise all results remain scenario-only.
+- [ ] **Gate 5 — Approved challenge-specific capability:** every applicable official criterion implemented, tested, evidenced, and demonstrated; no prompt requirement is satisfied by planned work.
+- [ ] **Gate 6 — QA, reliability, accessibility, and UX:** clean-checkout tests/build/lint/CI; export/UI parity; error/offline/accessibility checks; user-task evidence and limitations.
+- [ ] **Gate 7 — Independent review and judge rehearsal:** three genuinely independent reviewer assessments, red-team findings/remediation, and clean demo evidence.
+- [ ] **Gate 8 — Final evidence and internal readiness decision:** reviewed commit matches evidence; all gates verified; six-role scorecard and arithmetic mean; no critical/high issue.
+
+For each gate record: owner, task status, commit, verification command, evidence path, reviewer, pass/fail rationale, dependency, and claims blocked by any failure. A failed gate blocks dependent claims even if later feature work exists.
 
 ### Science & Data Layer
-- [ ] **P1:** Real SWOT data ingested with all quality gates
-- [ ] **P2:** Real IMERG rainfall and BWDB gauge data ingested
-- [ ] **P3:** Manning calibration uses real data with time-split discipline
-- [ ] **P4:** Muskingum-Cunge routing produces physically consistent results
-- [ ] **P5:** Scientific validation metrics computed honestly from real data
+- [ ] **P1:** SWOT/source ingestion is authentic, licensed, provenance-complete, and required by the approved challenge; otherwise remain synthetic/blocked without real-data claims
+- [ ] **P2:** IMERG/gauge/source ingestion is verified and fail-closed; no unavailable inputs are fabricated
+- [ ] **P3:** Calibration uses appropriate traceable observations, justified assumptions, and a locked time/event split
+- [ ] **P4:** Actual routing method passes stability, physical plausibility, unit, and uncertainty checks
+- [ ] **P5:** Metrics use independent observed data and leakage-free evaluation; synthetic-only results are labeled scenario tests
 
 ### Frontend & Visualization
 - [ ] **P6:** Dashboard displays real computed data (no hardcoded values)
@@ -1188,14 +1312,14 @@ Use this checklist to verify that ALL prompts have been correctly implemented be
 
 ### Critical Non-Negotiables
 - [ ] NSE, KGE, PBIAS are COMPUTED values (never hardcoded)
-- [ ] All timestamps are UTC
-- [ ] `slope2` used everywhere (never `slope`)
+- [ ] All timestamps and timezone conversions are verified for the specific source and stored unambiguously (normally normalized to UTC)
+- [ ] The appropriate SWOT slope field is selected using product documentation and QA; do not assume a field name alone guarantees validity
 - [ ] Reach IDs stored as strings (never float64)
-- [ ] `import netCDF4` before `import xarray`
-- [ ] IMERG timestamps shifted back 30 minutes
-- [ ] Fill values `-999999.0` replaced with NaN
+- [ ] Dependency import order is tested only where required by the installed stack
+- [ ] IMERG interval timestamp convention is verified from product documentation before any conversion
+- [ ] Product fill values are decoded according to source metadata and tested
 - [ ] `earthaccess.login()` called ONCE (never in loop)
-- [ ] `minimize_scalar` uses `method='bounded'`
+- [ ] Calibration algorithm/bounds are justified and tested for the actual model; an optimizer option is not evidence of scientific validity
 - [ ] Demo dates driven from DATA (never hardcoded strings)
 - [ ] No NASA Meatball/Worm logo
 - [ ] No minors under 18 in videos
@@ -1203,6 +1327,13 @@ Use this checklist to verify that ALL prompts have been correctly implemented be
 - [ ] All third-party materials cited
 - [ ] AI use disclosed in AI_USE_LOG.md
 - [ ] Working build demo in submission demo videos (no slideshows)
+
+### Final scoring decision
+- [ ] At least three independent reviewers (not repeated runs of one person/model/agent) each assess all six roles with evidence and record feedback.
+- [ ] All six reported role scores are at least 9.0/10; arithmetic mean is at least 9.0/10 using `Overall internal score = (Role 1 + Role 2 + Role 3 + Role 4 + Role 5 + Role 6) / 6`.
+- [ ] No critical/high issue remains; mandatory gates are `VERIFIED`; evidence package and public claims match the reviewed commit.
+- [ ] If any item above fails, mark **NOT READY FOR 9+ ASSESSMENT** regardless of the mean.
+- [ ] Do not imply that an internal 9+/10 readiness result predicts NASA judges' score, selection, nomination, or winning.
 
 ---
 

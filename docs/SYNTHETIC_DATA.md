@@ -1,10 +1,11 @@
 # Synthetic Data Provenance and Disclosure
 
-**Status:** required disclosure for the current offline demo
+**Status:** required disclosure and implementation acceptance specification for the current offline demo
 **Last source review:** 2026-10-24
 **Generator:** scripts/generate_fixtures.py
 **Default generator mode:** synthetic
 **Machine-readable manifest:** not present yet; implementation is required before the provenance gate can pass
+**Readiness target:** eliminate provenance ambiguity and support a credible 9+ review only when the evidence gates in `SCORE_REMEDIATION_BUILD_PROMPTS.md` pass; this document does not promise a score
 
 ## Executive disclosure
 
@@ -13,6 +14,8 @@ The checked-in fixture set is procedurally generated. It does not contain observ
 The generated gauge and rainfall series are deliberately paired scenarios. Any model score computed against these files describes agreement with a constructed test case. It is not independent forecast validation, field performance, or evidence of real-world skill.
 
 The data-generation code and the current fixture README contain source/observation wording that conflicts with this disclosure. Until those code-generated labels are corrected and a manifest is implemented, show a prominent synthetic-demo notice in every affected page, chart, metric panel, export, and presentation.
+
+This notice is a transparency requirement, not a substitute for real observations, model validation, or challenge fit. Correctly labeling a synthetic prototype is necessary but cannot by itself raise scientific credibility or establish NASA-data use.
 
 ## What is in the repository now
 
@@ -58,14 +61,18 @@ Before enabling a real-data release, each output must have per-file provenance. 
 
 ## Required implementation before this disclosure can pass review
 
-1. Correct the generator docstrings, NetCDF attributes, CSV labels, and generated data/fixtures/README.md. The current generator writes misleading NASA/BWDB observation wording on every run.
-2. Add a generated data/fixtures/PROVENANCE.json manifest. Enumerate each data file, its mode, whether it contains real observations, generator/source function, random seed where applicable, units, time coverage, and SHA-256 digest. Do not hand-edit a manifest that the generator overwrites.
-3. Add an explicit provenance field to each NetCDF dataset and a data_provenance column to the CSV. For a truly real file, store the product/station identifier, collection/version, access time, source URL or granule IDs, and processing steps.
-4. Fix the --mode real control flow so no synthetic event, rainfall, or gauge output is written under a real label. Incomplete source availability must be reported per file.
-5. Surface provenance in all affected UI pages and exported JSON. Synthetic records may never be represented as observations in captions, legends, alt text, video scripts, or metric descriptions.
-6. Make fixture generation target an explicit output directory so tests can generate in a temporary directory. Tests must not overwrite tracked files under data/fixtures/ or data/processed/.
-7. Add provenance tests for manifest completeness, checksums, per-file mode, truthful UI/export labels, and the fail-closed behavior of real ingestion. Tests must use temporary paths.
-8. Recompute any displayed metric from the selected dataset and export. Remove stale hard-coded metric/date claims. The metric JSON and the UI must agree exactly after formatting.
+1. Correct generator docstrings, NetCDF global/variable attributes, CSV labels, and generated fixture documentation. Use an unambiguous provenance type such as `synthetic`; do not attach NASA/BWDB observational source labels to generated values.
+2. Generate a machine-readable `data/fixtures/PROVENANCE.json` from the same command that creates the fixtures. List every file and its provenance type, generator/source function, code revision, seed where applicable, units, time coverage, processing steps, and SHA-256 digest. Make the manifest deterministic apart from explicitly recorded generation/access timestamps. Never hand-edit generated manifest content.
+3. Include explicit per-file provenance in NetCDF, CSV and exported records. For any authentic observation, retain the exact product/station identifier, collection/version, source URL or granule/record IDs, access time, license, QA decisions, units, processing steps, and checksum. A filename, variable name, metadata string, map, or successful API request is not by itself proof that returned records are authentic.
+4. Split synthetic fixture generation from real-data ingestion. A real-data command must fail closed for each required missing/invalid source and must never silently fill the gap with generated values. If mixed inputs are deliberately supported, provenance must remain attached per file and per output row, with mixed status visible to the user.
+5. Put provenance and data status beside every interpretation point in the UI, charts, map layers, exports, downloads, alt text, captions, demo scripts, README, and video. Distinguish real observation, forecast, model output, and synthetic scenario; include timestamps/time zones and units. Never present synthetic values as observations or simulation output as forecast skill.
+6. Make fixture generation accept an explicit output directory and deterministic seed. Tests and demos that generate files must use temporary directories and must not overwrite tracked `data/fixtures/` or `data/processed/` outputs.
+7. Test manifest completeness and hashes; ensure every generated record is labeled synthetic; test real-ingestion success and fail-closed paths; verify truthful UI/export labels; reject source/provenance mismatches; and ensure test runs leave `git status` unchanged.
+8. Establish one versioned, schema-validated output path for metrics and dates. Remove hardcoded claims; calculate metrics from the selected data and export exactly once. Require UI values to match those exports, including provenance, period, units, sample size, method, and limitations.
+9. Add a reproducible provenance audit command that verifies required files, checksums, schema, source identifiers, temporal coverage, and consistency across pipeline results, exports, and UI. Its report must distinguish “verified,” “synthetic,” “mixed,” and “unknown”; verification failure is an error, never a success-shaped fallback.
+10. Keep credentials out of manifests, logs, screenshots, and evidence bundles. Store only public source identifiers/URLs and safe provenance metadata; document access controls and licensing for restricted data.
+
+**Acceptance gate:** an independent reviewer can regenerate the synthetic fixtures into a temporary directory, verify each checksum and label, confirm that no fake source identity is presented as observation, and demonstrate that real ingestion cannot silently substitute synthetic records. UI and exports expose the same provenance. A passed gate establishes trustworthy provenance handling—not real-data validity, predictive skill, or a competition score.
 
 ## Required wording for the current demo
 
@@ -94,4 +101,4 @@ For each release, archive:
 - A comparison showing that UI, JSON exports, and the manifest assign the same provenance to every displayed value.
 - The actual NASA granule/product IDs and gauge source record identifiers for any file described as real.
 
-**Current status:** disclosure drafted; generator, fixture README, manifest, tests, and UI labels still require implementation. This document does not certify those changes.
+**Current status:** disclosure and acceptance requirements documented; generator, fixture README, manifest, tests, and UI labels still require implementation. This document does not certify those changes.
