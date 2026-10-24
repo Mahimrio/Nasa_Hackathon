@@ -41,7 +41,7 @@ export default function OperationalLimitsPanel({ metrics }) {
       aria-label={t("limits.title")}
     >
       <div
-        className="card-header-bar"
+        className="card-header-bar limits-card-header"
         style={{
           marginBottom: isExpanded ? "var(--space-3)" : 0,
           paddingBottom: isExpanded ? "var(--space-2)" : 0,
@@ -80,76 +80,92 @@ export default function OperationalLimitsPanel({ metrics }) {
         </div>
 
         <button
-          className="btn-standard neu-inset"
-          style={{ minHeight: "44px", minWidth: "44px", padding: "0 14px", fontSize: "13px" }}
-          onClick={() => setIsExpanded(!isExpanded)}
+          type="button"
+          className="limits-toggle-button"
+          onClick={() => setIsExpanded((expanded) => !expanded)}
           aria-expanded={isExpanded}
           aria-controls="operational-limits-grid"
           aria-label={isExpanded ? t("limits.collapseAria") : t("limits.expandAria")}
         >
-          {isExpanded ? t("limits.collapse") : t("limits.expand")}
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
-              transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)",
-              transition: "transform 200ms",
-            }}
-            aria-hidden="true"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
+          <span>{isExpanded ? t("limits.collapse") : t("limits.expand")}</span>
+          <span className="limits-toggle-visual" aria-hidden="true">
+            <svg
+              className={`limits-toggle-state-icon ${isExpanded ? "is-current" : ""}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
+              <path d="M4 8.5h16" />
+              <path d="m9 15 3-3 3 3" />
+            </svg>
+            <svg
+              className={`limits-toggle-state-icon ${!isExpanded ? "is-current" : ""}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3.5" y="4" width="17" height="16" rx="2.5" />
+              <path d="M4 8.5h16" />
+              <path d="m9 12 3 3 3-3" />
+            </svg>
+          </span>
         </button>
       </div>
 
-      {isExpanded && (
-        <div
-          id="operational-limits-grid"
-          className="limits-grid-layout"
-          role="region"
-          aria-label={t("limits.title")}
-        >
-          {limits.map((l) => (
-            <div key={l.id} className="limit-item">
-              <span className="limit-icon-bullet" aria-hidden="true">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
-              </span>
-              <div>
-                <strong
-                  style={{
-                    color: "var(--text-primary)",
-                    display: "block",
-                    marginBottom: "3px",
-                    fontSize: "13px",
-                  }}
-                >
-                  {l.title}
-                </strong>
-                <span>{l.text}</span>
+      <div
+        id="operational-limits-grid"
+        className={`limits-disclosure ${isExpanded ? "is-open" : "is-closed"}`}
+        role="region"
+        aria-label={t("limits.title")}
+        aria-hidden={!isExpanded}
+      >
+        <div className="limits-disclosure-inner" inert={!isExpanded}>
+          <div className="limits-grid-layout">
+            {limits.map((l) => (
+              <div key={l.id} className="limit-item">
+                <span className="limit-icon-bullet" aria-hidden="true">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </span>
+                <div>
+                  <strong
+                    style={{
+                      color: "var(--text-primary)",
+                      display: "block",
+                      marginBottom: "3px",
+                      fontSize: "13px",
+                    }}
+                  >
+                    {l.title}
+                  </strong>
+                  <span>{l.text}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      )}
+      </div>
     </section>
   );
 }

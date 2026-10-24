@@ -30,7 +30,7 @@ The dashboard provides Upazila Agriculture Officers in the flood-prone Haor basi
   - NSE (`0.73`), KGE (`0.68`), PBIAS (`+1.9%`), Peak Timing Error (`-2.0 h`), and Warning Lead Time (`22.5 h`).
   - Interactive infomorphism definition popovers explaining formulas and benchmark criteria on hover.
   - *Audit note:* Comparative baseline gains are currently undergoing formal re-benchmarking.
-- **Permanent Operational Limits Panel (`OperationalLimitsPanel.js`):** Permanently visible physical constraints (§4.1), covering SWOT spatial resolution (>100 m), slope noise filtering, IMERG orographic bias, and routing regime.
+- **Operational Limits Panel (`OperationalLimitsPanel.js`):** Expanded by default with a persistent, accessible heading and control; its physical constraints can be collapsed, covering SWOT spatial resolution (>100 m), slope noise filtering, IMERG orographic bias, and routing regime.
 - **Interactive Modals:**
   - `ReachInspectorModal.js`: Detailed SWOT hydraulic profile (Manning $n$, bed elevation $z_{bed}$, channel width, length, slope quality, overpass pass count).
   - `AdvisoryBulletinModal.js`: Formatted, printable emergency harvest advisory bulletin for field dispatch.

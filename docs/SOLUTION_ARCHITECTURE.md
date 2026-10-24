@@ -61,7 +61,7 @@ etCDF4 first, then xarray |
 | **Creativity** | No published tool routes IMERG through SWOT-calibrated Muskingum-Cunge reaches to produce a harvest timing flag for the Haor. SWOT SoS/Confluence exists but does not produce harvest decisions or exploit travel-time routing for lead time. [INFERENCE: search log in SOURCES.md] |
 | **Validity** | Strict time-split. NSE + KGE computed from data. Manning n bounded physically. M-C limited to rising limb. IMERG bias acknowledged. Slope quality filter applied. All traps guarded. |
 | **Relevance** | SWOT RiverSP is the calibration engine. IMERG Early Run is the forecast driver. Both are NASA open data. They ARE the method, not a decoration. |
-| **Presentation** | One screen. One question. One slider. Limits panel always visible. Bangla default. Computed metrics only on screen. |
+| **Presentation** | One screen. One question. One slider. Limits panel expanded by default with a persistent heading and collapse control. Bangla default. Computed metrics only on screen. |
 
 ---
 
@@ -373,7 +373,7 @@ peak_date = modelled_level.idxmax()  # computed, not hardcoded to "Apr 12"
 |        +--[Apr 1]---[Apr 15]---[May 1]---[May 31]------------>|
 |                  [SLIDER] <- peak annotation auto-set from data|
 +=================================================================+
-|  LIMITS (always visible)                                       |
+|  LIMITS (expanded by default; collapsible)                       |
 |  SWOT resolves rivers wider than ~100 m. Narrow headwaters:   |
 |  not resolved. Low-slope reaches where slope uncertainty       |
 |  exceeds signal are excluded (shown hatched on map).           |
@@ -404,7 +404,7 @@ peak_date = modelled_level.idxmax()  # computed, not hardcoded to "Apr 12"
 - 0-5s: "230,000 farmers. One decision. Cut the rice — or wait."
 - 5-12s: Slider drags. Meghalaya rain pulses. Flag turns RED before gauge moves. "The flood is still ~26 hours away. Our model sees it coming."
 - 12-20s: Hydrograph. Two lines. Timing arrow. "SWOT's channel data added ~[computed] hours of warning over a rainfall-only alert."
-- 20-26s: Limits panel on screen. "SWOT cannot see every channel. We say that. Always."
+- 20-26s: Limits summary and control on screen; details begin expanded and may be collapsed. "SWOT cannot see every channel. We say that."
 - 26-30s: Team name. Challenge: [OPEN Oct 28]. "For the Haor."
 
 ### 4.3 Accessibility
@@ -536,7 +536,7 @@ The official challenge summary for *“Be An Earth System Trend Detective!”* d
 - NOT claiming that the Trend Explorer improves real-time hydrodynamic warning accuracy
 - NOT the first satellite flood tool for Bangladesh — novelty is the harvest-timing flag for this ungauged transboundary corridor
 
-All of the above are in the Limits panel, always visible. Every team member must be able to say this from memory.
+All of the above remain in the Limits panel, which is expanded by default and always discoverable via its persistent heading and control. Every team member must be able to say this from memory.
 
 ---
 

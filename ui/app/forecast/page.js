@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLocale } from "../hooks/useLocale";
 import { useTelemetry } from "../context/TelemetryContext";
 import AppHeader from "../components/AppHeader";
+import DashboardFooter from "../components/DashboardFooter";
 import PageContextBar from "../components/PageContextBar";
 import HydrographPanel from "../components/HydrographPanel";
 import ValidationMetricsPanel from "../components/ValidationMetricsPanel";
@@ -222,33 +223,7 @@ export default function ForecastPage() {
         </div>
       </main>
 
-      {/* Global Application Footer */}
-      <footer className="dashboard-footer" role="contentinfo">
-        <div>
-          {lang === "en"
-            ? "HydroSense-SWOT · NASA Space Apps Challenge 2026 · Tier 4 User Delivery Interface"
-            : "হাইড্রোসেন্স-SWOT · নাসা স্পেস অ্যাপস চ্যালেঞ্জ ২০২৬ · টিয়ার ৪ ইন্টারফেস"}
-        </div>
-        <div className="footer-citations">
-          <span>
-            {lang === "en"
-              ? "NASA SWOT L2 HR RiverSP 2.0 (KaRIn Altimetry)"
-              : "নাসা SWOT L2 HR RiverSP 2.0 (KaRIn অলটিমেট্রি)"}
-          </span>
-          <span>•</span>
-          <span>
-            {lang === "en"
-              ? "GPM IMERG Early Run V07 (0.1° Half-Hourly)"
-              : "GPM IMERG আর্লি রান V07 (০.১° আধা-ঘণ্টা)"}
-          </span>
-          <span>•</span>
-          <span>
-            {lang === "en"
-              ? "BWDB SW266 (Model SW108) Kanaighat Gauge"
-              : "বাপাউবো SW২৬৬ (মডেল SW১০৮) কানাইঘাট গেজ"}
-          </span>
-        </div>
-      </footer>
+      <DashboardFooter />
 
       {/* Interactive Modals */}
       {inspectingReach && (

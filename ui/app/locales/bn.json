@@ -4,6 +4,8 @@
     "badge": "সোয়াট",
     "statusLabel": "অবস্থা:",
     "statusReplay": "সক্রিয় সিমুলেশন",
+    "openMenu": "মেনু খুলুন",
+    "closeMenu": "মেনু বন্ধ করুন",
     "advisoryBulletinBtn": "পরামর্শ বুলেটিন",
     "modelInfoBtn": "মডেল তথ্য",
     "displayLanguage": "প্রদর্শনের ভাষা",
@@ -188,6 +190,13 @@
         "text": "এপ্রিল ১ – মে ৩১, ২০২৬ ইভেন্টে যাচাইকৃত: মডেলের NSE = {nse} (বেসলাইন {baseNse}), KGE = {kge}, শীর্ষ সময় ত্রুটি = {timing}, এবং আগাম সতর্কতার সময় = {lead}।"
       }
     ]
+  },
+  "footer": {
+    "dataProvenance": "তথ্যসূত্র ও ডেটার উৎস",
+    "swotDetails": "L2 HR RiverSP 2.0 · KaRIn অল্টিমেট্রি",
+    "imergDetails": "Early Run V07 · 0.1° · প্রতি আধা ঘণ্টায়",
+    "gaugeDetails": "কানাইঘাট গেজ · SW266 (মডেল SW108)",
+    "challengeContext": "NASA Space Apps Challenge 2026 · টিয়ার ৪ ব্যবহারকারী ইন্টারফেস"
   },
   "inspector": {
     "title": "নদীর হাইড্রোলিক রিচ ক্যালিব্রেশন তথ্য",

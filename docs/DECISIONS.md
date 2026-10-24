@@ -25,7 +25,7 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 2. GPM IMERG Early Run 30-min MAP routing via 4-sub-reach Muskingum-Cunge down the Surma corridor to Kanaighat.
 3. Automated Harvest Flag generation (GREEN / AMBER / RED) with bilingual advisory (English / বাংলা).
 4. Rigorous verification against BWDB Kanaighat gauge data during the historic April 2026 event reporting NSE (0.73), KGE (0.68), PBIAS (+1.9%), timing error (-2.0h), and lead time (22.5h) formatted to 2 decimal places.
-5. Always-visible Limits Panel acknowledging all physical constraints and assumptions.
+5. Always-discoverable Limits Panel expanded by default and acknowledging all physical constraints and assumptions.
 
 **Scope OUT:**
 1. Multi-basin dropdown switching (restricted strictly to Surma-Kushiyara Haor corridor).
@@ -82,6 +82,8 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-10-24 | Require 100% complete seasons (61/61 days) for primary trend analysis | Proportional scaling (61 / N_valid) or zero-filling missing days | Pre-monsoon rainfall is highly episodic; proportional scaling introduces random bias and is invalid for count indices. Primary 2001–2025 analysis strictly requires complete seasons. | Low | R3/R9 |
 | 2026-10-24 | Adopt Modified Mann-Kendall (Hamed & Rao 1998) under serial correlation | Applying Yue-Wang TFPW or ignoring autocorrelation | TFPW introduces sample autocorrelation bias and distorts true slopes in short records (N=25); MMK variance correction directly adjusts test statistic variance without modifying the physical data. | Low | R3/R5 |
 | 2026-10-24 | Enforce fail-closed data ingestion and ban synthetic production records | Generating synthetic climatology fallback in data/trends/ | Silent generation of synthetic data mimics real measurements and risks disqualification; synthetic data is restricted strictly to isolated unit-test fixtures. | Low | R4/R9 |
+| 2026-10-24 | Adapt the application header for desktop, tablet, and phone layouts | Keep the three-column desktop header and shrink or wrap it at every width | Separate aligned rows prevent brand/navigation/action overlap on compact desktop; persistent tablet navigation and a mobile disclosure preserve all controls at touch widths. | Low | R6/R7 |
+| 2026-10-24 | Make operational limits smoothly collapsible and establish a shared source-provenance footer | Keep dense methods text expanded forever and repeat a low-contrast footer on each route | State-specific SVG controls and reduced-motion-aware animation preserve clear interaction; the shared bilingual footer makes SWOT, IMERG, and BWDB provenance readable across routes. | Low | R6/R7 |
 
 
 ---

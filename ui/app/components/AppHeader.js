@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "../hooks/useLocale";
@@ -16,6 +16,8 @@ export default function AppHeader({
   const { theme, toggleTheme } = useTelemetry();
   const pathname = usePathname();
   const [isOnline, setIsOnline] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuButtonRef = useRef(null);
 
   useEffect(() => {
     const updateOnline = () => {
@@ -33,12 +35,28 @@ export default function AppHeader({
     };
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+        mobileMenuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileMenuOpen]);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const isDashboardActive = pathname === "/" || pathname === "/dashboard";
   const isForecastActive = pathname === "/forecast";
   const isAdvisoryActive = pathname === "/advisory";
 
   return (
-    <header className="app-topbar" role="banner">
+    <header className={`app-topbar ${isMobileMenuOpen ? "topbar-mobile-menu-open" : ""}`} role="banner">
       {/* Column 1: Brand & Regional Context */}
       <div className="topbar-left">
         <Link href="/" className="topbar-brand">
@@ -64,7 +82,12 @@ export default function AppHeader({
       </div>
 
       {/* Column 2: Strictly Centered Page Shifter / Core Journey Tabs */}
-      <nav className="topbar-center topbar-nav" aria-label={t("app.navAria")}>
+      <nav
+        id="topbar-navigation"
+        className="topbar-center topbar-nav"
+        aria-label={t("app.navAria")}
+        onClick={closeMobileMenu}
+      >
         <Link
           href="/dashboard"
           className={`topbar-nav-link ${isDashboardActive ? "active" : ""}`}
@@ -94,7 +117,7 @@ export default function AppHeader({
       </nav>
 
       {/* Column 3: Live Replay Telemetry + Language + Quick Bulletin CTA + Model Info */}
-      <div className="topbar-right">
+      <div id="topbar-controls" className="topbar-right">
         {/* Central Telemetry & Freshness Indicator */}
         <div className="topbar-status-wrapper topbar-center-status">
           <div
@@ -147,7 +170,10 @@ export default function AppHeader({
             <button
               type="button"
               className={`lang-option ${lang === "en" ? "active" : ""}`}
-              onClick={() => setLang("en")}
+              onClick={() => {
+                setLang("en");
+                closeMobileMenu();
+              }}
               role="radio"
               aria-checked={lang === "en"}
               title="English"
@@ -158,7 +184,10 @@ export default function AppHeader({
             <button
               type="button"
               className={`lang-option ${lang === "bn" ? "active" : ""}`}
-              onClick={() => setLang("bn")}
+              onClick={() => {
+                setLang("bn");
+                closeMobileMenu();
+              }}
               role="radio"
               aria-checked={lang === "bn"}
               title="বাংলা (Bengali)"
@@ -172,7 +201,10 @@ export default function AppHeader({
           <button
             type="button"
             className="theme-toggle-btn"
-            onClick={toggleTheme}
+            onClick={() => {
+              toggleTheme();
+              closeMobileMenu();
+            }}
             title={
               theme === "mocha"
                 ? (lang === "en" ? "Switch to Light Field Theme" : "লাইট ফিল্ড থিমে পরিবর্তন করুন")
@@ -189,7 +221,10 @@ export default function AppHeader({
           {/* Advisory Bulletin Button */}
           <button
             className="btn-standard neu-raised topbar-advisory-btn"
-            onClick={onOpenBulletin}
+            onClick={() => {
+              closeMobileMenu();
+              onOpenBulletin();
+            }}
             title={lang === "en" ? "Generate Agricultural Advisory Bulletin" : "কৃষি বুলেটিন তৈরি করুন"}
             aria-label={t("app.advisoryBulletinBtn")}
             style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
@@ -204,7 +239,10 @@ export default function AppHeader({
           {/* Model Architecture Info */}
           <button
             className="btn-icon neu-raised"
-            onClick={onOpenModelInfo}
+            onClick={() => {
+              closeMobileMenu();
+              onOpenModelInfo();
+            }}
             title={lang === "en" ? "About SWOT Hydrologic Model Architecture" : "মডেল তথ্য"}
             aria-label={t("app.modelInfoBtn")}
           >
@@ -216,6 +254,24 @@ export default function AppHeader({
           </button>
         </div>
       </div>
+
+      <button
+        ref={mobileMenuButtonRef}
+        type="button"
+        className="topbar-mobile-toggle"
+        aria-label={isMobileMenuOpen ? t("app.closeMenu") : t("app.openMenu")}
+        aria-expanded={isMobileMenuOpen}
+        aria-controls="topbar-navigation topbar-controls"
+        onClick={() => setIsMobileMenuOpen((open) => !open)}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          {isMobileMenuOpen ? (
+            <path d="M18 6 6 18M6 6l12 12" />
+          ) : (
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          )}
+        </svg>
+      </button>
     </header>
   );
 }

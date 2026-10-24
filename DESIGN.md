@@ -153,4 +153,6 @@ The design adheres to a **calm, readable, trustworthy professional light visual 
 - **Analytical View (Module 2 — Historical Rainfall Trend Explorer):**
   - Delivered via dedicated `TrendExplorerViewer.js` component activated via topbar segmented switcher (`🛰️ Real-Time Warning` vs `📊 Rainfall Trends`).
   - Features 25-year Recharts multi-decadal time-series chart with solid navy Sen's slope line (`#175A85`), analytical 95% CI envelope (`rgba(40, 123, 181, 0.12)`), 4 factual statistical cards, and contextual climatological disclaimer well (`#F8FAFC`).
-- **Responsive Viewport Targets:** Verified across 1440×900 (desktop), 1366×768 (laptop), 390×844 (mobile), and 360×800 (narrow mobile). No horizontal overflow.
+- **Responsive Viewport Targets:** Captured in headless Chromium at 1440×900 (desktop), 1170×820 (compact desktop/tablet landscape), 768×1024 (tablet portrait), 390×844 (mobile), and 320×700 (narrow mobile). The document width matched the viewport in each capture; physical touch-device behavior remains unverified.
+- **Operational Limits Disclosure:** The methods panel stays expanded by default and collapses with distinct panel SVGs, a smooth state transition, keyboard-operable control, and a reduced-motion path.
+- **Shared Scientific Footer:** All operational routes share a bilingual mission and data-provenance footer for NASA SWOT, GPM IMERG Early Run V07, and the BWDB Kanaighat gauge.
