@@ -164,7 +164,7 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 > That twenty-two-hour window allows officers to deploy combine harvesters and volunteer brigades to rescue the mature grain before the 13.20 meter danger level is breached.  
 > 
 > With our built-in **Bangla language toggle**, advisories can be broadcast directly over Union Parishad loudspeakers.  
-> And our permanently visible **Operational Limits Panel** ensures scientific honesty: acknowledging that SWOT provides offline geometry rather than a continuous live gauge.  
+> And our expanded-by-default **Operational Limits Panel** keeps scientific limits easy to inspect, while its heading remains available when collapsed. It clarifies that SWOT provides offline geometry rather than a continuous live gauge.
 > 
 > **HydroSense-SWOT** brings NASA space science directly to the farmers of Bangladesh. Thank you!"
 

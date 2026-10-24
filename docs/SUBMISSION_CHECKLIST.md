@@ -34,7 +34,7 @@
 | [x] | **Time-Split Discipline** | Manning roughness $n$ calibrated on pre-event period (Jan 2024 – Mar 2026); test period (Apr–May 2026) strictly frozen. | **PASS** | Verified in `pipeline/manning_calibration.py`. No data leakage. |
 | [x] | **Quality Gating Enforced** | Slope noise filter ($\text{slope2} \ge 2\times\text{slope\_u}$) and width $> 100\text{ m}$ filter applied. | **PASS** | Low-confidence slope reaches flagged and excluded from Manning calibration. |
 | [x] | **Uncertainty Quantified** | Propagate SWOT $\pm 0.18\text{ m}$ WSE analytical uncertainty band onto stage predictions. | **PASS** | Hydrograph plots shaded $\pm 0.18\text{ m}$ uncertainty band around modelled water level. |
-| [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Permanently visible [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) on dashboard. |
+| [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Expanded-by-default [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) with a persistent accessible heading and collapse control. |
 | [x] | **Clean JSON Exports** | Static JSON bridge contains zero `NaN` or `-999999.0` fill values. | **PASS** | Verified across all 5 JSON files in `ui/public/data/`. |
 | [!] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **UNDER AUDIT** | Active scientific audit confirmed script parameter issues in `validation_report.py` and `run_pipeline.py`. Baseline comparison metrics marked unresolved pending re-benchmarking. |
 

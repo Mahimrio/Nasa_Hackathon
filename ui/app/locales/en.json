@@ -4,6 +4,8 @@
     "badge": "SWOT",
     "statusLabel": "STATUS:",
     "statusReplay": "LIVE REPLAY",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
     "advisoryBulletinBtn": "Advisory Bulletin",
     "modelInfoBtn": "Model Info",
     "displayLanguage": "Display language",
@@ -188,6 +190,13 @@
         "text": "Validated across April 1 – May 31, 2026: Model achieves NSE = {nse} (vs {baseNse} rainfall baseline), KGE = {kge}, Peak Timing Error = {timing}, and Actionable Warning Lead Time = {lead}."
       }
     ]
+  },
+  "footer": {
+    "dataProvenance": "Data provenance",
+    "swotDetails": "L2 HR RiverSP 2.0 · KaRIn altimetry",
+    "imergDetails": "Early Run V07 · 0.1° · half-hourly",
+    "gaugeDetails": "Kanaighat gauge · SW266 (model SW108)",
+    "challengeContext": "NASA Space Apps Challenge 2026 · Tier 4 User Delivery Interface"
   },
   "inspector": {
     "title": "Hydraulic Reach Calibration Inspector",

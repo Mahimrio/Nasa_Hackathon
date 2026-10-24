@@ -421,17 +421,16 @@ Use content-based breakpoints; these are initial suggestions:
 |---|---:|---|
 | Small mobile | `< 480 px` | Single column; compact top bar; map first; validation cards 2 columns where readable |
 | Mobile / large phone | `480–767 px` | Single-column cards; optional horizontal metric strip |
-| Tablet | `768–1023 px` | 8-column layout; map full width, decision panel may sit below or beside map only if each gets enough width |
-| Laptop | `1024–1279 px` | Map + decision rail in a 2:1 ratio where labels fit; cards 16 px gutters |
-| Desktop | `1280–1679 px` | Intended 8/4 split and full-width hydrograph |
-| Large desktop | `≥ 1680 px` | Center content to max-width 1680 px; do not enlarge chart text/spacing without limit |
+| Tablet portrait | `768–1023 px` | Persistent journey tabs with secondary controls in an accessible disclosure; map full width and decision panel below |
+| Laptop / compact desktop | `1024–1679 px` | Brand and actions on the first header row, journey navigation centered below; map + decision rail in a 2:1 ratio where labels fit |
+| Large desktop | `≥ 1680 px` | Single-row header; intended 8/4 split; center content to max-width 1680 px and do not enlarge chart text/spacing without limit |
 
 ### 5.2 Mobile order
 
-1. Top bar / connection state.
+1. Compact top bar; navigation and connection state stay available through the mobile menu.
 2. Page context and essential filters.
 3. Harvest decision summary (either before map if it is urgent, or directly beneath map according to product priority; the recommended first view is map then a concise decision summary).
-4. Map (height 300–340 px; map toolbar buttons remain touchable).
+4. Map (height 300–360 px; map toolbar buttons remain touchable).
 5. Hydrograph.
 6. Scientific metrics (2 columns or horizontal list).
 7. Operational limits (collapsed if long).

@@ -20,6 +20,8 @@ HydroSense-SWOT is structured into two distinct, decoupled components:
 ## What it does
 HydroSense-SWOT addresses the pre-monsoon flash-flood crisis in northeastern Bangladesh, where overtopping embankments frequently destroy ripening Boro rice. The operational dashboard (Module 1) provides a day-level event rail, selected-day readout, single editable hour-skip control, pinned current replay date, and a layout-stable English/Bengali interface for rapid agricultural triage. Module 2 provides decadal retrospective context for agricultural extension planners without confounding long-term climatology with 24–48h operational flood prediction.
 
+The dashboard reflows for tablet and phone screens. Journey navigation stays visible on tablet, while the phone menu keeps navigation, language, theme, connection status, and advisory controls accessible without crowding the top bar. The operational limitations panel has a smooth, reduced-motion-aware disclosure, and a shared bilingual footer summarizes the mission and data provenance.
+
 ## How to run (5 steps)
 1. **Install dependencies:**  
    ```bash
@@ -44,6 +46,7 @@ HydroSense-SWOT addresses the pre-monsoon flash-flood crisis in northeastern Ban
    cd ui && npm run dev
    ```
    Open `http://localhost:3000` in your browser.
+   The interface adapts from desktop through narrow phone widths, including a touch-friendly mobile menu, animated limitations disclosure, and a source-focused footer.
 
 ## Data Sources
 
@@ -87,7 +90,7 @@ Evaluated on the frozen test period (April 1 – May 31, 2026) using 15-minute t
 - **Sensor Revisit vs Routing:** SWOT does not act as a live continuous gauge (21-day orbit repeat); it provides offline channel parameterization. Operational lead time is driven by routing observed GPM IMERG rainfall.
 - **In-Channel Hydraulic Regime:** Muskingum-Cunge routing models the rising limb and threshold-crossing timing. 2D floodplain inundation and post-breach backwater dynamics are not modelled.
 - **Orographic Bias:** GPM IMERG may overestimate intense rainfall over the steep Meghalaya escarpment; calibration against downstream gauge stage implicitly dampens this bias.
-- *Detailed specification:* See the permanently visible [Operational Limits Panel specification](docs/DESIGN_ARCHITECTURE.md#operational-limits-panel) and [SOLUTION_ARCHITECTURE.md §4.1](docs/SOLUTION_ARCHITECTURE.md).
+- *Detailed specification:* See the always-discoverable [Operational Limits Panel specification](docs/DESIGN_ARCHITECTURE.md#operational-limits-panel) and [SOLUTION_ARCHITECTURE.md §4.1](docs/SOLUTION_ARCHITECTURE.md).
 
 ## Citation & Team
 - **Team:** AUSTrology

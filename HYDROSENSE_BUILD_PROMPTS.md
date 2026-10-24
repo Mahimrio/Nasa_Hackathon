@@ -115,7 +115,7 @@ cp .env.example .env
 | Harvest Decision Panel | `ui/app/components/HarvestDecisionPanel.js` | ✅ Flag status, modeled parameters |
 | Hydrograph Panel | `ui/app/components/HydrographPanel.js` | ✅ Dual-axis chart with timeline scrubber |
 | Validation Metrics Panel | `ui/app/components/ValidationMetricsPanel.js` | ✅ NSE, KGE, PBIAS, timing, lead time cards |
-| Operational Limits Panel | `ui/app/components/OperationalLimitsPanel.js` | ✅ Always-visible limits |
+| Operational Limits Panel | `ui/app/components/OperationalLimitsPanel.js` | ✅ Expanded by default; accessible collapsible limits |
 | Reach Inspector Modal | `ui/app/components/ReachInspectorModal.js` | ✅ Detailed reach data on click |
 | Advisory Bulletin Modal | `ui/app/components/AdvisoryBulletinModal.js` | ✅ Bilingual advisory text |
 | Model Architecture Modal | `ui/app/components/ModelArchitectureModal.js` | ✅ Pipeline explanation |

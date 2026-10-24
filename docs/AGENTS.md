@@ -32,14 +32,17 @@ This file serves as the concise operating contract for any AI assistant working 
 - **Decoupled Architecture:** Module 2 lives exclusively in `trend_explorer/` and `data/trends/`. It does not alter `pipeline/run_pipeline.py` or existing Module 1 fixtures (Trap T-G10).
 
 ### Frontend Delivery Dashboard (Tier 4 — Next.js 16)
-- **Framework & Architecture:** Next.js 16 App Router in `ui/` conforming to `docs/DESIGN_ARCHITECTURE.md`. Modular components organized under `ui/app/components/` (`AppHeader`, `PageContextBar`, `RiverMapPanel`, `HarvestDecisionPanel`, `HydrographPanel`, `ValidationMetricsPanel`, `OperationalLimitsPanel`, `ReachInspectorModal`, `AdvisoryBulletinModal`, `ModelArchitectureModal`, and planned `TrendExplorerViewer`).
+- **Framework & Architecture:** Next.js 16 App Router in `ui/` conforming to `docs/DESIGN_ARCHITECTURE.md`. Modular components organized under `ui/app/components/` (`AppHeader`, `DashboardFooter`, `PageContextBar`, `RiverMapPanel`, `HarvestDecisionPanel`, `HydrographPanel`, `ValidationMetricsPanel`, `OperationalLimitsPanel`, `ReachInspectorModal`, `AdvisoryBulletinModal`, `ModelArchitectureModal`, and planned `TrendExplorerViewer`).
 - **Data Hydration:** The UI reads purely static JSON fixtures from `ui/public/data/*.json` and `ui/public/data/trends/trend_results.json`. Zero runtime Python server or live API calls required during judging demos.
 - **Recharts & Dynamic Timeline:** Recharts renders stage and rainfall hyetographs with analytical uncertainty bands (`upper`/`lower`). Time slider and replay engine (1x, 2x, 5x) scrub index across `event_timeseries.json`.
 - **Styling & Depth:** Calm, high-contrast agricultural design system (#F5F8FA background, #FFFFFF cards, #173B57 text, #287BB5 blue, #B7791F amber, #B4232F red) with crisp structural borders and zero distracting neon glows.
 - **No Hardcoded Dates/Metrics:** Dates, timestamps, and performance metrics must be dynamically parsed from exported JSON data files, never hardcoded (Trap B10 / Trap C1).
-- **Bilingual Interface:** Every user-facing label, advisory text, metric sub-label, and tooltip supports instantaneous English (`en`) and Bengali (`bn`) toggling with 100% key parity (252 keys).
+- **Bilingual Interface:** Every user-facing label, advisory text, metric sub-label, and tooltip supports instantaneous English (`en`) and Bengali (`bn`) toggling with 100% key parity (261 keys).
+- **Responsive Delivery:** At 1024–1679 px, the brand/actions and journey navigation use aligned separate rows; at 768–1023 px, journey tabs remain visible and secondary controls open from a disclosure; below 768 px, a compact brand row opens navigation and controls. Keep touch targets at least 44 px and let users dismiss the menu with Escape.
+- **Disclosure Motion:** Use distinct SVG state icons for expand/collapse controls, keep state and action clear, and honor `prefers-reduced-motion`.
+- **Shared Footer:** Present the HydroSense mission and NASA SWOT, GPM IMERG, and BWDB provenance in readable English and Bengali across dashboard routes.
 - **Accessibility & CVD:** Use CVD-safe palette (WCAG AA $\ge 4.5:1$) and `@media (prefers-reduced-motion: reduce)` support. Status flags must use icon + text label + color (never color alone, per §4.3).
-- **Limits Panel:** The operational limits panel must remain permanently visible on screen (Trap C3).
+- **Limits Panel:** Keep the operational limits section expanded by default; when collapsed, preserve its heading and accessible expand control so the methodology remains discoverable (Trap C3).
 
 ## 3. Project Status & Work Orders
 - **P1-SWOT through P7-MAP:** **DONE** (Full Module 1 hydrological pipeline, SWOT Manning calibration, Muskingum-Cunge routing, validation metrics, Leaflet GIS integration, and OSM meanders).
@@ -56,7 +59,7 @@ This file serves as the concise operating contract for any AI assistant working 
 - **Data (R4):** Real sample inspected, fill values handled, fixture saved, `docs/SOURCES.md` updated.
 - **Science (R3):** Formulas checked against peer-reviewed literature, units verified, limits stated in `docs/DECISIONS.md` and Limits Panel.
 - **Backend (R5):** Contract written, offline fallback verified, test suite passing with 100% green tests (40/40).
-- **Frontend (R6/R7):** Next.js App Router bound to JSON exports, CVD-safe palette, bilingual toggle, limits panel permanently visible, zero console errors.
+- **Frontend (R6/R7):** Next.js App Router bound to JSON exports, CVD-safe palette, bilingual toggle, always-discoverable limits panel, zero console errors.
 - **Compliance (R9):** All sources cited in `docs/SOURCES.md`, licenses confirmed, zero banned content, `docs/AI_USE_LOG.md` and `docs/AGENTS.md` kept strictly up-to-date.
 
 
