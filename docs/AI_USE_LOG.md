@@ -43,3 +43,4 @@ In compliance with NASA Space Apps Challenge 2026 guidelines and the project ste
 
 
 
+| 2026-10-24 | Codex | GPT-6 | R9 Compliance / R10 QA | Rewrote the synthetic-data disclosure and score-remediation plan using current generator behavior, the supplied six-role rubric, evidence gates, and uncertainty-aware score reporting. No application code changed. | docs/SYNTHETIC_DATA.md, docs/SCORE_REMEDIATION_BUILD_PROMPTS.md | User | Corrected stale fixture descriptions, removed unsupported score guarantees, added provenance, independent validation, trend-statistics, QA, UX, and red-team acceptance gates. |
