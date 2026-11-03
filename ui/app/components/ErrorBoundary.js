@@ -38,8 +38,8 @@ export default class ErrorBoundary extends React.Component {
             margin: "60px auto",
             padding: "32px",
             borderRadius: "16px",
-            background: "#FFFFFF",
-            border: "1.5px solid rgba(180, 35, 47, 0.3)",
+            background: "var(--surface-popover)",
+            border: "1.5px solid color-mix(in srgb, var(--red-danger) 45%, transparent)",
             boxShadow: "0 12px 36px rgba(23, 59, 87, 0.12)",
             textAlign: "center",
           }}
@@ -49,13 +49,13 @@ export default class ErrorBoundary extends React.Component {
               width: "56px",
               height: "56px",
               borderRadius: "50%",
-              background: "#FDF2F2",
-              border: "1px solid rgba(180, 35, 47, 0.25)",
+              background: "var(--red-surface)",
+              border: "1px solid color-mix(in srgb, var(--red-danger) 40%, transparent)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               margin: "0 auto 18px auto",
-              color: "#B4232F",
+              color: "var(--red-danger)",
             }}
           >
             <svg
@@ -102,7 +102,7 @@ export default class ErrorBoundary extends React.Component {
           {this.state.error && (
             <div
               style={{
-                background: "#F8FAFC",
+                background: "var(--surface-850)",
                 border: "1px solid var(--border-subtle)",
                 borderRadius: "8px",
                 padding: "10px 14px",

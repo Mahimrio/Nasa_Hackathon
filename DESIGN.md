@@ -81,6 +81,8 @@ components:
 
 # Design System — HydroSense-SWOT
 
+> **Theme status (2026-11-03):** The app ships two themes. **Mocha** (dark) is the default (`data-theme="mocha"` in `layout.js`, persisted in `localStorage` as `hydrosense_theme`) and is documented in **Section 6**. **Light Field** is the toggleable alternative and is what Sections 1–5 and the frontmatter tokens describe. Where Sections 1–5 conflict with Section 6 on surfaces, decoration or fonts, Section 6 wins for Mocha. Semantic rules (GREEN/AMBER/RED, 12px type floor, bilingual parity, reduced motion) apply to both.
+
 ## 1. Overview & Visual Philosophy
 
 HydroSense-SWOT is a high-precision scientific telemetry and harvest decision-support instrument tailored for transboundary flash-flood early warning in the Haor basin of northeastern Bangladesh. It is used by Upazila agricultural extension officers (DAE) and Boro rice farming communities.
@@ -156,3 +158,47 @@ The design adheres to a **calm, readable, trustworthy professional light visual 
 - **Responsive Viewport Targets:** Captured in headless Chromium at 1440×900 (desktop), 1170×820 (compact desktop/tablet landscape), 768×1024 (tablet portrait), 390×844 (mobile), and 320×700 (narrow mobile). The document width matched the viewport in each capture; physical touch-device behavior remains unverified.
 - **Operational Limits Disclosure:** The methods panel stays expanded by default and collapses with distinct panel SVGs, a smooth state transition, keyboard-operable control, and a reduced-motion path.
 - **Shared Scientific Footer:** All operational routes share a bilingual mission and data-provenance footer for NASA SWOT, GPM IMERG Early Run V07, and the BWDB Kanaighat gauge.
+
+---
+
+## 6. Mocha Blend Theme (default, in progress)
+
+Brief: *Mocha Brown, Platinum Silver, Pale Lavender must read as one blended system; cards, buttons and background all in that family; cards animated; fonts professional and multi-family.* Work is **uncommitted and not pushed** (user asked not to push).
+
+**Files**
+- `ui/app/globals.css`: Mocha tokens in `:root, [data-theme="mocha"]`; Light Field in `[data-theme="light"]`.
+- `ui/app/mocha-blend.css`: all Mocha-only treatment, scoped to `[data-theme="mocha"]`, imported after `globals.css` in `layout.js`. Numbered sections: 1 canvas, 2 type roles, 3 cards, 4 entrance, 5 top bar, 6 buttons, 7 decision panel, 8 map chrome, 9 overlays/tooltips, 10 selection/scrollbar/focus, 11 reduced motion, 12 accent fills, 13 map header fixes.
+- `ui/app/components/SurfaceFX.js`: pointer-follow spotlight. One delegated `pointermove` listener, rAF-throttled, writes `--mx/--my` on `.glass-panel, .triage-pillar-card, .metric-card, .advisory-stat-box`. Disabled for coarse pointers and `prefers-reduced-motion`.
+
+**Roles**
+| Role | Colour | Tokens |
+|---|---|---|
+| Mocha: canvas, cards, wells | `#1D130D` canvas, `#35241A` card, `#412D21` elevated, `#22160F` well, `#3F2C20` popover | `--mocha-*`, `--surface-card`, `--surface-popover` |
+| Platinum: type, hairlines, primary action | `#E8E4DE`; text `#F2EEE8` / `#CBBFB5` / `#A89A8E`; hairline `rgba(232,228,222,.14)` | `--platinum-*`, `--text-*`, `--border-subtle` |
+| Pale Lavender: focus, active, satellite telemetry | `#DCD2F2`, deep `#A592D6`, border `rgba(205,190,240,.42)` | `--pale-lavender*`, `--lavender-deep` |
+| Water only | sky blue `#9CCBF2` | `--cyan-*` |
+| Safety (shape and icon always accompany colour) | green `#7FD6A4`, amber `#F0B45A`, red `#FF8A94` | `--green-action`, `--amber-caution`, `--red-danger` |
+
+**Type roles:** Fraunces (display: card titles, triage headline, decision status, brand, modal headings) / Manrope (interface and body) / IBM Plex Mono (measurements, timestamps, codes, chart ticks). Bengali: Noto Serif Bengali for display, Noto Sans Bengali for UI; `.lang-bn` resets letter-spacing to 0. Fonts load through a `<link>` in `layout.js` (not CSS `@import`). 12px minimum is enforced in Mocha for the former 9–11px labels.
+
+**Motion:** ambient lavender/mocha light drifting on `body::before` (46s) with fine grain on `body::after`; surfaces rise in with a stagger on entrance; card hover lifts and shows a lavender spotlight under the cursor; button sheen; gauge fill; status glow on the decision panel. Section 11 of `mocha-blend.css` drops the choreography under `prefers-reduced-motion` but keeps every state change.
+
+**Charts:** Recharts reads `--chart-model` (`#C9BBF5`), `--chart-observed`, `--chart-baseline`, `--chart-rain`, `--chart-band`, `--chart-grid`, `--chart-tick`, `--chart-label`, `--chart-amber`, `--chart-red`, `--chart-dot-ring`. No hex literals remain in `HydrographPanel.js`. The uncertainty band is one range `Area` over `[lower, upper]`, with a range-aware tooltip.
+
+**Map:** the basemap stays light for legibility; the frame, controls, gauge label (`--surface-popover`, amber border) and location button are mocha.
+
+### 6.1 Status and handoff
+
+Done: tokens, fonts, cards, buttons, top bar, decision panel, chart colours, map chrome, overlays, reduced motion, SVG theme toggle, screenshot rig `.design-shots/shoot.mjs` (headless Chromium; prints `overflowX` per capture). Dashboard 1440 EN/BN and 390 EN were reviewed. Round 2 captures (`b-forecast`, `b-advisory`, `b-trends`, `b-schematic`, `b-hover`, `b-bulletin`) exist in `.design-shots/`. Forecast looked coherent. Advisory, trends and bulletin were captured but not fully assessed.
+
+**Next steps, in order**
+1. Run `cd ui && npm run build` and `npm run lint`, then `pytest tests/` from the repo root. None were run after the redesign.
+2. Fix the clipped "Danger 13.20m" label: raise the right margin of both Recharts charts in `HydrographPanel.js` (about 70) and keep the rain chart aligned with the main chart.
+3. Fix `shoot.mjs` so the schematic capture targets the map toggle inside `.card-header-bar`, not the first `[role=radio]` (the language toggle).
+4. Review `b-advisory.png`, `b-trends.png`, `b-bulletin.png`, and take a hover shot of `.triage-pillar-card`.
+5. Check the topbar between 1170 and 1760 px: "Trend Explorer" clipped to "Trend Ex…" at about 1566 px before the redesign; the compact two-row layout applies at 1440.
+6. Open items from earlier in the session, not yet investigated: (a) "Flood Peak (13.4m)" jump pill shows active while the replay is at Apr 11 18:00 (8.88 m); (b) a Next.js dev overlay "1 Issue" badge; (c) WATCH badge contrast, which should be rechecked in both themes.
+7. Check the Light Field theme for regressions (`globals.css` was edited in about 260 lines).
+8. After human review, commit. Delete `ui/dev.log` (stray) and decide whether `.design-shots/` and `NASA Webapp Challenge Assistance.md` (about 970 KB) belong in the repo or in `.gitignore`.
+
+Run: `cd ui && npm run dev` then open `http://localhost:3000`. The dev server was stopped at the user's request; another project runs on this machine, so check the port before starting.

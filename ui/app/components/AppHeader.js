@@ -1,10 +1,56 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLocale } from "../hooks/useLocale";
 import { useTelemetry } from "../context/TelemetryContext";
+import HydroSenseLogo from "./HydroSenseLogo";
+
+/**
+ * Positions a sliding highlight under the active child of `container`.
+ * Writes CSS variables only (no React state), so moving it never re-renders.
+ * The container must be `position: relative`; the indicator reads the variables.
+ */
+function placeIndicator(container, activeSelector) {
+  if (!container) return;
+  const active = container.querySelector(activeSelector);
+  if (!active || active.offsetWidth === 0) {
+    container.style.setProperty("--ind-o", "0");
+    return;
+  }
+  container.style.setProperty("--ind-x", `${active.offsetLeft}px`);
+  container.style.setProperty("--ind-y", `${active.offsetTop}px`);
+  container.style.setProperty("--ind-w", `${active.offsetWidth}px`);
+  container.style.setProperty("--ind-h", `${active.offsetHeight}px`);
+  container.style.setProperty("--ind-o", "1");
+}
+
+function useSlidingIndicator(containerRef, activeSelector, deps) {
+  const [animated, setAnimated] = useState(false);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    placeIndicator(container, activeSelector);
+    // Enable transitions only after the first placement, so it never slides in from 0.
+    const frame = requestAnimationFrame(() => setAnimated(true));
+
+    if (!container || typeof ResizeObserver === "undefined") {
+      return () => cancelAnimationFrame(frame);
+    }
+    // Fonts, language and viewport changes resize the tabs; keep the highlight glued to them.
+    const observer = new ResizeObserver(() => placeIndicator(container, activeSelector));
+    observer.observe(container);
+    container.querySelectorAll("a, button").forEach((el) => observer.observe(el));
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  return animated;
+}
 
 export default function AppHeader({
   currentDateStr,
@@ -12,12 +58,15 @@ export default function AppHeader({
   onOpenBulletin,
   onOpenModelInfo,
 }) {
-  const { lang, setLang, t } = useLocale();
+  const { lang, setLang, t, mounted } = useLocale();
   const { theme, toggleTheme } = useTelemetry();
   const pathname = usePathname();
   const [isOnline, setIsOnline] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [pending, setPending] = useState(null);
   const mobileMenuButtonRef = useRef(null);
+  const navRef = useRef(null);
+  const langRef = useRef(null);
 
   useEffect(() => {
     const updateOnline = () => {
@@ -51,32 +100,53 @@ export default function AppHeader({
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const isDashboardActive = pathname === "/" || pathname === "/dashboard";
-  const isForecastActive = pathname === "/forecast";
-  const isAdvisoryActive = pathname === "/advisory";
-  const isTrendsActive = pathname === "/trends";
+  const routeKey =
+    pathname === "/" || pathname === "/dashboard"
+      ? "dashboard"
+      : pathname === "/forecast"
+        ? "forecast"
+        : pathname === "/advisory"
+          ? "advisory"
+          : pathname === "/trends"
+            ? "trends"
+            : null;
+
+  // Optimistic: the highlight starts sliding on click, before the route has committed.
+  // The pending choice is tied to the pathname it was made on, so it expires by itself
+  // once navigation lands (or if the user stays on the same page).
+  const activeKey = pending && pending.fromPath === pathname ? pending.key : routeKey;
+
+  const isDashboardActive = activeKey === "dashboard";
+  const isForecastActive = activeKey === "forecast";
+  const isAdvisoryActive = activeKey === "advisory";
+  const isTrendsActive = activeKey === "trends";
+
+  const navAnimated = useSlidingIndicator(navRef, ".topbar-nav-link.active", [
+    activeKey,
+    lang,
+    mounted,
+    isMobileMenuOpen,
+  ]);
+  const langAnimated = useSlidingIndicator(langRef, ".lang-option.active", [lang, mounted, isMobileMenuOpen]);
+
+  const choose = (key) => () => setPending({ key, fromPath: pathname });
 
   return (
-    <header className={`app-topbar ${isMobileMenuOpen ? "topbar-mobile-menu-open" : ""}`} role="banner">
+    <header
+      className={`app-topbar ${isMobileMenuOpen ? "topbar-mobile-menu-open" : ""}`}
+      role="banner"
+      data-ready={mounted ? "true" : "false"}
+    >
       {/* Column 1: Brand & Regional Context */}
       <div className="topbar-left">
         <Link href="/" className="topbar-brand">
           <div className="brand-glyph" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-            </svg>
+            <HydroSenseLogo size={22} />
           </div>
           <div className="brand-text">
             <div className="brand-name">
               {t("app.title")}
               <span className="brand-badge">{t("app.badge")}</span>
-            </div>
-            <div className="brand-title">
-              {t("contextBar.title")}
-              <span className="brand-region-badge">{t("contextBar.haorBasinBadge")}</span>
-            </div>
-            <div className="brand-tagline">
-              {t("contextBar.subtitle")}
             </div>
           </div>
         </Link>
@@ -85,14 +155,17 @@ export default function AppHeader({
       {/* Column 2: Strictly Centered Page Shifter / Core Journey Tabs */}
       <nav
         id="topbar-navigation"
-        className="topbar-center topbar-nav"
+        ref={navRef}
+        className={`topbar-center topbar-nav ${navAnimated ? "is-animated" : ""}`}
         aria-label={t("app.navAria")}
         onClick={closeMobileMenu}
       >
+        <span className="nav-indicator" aria-hidden="true" />
         <Link
           href="/dashboard"
           className={`topbar-nav-link ${isDashboardActive ? "active" : ""}`}
-          aria-current={isDashboardActive ? "page" : undefined}
+          aria-current={routeKey === "dashboard" ? "page" : undefined}
+          onClick={choose("dashboard")}
         >
           <span className="nav-step-badge">1</span>
           <span>{lang === "en" ? "Dashboard" : "ড্যাশবোর্ড"}</span>
@@ -101,7 +174,8 @@ export default function AppHeader({
         <Link
           href="/forecast"
           className={`topbar-nav-link ${isForecastActive ? "active" : ""}`}
-          aria-current={isForecastActive ? "page" : undefined}
+          aria-current={routeKey === "forecast" ? "page" : undefined}
+          onClick={choose("forecast")}
         >
           <span className="nav-step-badge">2</span>
           <span>{lang === "en" ? "Forecast & Analysis" : "পূর্বাভাস ও বিশ্লেষণ"}</span>
@@ -110,12 +184,18 @@ export default function AppHeader({
         <Link
           href="/advisory"
           className={`topbar-nav-link ${isAdvisoryActive ? "active" : ""}`}
-          aria-current={isAdvisoryActive ? "page" : undefined}
+          aria-current={routeKey === "advisory" ? "page" : undefined}
+          onClick={choose("advisory")}
         >
           <span className="nav-step-badge">3</span>
           <span>{lang === "en" ? "Harvest Advisory" : "ফসল কর্তন পরামর্শ"}</span>
         </Link>
-        <Link href="/trends" className={`topbar-nav-link ${isTrendsActive ? "active" : ""}`} aria-current={isTrendsActive ? "page" : undefined}>
+        <Link
+          href="/trends"
+          className={`topbar-nav-link ${isTrendsActive ? "active" : ""}`}
+          aria-current={routeKey === "trends" ? "page" : undefined}
+          onClick={choose("trends")}
+        >
           <span>{lang === "en" ? "Trend Explorer" : "প্রবণতা"}</span>
         </Link>
       </nav>
@@ -170,7 +250,13 @@ export default function AppHeader({
         {/* Actions & Bilingual Switcher */}
         <div className="topbar-actions">
           {/* Language Segmented Toggle */}
-          <div className="segmented-lang" role="radiogroup" aria-label={t("app.displayLanguage")}>
+          <div
+            ref={langRef}
+            className={`segmented-lang ${langAnimated ? "is-animated" : ""}`}
+            role="radiogroup"
+            aria-label={t("app.displayLanguage")}
+          >
+            <span className="lang-indicator" aria-hidden="true" />
             <button
               type="button"
               className={`lang-option ${lang === "en" ? "active" : ""}`}
@@ -216,7 +302,20 @@ export default function AppHeader({
             }
             aria-label={theme === "mocha" ? "Switch to Light theme" : "Switch to Mocha theme"}
           >
-            <span className="theme-toggle-icon" aria-hidden="true">{theme === "mocha" ? "☕" : "☀️"}</span>
+            <span className="theme-toggle-icon" aria-hidden="true">
+              {theme === "mocha" ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+                  <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+                  <path d="M7 2v3M11 2v3M15 2v3" />
+                </svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+                </svg>
+              )}
+            </span>
             <span className="theme-toggle-label">
               {theme === "mocha" ? (lang === "en" ? "Mocha" : "মোখা") : (lang === "en" ? "Light" : "লাইট")}
             </span>

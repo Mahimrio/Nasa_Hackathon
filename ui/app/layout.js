@@ -1,7 +1,16 @@
 import "./globals.css";
+import "./mocha-blend.css";
+import "./shell.css";
 import { LocaleProvider } from "./hooks/useLocale";
 import { TelemetryProvider } from "./context/TelemetryContext";
 import ProvenanceNotice from "./components/ProvenanceNotice";
+import SurfaceFX from "./components/SurfaceFX";
+import GlobalHeader from "./components/GlobalHeader";
+
+// Type system: Fraunces (display) / Manrope (interface) / IBM Plex Mono (data)
+// plus Noto Sans + Noto Serif Bengali so the Bengali UI keeps the same roles.
+const FONT_STYLESHEET =
+  "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&display=swap";
 
 export const metadata = {
   title: "HydroSense-SWOT — Synthetic Demo",
@@ -21,7 +30,7 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#F5F8FA",
+  themeColor: "#1D130D",
 };
 
 export default function RootLayout({ children }) {
@@ -29,15 +38,20 @@ export default function RootLayout({ children }) {
     <html lang="bn" data-theme="mocha" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <link rel="icon" href="/favicon.ico" />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={FONT_STYLESHEET} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
                 var theme = localStorage.getItem('hydrosense_theme') || 'mocha';
                 document.documentElement.setAttribute('data-theme', theme);
+                var l = document.createElement('link');
+                l.id = 'app-favicon'; l.rel = 'icon'; l.type = 'image/svg+xml';
+                l.href = theme === 'mocha' ? '/logo-mocha.svg' : '/logo-light.svg';
+                document.head.appendChild(l);
               } catch (e) {}
             `,
           }}
@@ -45,7 +59,12 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <LocaleProvider>
-          <TelemetryProvider><ProvenanceNotice />{children}</TelemetryProvider>
+          <TelemetryProvider>
+            <ProvenanceNotice />
+            <GlobalHeader />
+            {children}
+            <SurfaceFX />
+          </TelemetryProvider>
         </LocaleProvider>
       </body>
     </html>

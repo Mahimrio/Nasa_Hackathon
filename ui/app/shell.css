@@ -1,0 +1,271 @@
+/* ============================================================
+   HydroSense-SWOT — App shell motion
+   Loaded after globals.css and mocha-blend.css.
+
+   1. Header readiness (no text flash while language and fonts resolve)
+   2. Sliding indicators for the journey tabs and the EN/BN switch
+   3. Page-wide cross-fade for language and theme changes (View Transitions)
+   4. Loading skeleton that mirrors the dashboard layout
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Header readiness
+   The server renders Bengali; the saved language is only known on the client.
+   Until it is resolved (and the fonts are in), the header content stays invisible
+   rather than flashing the wrong language and then reflowing.
+   ------------------------------------------------------------ */
+.app-topbar > * {
+  transition: opacity 380ms var(--ease-soft, ease);
+}
+
+.app-topbar[data-ready="false"] > * {
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------
+   2. Sliding indicators
+   AppHeader writes --ind-x / --ind-y / --ind-w / --ind-h / --ind-o on the container.
+   ------------------------------------------------------------ */
+.topbar-nav,
+.segmented-lang {
+  position: relative;
+  isolation: isolate;
+}
+
+.nav-indicator,
+.lang-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: var(--ind-w, 0px);
+  height: var(--ind-h, 0px);
+  transform: translate3d(var(--ind-x, 0px), var(--ind-y, 0px), 0);
+  opacity: var(--ind-o, 0);
+  pointer-events: none;
+  will-change: transform, width;
+}
+
+.nav-indicator {
+  border-radius: var(--radius-pill);
+  background: var(--blue-primary);
+  border: 1px solid var(--blue-primary);
+  box-shadow: 0 1px 4px rgba(40, 123, 181, 0.22);
+}
+
+.lang-indicator {
+  border-radius: var(--radius-pill);
+  background: var(--blue-primary);
+  border: 1px solid var(--blue-primary);
+  box-shadow: 0 1px 4px rgba(40, 123, 181, 0.22);
+}
+
+/* Transitions only after the first placement, so the highlight never slides in from 0 */
+.topbar-nav.is-animated .nav-indicator,
+.segmented-lang.is-animated .lang-indicator {
+  transition:
+    transform 560ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    width 560ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    height 560ms var(--ease-expo, cubic-bezier(0.16, 1, 0.3, 1)),
+    opacity 240ms ease;
+}
+
+/* The links and options sit above the indicator and carry no background of their own
+   when active: the indicator is the highlight. */
+.topbar-nav .topbar-nav-link,
+.segmented-lang .lang-option {
+  position: relative;
+  z-index: 1;
+}
+
+.topbar-nav .topbar-nav-link {
+  transition:
+    color 260ms var(--ease-soft, ease),
+    background 220ms var(--ease-soft, ease),
+    transform 260ms var(--ease-expo, ease);
+}
+
+.segmented-lang .lang-option {
+  transition:
+    color 260ms var(--ease-soft, ease),
+    background 220ms var(--ease-soft, ease),
+    transform 260ms var(--ease-expo, ease);
+}
+
+.topbar-nav .topbar-nav-link.active,
+.topbar-nav .topbar-nav-link.active:hover,
+.segmented-lang .lang-option.active,
+.segmented-lang .lang-option.active:hover {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.topbar-nav .topbar-nav-link.active { color: #FFFFFF; }
+
+/* Tab labels never wrap on desktop; the layout switches to two rows before they would */
+@media (min-width: 1024px) {
+  .topbar-nav .topbar-nav-link {
+    white-space: nowrap;
+  }
+}
+
+/* Press feedback */
+.topbar-nav .topbar-nav-link:active,
+.segmented-lang .lang-option:active {
+  transform: scale(0.96);
+  transition-duration: 90ms;
+}
+
+/* The step badge settles into its active colour instead of snapping */
+.nav-step-badge {
+  transition:
+    background 320ms var(--ease-soft, ease),
+    color 320ms var(--ease-soft, ease),
+    transform 320ms var(--ease-expo, ease);
+}
+
+.topbar-nav-link.active .nav-step-badge { transform: scale(1.06); }
+.topbar-nav-link:not(.active):hover .nav-step-badge { transform: scale(1.1); }
+
+/* Mocha: a lavender-lit glass pill, as before, but now it travels */
+[data-theme="mocha"] .nav-indicator {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.28), rgba(205, 190, 240, 0.14));
+  border: 1px solid var(--pale-lavender-border);
+  box-shadow: 0 8px 18px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="mocha"] .topbar-nav .topbar-nav-link.active { color: #F7F3FD; }
+
+[data-theme="mocha"] .lang-indicator {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.30), rgba(205, 190, 240, 0.16));
+  border: 1px solid var(--pale-lavender-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+[data-theme="mocha"] .segmented-lang .lang-option.active { color: #F7F3FD; }
+
+/* ------------------------------------------------------------
+   3. View transitions: language and theme changes cross-fade the whole page
+   (useLocale.setLang and TelemetryContext.toggleTheme run inside a View Transition).
+   The language indicator is a named element, so the browser morphs it between the
+   two options. In browsers without the API the CSS transition above does the slide.
+   ------------------------------------------------------------ */
+@supports (view-transition-name: none) {
+  .lang-indicator {
+    view-transition-name: lang-indicator;
+    transition: none !important;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+::view-transition-group(lang-indicator) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
+  .nav-indicator,
+  .lang-indicator,
+  .topbar-nav .topbar-nav-link,
+  .segmented-lang .lang-option,
+  .nav-step-badge {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   4. Loading skeleton
+   Same shell, same hero grid and similar block heights as the dashboard, so the swap
+   to real content does not move anything. The sweep is a transform on a pseudo-element
+   (compositor only), unlike the old background-position animation.
+   ------------------------------------------------------------ */
+.skeleton-shell > * {
+  animation: none !important;
+}
+
+.skeleton-block {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--gradient-glass, var(--surface-card));
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
+.skeleton-block::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(100deg, transparent 20%, rgba(40, 123, 181, 0.07) 50%, transparent 80%);
+  animation: skeleton-sweep 1.9s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+}
+
+[data-theme="mocha"] .skeleton-block::after {
+  background: linear-gradient(100deg, transparent 20%, rgba(214, 200, 248, 0.085) 50%, transparent 80%);
+}
+
+@keyframes skeleton-sweep {
+  to { transform: translateX(100%); }
+}
+
+.skeleton-context { height: 56px; }
+.skeleton-triage { height: 232px; padding: var(--space-5); display: flex; align-items: flex-end; }
+.skeleton-map { height: 600px; }
+.skeleton-decision { height: 600px; }
+
+.skeleton-pillars {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.skeleton-pillar {
+  height: 108px;
+  border-radius: var(--radius-md);
+  background: rgba(8, 4, 2, 0.28);
+  border: 1px solid var(--border-subtle);
+}
+
+html[data-theme="light"] .skeleton-pillar {
+  background: rgba(23, 59, 87, 0.04);
+}
+
+.skeleton-journey {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.skeleton-journey-card { height: 92px; }
+
+@media (max-width: 900px) {
+  .skeleton-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .skeleton-triage { height: 330px; }
+  .skeleton-journey { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 1023px) {
+  .skeleton-map { height: 420px; }
+  .skeleton-decision { height: 480px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-block::after {
+    animation: none;
+    opacity: 0;
+  }
+}

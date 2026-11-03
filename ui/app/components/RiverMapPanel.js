@@ -194,7 +194,7 @@ export default function RiverMapPanel({
               alignItems: "center",
               gap: "5px",
               background: viewMode === "geographic" ? "var(--blue-primary)" : "transparent",
-              color: viewMode === "geographic" ? "#FFFFFF" : "var(--text-secondary)",
+              color: viewMode === "geographic" ? "var(--on-accent)" : "var(--text-secondary)",
               transition: "all var(--motion-fast)",
             }}
             onClick={() => setViewMode("geographic")}
@@ -218,7 +218,7 @@ export default function RiverMapPanel({
               alignItems: "center",
               gap: "5px",
               background: viewMode === "schematic" ? "var(--blue-primary)" : "transparent",
-              color: viewMode === "schematic" ? "#FFFFFF" : "var(--text-secondary)",
+              color: viewMode === "schematic" ? "var(--on-accent)" : "var(--text-secondary)",
               transition: "all var(--motion-fast)",
             }}
             onClick={() => setViewMode("schematic")}

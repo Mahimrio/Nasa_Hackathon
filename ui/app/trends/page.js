@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import AppHeader from "../components/AppHeader";
+
 import DashboardFooter from "../components/DashboardFooter";
 import { useLocale } from "../hooks/useLocale";
 
@@ -18,7 +18,7 @@ export default function TrendsPage() {
   const title = lang === "bn" ? "বৃষ্টিপাত প্রবণতা অনুসন্ধান" : "Rainfall Trend Explorer";
   return (
     <>
-      <AppHeader currentDateStr="—" currentTimeStr="—" onOpenBulletin={() => {}} onOpenModelInfo={() => {}} />
+
       <main className="dashboard-shell" id="main-content">
         <section className="glass-panel card-padding" aria-labelledby="trend-title">
           <h1 id="trend-title" className="card-title">{title}</h1>

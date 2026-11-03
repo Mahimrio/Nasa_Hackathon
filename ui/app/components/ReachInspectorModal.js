@@ -72,8 +72,8 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#EAF3F9",
-              border: "1px solid rgba(40, 123, 181, 0.25)",
+              background: "var(--info-surface)",
+              border: "1px solid var(--info-border)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -260,14 +260,14 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             style={{
               padding: "12px",
               borderRadius: "8px",
-              background: "#FEF7EE",
-              border: "1px solid rgba(183, 121, 31, 0.3)",
+              background: "var(--amber-surface)",
+              border: "1px solid color-mix(in srgb, var(--amber-caution) 40%, transparent)",
               marginBottom: "16px",
             }}
           >
             <div
               style={{
-                color: "var(--amber-600, #B7791F)",
+                color: "var(--amber-400)",
                 fontWeight: 700,
                 fontSize: "12.5px",
                 marginBottom: "4px",

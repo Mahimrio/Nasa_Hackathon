@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale } from "../hooks/useLocale";
+import HydroSenseLogo from "./HydroSenseLogo";
 
 const DATA_SOURCES = [
   { name: "NASA SWOT", detail: "footer.swotDetails" },
@@ -17,17 +18,7 @@ export default function DashboardFooter() {
         <div className="footer-identity">
           <div className="footer-brand-lockup">
             <span className="footer-brand-mark" aria-hidden="true">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M12 3.25 5.9 11.3a4.8 4.8 0 0 0 3.83 7.7h4.54a4.8 4.8 0 0 0 3.83-7.7L12 3.25Z" />
-                <path d="M8.1 14.7c1.05-.72 2.1-.72 3.15 0 1.06.72 2.12.72 3.18 0" />
-              </svg>
+              <HydroSenseLogo />
             </span>
             <span className="footer-brand-copy">
               <strong>HydroSense-SWOT</strong>
