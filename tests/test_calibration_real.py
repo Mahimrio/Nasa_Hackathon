@@ -178,7 +178,9 @@ def test_diagnostic_plots_generation():
             },
         )
 
-        cal_res = calibrate_all_reaches(ds)
+        cal_res = calibrate_all_reaches(
+            ds, output_json_path=os.path.join(tmp_dir, "cal_results.json")
+        )
         plots = plot_calibration_diagnostics(ds, cal_res, output_dir=tmp_dir)
 
         assert "n_sensitivity_curve" in plots

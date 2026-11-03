@@ -57,8 +57,8 @@ export default function ModelArchitectureModal({ onClose }) {
               width: "40px",
               height: "40px",
               borderRadius: "8px",
-              background: "#EAF3F9",
-              border: "1px solid rgba(40, 123, 181, 0.25)",
+              background: "var(--info-surface)",
+              border: "1px solid var(--info-border)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -99,7 +99,7 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "#F8FAFC",
+              background: "var(--surface-850)",
               border: "1px solid var(--border-subtle)",
             }}
           >
@@ -126,7 +126,7 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "#F8FAFC",
+              background: "var(--surface-850)",
               border: "1px solid var(--border-subtle)",
             }}
           >
@@ -153,12 +153,12 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "#F8FAFC",
+              background: "var(--surface-850)",
               border: "1px solid var(--border-subtle)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-              <strong style={{ color: "#5B67CA", fontSize: "13.5px" }}>
+              <strong style={{ color: "var(--violet-500)", fontSize: "13.5px" }}>
                 {t("architecture.routingTitle")}
               </strong>
               <span
@@ -180,7 +180,7 @@ export default function ModelArchitectureModal({ onClose }) {
             style={{
               padding: "12px 14px",
               borderRadius: "10px",
-              background: "#F8FAFC",
+              background: "var(--surface-850)",
               border: "1px solid var(--border-subtle)",
             }}
           >

@@ -1,0 +1,1063 @@
+/* ============================================================
+   HydroSense-SWOT — Mocha Blend
+   Mocha Brown · Platinum Silver · Pale Lavender, as one tonal system.
+
+   Loaded after globals.css. Everything here is scoped to
+   [data-theme="mocha"], so the Light Field theme is untouched.
+
+   Roles
+   - Mocha     : canvas, cards, wells (the material)
+   - Platinum  : type, hairlines, the primary action (the metal)
+   - Lavender  : focus, active selection, satellite telemetry (the light)
+
+   Type roles
+   - Fraunces / Noto Serif Bengali : display (titles, decisions)
+   - Manrope  / Noto Sans Bengali  : interface and body
+   - IBM Plex Mono                 : measurements, timestamps, codes
+   ============================================================ */
+
+@property --spot {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+:root {
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* ------------------------------------------------------------
+   1. Canvas — warm mocha with a lavender haze and fine grain
+   ------------------------------------------------------------ */
+html[data-theme="mocha"] {
+  background: #1A100A;
+}
+
+[data-theme="mocha"] body {
+  background: var(--gradient-canvas);
+  background-attachment: fixed;
+  caret-color: var(--pale-lavender);
+}
+
+[data-theme="mocha"] body::before,
+[data-theme="mocha"] body::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+}
+
+/* Slow ambient light: two soft sources drifting against each other */
+[data-theme="mocha"] body::before {
+  inset: -18vmax;
+  z-index: 0;
+  background:
+    radial-gradient(34vmax 34vmax at 76% 14%, rgba(200, 182, 244, 0.11), transparent 70%),
+    radial-gradient(40vmax 40vmax at 14% 80%, rgba(184, 128, 88, 0.14), transparent 70%);
+  animation: ambient-drift 46s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Grain keeps the large gradients from banding and gives the mocha some tooth */
+[data-theme="mocha"] body::after {
+  inset: 0;
+  z-index: 0;
+  opacity: 0.07;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@keyframes ambient-drift {
+  from { transform: translate3d(-2vmax, -1vmax, 0) scale(1); }
+  to   { transform: translate3d(2.5vmax, 2vmax, 0) scale(1.08); }
+}
+
+/* ------------------------------------------------------------
+   2. Type roles
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .card-title,
+[data-theme="mocha"] .triage-headline,
+[data-theme="mocha"] .decision-status-title,
+[data-theme="mocha"] .brand-name,
+[data-theme="mocha"] .journey-stepper-title,
+[data-theme="mocha"] .journey-step-title,
+[data-theme="mocha"] .footer-brand-copy strong,
+[data-theme="mocha"] .footer-provenance h2,
+[data-theme="mocha"] .advisory-subcard-title,
+[data-theme="mocha"] .modal-content-panel h2,
+[data-theme="mocha"] .modal-content-panel h3 {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--pale-lavender);
+}
+
+[data-theme="mocha"] .card-title { font-size: 19px; line-height: 1.3; }
+[data-theme="mocha"] .triage-headline { font-size: 22px; line-height: 1.25; color: var(--text-primary); }
+[data-theme="mocha"] .brand-name { font-size: 19px; font-weight: 700; color: var(--topbar-text-primary); }
+
+[data-theme="mocha"] .decision-status-title {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  text-wrap: balance;
+}
+
+[data-theme="mocha"] .decision-status-title.NORMAL { color: var(--green-action); }
+[data-theme="mocha"] .decision-status-title.WATCH { color: var(--amber-caution); }
+[data-theme="mocha"] .decision-status-title.CRITICAL { color: var(--red-danger); }
+
+/* Bengali conjuncts need neutral tracking */
+.lang-bn .card-title,
+.lang-bn .triage-headline,
+.lang-bn .decision-status-title,
+.lang-bn .brand-name {
+  letter-spacing: 0;
+}
+
+[data-theme="mocha"] .metric-hero-value,
+[data-theme="mocha"] .param-value,
+[data-theme="mocha"] .event-day-chip-day,
+[data-theme="mocha"] .status-timestamp {
+  font-feature-settings: "zero" 1, "tnum" 1;
+}
+
+[data-theme="mocha"] .pillar-tag,
+[data-theme="mocha"] .metric-tag-label,
+[data-theme="mocha"] .param-label {
+  color: var(--text-secondary);
+}
+
+/* The smallest labels were 9–11px; DESIGN.md sets 12px as the floor */
+[data-theme="mocha"] .chart-current-label,
+[data-theme="mocha"] .event-day-block-selected-label,
+[data-theme="mocha"] .event-day-chip-weekday,
+[data-theme="mocha"] .event-day-chip-month,
+[data-theme="mocha"] .event-day-block-hint,
+[data-theme="mocha"] .event-day-block-selected-time,
+[data-theme="mocha"] .timeline-skip-unit,
+[data-theme="mocha"] .chart-current-stage {
+  font-size: 12px;
+}
+
+/* ------------------------------------------------------------
+   3. Cards — smoked-mocha glass with a platinum rim and a
+      lavender light that follows the pointer
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .glass-panel,
+[data-theme="mocha"] .neu-raised {
+  --spot: 0;
+  border: 1px solid var(--border-subtle);
+  background:
+    radial-gradient(560px circle at var(--mx, 50%) var(--my, 0%), rgba(214, 200, 248, calc(var(--spot) * 0.12)), transparent 64%),
+    var(--gradient-glass);
+  box-shadow: var(--shadow-card);
+  transition:
+    border-color 320ms var(--ease-soft),
+    box-shadow 420ms var(--ease-soft),
+    --spot 520ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .glass-panel:hover,
+[data-theme="mocha"] .glass-panel:focus-within {
+  --spot: 1;
+  border-color: var(--platinum-border-strong);
+}
+
+[data-theme="mocha"] .glass-panel-interactive:hover {
+  border-color: var(--pale-lavender-border);
+  box-shadow: var(--shadow-card-hover);
+}
+
+[data-theme="mocha"] .neu-inset {
+  background: var(--mocha-well);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-neu-inset);
+}
+
+[data-theme="mocha"] .card-header-bar {
+  border-bottom-color: var(--border-subtle);
+}
+
+[data-theme="mocha"] .card-icon {
+  color: var(--pale-lavender);
+}
+
+/* Inner wells: pillars, stat boxes, readouts sit one step deeper than the card */
+[data-theme="mocha"] .triage-pillar-card,
+[data-theme="mocha"] .advisory-stat-box,
+[data-theme="mocha"] .decision-advisory-text,
+[data-theme="mocha"] .chart-current-bar,
+[data-theme="mocha"] .triage-trust-badge {
+  --spot: 0;
+  background:
+    radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), rgba(214, 200, 248, calc(var(--spot) * 0.14)), transparent 70%),
+    linear-gradient(180deg, rgba(20, 11, 6, 0.46), rgba(20, 11, 6, 0.30));
+  border: 1px solid rgba(232, 228, 222, 0.10);
+  box-shadow: inset 0 1px 3px rgba(8, 4, 2, 0.35), 0 1px 0 rgba(255, 244, 232, 0.04);
+  transition:
+    transform 340ms var(--ease-expo),
+    border-color 260ms var(--ease-soft),
+    box-shadow 340ms var(--ease-soft),
+    --spot 420ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .triage-pillar-card:hover,
+[data-theme="mocha"] .triage-pillar-card:focus-visible,
+[data-theme="mocha"] .advisory-stat-box:hover {
+  --spot: 1;
+  transform: translateY(-3px);
+  border-color: var(--pale-lavender-border);
+  background:
+    radial-gradient(300px circle at var(--mx, 50%) var(--my, 0%), rgba(214, 200, 248, calc(var(--spot) * 0.14)), transparent 70%),
+    linear-gradient(180deg, rgba(20, 11, 6, 0.40), rgba(20, 11, 6, 0.24));
+  box-shadow: 0 16px 28px -16px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.10);
+}
+
+[data-theme="mocha"] .triage-trust-badge { color: var(--text-secondary); }
+
+[data-theme="mocha"] .triage-flag-hero-badge {
+  box-shadow: 0 6px 14px -8px rgba(8, 4, 2, 0.8);
+  background: rgba(20, 11, 6, 0.4);
+}
+
+[data-theme="mocha"] .decision-advisory-text {
+  color: var(--text-primary);
+}
+
+/* Operational limits: a full amber hairline and a warm top wash instead of a 4px side stripe */
+[data-theme="mocha"] .operational-limits-card {
+  border: 1px solid rgba(240, 180, 90, 0.34);
+  background:
+    linear-gradient(180deg, rgba(240, 180, 90, 0.10), transparent 90px),
+    var(--gradient-glass);
+}
+
+/* ------------------------------------------------------------
+   4. Entrance — one authored moment: surfaces rise out of the dark,
+      staggered top to bottom. Plays once on mount, never on updates.
+   ------------------------------------------------------------ */
+/* Opacity and transform only. The old version also animated filter: blur() on large
+   backdrop-filter panels, which forces a repaint of every frame and was the main
+   source of jank on refresh. It also started fully transparent after long delays, so
+   the page went blank between the skeleton and the content. It now starts at 55% and
+   the whole stagger finishes inside ~200ms. */
+@keyframes surface-rise {
+  from {
+    opacity: 0.55;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > * {
+    animation: surface-rise 520ms var(--ease-expo) backwards;
+  }
+
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > :nth-child(1) { animation-delay: 0ms; }
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > :nth-child(2) { animation-delay: 40ms; }
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > :nth-child(3) { animation-delay: 80ms; }
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > :nth-child(4) { animation-delay: 120ms; }
+  [data-theme="mocha"] .dashboard-shell:not(.skeleton-shell) > :nth-child(n+5) { animation-delay: 160ms; }
+
+  /* Inside the hero row the decision rail trails the map */
+  [data-theme="mocha"] .dashboard-hero-row > .glass-panel:nth-child(2) {
+    animation: surface-rise 520ms var(--ease-expo) 120ms backwards;
+  }
+
+  [data-theme="mocha"] .triage-4pillars-grid > .triage-pillar-card {
+    animation: surface-rise 460ms var(--ease-expo) backwards;
+  }
+  [data-theme="mocha"] .triage-4pillars-grid > :nth-child(1) { animation-delay: 60ms; }
+  [data-theme="mocha"] .triage-4pillars-grid > :nth-child(2) { animation-delay: 100ms; }
+  [data-theme="mocha"] .triage-4pillars-grid > :nth-child(3) { animation-delay: 140ms; }
+  [data-theme="mocha"] .triage-4pillars-grid > :nth-child(4) { animation-delay: 180ms; }
+
+  /* The stage gauge fills in, once, when the decision rail lands */
+  [data-theme="mocha"] .stage-gauge-fill {
+    transform-origin: left center;
+    animation: gauge-fill 900ms var(--ease-expo) 280ms backwards;
+  }
+}
+
+@keyframes gauge-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* ------------------------------------------------------------
+   5. Top bar — a mocha horizon that lets the page glow through
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .app-topbar {
+  background: var(--surface-topbar);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 10px 30px -18px rgba(8, 4, 2, 0.9), inset 0 -1px 0 rgba(255, 244, 232, 0.04);
+}
+
+[data-theme="mocha"] .brand-glyph {
+  background: linear-gradient(160deg, rgba(220, 210, 242, 0.18), rgba(122, 87, 64, 0.30));
+  border: 1px solid var(--pale-lavender-border);
+  color: var(--pale-lavender);
+  box-shadow: 0 8px 16px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.18);
+}
+
+[data-theme="mocha"] .brand-badge {
+  background: linear-gradient(180deg, #8A6249, #6E4A35);
+  color: #F4EFFB;
+  border: 1px solid rgba(232, 228, 222, 0.28);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+[data-theme="mocha"] .brand-region-badge {
+  background: var(--pale-lavender-surface);
+  color: var(--pale-lavender);
+  border: 1px solid var(--pale-lavender-border);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+[data-theme="mocha"] .brand-title { color: var(--topbar-text-secondary); }
+[data-theme="mocha"] .brand-tagline { color: var(--topbar-text-muted); }
+
+/* Navigation: a glass track with a lavender-lit active tab */
+[data-theme="mocha"] .topbar-nav {
+  background: var(--topbar-nav-bg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 3px rgba(8, 4, 2, 0.4);
+}
+
+[data-theme="mocha"] .topbar-nav-link {
+  color: var(--topbar-text-secondary);
+  border: 1px solid transparent;
+  transition:
+    color 220ms var(--ease-soft),
+    background 220ms var(--ease-soft),
+    border-color 220ms var(--ease-soft),
+    box-shadow 320ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .topbar-nav-link:hover {
+  color: #FFFFFF;
+  background: rgba(255, 244, 232, 0.08);
+}
+
+[data-theme="mocha"] .topbar-nav-link.active {
+  color: #F7F3FD;
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.28), rgba(205, 190, 240, 0.14));
+  border-color: var(--pale-lavender-border);
+  box-shadow: 0 8px 18px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="mocha"] .nav-step-badge {
+  background: rgba(255, 244, 232, 0.12);
+  color: var(--topbar-text-secondary);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+[data-theme="mocha"] .topbar-nav-link.active .nav-step-badge {
+  background: var(--pale-lavender);
+  color: #2A1B13;
+}
+
+/* Status, language, theme and icon controls share one neutral glass recipe */
+[data-theme="mocha"] .status-pill,
+[data-theme="mocha"] .segmented-lang,
+[data-theme="mocha"] .theme-toggle-btn,
+[data-theme="mocha"] .btn-icon,
+[data-theme="mocha"] .topbar-mobile-toggle {
+  background: linear-gradient(180deg, rgba(255, 244, 232, 0.075), rgba(255, 244, 232, 0.03));
+  border: 1px solid var(--border-subtle);
+  color: var(--topbar-text-primary);
+  box-shadow: 0 6px 14px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.08);
+}
+
+[data-theme="mocha"] .status-kicker { color: var(--topbar-text-secondary); }
+[data-theme="mocha"] .status-kicker strong { color: var(--green-action); letter-spacing: 0.06em; }
+[data-theme="mocha"] .status-timestamp { color: var(--pale-lavender); }
+
+[data-theme="mocha"] .status-beacon {
+  background: var(--green-action);
+  box-shadow: 0 0 0 3px rgba(127, 214, 164, 0.2);
+}
+
+[data-theme="mocha"] .lang-option {
+  color: var(--topbar-text-secondary);
+}
+
+[data-theme="mocha"] .lang-option:hover {
+  background: rgba(255, 244, 232, 0.08);
+  color: #FFFFFF;
+}
+
+[data-theme="mocha"] .lang-option.active {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.30), rgba(205, 190, 240, 0.16));
+  color: #F7F3FD;
+  border: 1px solid var(--pale-lavender-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+[data-theme="mocha"] .theme-toggle-btn { color: var(--topbar-text-primary); }
+[data-theme="mocha"] .theme-toggle-icon { display: inline-flex; color: var(--pale-lavender); }
+
+[data-theme="mocha"] .theme-toggle-btn:hover,
+[data-theme="mocha"] .btn-icon:hover,
+[data-theme="mocha"] .topbar-mobile-toggle:hover {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.20), rgba(205, 190, 240, 0.08));
+  border-color: var(--pale-lavender-border);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+/* ------------------------------------------------------------
+   6. Buttons — platinum is the one primary metal
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .btn-standard {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(180deg, rgba(255, 244, 232, 0.085), rgba(255, 244, 232, 0.035));
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 650;
+  box-shadow: 0 6px 14px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.09);
+  transition:
+    transform 260ms var(--ease-expo),
+    background 240ms var(--ease-soft),
+    border-color 240ms var(--ease-soft),
+    box-shadow 320ms var(--ease-soft),
+    color 200ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .btn-standard:hover {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.20), rgba(205, 190, 240, 0.08));
+  border-color: var(--pale-lavender-border);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px -12px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+[data-theme="mocha"] .btn-standard:active {
+  transform: translateY(0) scale(0.985);
+  transition-duration: 90ms;
+}
+
+[data-theme="mocha"] .btn-primary,
+[data-theme="mocha"] .topbar-advisory-btn {
+  background: var(--gradient-primary);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #2A1B13;
+  font-weight: 700;
+  box-shadow: 0 12px 22px -12px rgba(8, 4, 2, 0.95), inset 0 1px 0 #FFFFFF, inset 0 -1px 0 rgba(90, 70, 52, 0.25);
+}
+
+[data-theme="mocha"] .btn-primary:hover,
+[data-theme="mocha"] .topbar-advisory-btn:hover {
+  background: linear-gradient(180deg, #FFFFFF 0%, #DCD6CD 100%);
+  border-color: #FFFFFF;
+  color: #1E120A;
+  box-shadow: 0 16px 26px -12px rgba(8, 4, 2, 1), 0 0 0 3px rgba(205, 190, 240, 0.28), inset 0 1px 0 #FFFFFF;
+}
+
+/* A single sheen pass across the metal on hover */
+[data-theme="mocha"] .btn-primary::after,
+[data-theme="mocha"] .topbar-advisory-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.7) 50%, transparent 62%);
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-theme="mocha"] .btn-primary:hover::after,
+  [data-theme="mocha"] .topbar-advisory-btn:hover::after {
+    transform: translateX(130%);
+    transition: transform 760ms var(--ease-expo);
+  }
+}
+
+/* Quick-jump chips and selects */
+[data-theme="mocha"] .quick-preset-chips {
+  background: linear-gradient(180deg, rgba(255, 244, 232, 0.07), rgba(255, 244, 232, 0.03));
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 6px 14px -10px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.08);
+}
+
+[data-theme="mocha"] .preset-chip { color: var(--text-secondary); }
+
+[data-theme="mocha"] .preset-chip:hover {
+  background: rgba(255, 244, 232, 0.09);
+  border-color: var(--border-subtle);
+  color: #FFFFFF;
+  box-shadow: none;
+}
+
+[data-theme="mocha"] .preset-chip.active {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.30), rgba(205, 190, 240, 0.16));
+  color: #F7F3FD;
+  border: 1px solid var(--pale-lavender-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+[data-theme="mocha"] select,
+[data-theme="mocha"] select.btn-standard {
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark;
+  padding-right: 34px;
+  background-color: #2B1C13;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%23DCD2F2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M1.5 1.75 6 6.25l4.5-4.5'/></svg>"),
+    linear-gradient(180deg, rgba(255, 244, 232, 0.085), rgba(255, 244, 232, 0.03));
+  background-repeat: no-repeat, no-repeat;
+  background-position: right 12px center, 0 0;
+  background-size: 12px 8px, 100% 100%;
+  color: var(--text-primary);
+}
+
+[data-theme="mocha"] select option {
+  background: #2B1C13;
+  color: #F2EEE8;
+}
+
+/* Timeline controls */
+[data-theme="mocha"] .timeline-skip-control,
+[data-theme="mocha"] .timeline-speed-selector,
+[data-theme="mocha"] .event-day-chip {
+  background: linear-gradient(180deg, rgba(255, 244, 232, 0.07), rgba(255, 244, 232, 0.03));
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 0 rgba(255, 244, 232, 0.07);
+}
+
+[data-theme="mocha"] .timeline-skip-stepper { background: rgba(20, 11, 6, 0.4); }
+[data-theme="mocha"] .timeline-skip-arrow { color: var(--pale-lavender); }
+[data-theme="mocha"] .timeline-skip-arrow:hover { background: rgba(205, 190, 240, 0.16); }
+[data-theme="mocha"] .timeline-skip-control:focus-within {
+  border-color: var(--pale-lavender-border);
+  box-shadow: 0 0 0 3px rgba(205, 190, 240, 0.2);
+}
+[data-theme="mocha"] .timeline-skip-label svg { color: var(--pale-lavender); }
+
+[data-theme="mocha"] .timeline-play-btn {
+  background: var(--gradient-primary);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #2A1B13;
+  box-shadow: 0 12px 20px -10px rgba(8, 4, 2, 0.95), inset 0 1px 0 #FFFFFF;
+  transition: transform 260ms var(--ease-expo), box-shadow 300ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .timeline-play-btn:hover {
+  background: linear-gradient(180deg, #FFFFFF 0%, #DCD6CD 100%);
+  transform: scale(1.07);
+  box-shadow: 0 16px 24px -10px rgba(8, 4, 2, 1), 0 0 0 4px rgba(205, 190, 240, 0.26), inset 0 1px 0 #FFFFFF;
+}
+
+[data-theme="mocha"] .speed-btn:hover { background: rgba(255, 244, 232, 0.09); color: #FFFFFF; }
+[data-theme="mocha"] .speed-btn.active {
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.32), rgba(205, 190, 240, 0.18));
+  color: #F7F3FD;
+}
+
+[data-theme="mocha"] .event-day-chip:hover {
+  border-color: var(--pale-lavender-border);
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.16), rgba(205, 190, 240, 0.06));
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px -10px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 244, 232, 0.12);
+}
+
+[data-theme="mocha"] .event-day-chip.active {
+  border-color: var(--pale-lavender);
+  background: linear-gradient(180deg, rgba(205, 190, 240, 0.32), rgba(205, 190, 240, 0.16));
+  box-shadow: 0 0 0 1px var(--pale-lavender-border), 0 10px 18px -10px rgba(8, 4, 2, 0.95);
+}
+
+[data-theme="mocha"] .event-day-chip.active .event-day-chip-weekday { color: var(--pale-lavender); }
+
+[data-theme="mocha"] .event-day-block-selected {
+  background: var(--pale-lavender-surface);
+  border-color: var(--pale-lavender-border);
+}
+
+[data-theme="mocha"] .event-day-block-selected-value,
+[data-theme="mocha"] .chart-current-time,
+[data-theme="mocha"] .chart-current-stage strong {
+  color: var(--pale-lavender);
+}
+
+[data-theme="mocha"] .chart-current-dot {
+  background: var(--pale-lavender);
+  box-shadow: 0 0 0 3px rgba(205, 190, 240, 0.18), 0 0 10px rgba(205, 190, 240, 0.6);
+}
+
+[data-theme="mocha"] .chart-current-step { border-left-color: var(--border-subtle); }
+
+[data-theme="mocha"] .event-day-block,
+[data-theme="mocha"] .timeline-controller-card,
+[data-theme="mocha"] .metrics-5col-grid {
+  border-top-color: var(--border-subtle);
+}
+
+[data-theme="mocha"] .validation-metric-card { border-left-color: var(--border-subtle); }
+[data-theme="mocha"] .validation-metric-card:hover { background: rgba(255, 244, 232, 0.035); }
+[data-theme="mocha"] .validation-metric-card.accent-card { background: rgba(205, 190, 240, 0.07); }
+[data-theme="mocha"] .validation-metric-card.accent-card .metric-hero-value { color: var(--pale-lavender); }
+[data-theme="mocha"] .metric-info-icon { background: rgba(255, 244, 232, 0.10); }
+
+/* Scrubber */
+[data-theme="mocha"] .timeline-scrubber-input {
+  background: rgba(20, 11, 6, 0.65);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 3px rgba(8, 4, 2, 0.6);
+}
+
+[data-theme="mocha"] .timeline-scrubber-input::-webkit-slider-thumb {
+  background: linear-gradient(180deg, #F3F0EA, #CFC9C0);
+  border: 2px solid var(--pale-lavender);
+  box-shadow: 0 6px 12px -4px rgba(8, 4, 2, 0.9);
+}
+
+[data-theme="mocha"] .timeline-scrubber-input::-webkit-slider-thumb:hover {
+  background: #FFFFFF;
+  box-shadow: 0 8px 14px -4px rgba(8, 4, 2, 1), 0 0 0 4px rgba(205, 190, 240, 0.25);
+}
+
+[data-theme="mocha"] .timeline-scrubber-input::-moz-range-thumb {
+  background: linear-gradient(180deg, #F3F0EA, #CFC9C0);
+  border: 2px solid var(--pale-lavender);
+  box-shadow: 0 6px 12px -4px rgba(8, 4, 2, 0.9);
+}
+
+[data-theme="mocha"] .event-day-rail {
+  scrollbar-color: rgba(205, 190, 240, 0.5) rgba(20, 11, 6, 0.5);
+}
+[data-theme="mocha"] .event-day-rail::-webkit-scrollbar-track { background: rgba(20, 11, 6, 0.5); }
+[data-theme="mocha"] .event-day-rail::-webkit-scrollbar-thumb { background: rgba(205, 190, 240, 0.5); }
+
+/* ------------------------------------------------------------
+   7. Decision panel — status lights glow from inside the glass
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .decision-status-orb.NORMAL {
+  background: radial-gradient(circle at 35% 28%, rgba(127, 214, 164, 0.32), rgba(127, 214, 164, 0.08) 70%);
+  border-color: rgba(127, 214, 164, 0.7);
+  box-shadow: 0 16px 28px -14px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="mocha"] .decision-status-orb.WATCH {
+  background: radial-gradient(circle at 35% 28%, rgba(240, 180, 90, 0.34), rgba(240, 180, 90, 0.08) 70%);
+  border-color: rgba(240, 180, 90, 0.75);
+  box-shadow: 0 16px 28px -14px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="mocha"] .decision-status-orb.CRITICAL {
+  background: radial-gradient(circle at 35% 28%, rgba(255, 138, 148, 0.34), rgba(255, 138, 148, 0.08) 70%);
+  border-color: rgba(255, 138, 148, 0.8);
+  box-shadow: 0 16px 28px -14px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="mocha"] .stage-gauge-track {
+  background: rgba(20, 11, 6, 0.7);
+  box-shadow: inset 0 1px 3px rgba(8, 4, 2, 0.7);
+}
+
+[data-theme="mocha"] .param-row { border-bottom-color: var(--border-subtle); }
+
+[data-theme="mocha"] .hydrograph-crossing-callout {
+  background: linear-gradient(180deg, rgba(240, 180, 90, 0.16), rgba(240, 180, 90, 0.07));
+  border-color: rgba(240, 180, 90, 0.38);
+}
+
+/* ------------------------------------------------------------
+   8. Map chrome — the basemap stays light and legible, its frame is mocha
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .interactive-leaflet-wrapper {
+  border: 1px solid var(--platinum-border);
+  background: #D9D3CA;
+  box-shadow: inset 0 0 0 1px rgba(8, 4, 2, 0.25), 0 10px 24px -14px rgba(8, 4, 2, 0.85);
+}
+
+[data-theme="mocha"] .leaflet-container { background: #D9D3CA !important; }
+
+/* Warm the basemap toward mocha without touching the river overlays */
+[data-theme="mocha"] .leaflet-gl-layer,
+[data-theme="mocha"] .leaflet-gl-layer canvas,
+[data-theme="mocha"] .maplibregl-canvas {
+  filter: sepia(0.28) saturate(0.88) brightness(0.97) contrast(1.02) !important;
+}
+
+[data-theme="mocha"] .leaflet-control-zoom {
+  box-shadow: 0 12px 22px -12px rgba(8, 4, 2, 0.9) !important;
+}
+
+[data-theme="mocha"] .leaflet-control-zoom a {
+  background: linear-gradient(180deg, #4A3427, #392619) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--platinum-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 244, 232, 0.10) !important;
+}
+
+[data-theme="mocha"] .leaflet-control-zoom a:hover {
+  background: linear-gradient(180deg, #5A4132, #45301F) !important;
+  color: var(--pale-lavender) !important;
+  border-color: var(--pale-lavender-border) !important;
+}
+
+[data-theme="mocha"] .leaflet-control-scale-line {
+  background: rgba(42, 27, 19, 0.88) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--platinum-subtle) !important;
+}
+
+[data-theme="mocha"] .map-glass-tooltip,
+[data-theme="mocha"] .map-glass-popup .leaflet-popup-content-wrapper,
+[data-theme="mocha"] .map-glass-popup .leaflet-popup-tip {
+  background: var(--surface-popover) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--platinum-border-strong) !important;
+  box-shadow: 0 18px 32px -14px rgba(8, 4, 2, 0.95) !important;
+}
+
+[data-theme="mocha"] .map-glass-tooltip::before { border-top-color: var(--surface-popover) !important; }
+[data-theme="mocha"] .map-glass-popup .leaflet-popup-close-button { color: var(--text-secondary) !important; }
+[data-theme="mocha"] .map-glass-popup .leaflet-popup-close-button:hover { color: var(--pale-lavender) !important; }
+
+[data-theme="mocha"] .map-geo-badge {
+  background: rgba(42, 27, 19, 0.9);
+  border-color: var(--platinum-border);
+}
+
+[data-theme="mocha"] .map-dropdown-trigger,
+[data-theme="mocha"] .map-tool-btn {
+  background: rgba(42, 27, 19, 0.88);
+  border: 1px solid var(--platinum-border);
+  color: var(--text-primary);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 20px -12px rgba(8, 4, 2, 0.95), inset 0 1px 0 rgba(255, 244, 232, 0.08);
+}
+
+[data-theme="mocha"] .map-dropdown-trigger:hover,
+[data-theme="mocha"] .map-tool-btn:hover {
+  border-color: var(--pale-lavender-border);
+  color: var(--pale-lavender);
+}
+
+[data-theme="mocha"] .map-dropdown-menu,
+[data-theme="mocha"] .map-layers-menu {
+  background: var(--surface-popover);
+  border: 1px solid var(--platinum-border-strong);
+  box-shadow: var(--shadow-elevated);
+  color: var(--text-primary);
+}
+
+[data-theme="mocha"] .map-dropdown-item:hover,
+[data-theme="mocha"] .map-layer-toggle-btn:hover {
+  background: rgba(205, 190, 240, 0.12);
+}
+
+[data-theme="mocha"] .map-bottom-legend { color: var(--text-secondary); }
+
+[data-theme="mocha"] .selected-reach-chip {
+  color: var(--pale-lavender);
+  background: var(--pale-lavender-surface);
+  border-color: var(--pale-lavender-border);
+}
+
+/* ------------------------------------------------------------
+   9. Overlays, tooltips and notices
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .modal-overlay-backdrop {
+  background: radial-gradient(60rem 40rem at 50% 30%, rgba(60, 38, 26, 0.72), rgba(14, 8, 5, 0.9));
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+}
+
+[data-theme="mocha"] .modal-content-panel {
+  background: var(--gradient-glass-raised);
+  border: 1px solid var(--platinum-border-strong);
+  box-shadow: var(--shadow-elevated);
+  color: var(--text-primary);
+}
+
+[data-theme="mocha"] .modal-close-btn {
+  background: rgba(255, 244, 232, 0.07);
+  border-color: var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+[data-theme="mocha"] .modal-close-btn:hover {
+  background: rgba(205, 190, 240, 0.16);
+  border-color: var(--pale-lavender-border);
+  color: #FFFFFF;
+}
+
+[data-theme="mocha"] .chart-tooltip-glass {
+  background: var(--surface-popover) !important;
+  border: 1px solid var(--platinum-border-strong) !important;
+  box-shadow: 0 18px 32px -14px rgba(8, 4, 2, 0.95) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="mocha"] .tooltip-time-head { color: var(--pale-lavender); }
+
+[data-theme="mocha"] .spinner-gyro {
+  border-color: rgba(205, 190, 240, 0.16);
+  border-top-color: var(--pale-lavender);
+  border-right-color: var(--mocha-border);
+}
+
+/* The synthetic-data notice stays loud, in amber, but belongs to the palette */
+[data-theme="mocha"] .provenance-notice {
+  background: linear-gradient(90deg, #3A2814 0%, #4B3517 50%, #3A2814 100%);
+  color: #FBE6BC;
+  border-bottom: 1px solid rgba(240, 180, 90, 0.6);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+[data-theme="mocha"] .dashboard-footer {
+  border-top: 1px solid var(--border-subtle);
+  background: linear-gradient(180deg, transparent, rgba(14, 8, 5, 0.55));
+}
+
+[data-theme="mocha"] .footer-brand-mark {
+  background: var(--pale-lavender-surface);
+  border-color: var(--pale-lavender-border);
+  color: var(--pale-lavender);
+}
+
+[data-theme="mocha"] .journey-step-card {
+  background: var(--gradient-glass);
+  border: 1px solid var(--border-subtle);
+  transition: transform 340ms var(--ease-expo), border-color 260ms var(--ease-soft), box-shadow 340ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .journey-step-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--pale-lavender-border);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ------------------------------------------------------------
+   10. Browser surfaces: selection, scrollbars, focus
+   ------------------------------------------------------------ */
+[data-theme="mocha"] ::selection {
+  background: rgba(205, 190, 240, 0.38);
+  color: #FFFFFF;
+}
+
+[data-theme="mocha"] {
+  scrollbar-color: rgba(205, 190, 240, 0.38) #1A100A;
+  accent-color: #CDBEF0;
+}
+
+[data-theme="mocha"] ::-webkit-scrollbar-track { background: #1A100A; }
+[data-theme="mocha"] ::-webkit-scrollbar-thumb {
+  background: rgba(205, 190, 240, 0.34);
+  border-radius: 4px;
+  border: 1px solid #1A100A;
+}
+[data-theme="mocha"] ::-webkit-scrollbar-thumb:hover { background: rgba(205, 190, 240, 0.6); }
+
+[data-theme="mocha"] :focus-visible {
+  outline: 2px solid var(--pale-lavender);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+[data-theme="mocha"] ::placeholder { color: var(--text-muted); }
+
+/* ------------------------------------------------------------
+   11. Reduced motion: keep every state change, drop the choreography
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="mocha"] body::before { animation: none; }
+
+  [data-theme="mocha"] .glass-panel,
+  [data-theme="mocha"] .triage-pillar-card,
+  [data-theme="mocha"] .btn-standard,
+  [data-theme="mocha"] .event-day-chip,
+  [data-theme="mocha"] .journey-step-card {
+    transition-duration: 0.01ms;
+  }
+
+  [data-theme="mocha"] .triage-pillar-card:hover,
+  [data-theme="mocha"] .journey-step-card:hover,
+  [data-theme="mocha"] .event-day-chip:hover,
+  [data-theme="mocha"] .btn-standard:hover {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   12. Accent fills that carried white text on the old blue
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .map-dropdown-badge {
+  background: var(--pale-lavender);
+  color: #2A1B13;
+}
+
+[data-theme="mocha"] .dropdown-switch { background: rgba(255, 244, 232, 0.22); }
+[data-theme="mocha"] .dropdown-switch.on { background: var(--pale-lavender); }
+
+[data-theme="mocha"] .map-svg-canvas {
+  background:
+    radial-gradient(circle at 60% 40%, #2C1D14 0%, #170E09 100%);
+}
+
+/* ------------------------------------------------------------
+   13. Map card header & map-attached chrome (post-inspection fixes)
+   ------------------------------------------------------------ */
+[data-theme="mocha"] .card-header-bar {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+
+[data-theme="mocha"] .card-header-bar [role="radio"],
+[data-theme="mocha"] .selected-reach-chip {
+  white-space: nowrap;
+}
+
+[data-theme="mocha"] .card-header-bar [role="radio"] {
+  font-size: 12px !important;
+  min-height: 30px;
+}
+
+[data-theme="mocha"] .selected-reach-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* Gauge label sits on a light basemap: keep it a solid, high-contrast chip */
+[data-theme="mocha"] .leaflet-gauge-label {
+  background: var(--surface-popover);
+  border-color: var(--amber-caution);
+  box-shadow: 0 10px 18px -8px rgba(8, 4, 2, 0.9);
+}
+
+[data-theme="mocha"] .station-tag { color: var(--amber-caution); font-size: 12px; }
+[data-theme="mocha"] .station-val { color: var(--text-primary); font-size: 12px; }
+
+[data-theme="mocha"] .leaflet-location-btn {
+  background: linear-gradient(180deg, #4A3427, #392619);
+  color: var(--text-primary);
+  border: 1px solid var(--platinum-border);
+  box-shadow: 0 12px 22px -12px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.10);
+}
+
+[data-theme="mocha"] .leaflet-location-btn:hover {
+  background: linear-gradient(180deg, #5A4132, #45301F);
+  color: var(--pale-lavender);
+  border-color: var(--pale-lavender-border);
+}
+
+[data-theme="mocha"] .dropdown-switch-handle { background: #F3F0EA; }
+
+[data-theme="mocha"] .threshold-chip.light { background: rgba(156, 203, 242, 0.16); color: #B9DDF7; }
+[data-theme="mocha"] .threshold-chip.mod { background: rgba(240, 180, 90, 0.16); color: var(--amber-caution); }
+[data-theme="mocha"] .threshold-chip.heavy { background: rgba(255, 138, 148, 0.16); color: var(--red-danger); }
+
+/* ------------------------------------------------------------
+   14. Row hover, advisory action cards, small advisory text
+   ------------------------------------------------------------ */
+
+/* Parameter rows in the decision panel: the base rule painted a near-white wash on hover,
+   which made the platinum label and value text disappear. Hover is now a lavender glow. */
+[data-theme="mocha"] .param-row {
+  margin-inline: -8px;
+  padding-inline: 12px;
+  border-radius: var(--radius-sm);
+  transition:
+    background 220ms var(--ease-soft),
+    border-color 220ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .param-row:hover {
+  background: linear-gradient(90deg, rgba(205, 190, 240, 0.13), rgba(205, 190, 240, 0.04));
+  border-bottom-color: transparent;
+}
+
+[data-theme="mocha"] .param-row:hover + .param-row {
+  border-top-color: transparent;
+}
+
+[data-theme="mocha"] .param-label { transition: color 220ms var(--ease-soft); }
+[data-theme="mocha"] .param-row:hover .param-label { color: var(--text-primary); }
+
+/* Advisory action cards: both belong to the same glass family as every other card.
+   Farmers get a platinum tint, officers keep the amber accent, so the two read apart. */
+[data-theme="mocha"] .advisory-action-box {
+  background: var(--gradient-glass);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 340ms var(--ease-expo),
+    border-color 260ms var(--ease-soft),
+    box-shadow 340ms var(--ease-soft);
+}
+
+[data-theme="mocha"] .advisory-action-box:hover {
+  transform: translateY(-2px);
+  border-color: var(--platinum-border-strong);
+  box-shadow: var(--shadow-card-hover);
+}
+
+[data-theme="mocha"] .action-box-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+[data-theme="mocha"] .farmer-box {
+  background:
+    linear-gradient(160deg, rgba(232, 228, 222, 0.11), rgba(232, 228, 222, 0.03) 62%),
+    var(--gradient-glass);
+  border-color: var(--platinum-border-strong);
+}
+
+[data-theme="mocha"] .farmer-box .action-box-title { color: var(--platinum-silver); }
+[data-theme="mocha"] .farmer-box .action-box-icon { color: var(--platinum-silver) !important; }
+
+[data-theme="mocha"] .farmer-box .check-bullet {
+  background: rgba(232, 228, 222, 0.14);
+  border-color: var(--platinum-subtle);
+  color: var(--platinum-silver);
+}
+
+[data-theme="mocha"] .officer-box .action-box-title { color: var(--amber-caution); }
+
+[data-theme="mocha"] .action-checklist li {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+/* The advisory evidence cards were set at 11 to 11.5px in --text-dim, under the 12px floor
+   in DESIGN.md and low in contrast on mocha. */
+[data-theme="mocha"] .trigger-item { font-size: 13px; }
+[data-theme="mocha"] .trigger-item p { color: var(--text-secondary); }
+[data-theme="mocha"] .trigger-metric-tag { font-size: 12px; }
+[data-theme="mocha"] .golden-window-hero-label { font-size: 12.5px; }
+[data-theme="mocha"] .affected-area-chip {
+  font-size: 12.5px;
+  background: rgba(255, 244, 232, 0.06);
+  box-shadow: none;
+}

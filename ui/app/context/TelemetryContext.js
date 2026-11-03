@@ -2,11 +2,12 @@
 
 import { createContext, useContext, useState, useEffect, useMemo, useCallback, startTransition } from "react";
 import { useLocale } from "../hooks/useLocale";
+import { withViewTransition } from "../lib/viewTransition";
 
 const TelemetryContext = createContext(null);
 
 export function TelemetryProvider({ children }) {
-  const { lang } = useLocale();
+  const { lang, mounted: localeReady } = useLocale();
   const intlLocale = lang === "bn" ? "bn-BD" : "en-GB";
   const [rawEventData, setRawEventData] = useState(null);
   const [rawGaugeData, setRawGaugeData] = useState(null);
@@ -36,15 +37,25 @@ export function TelemetryProvider({ children }) {
   // ---- THEME DOM SYNC ----
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    let link = document.getElementById("app-favicon");
+    if (!link) {
+      link = document.createElement("link");
+      link.id = "app-favicon";
+      link.rel = "icon";
+      link.type = "image/svg+xml";
+      document.head.appendChild(link);
+    }
+    link.href = theme === "mocha" ? "/logo-mocha.svg" : "/logo-light.svg";
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next = prev === "mocha" ? "light" : "mocha";
-      try {
-        localStorage.setItem("hydrosense_theme", next);
-      } catch {}
-      return next;
+    const next = document.documentElement.getAttribute("data-theme") === "mocha" ? "light" : "mocha";
+    try {
+      localStorage.setItem("hydrosense_theme", next);
+    } catch {}
+    withViewTransition(() => {
+      setTheme(next);
+      document.documentElement.setAttribute("data-theme", next);
     });
   }, []);
 
@@ -281,7 +292,9 @@ export function TelemetryProvider({ children }) {
     setShowBulletin,
     showModelInfo,
     setShowModelInfo,
-    loading,
+    // Stay in the skeleton until the saved language and web fonts are resolved,
+    // so the first real paint never swaps language or font.
+    loading: loading || !localeReady,
     loadError,
     fetchData,
     theme,

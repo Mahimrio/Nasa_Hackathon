@@ -199,7 +199,7 @@ export default function ValidationMetricsPanel({ metrics }) {
                     left: "50%",
                     transform: "translateX(-50%)",
                     width: "270px",
-                    background: "#FFFFFF",
+                    background: "var(--surface-popover)",
                     border: "1px solid var(--border-subtle)",
                     borderRadius: "8px",
                     padding: "12px 14px",

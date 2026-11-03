@@ -3,8 +3,40 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import en from "../locales/en.json";
 import bn from "../locales/bn.json";
+import { withViewTransition } from "../lib/viewTransition";
 
 const translations = { en, bn };
+
+// Longest we hold the loading skeleton while web fonts download.
+const FONT_WAIT_CAP_MS = 1800;
+
+/**
+ * Requests the faces the UI actually uses so the first real paint already has
+ * them. Without this, text paints in a fallback font and then reflows when the
+ * web fonts arrive, which reads as a stutter on refresh.
+ */
+function loadUiFonts(lang) {
+  if (typeof document === "undefined" || !document.fonts || !document.fonts.load) {
+    return Promise.resolve();
+  }
+  const specs = [
+    ["600 20px Fraunces"],
+    ["700 20px Fraunces"],
+    ["500 14px Manrope"],
+    ["700 14px Manrope"],
+    ["500 12px 'IBM Plex Mono'"],
+  ];
+  if (lang === "bn") {
+    specs.push(["500 14px 'Noto Sans Bengali'", "\u0985"]);
+    specs.push(["600 20px 'Noto Serif Bengali'", "\u0985"]);
+  }
+  return Promise.all(specs.map(([font, text]) => document.fonts.load(font, text).catch(() => [])));
+}
+
+function applyDocumentLang(lang) {
+  document.documentElement.lang = lang;
+  document.body.classList.toggle("lang-bn", lang === "bn");
+}
 
 export const LocaleContext = createContext(null);
 
@@ -20,41 +52,49 @@ export function LocaleProvider({ children }) {
   const [lang, setLangState] = useState("bn");
   const [mounted, setMounted] = useState(false);
 
+  // The server always renders "bn". We resolve the saved language and the web
+  // fonts together, then flip `mounted` once, so nothing visible switches
+  // language or font after first paint.
   useEffect(() => {
-    const timer = setTimeout(() => {
+    let cancelled = false;
+    let saved = "bn";
+    try {
+      const stored = localStorage.getItem("hydrosense_locale");
+      if (stored === "en" || stored === "bn") saved = stored;
+    } catch {
+      // localStorage may fail in restricted contexts
+    }
+
+    const cap = new Promise((resolve) => setTimeout(resolve, FONT_WAIT_CAP_MS));
+    Promise.race([loadUiFonts(saved), cap]).then(() => {
+      if (cancelled) return;
+      setLangState(saved);
       setMounted(true);
-      try {
-        const saved = localStorage.getItem("hydrosense_locale");
-        if (saved === "en" || saved === "bn") {
-          setLangState(saved);
-        } else {
-          setLangState("bn");
-        }
-      } catch {
-        // localStorage may fail in restricted contexts
-      }
-    }, 0);
-    return () => clearTimeout(timer);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const setLang = useCallback((newLang) => {
     if (newLang !== "en" && newLang !== "bn") return;
-    setLangState(newLang);
     try {
       localStorage.setItem("hydrosense_locale", newLang);
     } catch {
       // ignore
     }
+    withViewTransition(() => {
+      setLangState(newLang);
+      // Sync the document inside the transition callback so the "new" snapshot
+      // already has the right font stack and <html lang>.
+      applyDocumentLang(newLang);
+    });
   }, []);
 
   useEffect(() => {
     if (typeof document !== "undefined") {
-      document.documentElement.lang = lang;
-      if (lang === "bn") {
-        document.body.classList.add("lang-bn");
-      } else {
-        document.body.classList.remove("lang-bn");
-      }
+      applyDocumentLang(lang);
     }
   }, [lang]);
 

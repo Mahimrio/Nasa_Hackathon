@@ -5,7 +5,7 @@
            + Infomorphism + 3D Depth + Map & Flow Animation
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
+/* Fonts are loaded from layout.js (<link>), not @import, so they never block CSS parsing. */
 
 :root {
   /* ---- Shared Spacing Scale (4px base rhythm) ---- */
@@ -38,8 +38,9 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ---- Typography Stacks ---- */
-  --font-sans: 'Outfit', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-display: 'Fraunces', 'Noto Serif Bengali', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Manrope', 'Noto Sans Bengali', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: 'IBM Plex Mono', 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-body: var(--font-sans);
 }
 
@@ -48,121 +49,141 @@
   color-scheme: dark;
 
   /* ============================================================
-     Bespoke Palette (Mocha Brown + Platinum Silver + Pale Lavender)
-     User Reference: Warm Roasted Mocha Canvas, Sculpted Platinum Silver Cards,
-     and Luminous Pale Lavender Display Typography & Satellite Telemetry
+     Tonal Palette — Mocha Brown · Platinum Silver · Pale Lavender
+     One warm family end to end: roasted-mocha canvas and cards,
+     platinum for type, hairlines and primary actions, lavender for
+     focus, active states and satellite telemetry.
      ============================================================ */
-  --mocha-brown: #6F4E37;
-  --mocha-deep: #1E120A;
-  --mocha-canvas: #281912;
-  --mocha-surface: #382419;
-  --mocha-surface-elevated: #442B1E;
-  --mocha-well: #1A0D07;
-  --mocha-light: rgba(111, 78, 55, 0.22);
+  --mocha-brown: #7A5740;
+  --mocha-deep: #170E09;
+  --mocha-canvas: #1D130D;
+  --mocha-surface: #35241A;
+  --mocha-surface-elevated: #412D21;
+  --mocha-well: #22160F;
+  --mocha-light: rgba(160, 120, 90, 0.18);
   --mocha-border: #8D674B;
-  --mocha-glow: rgba(111, 78, 55, 0.25);
+  --mocha-glow: rgba(160, 120, 90, 0.28);
 
-  --platinum-silver: #ECEAE6;
+  --platinum-silver: #E8E4DE;
   --platinum-glint: #FFFFFF;
-  --platinum-subtle: #E2DFD9;
-  --platinum-border: #CFCBC3;
-  --platinum-border-strong: #A8A297;
-  --platinum-glow: rgba(229, 228, 226, 0.25);
+  --platinum-subtle: #CFC9C0;
+  --platinum-border: rgba(232, 228, 222, 0.16);
+  --platinum-border-strong: rgba(232, 228, 222, 0.34);
+  --platinum-glow: rgba(232, 228, 222, 0.22);
 
-  --pale-lavender: #E6E0F0;
-  --pale-lavender-glow: rgba(230, 224, 240, 0.25);
-  --pale-lavender-surface: #EFEAF7;
-  --pale-lavender-border: #C9BEE0;
-  --lavender-deep: #5A4876;
+  --pale-lavender: #DCD2F2;
+  --pale-lavender-glow: rgba(205, 190, 240, 0.28);
+  --pale-lavender-surface: rgba(205, 190, 240, 0.12);
+  --pale-lavender-border: rgba(205, 190, 240, 0.42);
+  --lavender-deep: #A592D6;
 
   /* Topbar Horizon Surface */
-  --surface-topbar: #1E120A;
-  --topbar-text-primary: #E6E0F0;
-  --topbar-text-secondary: #E5E4E2;
-  --topbar-text-muted: #BBB4C7;
-  --topbar-nav-bg: #2B1A11;
+  --surface-topbar: rgba(23, 14, 9, 0.82);
+  --topbar-text-primary: #F1EDF8;
+  --topbar-text-secondary: #D3CCDD;
+  --topbar-text-muted: #A99FB4;
+  --topbar-nav-bg: rgba(255, 244, 232, 0.05);
 
-  /* Surfaces & Structural Layers (Platinum Silver Cards on Mocha Earth Canvas) */
-  --bg-canvas: #281912;
-  --bg-viewport: #281912;
-  --bg-950: #1C0F08;
-  --bg-900: #2C1A12;
-  --surface-card: #ECEAE6;
-  --surface-900: #ECEAE6;
-  --surface-850: #DFDBD5;
-  --surface-800: #D5D1CA;
-  --surface-active: #C8C3BA;
+  /* Surfaces & Structural Layers */
+  --bg-canvas: #1D130D;
+  --bg-viewport: #1D130D;
+  --bg-950: #150D08;
+  --bg-900: #271810;
+  --surface-card: #35241A;
+  --surface-popover: #3F2C20;
+  --on-accent: #2A1B13;
+  --info-surface: rgba(205, 190, 240, 0.12);
+  --info-border: rgba(205, 190, 240, 0.34);
+  --surface-900: #35241A;
+  --surface-850: #2A1B13;
+  --surface-800: #402D21;
+  --surface-active: #4D382B;
 
-  /* Glass Strokes, Dividers & Platinum Borders */
-  --border-subtle: #CFCBC3;
-  --glass-stroke: #CFCBC3;
-  --glass-stroke-strong: #A8A297;
-  --glass-stroke-glint: rgba(255, 255, 255, 0.95);
-  --glass-stroke-amber: #B06F14;
-  --glass-stroke-red: #BF2638;
-  --glass-stroke-green: #247A4D;
+  /* Hairlines — platinum at low alpha so edges read as light, not lines */
+  --border-subtle: rgba(232, 228, 222, 0.14);
+  --glass-stroke: rgba(232, 228, 222, 0.14);
+  --glass-stroke-strong: rgba(232, 228, 222, 0.32);
+  --glass-stroke-glint: rgba(255, 255, 255, 0.16);
+  --glass-stroke-amber: #F0B45A;
+  --glass-stroke-red: #FF8A94;
+  --glass-stroke-green: #7FD6A4;
 
-  /* High-Contrast Typography inside Platinum Silver Cards (>12:1 WCAG AAA) */
-  --text-primary: #22140D;
-  --text-secondary: #54433A;
-  --text-muted: #78665C;
-  --text-dim: #98857B;
+  /* Type on mocha surfaces (platinum, warm-tinted greys; AA or better on every card) */
+  --text-primary: #F2EEE8;
+  --text-secondary: #CBBFB5;
+  --text-muted: #A89A8E;
+  --text-dim: #8C7E73;
 
-  /* River Flow & Altimetry Blues (High Contrast on Platinum) */
-  --blue-primary: #1C6AA6;
-  --blue-deep: #134B76;
-  --cyan-primary: #1C6AA6;
-  --cyan-400: #1C6AA6;
-  --cyan-300: #134B76;
-  --blue-500: #1C6AA6;
-  --cyan-glow: rgba(28, 106, 166, 0.16);
-  --blue-glow: rgba(28, 106, 166, 0.16);
-  --violet-500: #6D5B97;
-  --violet-glow: rgba(109, 91, 151, 0.18);
+  /* Water & interactive accents: lavender leads, sky blue is reserved for water */
+  --blue-primary: #BFAFEF;
+  --blue-deep: #DCD2F5;
+  --cyan-primary: #9CCBF2;
+  --cyan-400: #9CCBF2;
+  --cyan-300: #C2E1FA;
+  --blue-500: #A592D6;
+  --cyan-glow: rgba(156, 203, 242, 0.20);
+  --blue-glow: rgba(191, 175, 239, 0.22);
+  --violet-500: #B7A4EC;
+  --violet-glow: rgba(183, 164, 236, 0.22);
 
-  /* Semantic Action & Safety Palette (Rich, Unambiguous on Platinum) */
-  --green-action: #247A4D;
-  --green-400: #247A4D;
-  --green-surface: rgba(36, 122, 77, 0.14);
-  --green-bg: rgba(36, 122, 77, 0.14);
-  --green-glow: rgba(36, 122, 77, 0.18);
+  /* Semantic safety palette, lifted for dark surfaces (shape + icon always accompany colour) */
+  --green-action: #7FD6A4;
+  --green-400: #7FD6A4;
+  --green-surface: rgba(127, 214, 164, 0.14);
+  --green-bg: rgba(127, 214, 164, 0.14);
+  --green-glow: rgba(127, 214, 164, 0.24);
 
-  --amber-caution: #B06F14;
-  --amber-400: #B06F14;
-  --amber-surface: rgba(176, 111, 20, 0.15);
-  --amber-bg: rgba(176, 111, 20, 0.15);
-  --amber-glow: rgba(176, 111, 20, 0.18);
+  --amber-caution: #F0B45A;
+  --amber-400: #F0B45A;
+  --amber-surface: rgba(240, 180, 90, 0.15);
+  --amber-bg: rgba(240, 180, 90, 0.15);
+  --amber-glow: rgba(240, 180, 90, 0.26);
 
-  --red-danger: #BF2638;
-  --red-400: #BF2638;
-  --red-surface: rgba(191, 38, 56, 0.15);
-  --red-bg: rgba(191, 38, 56, 0.15);
-  --red-glow: rgba(191, 38, 56, 0.18);
+  --red-danger: #FF8A94;
+  --red-400: #FF8A94;
+  --red-surface: rgba(255, 138, 148, 0.15);
+  --red-bg: rgba(255, 138, 148, 0.15);
+  --red-glow: rgba(255, 138, 148, 0.26);
 
   /* Cartography & Map Layers */
-  --map-water: #D2E4F2;
-  --map-land: #ECEAE6;
-  --map-land-border: #CFCBC3;
-  --grid-line: #DFDBD5;
-  --gauge-color: #B06F14;
+  --map-water: #CFE1EF;
+  --map-land: #E9E5DE;
+  --map-land-border: #CFC9C0;
+  --grid-line: rgba(232, 228, 222, 0.10);
+  --gauge-color: #F0B45A;
 
-  /* Surfaces & Gradients */
-  --gradient-canvas: radial-gradient(85rem 55rem at 50% 8%, #3E271D 0%, #20130B 100%);
-  --gradient-glass: linear-gradient(165deg, #F4F2EE 0%, #ECEAE6 55%, #E3E0DA 100%);
-  --gradient-glass-raised: linear-gradient(165deg, #F8F7F5 0%, #ECEAE6 50%, #DFDBD5 100%);
-  --gradient-primary: linear-gradient(180deg, #1C6AA6 0%, #134B76 100%);
-  --gradient-good: linear-gradient(90deg, #247A4D, #1C6AA6);
-  --gradient-watch: linear-gradient(90deg, #B06F14, #945B0A);
-  --gradient-critical: linear-gradient(90deg, #BF2638, #9B1A2A);
+  /* Chart palette (Recharts reads these through var()) */
+  --chart-model: #C9BBF5;
+  --chart-observed: #ECE7E0;
+  --chart-baseline: #A89A8E;
+  --chart-rain: rgba(156, 203, 242, 0.62);
+  --chart-band: rgba(191, 175, 239, 0.18);
+  --chart-grid: rgba(232, 228, 222, 0.09);
+  --chart-tick: #BFB2A7;
+  --chart-label: #E8E2DA;
+  --chart-amber: #F0B45A;
+  --chart-red: #FF8A94;
+  --chart-dot-ring: #2A1B13;
 
-  /* Tactile Sculpted 3D Depth Shadows with Specular Top Rim */
-  --shadow-card: 0 6px 24px -2px rgba(16, 9, 5, 0.50), 0 2px 6px rgba(16, 9, 5, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  --shadow-card-hover: 0 10px 32px -4px rgba(16, 9, 5, 0.60), 0 4px 10px rgba(16, 9, 5, 0.40), inset 0 1px 0 #FFFFFF;
-  --shadow-glass: 0 6px 24px -2px rgba(16, 9, 5, 0.50), 0 2px 6px rgba(16, 9, 5, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.95);
-  --shadow-glass-hover: 0 10px 32px -4px rgba(16, 9, 5, 0.60), 0 4px 10px rgba(16, 9, 5, 0.40), inset 0 1px 0 #FFFFFF;
-  --shadow-elevated: 0 12px 36px rgba(16, 9, 5, 0.65), inset 0 1px 0 #FFFFFF;
-  --shadow-neu-inset: inset 0 2px 4px rgba(34, 20, 13, 0.18);
-  --shadow-neu-raised: 0 4px 14px rgba(16, 9, 5, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  /* Canvas, glass and metal */
+  --gradient-canvas: radial-gradient(70rem 46rem at 82% -6%, rgba(190, 172, 236, 0.13) 0%, transparent 62%),
+                     radial-gradient(60rem 44rem at 6% 8%, rgba(150, 105, 72, 0.22) 0%, transparent 60%),
+                     linear-gradient(180deg, #24160F 0%, #1A100A 100%);
+  --gradient-glass: linear-gradient(158deg, #3E2B1F 0%, #35241A 52%, #2D1E15 100%);
+  --gradient-glass-raised: linear-gradient(158deg, #4A3427 0%, #3D2B1F 55%, #33231A 100%);
+  --gradient-primary: linear-gradient(180deg, #F3F0EA 0%, #D3CDC4 100%);
+  --gradient-good: linear-gradient(90deg, #7FD6A4, #9CCBF2);
+  --gradient-watch: linear-gradient(90deg, #F0B45A, #F7CD84);
+  --gradient-critical: linear-gradient(90deg, #FF8A94, #FFB0B7);
+
+  /* Depth: warm black ambient + platinum specular rim on the top edge */
+  --shadow-card: 0 14px 34px -14px rgba(8, 4, 2, 0.75), 0 2px 6px rgba(8, 4, 2, 0.4), inset 0 1px 0 rgba(255, 244, 232, 0.10);
+  --shadow-card-hover: 0 22px 44px -16px rgba(8, 4, 2, 0.85), 0 4px 10px rgba(8, 4, 2, 0.45), inset 0 1px 0 rgba(255, 244, 232, 0.18);
+  --shadow-glass: var(--shadow-card);
+  --shadow-glass-hover: var(--shadow-card-hover);
+  --shadow-elevated: 0 28px 60px -20px rgba(8, 4, 2, 0.9), inset 0 1px 0 rgba(255, 244, 232, 0.14);
+  --shadow-neu-inset: inset 0 2px 6px rgba(8, 4, 2, 0.45);
+  --shadow-neu-raised: 0 6px 16px -6px rgba(8, 4, 2, 0.7), inset 0 1px 0 rgba(255, 244, 232, 0.10);
 }
 
 [data-theme="light"] {
@@ -280,6 +301,23 @@
   --shadow-elevated: 0 8px 24px rgba(23, 59, 87, 0.10);
   --shadow-neu-inset: inset 0 1px 3px rgba(23, 59, 87, 0.08);
   --shadow-neu-raised: 0 1px 3px rgba(23, 59, 87, 0.06), 0 4px 12px rgba(23, 59, 87, 0.04);
+
+  /* Popovers & chart palette (mirrors the mocha token names) */
+  --surface-popover: #FFFFFF;
+  --on-accent: #FFFFFF;
+  --info-surface: #EAF3F9;
+  --info-border: rgba(40, 123, 181, 0.25);
+  --chart-model: #287BB5;
+  --chart-observed: #173B57;
+  --chart-baseline: #64748B;
+  --chart-rain: rgba(40, 123, 181, 0.65);
+  --chart-band: rgba(40, 123, 181, 0.15);
+  --chart-grid: #E5ECF0;
+  --chart-tick: #566B7C;
+  --chart-label: #173B57;
+  --chart-amber: #B7791F;
+  --chart-red: #B4232F;
+  --chart-dot-ring: #FFFFFF;
 }
 
 /* ============================================================
@@ -293,7 +331,6 @@
 
 html {
   background: var(--bg-canvas);
-  color-scheme: light;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -316,7 +353,9 @@ body {
 /* ---- Bangla Typography Specifics (§4 / P8) ---- */
 body.lang-bn,
 .lang-bn {
-  font-family: 'Noto Sans Bengali', 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: 'Noto Serif Bengali', 'Fraunces', Georgia, serif;
+  --font-sans: 'Noto Sans Bengali', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Noto Sans Bengali', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.68;
 }
 
@@ -495,7 +534,10 @@ body.lang-bn div {
   z-index: 40;
   height: 64px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  /* Brand | flexible nav track | controls. The nav centres inside the leftover space,
+     so the three columns can never overlap (a centred 1fr/auto/1fr grid let the
+     controls spill underneath the nav on mid-width desktops). */
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   column-gap: 16px;
   padding-inline: var(--space-6);
@@ -513,7 +555,8 @@ body.lang-bn div {
 
 .topbar-center.topbar-nav {
   justify-self: center;
-  margin-inline: auto;
+  margin-inline: 0;
+  min-width: 0;
 }
 
 .topbar-right {
@@ -569,9 +612,9 @@ body.lang-bn div {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: var(--green-surface);
-  border: 1px solid rgba(52, 128, 90, 0.25);
-  color: var(--green-action);
+  background: rgba(40, 123, 181, 0.10);
+  border: 1px solid rgba(40, 123, 181, 0.28);
+  color: var(--blue-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -609,9 +652,9 @@ body.lang-bn div {
   line-height: 1;
   padding: 3px 8px;
   border-radius: var(--radius-xs);
-  background: rgba(111, 78, 55, 0.22);
-  color: var(--pale-lavender);
-  border: 1px solid var(--mocha-border);
+  background: var(--blue-primary);
+  color: #FFFFFF;
+  border: 1px solid var(--blue-primary);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -802,8 +845,8 @@ body.lang-bn div {
 }
 
 .topbar-nav-link:hover {
-  color: #FFFFFF;
-  background: rgba(229, 228, 226, 0.15);
+  color: var(--blue-primary);
+  background: rgba(40, 123, 181, 0.10);
 }
 
 .topbar-nav-link.active {
@@ -887,7 +930,7 @@ body.lang-bn div {
   display: flex;
   align-items: center;
   height: 38px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: var(--surface-850);
   border: 1px solid var(--border-subtle);
   padding: 2px;
@@ -911,7 +954,7 @@ body.lang-bn div {
   background: transparent;
   color: var(--topbar-text-secondary, var(--text-secondary));
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: var(--radius-pill);
   transition: all var(--motion-fast) var(--ease-out);
 }
 
@@ -921,11 +964,11 @@ body.lang-bn div {
 }
 
 .lang-option.active {
-  background: var(--mocha-brown);
-  color: var(--pale-lavender);
+  background: var(--blue-primary);
+  color: #FFFFFF;
   font-weight: 700;
-  border: 1px solid var(--mocha-border);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--blue-primary);
+  box-shadow: 0 1px 4px rgba(40, 123, 181, 0.22);
 }
 
 /* Theme Toggle Button (Mocha Earth vs Light Field) */
@@ -1498,7 +1541,7 @@ body.lang-bn div {
 }
 
 .param-row:hover {
-  background: #F8FAFC;
+  background: var(--surface-subtle, #F8FAFC);
 }
 
 .param-label {
@@ -3639,24 +3682,8 @@ body.lang-bn div {
   color: var(--amber-caution);
 }
 
-[data-theme="mocha"] .farmer-box {
-  background: linear-gradient(145deg, #F0EFEB 0%, #E8E5DF 100%);
-  border: 1.5px solid rgba(111, 78, 55, 0.45);
-}
-
-[data-theme="mocha"] .farmer-box .action-box-title {
-  color: var(--mocha-brown);
-}
-
-[data-theme="mocha"] .farmer-box .action-box-icon {
-  color: var(--mocha-brown) !important;
-}
-
-[data-theme="mocha"] .farmer-box .check-bullet {
-  background: rgba(111, 78, 55, 0.16);
-  border-color: var(--mocha-brown);
-  color: var(--mocha-brown);
-}
+/* The farmer box in the Mocha theme is styled in mocha-blend.css (section 14): it used to be a
+   light cream card that inherited light text and was unreadable. */
 
 /* ============================================================
    Responsive Breakpoints for Mobile-First Readability
@@ -4242,8 +4269,10 @@ body.lang-bn div {
   color: #DC2626;
 }
 
-/* Compact wide screens: give the brand and controls one row, with journey nav below. */
-@media (min-width: 1024px) and (max-width: 1679px) {
+/* Compact wide screens: give the brand and controls one row, with journey nav below.
+   The single-row layout needs roughly 1870px (brand + nav + status + controls) without
+   wrapping the tab labels, so the two-row layout holds up to 1919px. */
+@media (min-width: 1024px) and (max-width: 1919px) {
   .app-topbar {
     height: auto;
     min-height: 64px;

@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLocale } from "./hooks/useLocale";
 import { useTelemetry } from "./context/TelemetryContext";
-import AppHeader from "./components/AppHeader";
+
 import DashboardFooter from "./components/DashboardFooter";
 import PageContextBar from "./components/PageContextBar";
 import RiverMapPanel from "./components/RiverMapPanel";
@@ -57,17 +57,7 @@ export default function DashboardPage() {
   } = useTelemetry();
 
   if (loading) {
-    return (
-      <>
-        <AppHeader
-          currentDateStr="-- --- 2026"
-          currentTimeStr="--:--"
-          onOpenBulletin={() => {}}
-          onOpenModelInfo={() => {}}
-        />
-        <DashboardSkeleton lang={lang} />
-      </>
-    );
+    return <DashboardSkeleton lang={lang} />;
   }
 
   if (!eventData || !current) {
@@ -89,19 +79,6 @@ export default function DashboardPage() {
 
   return (
     <ErrorBoundary lang={lang} onRetry={fetchData}>
-      {/* Skip to Main Content */}
-      <a href="#main-content" className="skip-to-content">
-        {lang === "en" ? "Skip to Main Content" : "মূল বিষয়বস্তুতে যান"}
-      </a>
-
-      {/* Top Application Bar with Route Navigation */}
-      <AppHeader
-        currentDateStr={dateStr}
-        currentTimeStr={timeStr}
-        onOpenBulletin={() => setShowBulletin(true)}
-        onOpenModelInfo={() => setShowModelInfo(true)}
-      />
-
       {/* Main Dashboard Application Shell (§1. Dashboard — Detect Risk) */}
       <main id="main-content" className="dashboard-shell" role="main" tabIndex="-1">
         {/* Context Strip & Quick Timeline Jumps */}

@@ -244,7 +244,7 @@ export default function HydrographPanel({
                     ? "1px solid var(--cyan-400)"
                     : "1px solid var(--border-subtle)",
                   boxShadow: isYearDropdownOpen
-                    ? "0 0 0 3px rgba(40, 123, 181, 0.2)"
+                    ? "0 0 0 3px var(--pale-lavender-glow, rgba(40, 123, 181, 0.2))"
                     : undefined,
                 }}
               >
@@ -283,8 +283,8 @@ export default function HydrographPanel({
                     borderRadius: "4px",
                     background:
                       selectedYear === 2026
-                        ? "rgba(40, 123, 181, 0.16)"
-                        : "rgba(183, 121, 31, 0.16)",
+                        ? "var(--blue-glow)"
+                        : "var(--amber-glow)",
                     color:
                       selectedYear === 2026 ? "var(--cyan-400)" : "var(--amber-400)",
                     textTransform: "uppercase",
@@ -384,7 +384,7 @@ export default function HydrographPanel({
                           borderRadius: "6px",
                           border: "none",
                           background: isSelected
-                            ? "rgba(40, 123, 181, 0.15)"
+                            ? "var(--blue-glow)"
                             : "transparent",
                           color: isSelected
                             ? "var(--cyan-400)"
@@ -431,7 +431,7 @@ export default function HydrographPanel({
                               borderRadius: "4px",
                               background:
                                 yr === 2026
-                                  ? "rgba(40, 123, 181, 0.18)"
+                                  ? "var(--blue-glow)"
                                   : "rgba(128, 128, 128, 0.14)",
                               color:
                                 yr === 2026
@@ -469,27 +469,27 @@ export default function HydrographPanel({
         <div className="chart-header-actions">
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "14px", fontSize: "12px", color: "var(--text-secondary)" }}>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "14px", height: "3px", background: "#287BB5", borderRadius: "2px" }} />
+              <span style={{ width: "14px", height: "3px", background: "var(--chart-model)", borderRadius: "2px" }} />
               {t("hydrograph.modelledStage")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #173B57" }} />
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed var(--chart-observed)" }} />
               {t("hydrograph.bwdbObserved")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "14px", height: "0px", borderTop: "2px dotted #566B7C" }} />
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dotted var(--chart-baseline)" }} />
               {t("hydrograph.rainfallBaseline")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "10px", height: "8px", background: "rgba(40, 123, 181, 0.18)", borderRadius: "2px", border: "1px solid rgba(40, 123, 181, 0.35)" }} />
+              <span style={{ width: "10px", height: "8px", background: "var(--chart-band)", borderRadius: "2px", border: "1px solid var(--chart-model)" }} />
               {t("hydrograph.uncertaintyBand")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "10px", height: "8px", background: "rgba(40, 123, 181, 0.45)", borderRadius: "2px" }} />
+              <span style={{ width: "10px", height: "8px", background: "var(--chart-rain)", borderRadius: "2px" }} />
               {t("hydrograph.imergRain")}
             </span>
             <span style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed #B7791F" }} />
+              <span style={{ width: "14px", height: "0px", borderTop: "2px dashed var(--chart-amber)" }} />
               {t("hydrograph.dangerLevel")} ({formatNumber(dangerLevel.toFixed(2))}m)
             </span>
           </div>
@@ -557,25 +557,25 @@ export default function HydrographPanel({
       <div style={{ width: "100%", height: 80, background: "transparent", padding: "4px 0" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 2, right: 30, bottom: 0, left: 20 }}>
-            <CartesianGrid stroke="#E5ECF0" vertical={false} />
+            <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
             <XAxis dataKey="time" hide />
             <YAxis
               reversed
               domain={[0, "auto"]}
-              tick={{ fontSize: 12, fill: "#566B7C", fontFamily: "var(--font-mono)" }}
+              tick={{ fontSize: 12, fill: "var(--chart-tick)", fontFamily: "var(--font-mono)" }}
               label={{
                 value: t("hydrograph.rainAxis"),
                 angle: -90,
                 position: "insideLeft",
                 fontSize: 12,
-                fill: "#566B7C",
+                fill: "var(--chart-tick)",
                 offset: 10,
               }}
               width={55}
             />
-            <Bar dataKey="rainfall" fill="rgba(40, 123, 181, 0.65)" radius={[0, 0, 2, 2]} />
+            <Bar dataKey="rainfall" fill="var(--chart-rain)" radius={[0, 0, 2, 2]} />
             {currentTimeFormatted && (
-              <ReferenceLine x={currentTimeFormatted} stroke="#287BB5" strokeWidth={1.5} strokeDasharray="3 3" />
+              <ReferenceLine x={currentTimeFormatted} stroke="var(--chart-model)" strokeWidth={1.5} strokeDasharray="3 3" />
             )}
           </ComposedChart>
         </ResponsiveContainer>
@@ -585,57 +585,48 @@ export default function HydrographPanel({
       <div style={{ width: "100%", height: 320, background: "transparent", padding: "6px 0" }}>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={chartData} margin={{ top: 12, right: 30, bottom: 8, left: 20 }}>
-            <CartesianGrid stroke="#E5ECF0" strokeDasharray="4 4" />
+            <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 4" />
             <XAxis
               dataKey="time"
-              tick={{ fontSize: 12, fill: "#566B7C", fontFamily: "var(--font-mono)" }}
+              tick={{ fontSize: 12, fill: "var(--chart-tick)", fontFamily: "var(--font-mono)" }}
               interval={14}
             />
             <YAxis
               domain={["auto", "auto"]}
-              tick={{ fontSize: 12, fill: "#566B7C", fontFamily: "var(--font-mono)" }}
+              tick={{ fontSize: 12, fill: "var(--chart-tick)", fontFamily: "var(--font-mono)" }}
               label={{
                 value: t("hydrograph.waterLevelAxis"),
                 angle: -90,
                 position: "insideLeft",
                 fontSize: 12.5,
-                fill: "#173B57",
+                fill: "var(--chart-label)",
                 offset: 10,
               }}
               width={55}
             />
 
-            {/* Uncertainty Band (§4.5: 8-15% opacity fill without thick border) */}
+            {/* Uncertainty band: one range area [lower, upper], so it needs no card-coloured mask */}
             <Area
               type="monotone"
-              dataKey="upper"
+              dataKey={(d) => (d.lower != null && d.upper != null ? [d.lower, d.upper] : null)}
               stroke="none"
-              fill="rgba(40, 123, 181, 0.15)"
+              fill="var(--chart-band)"
               activeDot={false}
               isAnimationActive={false}
-              name={t("hydrograph.upperBound")}
-            />
-            <Area
-              type="monotone"
-              dataKey="lower"
-              stroke="none"
-              fill="#FFFFFF"
-              activeDot={false}
-              isAnimationActive={false}
-              name={t("hydrograph.lowerBound")}
+              name={t("hydrograph.uncertaintyBand")}
             />
 
             {/* Danger Level Reference Line (Amber Dashed at 13.20m) */}
             <ReferenceLine
               y={dangerLevel}
-              stroke="#B7791F"
+              stroke="var(--chart-amber)"
               strokeDasharray="6 4"
               strokeWidth={1.8}
               label={{
                 value: `${t("hydrograph.dangerLabel")} ${formatNumber(dangerLevel.toFixed(2))}m`,
                 position: "right",
                 fontSize: 12,
-                fill: "#B7791F",
+                fill: "var(--chart-amber)",
                 fontWeight: 700,
               }}
             />
@@ -643,14 +634,14 @@ export default function HydrographPanel({
             {/* Danger Crossing Point Indicator */}
             <ReferenceLine
               x="04-13 01:00"
-              stroke="#B4232F"
+              stroke="var(--chart-red)"
               strokeWidth={1.5}
               strokeDasharray="3 3"
               label={{
                 value: lang === "en" ? "Danger Crossing (13.20m)" : "বিপদসীমা অতিক্রম (১৩.২০মি)",
                 position: "insideBottomRight",
                 fontSize: 12,
-                fill: "#B4232F",
+                fill: "var(--chart-red)",
                 fontWeight: 700,
               }}
             />
@@ -659,14 +650,14 @@ export default function HydrographPanel({
             {currentTimeFormatted && (
               <ReferenceLine
                 x={currentTimeFormatted}
-                stroke="#287BB5"
+                stroke="var(--chart-model)"
                 strokeWidth={2}
                 strokeDasharray="4 2"
                 label={{
                   value: `${currentTimeFormatted} UTC`,
                   position: "top",
                   fontSize: 12,
-                  fill: "#287BB5",
+                  fill: "var(--chart-model)",
                   fontWeight: 650,
                 }}
               />
@@ -676,11 +667,11 @@ export default function HydrographPanel({
             <Line
               type="monotone"
               dataKey="modelled"
-              stroke="#287BB5"
+              stroke="var(--chart-model)"
               strokeWidth={2.8}
               dot={false}
               isAnimationActive={false}
-              activeDot={{ r: 5, fill: "#287BB5", stroke: "#FFFFFF", strokeWidth: 2 }}
+              activeDot={{ r: 5, fill: "var(--chart-model)", stroke: "var(--chart-dot-ring)", strokeWidth: 2 }}
               name={t("hydrograph.modelledStage")}
             />
 
@@ -688,12 +679,12 @@ export default function HydrographPanel({
             <Line
               type="monotone"
               dataKey="observed"
-              stroke="#173B57"
+              stroke="var(--chart-observed)"
               strokeWidth={2}
               strokeDasharray="5 3"
               dot={false}
               isAnimationActive={false}
-              activeDot={{ r: 4, fill: "#173B57", stroke: "#FFFFFF", strokeWidth: 2 }}
+              activeDot={{ r: 4, fill: "var(--chart-observed)", stroke: "var(--chart-dot-ring)", strokeWidth: 2 }}
               name={t("hydrograph.bwdbObserved")}
               connectNulls={false}
             />
@@ -702,12 +693,12 @@ export default function HydrographPanel({
             <Line
               type="monotone"
               dataKey="baseline"
-              stroke="#64748B"
+              stroke="var(--chart-baseline)"
               strokeWidth={1.8}
               strokeDasharray="2 3"
               dot={false}
               isAnimationActive={false}
-              activeDot={{ r: 3, fill: "#64748B", stroke: "#FFFFFF", strokeWidth: 1.5 }}
+              activeDot={{ r: 3, fill: "var(--chart-baseline)", stroke: "var(--chart-dot-ring)", strokeWidth: 1.5 }}
               name={t("hydrograph.rainfallBaseline")}
               connectNulls={false}
             />
@@ -967,8 +958,12 @@ function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel, fo
 
       {payload.map((p, i) => {
         if (p.value == null) return null;
-        const color = p.stroke || p.fill || "#35D8F2";
-        const val = typeof p.value === "number" ? p.value.toFixed(2) : p.value;
+        const color = p.stroke && p.stroke !== "none" ? p.stroke : p.fill || "var(--chart-model)";
+        const val = Array.isArray(p.value)
+          ? `${Number(p.value[0]).toFixed(2)} – ${Number(p.value[1]).toFixed(2)}`
+          : typeof p.value === "number"
+            ? p.value.toFixed(2)
+            : p.value;
         const formattedVal = formatNumber ? formatNumber(val) : val;
         const isRain = p.dataKey === "rainfall";
 
@@ -987,7 +982,7 @@ function CustomHydrographTooltip({ active, payload, label, lang, dangerLevel, fo
 
       <div style={{ marginTop: 8, paddingTop: 6, borderTop: "1px solid var(--border-subtle)", fontSize: "12.5px", color: "var(--text-secondary)" }}>
         <span>{lang === "en" ? "Danger Level: " : "বিপদসীমা: "}</span>
-        <strong style={{ color: "var(--red-critical)" }}>{formatNumber ? formatNumber(dangerLevel) : dangerLevel} m</strong>
+        <strong style={{ color: "var(--red-400)" }}>{formatNumber ? formatNumber(dangerLevel) : dangerLevel} m</strong>
       </div>
     </div>
   );

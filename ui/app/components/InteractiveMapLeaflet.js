@@ -541,7 +541,7 @@ export default function InteractiveMapLeaflet({
             top: "108px",
             left: "64px",
             zIndex: 1050,
-            background: "#FFFFFF",
+            background: "var(--surface-popover)",
             border: "1px solid var(--glass-stroke-red, #B4232F)",
             borderRadius: "var(--radius-sm)",
             padding: "8px 12px",
@@ -556,7 +556,7 @@ export default function InteractiveMapLeaflet({
             animation: "fadeIn 0.2s ease-out",
           }}
         >
-          <span style={{ color: "#B4232F", fontSize: "14px" }}>⚠️</span>
+          <span style={{ color: "var(--red-400)", fontSize: "14px" }}>⚠️</span>
           <span style={{ lineHeight: "1.4" }}>{locationError}</span>
           <button
             type="button"
@@ -906,7 +906,7 @@ export default function InteractiveMapLeaflet({
                       </div>
                       <div className="layer-stat-item">
                         <span className="stat-name">{lang === "en" ? "Current Rate:" : "বর্তমান মাত্রা:"}</span>
-                        <strong className="stat-val" style={{ color: currentRainfall > 15 ? "#B4232F" : currentRainfall > 5 ? "#B7791F" : "#287BB5" }}>
+                        <strong className="stat-val" style={{ color: currentRainfall > 15 ? "var(--red-400)" : currentRainfall > 5 ? "var(--amber-400)" : "#287BB5" }}>
                           {currentRainfall.toFixed(1)} mm/h
                         </strong>
                       </div>
@@ -1144,14 +1144,14 @@ export default function InteractiveMapLeaflet({
           <Polyline
             positions={geoData.meghalaya_border}
             pathOptions={{
-              color: "#B45309",
+              color: "var(--amber-400)",
               weight: 2.2,
               dashArray: "6, 8",
               opacity: 0.9,
             }}
           >
             <Tooltip sticky className="map-glass-tooltip">
-              <div style={{ fontSize: "13px", fontWeight: 750, color: "#B45309" }}>
+              <div style={{ fontSize: "13px", fontWeight: 750, color: "var(--amber-400)" }}>
                 {lang === "en"
                   ? "⛰️ Meghalaya Escarpment Ridge"
                   : "⛰️ মেঘালয় খাড়া পর্বত ঢাল"}
@@ -1530,12 +1530,12 @@ export default function InteractiveMapLeaflet({
                       <strong style={{ fontSize: "14px", color: "var(--text-primary)", display: "block" }}>
                         {lang === "en" ? "Kanaighat Gauge (BWDB SW266 / Model SW108)" : "কানাইঘাট গেজ স্টেশন (বাপাউবো SW২৬৬ / মডেল SW১০৮)"}
                       </strong>
-                      <span style={{ fontSize: "12px", color: "var(--amber-600, #B7791F)", fontWeight: 650 }}>
+                      <span style={{ fontSize: "12px", color: "var(--amber-400)", fontWeight: 650 }}>
                         {lang === "en" ? "Feature A · Surma River Validation Station" : "বৈশিষ্ট্য ১ · সুরমা নদী যাচাইকরণ গেজ"}
                       </span>
                     </div>
                   </div>
-                  <div style={{ fontSize: "12px", color: "var(--blue-deep)", background: "#EAF3F9", padding: "6px 8px", borderRadius: "6px", border: "1px solid rgba(40, 123, 181, 0.25)" }}>
+                  <div style={{ fontSize: "12px", color: "var(--blue-deep)", background: "var(--info-surface)", padding: "6px 8px", borderRadius: "6px", border: "1px solid var(--info-border)" }}>
                     <div><strong>{lang === "en" ? "Official BWDB/FFWC Catalog ID:" : "সরকারি বাপাউবো/এফএফডব্লিউসি আইডি:"}</strong> SW266</div>
                     <div><strong>{lang === "en" ? "Internal Pipeline / Heritage Alias:" : "অভ্যন্তরীণ মডেল কোড:"}</strong> SW108</div>
                   </div>
@@ -1544,13 +1544,13 @@ export default function InteractiveMapLeaflet({
                   </div>
                   <div style={{ fontSize: "13px", display: "flex", justifyContent: "space-between", color: "var(--text-primary)" }}>
                     <span>{lang === "en" ? "Danger Level:" : "বিপদসীমা:"}</span>
-                    <strong style={{ color: "#B4232F", fontFamily: "var(--font-mono)" }}>
+                    <strong style={{ color: "var(--red-400)", fontFamily: "var(--font-mono)" }}>
                       13.20 m PWD <span style={{ fontSize: "11px", color: "var(--text-muted)", fontWeight: 400 }}>(12.75 m MSL)</span>
                     </strong>
                   </div>
                   <div style={{ fontSize: "13px", display: "flex", justifyContent: "space-between", color: "var(--text-primary)" }}>
                     <span>{lang === "en" ? "Stage Readout:" : "বর্তমান স্তর:"}</span>
-                    <strong style={{ color: currentStage >= dangerLevel ? "#B4232F" : "#B7791F", fontFamily: "var(--font-mono)", fontSize: "13.5px" }}>
+                    <strong style={{ color: currentStage >= dangerLevel ? "var(--red-400)" : "var(--amber-400)", fontFamily: "var(--font-mono)", fontSize: "13.5px" }}>
                       {currentGaugeLevel != null ? `${currentGaugeLevel.toFixed(2)} m (Obs)` : `${currentStage.toFixed(2)} m (Mod)`}
                     </strong>
                   </div>
@@ -1571,7 +1571,7 @@ export default function InteractiveMapLeaflet({
                 </div>
                 <div style={{ fontSize: "12.5px", fontFamily: "var(--font-mono)", color: "var(--text-primary)", marginTop: "2px" }}>
                   {currentGaugeLevel != null ? `Observed: ${currentGaugeLevel.toFixed(2)} m PWD (equiv. ${(currentGaugeLevel - 0.45).toFixed(2)} m MSL)` : `Modelled: ${currentStage.toFixed(2)} m PWD`}
-                  <span style={{ color: currentStage >= dangerLevel ? "#B4232F" : "#B7791F", fontWeight: 700 }}>
+                  <span style={{ color: currentStage >= dangerLevel ? "var(--red-400)" : "var(--amber-400)", fontWeight: 700 }}>
                     {" "} (Danger: 13.20m PWD / 12.75m MSL)
                   </span>
                 </div>
