@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useMemo, useCallback, useRef } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -19,6 +19,7 @@ import { setWorkerUrl } from "maplibre-gl";
 import "leaflet/dist/leaflet.css";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { getCividisColor } from "./RiverMapPanel";
+import MapIcon from "./MapIcon";
 
 // Surma-Kushiyara Haor corridor coordinates (centered to balance Meghalaya, rivers, and gauge)
 const DEFAULT_CENTER = [24.98, 92.08];
@@ -130,6 +131,18 @@ export default function InteractiveMapLeaflet({
   const [hoveredReachId, setHoveredReachId] = useState(null);
   const [basemapType, setBasemapType] = useState("liberty"); // "liberty" (colorful default) | "positron" (clean light) | "satellite"
   const [isOffline, setIsOffline] = useState(false);
+
+  // Next.js (cacheComponents) keeps visited routes in a hidden <Activity>. Hiding runs
+  // react-leaflet's cleanup, which calls map.remove() but keeps the dead map in context,
+  // so returning to the page crashed every layer. Unmount the map while hidden and
+  // build a fresh one when the page is shown again.
+  const [mapAlive, setMapAlive] = useState(false);
+  useLayoutEffect(() => {
+    // Mirrors Activity visibility (an external lifecycle), so state is the intended signal here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMapAlive(true);
+    return () => setMapAlive(false);
+  }, []);
 
   // Dropdown menus state: 'basemap' | 'layers' | 'focus' | null
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -464,7 +477,7 @@ export default function InteractiveMapLeaflet({
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
           }}
         >
-          <span>⚡</span>
+          <MapIcon name="offline" size={13} />
           <span>
             {lang === "en"
               ? "Offline Mode · Cached SWOT Telemetry Active"
@@ -590,7 +603,7 @@ export default function InteractiveMapLeaflet({
             aria-haspopup="menu"
             title={lang === "en" ? "Select Map Basemap Style" : "বেসম্যাপ ধরন নির্বাচন করুন"}
           >
-            <span>{basemapType === "satellite" ? "🛰️" : basemapType === "positron" ? "📄" : "🗺️"}</span>
+            <MapIcon name={basemapType === "satellite" ? "satellite" : basemapType === "positron" ? "light" : "map"} />
             <span>
               {basemapType === "satellite"
                 ? (lang === "en" ? "Satellite" : "উপগ্রহ")
@@ -617,13 +630,13 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span>🗺️</span>
+                  <MapIcon name="map" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Colorful" : "রঙিন টপোগ্রাফিক"}</span>
                     <span className="dropdown-item-sub">OpenFreeMap Liberty</span>
                   </div>
                 </div>
-                {basemapType === "liberty" && <span style={{ color: "var(--blue-primary)", fontWeight: 800 }}>✓</span>}
+                {basemapType === "liberty" && <MapIcon name="check" size={14} strokeWidth={2.6} style={{ color: "var(--blue-primary)" }} />}
               </button>
               <button
                 type="button"
@@ -635,13 +648,13 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span>📄</span>
+                  <MapIcon name="light" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Light Grayscale" : "হালকা মিনিমালিস্ট"}</span>
                     <span className="dropdown-item-sub">OpenFreeMap Positron</span>
                   </div>
                 </div>
-                {basemapType === "positron" && <span style={{ color: "var(--blue-primary)", fontWeight: 800 }}>✓</span>}
+                {basemapType === "positron" && <MapIcon name="check" size={14} strokeWidth={2.6} style={{ color: "var(--blue-primary)" }} />}
               </button>
               <button
                 type="button"
@@ -653,13 +666,13 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span>🛰️</span>
+                  <MapIcon name="satellite" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Satellite" : "উপগ্রহ ছবি"}</span>
                     <span className="dropdown-item-sub">Esri World Imagery</span>
                   </div>
                 </div>
-                {basemapType === "satellite" && <span style={{ color: "var(--blue-primary)", fontWeight: 800 }}>✓</span>}
+                {basemapType === "satellite" && <MapIcon name="check" size={14} strokeWidth={2.6} style={{ color: "var(--blue-primary)" }} />}
               </button>
             </div>
           )}
@@ -675,7 +688,7 @@ export default function InteractiveMapLeaflet({
             aria-haspopup="menu"
             title={lang === "en" ? "Toggle Map Layers & Overlays" : "মানচিত্র লেয়ার অন/অফ করুন"}
           >
-            <span>⚡</span>
+            <MapIcon name="layers" />
             <span>{lang === "en" ? "Layers" : "লেয়ার"}</span>
             <span className="map-dropdown-badge">
               {[showFlowAnim, showSwotSwath, showSubbasins, showRainfallOverlay].filter(Boolean).length}
@@ -702,7 +715,7 @@ export default function InteractiveMapLeaflet({
                     onClick={() => setShowFlowAnim(!showFlowAnim)}
                     title={lang === "en" ? "Toggle river flow motion on/off" : "নদী প্রবাহ মোশন অন/অফ করুন"}
                   >
-                    <span className="layer-icon" aria-hidden="true">🌊</span>
+                    <span className="layer-icon" aria-hidden="true"><MapIcon name="waves" size={17} /></span>
                     <div className="layer-title-box">
                       <span className="dropdown-item-title">{lang === "en" ? "River Flow Motion" : "নদী প্রবাহ মোশন"}</span>
                       <span className="dropdown-item-sub">{lang === "en" ? "Surma & Kushiyara velocity vectors" : "প্রবাহের গতিবেগ ভেক্টর"}</span>
@@ -757,7 +770,7 @@ export default function InteractiveMapLeaflet({
                     onClick={() => setShowSwotSwath(!showSwotSwath)}
                     title={lang === "en" ? "Toggle SWOT Swaths on/off" : "SWOT কক্ষপথ অন/অফ করুন"}
                   >
-                    <span className="layer-icon" aria-hidden="true">🛰️</span>
+                    <span className="layer-icon" aria-hidden="true"><MapIcon name="orbit" size={17} /></span>
                     <div className="layer-title-box">
                       <span className="dropdown-item-title">{lang === "en" ? "SWOT Satellite Swaths" : "SWOT উপগ্রহ কক্ষপথ"}</span>
                       <span className="dropdown-item-sub">{lang === "en" ? "Pass 018 & 042 KaRIn tracks" : "পাস ০১৮ ও ০৪২ ট্র‍্যাক"}</span>
@@ -812,7 +825,7 @@ export default function InteractiveMapLeaflet({
                     onClick={() => setShowSubbasins(!showSubbasins)}
                     title={lang === "en" ? "Toggle Basins on/off" : "অববাহিকা অন/অফ করুন"}
                   >
-                    <span className="layer-icon" aria-hidden="true">⛰️</span>
+                    <span className="layer-icon" aria-hidden="true"><MapIcon name="mountain" size={17} /></span>
                     <div className="layer-title-box">
                       <span className="dropdown-item-title">{lang === "en" ? "HydroSHEDS Basins" : "হাইড্রোশেডস অববাহিকা"}</span>
                       <span className="dropdown-item-sub">{lang === "en" ? "Meghalaya runoff catchment" : "মেঘালয় উজানের ক্যাচমেন্ট"}</span>
@@ -867,7 +880,7 @@ export default function InteractiveMapLeaflet({
                     onClick={() => setShowRainfallOverlay(!showRainfallOverlay)}
                     title={lang === "en" ? "Toggle Rainfall layer on/off" : "বৃষ্টিপাত ওভারলে অন/অফ করুন"}
                   >
-                    <span className="layer-icon" aria-hidden="true">🌧️</span>
+                    <span className="layer-icon" aria-hidden="true"><MapIcon name="rain" size={17} /></span>
                     <div className="layer-title-box">
                       <span className="dropdown-item-title">{lang === "en" ? "IMERG Rainfall Heatmap" : "আইমার্জ বৃষ্টিপাত ওভারলে"}</span>
                       <span className="dropdown-item-sub">{lang === "en" ? "NASA GPM convective plume" : "নাসা জিপিএম প্রাক-বৃষ্টিপাত"}</span>
@@ -934,7 +947,7 @@ export default function InteractiveMapLeaflet({
             aria-haspopup="menu"
             title={lang === "en" ? "Fly to Key Geographic Landmarks" : "প্রধান ভৌগোলিক অবস্থানে যান"}
           >
-            <span>🧭</span>
+            <MapIcon name="compass" />
             <span>{lang === "en" ? "Quick Focus" : "দ্রুত সন্ধান"}</span>
             <svg className="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <polyline points="6 9 12 15 18 9" />
@@ -954,7 +967,7 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span style={{ fontSize: "14px" }}>📍</span>
+                  <MapIcon name="pin" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Kanaighat Gauge (SW266)" : "কানাইঘাট গেজ (SW২৬৬)"}</span>
                     <span className="dropdown-item-sub">{lang === "en" ? "Validation Station · 24.9980°N, 92.2594°E" : "সুরমা যাচাইকরণ গেজ (SW১০৮)"}</span>
@@ -970,7 +983,7 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span style={{ fontSize: "14px" }}>🌊</span>
+                  <MapIcon name="waves" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Surma River Corridor" : "সুরমা নদী করিডোর"}</span>
                     <span className="dropdown-item-sub">{lang === "en" ? "Operational SWOT Reaches" : "সক্রিয় হাইড্রোলিক রুট"}</span>
@@ -986,7 +999,7 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span style={{ fontSize: "14px" }}>〰️</span>
+                  <MapIcon name="wave" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Kushiyara River" : "কুশিয়ারা নদী"}</span>
                     <span className="dropdown-item-sub">{lang === "en" ? "Regional Hydrologic Context" : "আঞ্চলিক ড্রেনেজ প্রসঙ্গ"}</span>
@@ -1002,7 +1015,7 @@ export default function InteractiveMapLeaflet({
                 }}
               >
                 <div className="dropdown-item-left">
-                  <span style={{ fontSize: "14px" }}>🌧️</span>
+                  <MapIcon name="rain" size={16} />
                   <div className="dropdown-item-info">
                     <span className="dropdown-item-title">{lang === "en" ? "Meghalaya Escarpment" : "মেঘালয় পর্বত ঢাল"}</span>
                     <span className="dropdown-item-sub">{lang === "en" ? "Upstream Runoff Catchment" : "উজানের পাহাড়ি ঢল অববাহিকা"}</span>
@@ -1014,6 +1027,7 @@ export default function InteractiveMapLeaflet({
         </div>
       </div>
 
+      {mapAlive && (
       <MapContainer
         center={DEFAULT_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -1667,6 +1681,7 @@ export default function InteractiveMapLeaflet({
           </>
         )}
       </MapContainer>
+      )}
 
       {/* Unobtrusive OpenFreeMap Attribution Pill */}
       <div

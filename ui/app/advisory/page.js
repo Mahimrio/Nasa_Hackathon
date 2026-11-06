@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { NAV_BACK } from "../lib/navDirection";
 import { useLocale } from "../hooks/useLocale";
 import { useTelemetry } from "../context/TelemetryContext";
 
@@ -109,6 +110,7 @@ export default function AdvisoryPage() {
           <div style={{ display: "flex", gap: "10px" }}>
             <Link
               href="/forecast"
+              transitionTypes={NAV_BACK}
               className="btn-standard neu-inset"
               style={{ minHeight: "40px", padding: "0 14px", fontSize: "12px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
@@ -118,6 +120,7 @@ export default function AdvisoryPage() {
 
             <Link
               href="/dashboard"
+              transitionTypes={NAV_BACK}
               className="btn-standard neu-inset"
               style={{ minHeight: "40px", padding: "0 14px", fontSize: "12px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
@@ -239,7 +242,7 @@ export default function AdvisoryPage() {
 
         {/* Pathway Navigation Footer */}
         <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
-          <Link href="/forecast" className="pathway-card neu-raised">
+          <Link href="/forecast" transitionTypes={NAV_BACK} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "⬅ Return to 2. Forecast & Analysis" : "⬅ ২. পূর্বাভাস ও বিশ্লেষণে ফিরে যান"}
@@ -255,7 +258,7 @@ export default function AdvisoryPage() {
             </div>
           </Link>
 
-          <Link href="/dashboard" className="pathway-card neu-raised">
+          <Link href="/dashboard" transitionTypes={NAV_BACK} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "Return to 1. Risk Dashboard ➔" : "১. মূল ঝুঁকি ড্যাশবোর্ডে ফিরে যান ➔"}

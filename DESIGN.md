@@ -89,7 +89,7 @@ HydroSense-SWOT is a high-precision scientific telemetry and harvest decision-su
 
 The design adheres to a **calm, readable, trustworthy professional light visual language**:
 - **Clean Solid Surfaces:** High-legibility white surfaces (`#FFFFFF`) on a soft neutral blue-gray canvas (`#F5F8FA`) with delicate perimeter dividers (`#DCE5EA`).
-- **No Unnecessary Decoration:** Glassmorphism, translucent backdrops, neumorphic buttons, heavy drop shadows, neon cyan blooms, and continuous pulsing animations have been removed to prioritize clarity, contrast, and operational trust.
+- **No Unnecessary Decoration:** Glassmorphism, translucent backdrops, neumorphic buttons, heavy drop shadows and neon cyan blooms have been removed to prioritize clarity, contrast, and operational trust. Looping motion is allowed only under the rules in **Section 7** (slow, low-contrast, transform/opacity only, off under reduced motion).
 - **Scientific Credibility:** Primary decisions (GREEN / AMBER / RED) and modelled gauge water levels are visually anchored with high prominence, while secondary hydrological validation and assumptions remain accessible without competing for visual attention.
 - **First-Class Bilingualism:** Full parity between English and Bengali (`Noto Sans Bengali`), with comfortable line heights (1.6–1.7) ensuring vowel markers and conjuncts render crisply without clipping or crowding.
 
@@ -193,7 +193,7 @@ Done: tokens, fonts, cards, buttons, top bar, decision panel, chart colours, map
 
 **Next steps, in order**
 1. Run `cd ui && npm run build` and `npm run lint`, then `pytest tests/` from the repo root. None were run after the redesign.
-2. Fix the clipped "Danger 13.20m" label: raise the right margin of both Recharts charts in `HydrographPanel.js` (about 70) and keep the rain chart aligned with the main chart.
+2. ~~Fix the clipped "Danger 13.20m" label~~ Done 2026-11-06 (Section 7): both Recharts charts in `HydrographPanel.js` use a 104px right margin, the rain chart is 120px tall, and both Y-axis titles are centred (`textAnchor: "middle"`), so "Rain (mm/h)" and the Bengali titles no longer clip.
 3. Fix `shoot.mjs` so the schematic capture targets the map toggle inside `.card-header-bar`, not the first `[role=radio]` (the language toggle).
 4. Review `b-advisory.png`, `b-trends.png`, `b-bulletin.png`, and take a hover shot of `.triage-pillar-card`.
 5. Check the topbar between 1170 and 1760 px: "Trend Explorer" clipped to "Trend Ex…" at about 1566 px before the redesign; the compact two-row layout applies at 1440.
@@ -202,3 +202,35 @@ Done: tokens, fonts, cards, buttons, top bar, decision panel, chart colours, map
 8. After human review, commit. Delete `ui/dev.log` (stray) and decide whether `.design-shots/` and `NASA Webapp Challenge Assistance.md` (about 970 KB) belong in the repo or in `.gitignore`.
 
 Run: `cd ui && npm run dev` then open `http://localhost:3000`. The dev server was stopped at the user's request; another project runs on this machine, so check the port before starting.
+
+---
+
+## 7. Motion Layer (2026-11-06)
+
+Brief: *make the app visually appealing and simple for regular users: smooth transitions, smooth page changes, looped animated content, without touching the core.* Everything is decorative. No data, model output, thresholds or copy meaning changed.
+
+**Files**
+- `ui/app/motion.css`: the whole motion layer, imported last in `layout.js` (after `shell.css`). Numbered sections: 1 route transitions, 2 scroll progress, 3 scroll reveal, 4 ambient loops, 5 pathway cards, 6 hydrograph draw-in, 7 footer water line, 8 Trend Explorer orbit, 9 map icons, 10 reduced motion. Both themes; accent colour comes from `--motion-accent` (lavender in Mocha, blue in Light Field) and `--motion-water` (`--cyan-400`).
+- `ui/app/template.js`: wraps every page in React 19.3 `<ViewTransition>` with `enter`/`exit` maps `nav-forward`, `nav-back`, default `page-fade`. Templates remount per navigation, so each page gets an enter/exit pair while the layout (header) persists.
+- `ui/app/lib/navDirection.js`: journey order Dashboard (1) → Forecast (2) → Advisory (3) → Trends. `navTransitionTypes(from, to)` returns `["nav-forward"]` or `["nav-back"]` for `<Link transitionTypes>`. Used by the header tabs and brand link (`AppHeader.js`) and by the in-page journey links and pathway cards (`page.js`, `forecast/page.js`, `advisory/page.js`).
+- `ui/app/components/MapIcon.js`: 13 line icons (map, light, satellite, layers, waves, wave, orbit, mountain, rain, compass, pin, check, offline) replacing emoji in the map toolbar, basemap menu, layer list and Quick Focus menu (`InteractiveMapLeaflet.js`). Map legend labels in `RiverMapPanel.js` dropped their emoji prefixes; the colour swatches already identify each layer.
+
+**Choreography**
+| Moment | Treatment |
+|---|---|
+| Route change (tabs, journey links) | Old page fades out in 160ms while sliding 56px; new page slides in from the other side (440ms, `--ease-expo`) and fades in after the exit. Forward slides left, back slides right. Untyped navigations (browser back, `/` ↔ `/dashboard`) use a 14px rise and fade. |
+| Top bar | `view-transition-name: site-header`. During typed route changes its group does not animate and the old snapshot is hidden, so the bar stays fixed and the existing sliding tab pill stays visible. Language and theme swaps keep the whole-page cross-fade from `shell.css`. |
+| Scrolling | 2px gradient hairline under the top bar tracks page progress (`animation-timeline: scroll(root)`). Sections from the third one down, and the pathway cards, rise in over the first 140px of entry (`animation-timeline: view()`). Footer rows finish when fully visible, so the last row is never left faded. Browsers without scroll timelines keep the one-shot entrance from `mocha-blend.css`. |
+| Loops | Brand glyph ripple (4.8s). Top-bar replay beacon and triage flag dot breathe (2.6–2.8s; AMBER 1.8s, RED 1.2s). Decision orb halo ring (GREEN 3.6s, WATCH 2.4s, CRITICAL 1.6s; the orb's own AMBER/RED scale pulse is unchanged). Hydrograph replay dot breathes (2.4s). Light sweeps along the water-level gauge fill (3.4s). Sheen across the triage flag badge (every 7s). Next-step arrows nudge (3.2s). Two wave layers drift along the top of the footer (18s and 27s). Trend Explorer "Awaiting verified input" card: satellite orbits Earth (9s) with falling rain drops. |
+| Hover | Pathway cards: lavender/blue sheen pass and the arrow pushes 5px. |
+| Charts | Hydrograph series (lines, uncertainty area, rain bars) are revealed left to right once on mount with `clip-path: inset()`, so dash patterns are untouched. Recharts' own animation stays off (`isAnimationActive={false}`), so replay scrubbing never re-animates. |
+
+**Rules**
+- Loops animate `transform` and `opacity` only (the footer waves are a 200%-wide pseudo-element moved with `translate3d`), and every loop is at least 1.2s. Calm GREEN breathes slowly; AMBER and RED loop faster so urgency still reads from motion as well as colour, icon and text.
+- `::view-transition { pointer-events: none }` keeps unnamed content clickable during a route change.
+- `prefers-reduced-motion: reduce`: route swaps are instant, scroll reveal and every loop are off, the scroll hairline is hidden, hover feedback is colour only.
+- The Trend Explorer visual is explicitly an "awaiting input" state. It shows no numbers, axes or trend shapes, so it cannot be read as a synthetic result.
+
+**Related fix (map lifecycle):** with `cacheComponents: true`, Next keeps visited routes in a hidden React `<Activity>`. Hiding ran react-leaflet's cleanup (`map.remove()`) but kept the dead map in context, so returning to the dashboard by client navigation threw `_leaflet_pos` / `min` / "Map container is being reused" errors and showed the error boundary. This was reproduced on the unmodified branch. `InteractiveMapLeaflet.js` now renders `<MapContainer>` only while the page is visible (`mapAlive`, set in a layout effect and cleared in its cleanup), so a fresh map is built when the page is shown again. Map toolbar state (basemap, layers, focus) lives outside `MapContainer` and is kept.
+
+**Verified (2026-11-06):** `npm run lint` clean; `npx next build` compiles and prerenders all 6 routes; Dashboard → Forecast → Dashboard → Advisory → Dashboard navigation runs with zero console errors and a live map; `nav-forward` slide observed on the view-transition pseudo-elements; chart labels checked in Mocha/English and Light/Bengali. `pytest tests/`: 47 passed, 1 failed (`test_checked_in_fixture_manifest_is_complete_and_hashes_match`, a CRLF checkout checksum mismatch on `data/fixtures/gauge_kanaighat.csv` that also fails without these changes).

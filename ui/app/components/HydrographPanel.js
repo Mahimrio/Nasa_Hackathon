@@ -554,9 +554,9 @@ export default function HydrographPanel({
       </div>
 
       {/* 1. Rainfall Hyetograph (Inverted Bar Chart) */}
-      <div style={{ width: "100%", height: 80, background: "transparent", padding: "4px 0" }}>
+      <div style={{ width: "100%", height: 120, background: "transparent", padding: "4px 0" }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 2, right: 30, bottom: 0, left: 20 }}>
+          <ComposedChart data={chartData} margin={{ top: 2, right: 104, bottom: 0, left: 20 }}>
             <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
             <XAxis dataKey="time" hide />
             <YAxis
@@ -567,6 +567,7 @@ export default function HydrographPanel({
                 value: t("hydrograph.rainAxis"),
                 angle: -90,
                 position: "insideLeft",
+                textAnchor: "middle",
                 fontSize: 12,
                 fill: "var(--chart-tick)",
                 offset: 10,
@@ -584,7 +585,7 @@ export default function HydrographPanel({
       {/* 2. Main Stage Hydrograph */}
       <div style={{ width: "100%", height: 320, background: "transparent", padding: "6px 0" }}>
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData} margin={{ top: 12, right: 30, bottom: 8, left: 20 }}>
+          <ComposedChart data={chartData} margin={{ top: 12, right: 104, bottom: 8, left: 20 }}>
             <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 4" />
             <XAxis
               dataKey="time"
@@ -598,6 +599,7 @@ export default function HydrographPanel({
                 value: t("hydrograph.waterLevelAxis"),
                 angle: -90,
                 position: "insideLeft",
+                textAnchor: "middle",
                 fontSize: 12.5,
                 fill: "var(--chart-label)",
                 offset: 10,

@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./mocha-blend.css";
 import "./shell.css";
+import "./motion.css";
 import { LocaleProvider } from "./hooks/useLocale";
 import { TelemetryProvider } from "./context/TelemetryContext";
 import ProvenanceNotice from "./components/ProvenanceNotice";

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { NAV_FORWARD } from "./lib/navDirection";
 import { useLocale } from "./hooks/useLocale";
 import { useTelemetry } from "./context/TelemetryContext";
 
@@ -126,7 +127,7 @@ export default function DashboardPage() {
 
         {/* Cross-Route Decision Journey Pathway Navigation */}
         <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
-          <Link href="/forecast" className="pathway-card neu-raised">
+          <Link href="/forecast" transitionTypes={NAV_FORWARD} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "2. Understand Why: Forecast & Analysis ➔" : "২. পূর্বাভাসের কারণ জানুন: হাইড্রো বিশ্লেষণ ➔"}
@@ -142,7 +143,7 @@ export default function DashboardPage() {
             </div>
           </Link>
 
-          <Link href="/advisory" className="pathway-card neu-raised">
+          <Link href="/advisory" transitionTypes={NAV_FORWARD} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "3. Decide What to Do: Harvest Advisory ➔" : "৩. কী সিদ্ধান্ত নেবেন: ফসল কর্তন নির্দেশিকা ➔"}
