@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useLocale } from "../hooks/useLocale";
 import { useTelemetry } from "../context/TelemetryContext";
 import HydroSenseLogo from "./HydroSenseLogo";
+import { navTransitionTypes } from "../lib/navDirection";
 
 /**
  * Positions a sliding highlight under the active child of `container`.
@@ -139,7 +140,7 @@ export default function AppHeader({
     >
       {/* Column 1: Brand & Regional Context */}
       <div className="topbar-left">
-        <Link href="/" className="topbar-brand">
+        <Link href="/" className="topbar-brand" transitionTypes={navTransitionTypes(pathname, "/")}>
           <div className="brand-glyph" aria-hidden="true">
             <HydroSenseLogo size={22} />
           </div>
@@ -163,6 +164,7 @@ export default function AppHeader({
         <span className="nav-indicator" aria-hidden="true" />
         <Link
           href="/dashboard"
+          transitionTypes={navTransitionTypes(pathname, "/dashboard")}
           className={`topbar-nav-link ${isDashboardActive ? "active" : ""}`}
           aria-current={routeKey === "dashboard" ? "page" : undefined}
           onClick={choose("dashboard")}
@@ -173,6 +175,7 @@ export default function AppHeader({
 
         <Link
           href="/forecast"
+          transitionTypes={navTransitionTypes(pathname, "/forecast")}
           className={`topbar-nav-link ${isForecastActive ? "active" : ""}`}
           aria-current={routeKey === "forecast" ? "page" : undefined}
           onClick={choose("forecast")}
@@ -183,6 +186,7 @@ export default function AppHeader({
 
         <Link
           href="/advisory"
+          transitionTypes={navTransitionTypes(pathname, "/advisory")}
           className={`topbar-nav-link ${isAdvisoryActive ? "active" : ""}`}
           aria-current={routeKey === "advisory" ? "page" : undefined}
           onClick={choose("advisory")}
@@ -192,6 +196,7 @@ export default function AppHeader({
         </Link>
         <Link
           href="/trends"
+          transitionTypes={navTransitionTypes(pathname, "/trends")}
           className={`topbar-nav-link ${isTrendsActive ? "active" : ""}`}
           aria-current={routeKey === "trends" ? "page" : undefined}
           onClick={choose("trends")}

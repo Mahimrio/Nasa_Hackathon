@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { NAV_BACK, NAV_FORWARD } from "../lib/navDirection";
 import { useLocale } from "../hooks/useLocale";
 import { useTelemetry } from "../context/TelemetryContext";
 
@@ -117,6 +118,7 @@ export default function ForecastPage() {
           <div style={{ display: "flex", gap: "10px" }}>
             <Link
               href="/dashboard"
+              transitionTypes={NAV_BACK}
               className="btn-standard neu-inset"
               style={{ minHeight: "40px", padding: "0 14px", fontSize: "12px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
@@ -126,6 +128,7 @@ export default function ForecastPage() {
 
             <Link
               href="/advisory"
+              transitionTypes={NAV_FORWARD}
               className="btn-standard btn-primary"
               style={{ minHeight: "40px", padding: "0 14px", fontSize: "12px", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "6px" }}
             >
@@ -166,7 +169,7 @@ export default function ForecastPage() {
 
         {/* Pathway Navigation Footer */}
         <div className="journey-pathway-banner" aria-label={lang === "en" ? "Next Steps in User Journey" : "পরবর্তী ধাপসমূহ"}>
-          <Link href="/dashboard" className="pathway-card neu-raised">
+          <Link href="/dashboard" transitionTypes={NAV_BACK} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "⬅ Return to 1. Dashboard (Detect Risk)" : "⬅ ১. ড্যাশবোর্ডে ফিরে যান (ঝুঁকি শনাক্তকরণ)"}
@@ -182,7 +185,7 @@ export default function ForecastPage() {
             </div>
           </Link>
 
-          <Link href="/advisory" className="pathway-card neu-raised">
+          <Link href="/advisory" transitionTypes={NAV_FORWARD} className="pathway-card neu-raised">
             <div>
               <div className="pathway-title">
                 {lang === "en" ? "Proceed to 3. Harvest Advisory (Decide & Act) ➔" : "৩. ফসল কর্তন নির্দেশিকা দেখুন (সিদ্ধান্ত ও পদক্ষেপ) ➔"}

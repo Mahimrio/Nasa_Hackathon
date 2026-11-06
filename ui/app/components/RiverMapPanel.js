@@ -828,28 +828,28 @@ export default function RiverMapPanel({
           <div className="swatch-group">
             <span className="swatch-dot" style={{ background: "#B7791F", boxShadow: "0 0 6px rgba(183, 121, 31, 0.4)" }} />
             <span style={{ fontSize: "13.5px", fontWeight: 650, color: "var(--text-primary)" }}>
-              {lang === "en" ? "📍 Kanaighat Gauge (SW266 / SW108)" : "📍 কানাইঘাট গেজ (SW২৬৬ / SW১০৮)"}
+              {lang === "en" ? "Kanaighat Gauge (SW266 / SW108)" : "কানাইঘাট গেজ (SW২৬৬ / SW১০৮)"}
             </span>
           </div>
 
           <div className="swatch-group">
             <span style={{ width: "16px", height: "4px", borderRadius: "2px", background: "var(--blue-primary)" }} />
             <span style={{ fontSize: "13.5px", fontWeight: 650, color: "var(--blue-primary)" }}>
-              {lang === "en" ? "🌊 Surma River (Operational)" : "🌊 সুরমা নদী (অপারেশনাল)"}
+              {lang === "en" ? "Surma River (Operational)" : "সুরমা নদী (অপারেশনাল)"}
             </span>
           </div>
 
           <div className="swatch-group">
             <span style={{ width: "16px", height: "3px", borderRadius: "2px", background: "var(--text-muted)", borderTop: "1px dashed var(--border-subtle)" }} />
             <span style={{ fontSize: "13px", color: "var(--text-secondary)" }}>
-              {lang === "en" ? "〰️ Kushiyara River (Context)" : "〰️ কুশিয়ারা নদী (প্রসঙ্গ)"}
+              {lang === "en" ? "Kushiyara River (Context)" : "কুশিয়ারা নদী (প্রসঙ্গ)"}
             </span>
           </div>
 
           <div className="swatch-group">
             <span style={{ width: "12px", height: "12px", borderRadius: "3px", border: "1.5px dashed var(--blue-deep)", background: "rgba(40, 123, 181, 0.15)" }} />
             <span style={{ fontSize: "13px", color: "var(--blue-deep)", fontWeight: 600 }}>
-              {lang === "en" ? "🌧️ Meghalaya Catchment" : "🌧️ মেঘালয় ক্যাচমেন্ট"}
+              {lang === "en" ? "Meghalaya Catchment" : "মেঘালয় ক্যাচমেন্ট"}
             </span>
           </div>
 
