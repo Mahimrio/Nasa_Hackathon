@@ -14,17 +14,20 @@ const FONT_STYLESHEET =
   "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&display=swap";
 
 export const metadata = {
-  title: "HydroSense-SWOT — Synthetic Demo",
+  title: "HydroSense-SWOT — NASA Earth System Trend Detective",
   description:
-    "A synthetic engineering demonstration of hydrologic-routing software. It is not an operational warning or validated forecast.",
+    "Provenance-verified 25-year (2001–2025) NASA GPM IMERG Final rainfall trend analysis and hydrodynamic flood modeling for the Sylhet Haor Basin.",
   keywords: [
+    "NASA Space Apps 2026",
+    "Earth System Trend Detective",
+    "NASA GPM IMERG",
     "NASA SWOT",
-    "GPM IMERG",
+    "Theil-Sen Slope",
+    "Modified Mann-Kendall",
     "Haor basin",
     "flood warning",
     "Boro rice",
     "Bangladesh",
-    "Space Apps 2026",
   ],
 };
 

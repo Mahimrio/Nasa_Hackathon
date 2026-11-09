@@ -1,0 +1,63 @@
+{
+  "_comment": "PROVENANCE MANIFEST TEMPLATE — HydroSense-SWOT Module 2",
+  "_instructions": [
+    "1. Run trend_explorer/ingest_imerg.py to populate this manifest automatically.",
+    "2. Never edit field values by hand after ingestion — they are computed outputs.",
+    "3. Keep credentials out of this file. Store NASA Earthdata credentials in .env or ~/.netrc only.",
+    "4. The checksum_algorithm field documents which algorithm was used for all local_sha256 fields.",
+    "5. http_etag is source metadata from the HTTP response header — not a content checksum.",
+    "6. local_sha256 is computed locally on the retrieved byte payload after spatial subsetting.",
+    "7. This manifest is verified automatically by validate_dataset_provenance() in trend_explorer/analysis.py."
+  ],
+  "schema_version": "1.0.0",
+  "product": "GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07",
+  "product_shortname": "GPM_3IMERGDF",
+  "product_version": "07B",
+  "doi": "10.5067/GPM/IMERGDF/DAY/07",
+  "doi_url": "https://doi.org/10.5067/GPM/IMERGDF/DAY/07",
+  "ges_disc_opendap_base": "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/",
+  "citation": "Huffman, G.J., E.F. Stocker, D.T. Bolvin, E.J. Nelkin, Jackson Tan (2019). GPM IMERG Final Precipitation L3 1 day 0.1 degree x 0.1 degree V07. Edited by Andrey Savtchenko. Greenbelt, MD: Goddard Earth Sciences Data and Information Services Center (GES DISC). DOI: 10.5067/GPM/IMERGDF/DAY/07",
+  "variable": "precipitation",
+  "units": "mm/day",
+  "physical_meaning": "Daily mean precipitation rate in mm/day derived from half-hourly IMERG data. Summing over 61 April-May days (April 1 through May 31) yields total seasonal accumulation in mm.",
+  "spatial_subset": {
+    "lat_min": 24.0,
+    "lat_max": 26.0,
+    "lon_min": 90.0,
+    "lon_max": 93.5,
+    "bounding_box_order": "lat_min, lat_max, lon_min, lon_max",
+    "opendap_constraint_note": "Subset requested via OPeNDAP constraint expression indexing lat/lon dimensions to the study window. Transferred bytes measured per granule and logged.",
+    "approximate_grid_cells": "~21 lat cells x ~36 lon cells at 0.1 degree resolution"
+  },
+  "study_seasons": {
+    "start_year": 2001,
+    "end_year": 2025,
+    "total_years": 25,
+    "months": "April (30 days) + May (31 days)",
+    "days_per_season": 61,
+    "total_expected_granules": 1525
+  },
+  "checksum_algorithm": "SHA-256",
+  "staging_unit": "Annual NetCDF chunk: data/trends/staging/imerg_am_{year}.nc",
+  "staging_validation": "Each annual chunk verified for exactly 61 time steps, non-empty lat/lon grids, and correct variable presence before acceptance.",
+  "retrieval_date_utc": "POPULATE_AFTER_INGESTION",
+  "retrieval_code_version": "POPULATE_AFTER_INGESTION",
+  "total_transferred_bytes": "POPULATE_AFTER_INGESTION",
+  "final_dataset_path": "data/trends/imerg_sylhet_2001_2025.nc",
+  "final_dataset_sha256": "POPULATE_AFTER_INGESTION",
+  "granules": [
+    {
+      "_note": "This array will be populated automatically by ingest_imerg.py at runtime.",
+      "_example_entry": {
+        "date": "YYYY-MM-DD",
+        "granule_id": "3B-DAY.MS.MRG.3IMERG.YYYYMMDD-S000000-E235959.V07B.nc4",
+        "source_url": "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGDF.07/YYYY/DOY/3B-DAY.MS.MRG.3IMERG.YYYYMMDD-S000000-E235959.V07B.nc4",
+        "http_etag": "SOURCE_METADATA_FROM_RESPONSE_HEADER_NOT_A_CONTENT_CHECKSUM",
+        "local_sha256": "SHA256_OF_SPATIAL_SUBSET_BYTE_PAYLOAD",
+        "transferred_bytes": 0,
+        "staging_chunk": "data/trends/staging/imerg_am_YYYY.nc"
+      }
+    }
+  ]
+}
+

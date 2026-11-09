@@ -25,7 +25,7 @@ HydroSense-SWOT bridges the critical upstream observational gap between transbou
 HydroSense-SWOT unifies two complementary Earth-observation capabilities into a single cohesive platform for Bangladesh's Haor region:
 
 1. **Module 1 — Operational Haor Flood-Warning System `[IMPLEMENTED]`:** Routes near-real-time NASA GPM IMERG Early Run satellite rainfall through un-gauged border river reaches whose physical hydraulic conveyance (Manning roughness, width, water surface elevation, and reach slope) is parameterized offline using NASA SWOT Ka-band radar interferometry, generating rapid 20–30h harvest decision advisories.
-2. **Module 2 — Haor Rainfall Trend Explorer `[IMPLEMENTED - FAIL-CLOSED ON REAL DATA]`:** Evaluates 26+ years of research-quality NASA GPM IMERG Final Run precipitation data (1998–2025) to determine whether pre-monsoon precipitation volume ($PRCPTOT_{AM}$) or extreme storm frequency ($R50mm_{AM}$) has changed with statistical significance in upstream catchments. (Locked alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* per `docs/DECISIONS.md`).
+2. **Module 2 — Haor Rainfall Trend Explorer `[IMPLEMENTED - FAIL-CLOSED ON REAL DATA]`:** Evaluates 25 complete pre-monsoon seasons (2001–2025, 1,525 daily granules) of research-quality NASA GPM IMERG Final Run precipitation data to determine whether pre-monsoon precipitation volume ($PRCPTOT_{AM}$) or extreme storm frequency ($R50mm_{AM}$) has changed with statistical significance in transboundary quadrant zones. (Locked alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* per `docs/DECISIONS.md`).
 
 ## Implementation & Validation Status
 
@@ -66,7 +66,7 @@ HydroSense-SWOT unifies two complementary Earth-observation capabilities into a 
 
 - NASA SWOT L2 HR RiverSP 2.0 (PO.DAAC Collection C2799438271-POCLOUD).
 - NASA GPM IMERG Early Run V07B (`GPM_3IMERGHHE`, ~4-hour latency, operational routing).
-- NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF` / `GPM_3IMERGM`, 1998–2025, GPCC gauge-adjusted, climatology).
+- NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF` / `GPM_3IMERGM`, 2001–2025, GPCC gauge-adjusted, climatology).
 - Bangladesh Water Development Board (BWDB) Kanaighat gauge records (Station SW108/SW266, Danger Level 13.20 m PWD).
 - Verified historical validation event: April 1 – May 31, 2026 transboundary flash flood replay.
 - Published research: Haor Basin Flash Flood Assessment (*J. Environ. Sci. & Nat. Resour.* 2019; 149,224 ha lost in Sunamganj).

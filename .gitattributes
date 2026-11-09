@@ -1,0 +1,4 @@
+* text=auto eol=lf
+data/fixtures/gauge_kanaighat.csv text eol=lf
+*.nc binary
+

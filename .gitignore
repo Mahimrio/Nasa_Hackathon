@@ -43,6 +43,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 *.pem
+.dodsrc
+.netrc
+*.urs_cookies
 
 # Raw Data Downloads
 data/raw/
