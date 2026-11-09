@@ -34,11 +34,13 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
    ```
 3. **Execute scientific pipeline & export UI data:**  
    ```bash
-   python3 pipeline/run_pipeline.py
+   # Demo mode runs synthetic benchmark with explicit SYNTHETIC_DEMO labels:
+   python3 pipeline/run_pipeline.py --mode demo
    python3 scripts/export_json.py
    ./scripts/audit_provenance.py
+   # Note: Real-data mode (--mode real) fails closed unless verified NASA/BWDB inputs exist in data/real/
    ```
-4. **Run test suite (71 unit tests):**  
+4. **Run test suite (89 unit tests):**  
    ```bash
    python3 -m pytest tests/ -v
    ```
