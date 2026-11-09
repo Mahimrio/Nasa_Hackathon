@@ -844,8 +844,9 @@ def ingest_imerg_final(
         "retrieval_method": "GES DISC OPeNDAP server-side constraint slicing (precipitation[0:0][2700:2735][1140:1160],lat,lon)",
         "staging_verification": "Each of the 25 annual NetCDF files is cryptographically verified against its corresponding SHA-256 sidecar file in data/trends/staging/",
         "elapsed_seconds": round(elapsed, 1),
-        "final_dataset_path": str(FINAL_NC_PATH),
+        "final_dataset_path": f"data/trends/{FINAL_NC_PATH.name}",
         "final_dataset_sha256": final_sha256,
+        "files": {FINAL_NC_PATH.name: final_sha256},
         "credentials": "NOT_STORED — credentials must remain in .env or ~/.netrc only",
         "granules": granule_records,
     }

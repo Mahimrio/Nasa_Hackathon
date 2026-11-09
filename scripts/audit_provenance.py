@@ -46,9 +46,12 @@ def audit_module2_trends(root: Path) -> int:
             except Exception as exc:
                 raise ProvenanceError(f"Corrupt data/trends/PROVENANCE.json: {exc}")
 
-            declared_files = manifest_data.get("files", {})
+            declared_files = {
+                Path(str(k).replace("\\", "/")).name: v
+                for k, v in manifest_data.get("files", {}).items()
+            }
             if "final_dataset_path" in manifest_data and "final_dataset_sha256" in manifest_data:
-                target_name = Path(manifest_data["final_dataset_path"]).name
+                target_name = Path(str(manifest_data["final_dataset_path"]).replace("\\", "/")).name
                 declared_files[target_name] = manifest_data["final_dataset_sha256"]
 
             for p in trends_dir.iterdir():

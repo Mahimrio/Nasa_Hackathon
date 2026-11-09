@@ -32,7 +32,7 @@
   "retrieval_method": "GES DISC OPeNDAP server-side constraint slicing (precipitation[0:0][2700:2735][1140:1160],lat,lon)",
   "staging_verification": "Each of the 25 annual NetCDF files is cryptographically verified against its corresponding SHA-256 sidecar file in data/trends/staging/",
   "elapsed_seconds": 89.3,
-  "final_dataset_path": "F:\\Nasa\\Nasa_Hackathon\\data\\trends\\imerg_sylhet_2001_2025.nc",
+  "final_dataset_path": "data/trends/imerg_sylhet_2001_2025.nc",
   "final_dataset_sha256": "0a1fec67fd1cb5ecc1970b216c5fa4aafe36650bf6eb3cf885c89ab72c49156f",
   "credentials": "NOT_STORED \u2014 credentials must remain in .env or ~/.netrc only",
   "granules": [
@@ -16811,5 +16811,8 @@
       "status": "OK",
       "elapsed": 0.0
     }
-  ]
+  ],
+  "files": {
+    "imerg_sylhet_2001_2025.nc": "0a1fec67fd1cb5ecc1970b216c5fa4aafe36650bf6eb3cf885c89ab72c49156f"
+  }
 }
