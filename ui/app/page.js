@@ -82,6 +82,80 @@ export default function DashboardPage() {
     <ErrorBoundary lang={lang} onRetry={fetchData}>
       {/* Main Dashboard Application Shell (§1. Dashboard — Detect Risk) */}
       <main id="main-content" className="dashboard-shell" role="main" tabIndex="-1">
+        {/* NASA Space Apps Challenge 2026: Earth System Trend Detective Feature Banner */}
+        <section
+          className="glass-panel nasa-challenge-hero-card"
+          role="region"
+          aria-label={lang === "en" ? "NASA Challenge Response Spotlight" : "নাসা চ্যালেঞ্জ স্পটলাইট"}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "1rem",
+            padding: "0.85rem 1.25rem",
+            marginBottom: "0.85rem",
+            borderLeft: "4px solid var(--teal-primary, #0ea5e9)",
+            background: "linear-gradient(90deg, rgba(14, 165, 233, 0.12) 0%, rgba(20, 24, 33, 0.65) 100%)",
+            borderRadius: "8px",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", maxWidth: "800px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span
+                style={{
+                  fontSize: "10px",
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  padding: "2px 7px",
+                  borderRadius: "4px",
+                  background: "var(--teal-primary, #0ea5e9)",
+                  color: "#0a0a0a",
+                  textTransform: "uppercase",
+                }}
+              >
+                NASA Space Apps Challenge 2026
+              </span>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  letterSpacing: "0.04em",
+                  color: "var(--teal-primary, #0ea5e9)",
+                }}
+              >
+                EARTH SYSTEM TREND DETECTIVE
+              </span>
+            </div>
+            <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.4", color: "var(--text-secondary, #cbd5e1)" }}>
+              {lang === "en"
+                ? "25-Year Climatological Rainfall Trend Analysis (2001–2025) across Transboundary Quadrants using 1,525 daily provenance-verified NASA GPM IMERG Final granules. Verified null result with Hamed–Rao Modified Mann–Kendall inference."
+                : "১,৫২৫টি দৈনিক যাচাইকৃত নাসা GPM IMERG Final গ্রানুল ব্যবহার করে ২৫ বছরের (২০০১–২০২৫) প্রাক-বর্ষা বৃষ্টিপাত প্রবণতা বিশ্লেষণ। হামেদ–রাও সংশোধিত মান–কেন্ডাল পরিসংখ্যান সহ অপরিবর্তিত/নাল ফলাফল যাচাই।"
+              }
+            </p>
+          </div>
+          <Link
+            href="/trends"
+            transitionTypes={NAV_FORWARD}
+            className="btn-standard neu-raised"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+              background: "var(--teal-primary, #0ea5e9)",
+              color: "#0b1215",
+              fontWeight: 700,
+              fontSize: "12px",
+              padding: "8px 16px",
+              borderRadius: "6px",
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span>{lang === "en" ? "Explore NASA Trend Detective ➔" : "নাসা ট্রেন্ড ডিটেকটিভ দেখুন ➔"}</span>
+          </Link>
+        </section>
+
         {/* Context Strip & Quick Timeline Jumps */}
         <PageContextBar
           reaches={reachMeta}

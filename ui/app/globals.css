@@ -4634,3 +4634,729 @@ body.lang-bn div {
   line-height: 1.4;
   text-align: center;
 }
+
+/* ============================================================
+   Module 2 — Haor Rainfall Trend Explorer
+   ============================================================ */
+.trend-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trend-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+.trend-title {
+  margin: 2px 0 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.15;
+}
+
+.trend-subtitle {
+  margin: 2px 0 0;
+  font-size: 15px;
+  color: var(--text-secondary);
+  max-width: 78ch;
+}
+
+.trend-intro {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  max-width: 90ch;
+}
+
+.trend-loading {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.trend-awaiting-state {
+  margin-top: 12px;
+}
+
+.trend-awaiting-body {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 88ch;
+}
+
+.trend-awaiting-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.trend-preview-btn {
+  min-height: 44px;
+  padding-inline: 20px;
+}
+
+.trend-awaiting-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 52ch;
+}
+
+.trend-error {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--red-danger);
+  background: var(--red-surface);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Provenance notices */
+.trend-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-850);
+  flex-wrap: wrap;
+}
+
+.trend-notice--synthetic {
+  border: 1px solid var(--amber-caution);
+  background: var(--amber-surface);
+}
+
+.trend-notice--verified {
+  border: 1px solid var(--blue-primary);
+  background: color-mix(in srgb, var(--blue-primary) 10%, transparent);
+}
+
+.trend-notice-badge {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid currentColor;
+  color: var(--amber-caution);
+}
+
+.trend-notice--verified .trend-notice-badge {
+  color: var(--blue-primary);
+}
+
+.trend-notice-copy {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.trend-notice-title {
+  display: block;
+  font-size: 13.5px;
+  color: var(--text-primary);
+}
+
+.trend-notice-body {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.trend-exit-preview {
+  flex: 0 0 auto;
+  min-height: 44px;
+}
+
+/* Viewer controls */
+.trend-viewer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.trend-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trend-control-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trend-control-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.trend-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trend-tab {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-850);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--motion-fast) var(--ease-out),
+    border-color var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) var(--ease-out);
+}
+
+.trend-tab:hover {
+  border-color: var(--blue-primary);
+  color: var(--text-primary);
+}
+
+.trend-tab[aria-selected="true"] {
+  border-color: var(--blue-primary);
+  background: var(--surface-active);
+  color: var(--text-primary);
+  box-shadow: inset 0 -2px 0 var(--blue-primary);
+}
+
+.trend-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trend-indicator-btn {
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-850);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--motion-fast) var(--ease-out),
+    border-color var(--motion-fast) var(--ease-out),
+    color var(--motion-fast) var(--ease-out);
+}
+
+.trend-indicator-btn:hover {
+  border-color: var(--blue-primary);
+  color: var(--text-primary);
+}
+
+.trend-indicator-btn[aria-pressed="true"] {
+  border-color: var(--blue-primary);
+  background: var(--blue-primary);
+  color: var(--surface-900);
+}
+
+/* Chart panel */
+.trend-chart-panel {
+  scroll-margin-top: 80px;
+}
+
+.trend-chart-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.trend-chart-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trend-chart-subtitle {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.trend-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.trend-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.trend-legend-swatch {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.trend-legend-swatch--observed {
+  background: var(--blue-primary);
+}
+
+.trend-legend-swatch--fitted {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--amber-caution) 0 5px,
+    transparent 5px 9px
+  );
+}
+
+.trend-chart-canvas {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.trend-tooltip {
+  background: var(--surface-popover);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+  color: var(--text-primary);
+}
+
+.trend-tooltip-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.trend-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.trend-tooltip-row strong {
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+}
+
+.trend-tooltip-swatch {
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.trend-tooltip-swatch--observed {
+  background: var(--blue-primary);
+}
+
+.trend-tooltip-swatch--fitted {
+  background: var(--amber-caution);
+}
+
+/* Statistical cards */
+.trend-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.trend-stat-card {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trend-stat-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.trend-stat-value {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.trend-stat-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.trend-stat-sub {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.trend-stat-foot {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+.trend-stat-pairs {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 2px 0;
+}
+
+.trend-stat-pairs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trend-stat-pair-key {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.trend-stat-pair-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.trend-stat-badge {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+  border: 1px solid var(--border-subtle);
+}
+
+.trend-stat-badge--neutral {
+  color: var(--text-secondary);
+  background: var(--surface-850);
+}
+
+.trend-stat-badge--attention {
+  color: var(--amber-caution);
+  background: var(--amber-surface);
+  border-color: var(--amber-caution);
+}
+
+/* Climatological disclaimer */
+.trend-disclaimer {
+  display: flex;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--amber-caution);
+  border-inline-start-width: 5px;
+  background: var(--amber-surface);
+}
+
+.trend-disclaimer-icon {
+  flex: 0 0 auto;
+  color: var(--amber-caution);
+  margin-top: 1px;
+}
+
+.trend-disclaimer-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trend-disclaimer-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Provenance metadata */
+.trend-metadata-title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trend-metadata-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px 22px;
+  margin: 0;
+}
+
+.trend-metadata-list > div {
+  min-width: 0;
+}
+
+.trend-metadata-list dt {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.trend-metadata-list dd {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.trend-metadata-mono {
+  font-family: var(--font-mono);
+  font-size: 11.5px !important;
+}
+
+@media (max-width: 1100px) {
+  .trend-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .trend-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trend-notice {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trend-exit-preview {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trend-tab {
+    width: 100%;
+  }
+
+  .trend-indicator-btn {
+    flex: 1 1 100%;
+  }
+
+  .trend-stat-value {
+    font-size: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trend-tab,
+  .trend-indicator-btn,
+  .trend-exit-preview {
+    transition: none;
+  }
+}
+
+/* Trend Explorer hardening: wrapping, focus, direction chip, chart fallback */
+.trend-viewer,
+.trend-control-block,
+.trend-chart-panel,
+.trend-chart-canvas,
+.trend-stat-card {
+  min-width: 0;
+}
+
+.trend-tab,
+.trend-indicator-btn {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.trend-notice-badge,
+.trend-stat-badge {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* The sr-only table keeps its full content for assistive tech, but a table's
+   intrinsic width ignores the utility's width:1px. This clipped wrapper keeps
+   the table's layout box from inflating the chart panel's scrollWidth. */
+.trend-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.trend-direction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.trend-direction-icon {
+  flex: 0 0 auto;
+  color: currentColor;
+}
+
+.trend-chart-placeholder {
+  width: 100%;
+  height: 360px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--surface-850) 0%,
+    var(--surface-active) 50%,
+    var(--surface-850) 100%
+  );
+  background-size: 200% 100%;
+  animation: trend-placeholder-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes trend-placeholder-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.trend-tab:focus-visible,
+.trend-indicator-btn:focus-visible,
+.trend-preview-btn:focus-visible,
+.trend-exit-preview:focus-visible,
+.trend-chart-panel:focus-visible {
+  outline: 2px solid var(--blue-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trend-chart-placeholder {
+    animation: none;
+  }
+}
+
+/* Awaiting-data orbit visual */
+.trend-awaiting {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.trend-awaiting-visual {
+  flex: 0 0 auto;
+  width: 104px;
+  height: 104px;
+}
+
+.trend-awaiting-copy {
+  flex: 1 1 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.trend-awaiting-copy strong {
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.orbit-path {
+  fill: none;
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.earth {
+  fill: var(--surface-active);
+  stroke: var(--blue-primary);
+  stroke-width: 1.5;
+}
+
+.drop {
+  fill: var(--blue-primary);
+}
+
+.orbit {
+  transform-box: view-box;
+  transform-origin: 52px 52px;
+  animation: trend-orbit 14s linear infinite;
+}
+
+.sat {
+  fill: var(--amber-caution);
+}
+
+@keyframes trend-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit {
+    animation: none;
+  }
+}

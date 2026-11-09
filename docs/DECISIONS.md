@@ -99,6 +99,8 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-10-24 | Lock "Be An Earth System Trend Detective!" as primary approved challenge | Leaving challenge selection provisional indefinitely | Full criteria-to-feature mapping completed (Gate 0); aligns macro-climatological trend exploration (Module 2) with local agricultural impact (Module 1). | Low | R0/R9 |
 | 2026-10-24 | Resolve and re-benchmark baseline comparison subroutine (WO-016) | Leaving baseline evaluation distorted | Corrected df_sim self-comparison in validation_report.py and metrics.py; true persistence and rainfall threshold baselines evaluated; warning lead time reported honestly as N/A in the absence of an operational issue-time product (Gate 4). | Low | R3/R5 |
 | 2026-10-24 | Implement fail-closed Trend Explorer backend and UI route (WO-017 & WO-018) | Leaving Module 2 as planned documentation only | Built trend_explorer/analysis.py and ui/app/trends/page.js; fail-closed behavior verified via pytest (48/48 pass) and Next.js production build. | Low | R4/R6 |
+| 2026-11-09 | Enforce strict provenance separation and hermetic E2E testing (WO-023) | Allowing synthetic test datasets to produce 'VERIFIED_REAL' outputs | Distinguishes production from test runs; synthetic datasets cannot claim VERIFIED_REAL; hermetic tests run strictly in tmp_path. | Low | R5/R10 |
+| 2026-11-09 | Upgrade central compliance auditor for dual-module validation (WO-024) | Relying solely on Module 1 checks | Audits both Module 1 fixtures and Module 2 trends directory allowlist and UI export labels; fails if synthetic fixtures claim COMPUTED status. | Low | R9/R10 |
 
 
 ---

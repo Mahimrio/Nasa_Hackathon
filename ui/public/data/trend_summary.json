@@ -1,0 +1,2032 @@
+{
+  "schema_version": "2.2.0",
+  "generated_at_utc": "2026-11-09T18:34:37.663053+00:00",
+  "input_provenance": "VERIFIED_REAL",
+  "analysis_status": "COMPUTED",
+  "study_period": {
+    "start_year": 2001,
+    "end_year": 2025
+  },
+  "study_region": "Sylhet Division, Bangladesh (Haor Basin / SWOT overpass region)",
+  "indicators": {
+    "prcptot": {
+      "id": "prcptot",
+      "threshold_mm_per_day": 1.0,
+      "description": "Apr-May total precipitation on wet days (P \u2265 1 mm/day), mm"
+    },
+    "r50mm": {
+      "id": "r50mm",
+      "threshold_mm_per_day": 50.0,
+      "description": "Count of Apr-May heavy-rain days (P \u2265 50 mm/day), days"
+    }
+  },
+  "spatial_coverage_policy": {
+    "minimum_valid_cell_fraction": 0.95,
+    "zone_membership": "half-open intervals on cell centres; no cell can belong to two zones",
+    "weighting": "cos(latitude) area weights applied after cell-first accumulation"
+  },
+  "statistical_methods": {
+    "slope_estimator": "Theil-Sen (actual year deltas)",
+    "slope_ci": "Gilbert (1987) rank bounds at 95% using Var*(S)",
+    "trend_test": "Mann-Kendall with Hamed-Rao (1998) multi-lag rank autocorrelation correction",
+    "kendall_variance": "Tied-rank correction included",
+    "autocorrelation_basis": "Ranks of detrended residuals; consecutive calendar-year pairs for lag estimation",
+    "significance_level": 0.05,
+    "multiple_testing": "Holm-Bonferroni over 6 tests (3 zones \u00d7 2 indicators)"
+  },
+  "minimum_seasons": 20,
+  "minimum_seasons_basis": "Predeclared project threshold; not a WMO guideline",
+  "data_completeness_policy": "A season is complete when all 61 Apr-May days are present (no duplicates) and each day has \u226595% valid cells. Incomplete seasons are retained in annual_series with season_complete=false.",
+  "limitations": "Area-weighted zone indicators do not establish causality or predict individual floods. Spatial dependence across zones and multiple-area inference require explicit extension. Source authenticity depends on the retrieval record and reviewable provenance; SHA-256 verifies file integrity only.",
+  "zones": [
+    {
+      "zone_id": "zone_a",
+      "status": "COMPUTED",
+      "complete_seasons_count": 25,
+      "minimum_seasons_required": 20,
+      "incomplete_seasons": [],
+      "indicators": {
+        "prcptot": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": 6.077108054173772,
+          "slope_per_decade": 60.77108054173772,
+          "slope_ci_low_per_year": -7.733680336670064,
+          "slope_ci_high_per_year": 16.107300947223322,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": 26.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 728.3354089424046,
+          "correction_factor_cf": 0.39727385942312976,
+          "r1_lag1_autocorr": -0.43105788642042414,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": 0.08666666666666667,
+          "z_statistic": 0.9263482737690442,
+          "p_value_raw": 0.3542650162267422,
+          "p_value_adjusted": 1.0,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 560.1223961882744,
+              "r50mm_observed": 2.183587382691958,
+              "prcptot_fitted": 737.2122604295582,
+              "r50mm_fitted": 2.9814198385877972,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 991.1057872758697,
+              "r50mm_observed": 5.549773349554348,
+              "prcptot_fitted": 743.2893684837309,
+              "r50mm_fitted": 3.0423169567457222,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 475.4101880981243,
+              "r50mm_observed": 1.333649791759248,
+              "prcptot_fitted": 749.3664765379053,
+              "r50mm_fitted": 3.103214074903633,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 1157.1713705196269,
+              "r50mm_observed": 6.749856054073382,
+              "prcptot_fitted": 755.4435845920798,
+              "r50mm_fitted": 3.164111193061558,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 597.0072232672832,
+              "r50mm_observed": 0.7169897717946438,
+              "prcptot_fitted": 761.5206926462524,
+              "r50mm_fitted": 3.225008311219483,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 1074.5671342988248,
+              "r50mm_observed": 6.166873021723404,
+              "prcptot_fitted": 767.5978007004269,
+              "r50mm_fitted": 3.285905429377408,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 773.6749087546003,
+              "r50mm_observed": 3.6505847150211403,
+              "prcptot_fitted": 773.6749087545995,
+              "r50mm_fitted": 3.346802547535333,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 348.5011076868089,
+              "r50mm_observed": 0.43345703466161417,
+              "prcptot_fitted": 779.752016808774,
+              "r50mm_fitted": 3.407699665693258,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 569.1983627283219,
+              "r50mm_observed": 2.249883148389491,
+              "prcptot_fitted": 785.8291248629484,
+              "r50mm_fitted": 3.4685967838511687,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1620.1805627514884,
+              "r50mm_observed": 10.384014046172918,
+              "prcptot_fitted": 791.9062329171211,
+              "r50mm_fitted": 3.5294939020090936,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 330.1167626440088,
+              "r50mm_observed": 0.3666116149506636,
+              "prcptot_fitted": 797.9833409712955,
+              "r50mm_fitted": 3.5903910201670186,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 850.9826448001629,
+              "r50mm_observed": 3.700798224455342,
+              "prcptot_fitted": 804.06044902547,
+              "r50mm_fitted": 3.6512881383249436,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 828.2892428656746,
+              "r50mm_observed": 4.100536512981023,
+              "prcptot_fitted": 810.1375570796426,
+              "r50mm_fitted": 3.7121852564828686,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 575.8635830677928,
+              "r50mm_observed": 2.600013902493139,
+              "prcptot_fitted": 816.2146651338171,
+              "r50mm_fitted": 3.7730823746407935,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 890.5679428991589,
+              "r50mm_observed": 3.83397949279871,
+              "prcptot_fitted": 822.2917731879897,
+              "r50mm_fitted": 3.8339794927987043,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1299.0973977836693,
+              "r50mm_observed": 8.333402033694304,
+              "prcptot_fitted": 828.3688812421642,
+              "r50mm_fitted": 3.8948766109566293,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 1006.7784134463608,
+              "r50mm_observed": 5.050171852535936,
+              "prcptot_fitted": 834.4459892963387,
+              "r50mm_fitted": 3.9557737291145543,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 630.1985076259331,
+              "r50mm_observed": 2.950419102883594,
+              "prcptot_fitted": 840.5230973505113,
+              "r50mm_fitted": 4.016670847272479,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 682.3557260113306,
+              "r50mm_observed": 1.9167834167588502,
+              "prcptot_fitted": 846.6002054046858,
+              "r50mm_fitted": 4.077567965430404,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 901.4648745240667,
+              "r50mm_observed": 4.116577366298976,
+              "prcptot_fitted": 852.6773134588602,
+              "r50mm_fitted": 4.138465083588329,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 474.01438839818206,
+              "r50mm_observed": 1.6333880296828387,
+              "prcptot_fitted": 858.7544215130329,
+              "r50mm_fitted": 4.19936220174624,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 1332.283949454398,
+              "r50mm_observed": 9.26659847391827,
+              "prcptot_fitted": 864.8315295672073,
+              "r50mm_fitted": 4.260259319904165,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 369.05640520372305,
+              "r50mm_observed": 0.966501613099812,
+              "prcptot_fitted": 870.90863762138,
+              "r50mm_fitted": 4.32115643806209,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 805.8519808359993,
+              "r50mm_observed": 5.833663592859717,
+              "prcptot_fitted": 876.9857456755544,
+              "r50mm_fitted": 4.382053556220015,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 1055.2415693165426,
+              "r50mm_observed": 7.033718289104509,
+              "prcptot_fitted": 883.0628537297289,
+              "r50mm_fitted": 4.44295067437794,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        },
+        "r50mm": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": 0.06089711815792262,
+          "slope_per_decade": 0.6089711815792263,
+          "slope_ci_low_per_year": -0.03330676646789416,
+          "slope_ci_high_per_year": 0.1597457608574221,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": 38.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 559.8522129686455,
+          "correction_factor_cf": 0.3053739343465339,
+          "r1_lag1_autocorr": -0.46724259716127436,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": 0.12666666666666668,
+          "z_statistic": 1.5637417248160703,
+          "p_value_raw": 0.1178782347120797,
+          "p_value_adjusted": 0.7072694082724782,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 560.1223961882744,
+              "r50mm_observed": 2.183587382691958,
+              "prcptot_fitted": 737.2122604295582,
+              "r50mm_fitted": 2.9814198385877972,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 991.1057872758697,
+              "r50mm_observed": 5.549773349554348,
+              "prcptot_fitted": 743.2893684837309,
+              "r50mm_fitted": 3.0423169567457222,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 475.4101880981243,
+              "r50mm_observed": 1.333649791759248,
+              "prcptot_fitted": 749.3664765379053,
+              "r50mm_fitted": 3.103214074903633,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 1157.1713705196269,
+              "r50mm_observed": 6.749856054073382,
+              "prcptot_fitted": 755.4435845920798,
+              "r50mm_fitted": 3.164111193061558,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 597.0072232672832,
+              "r50mm_observed": 0.7169897717946438,
+              "prcptot_fitted": 761.5206926462524,
+              "r50mm_fitted": 3.225008311219483,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 1074.5671342988248,
+              "r50mm_observed": 6.166873021723404,
+              "prcptot_fitted": 767.5978007004269,
+              "r50mm_fitted": 3.285905429377408,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 773.6749087546003,
+              "r50mm_observed": 3.6505847150211403,
+              "prcptot_fitted": 773.6749087545995,
+              "r50mm_fitted": 3.346802547535333,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 348.5011076868089,
+              "r50mm_observed": 0.43345703466161417,
+              "prcptot_fitted": 779.752016808774,
+              "r50mm_fitted": 3.407699665693258,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 569.1983627283219,
+              "r50mm_observed": 2.249883148389491,
+              "prcptot_fitted": 785.8291248629484,
+              "r50mm_fitted": 3.4685967838511687,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1620.1805627514884,
+              "r50mm_observed": 10.384014046172918,
+              "prcptot_fitted": 791.9062329171211,
+              "r50mm_fitted": 3.5294939020090936,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 330.1167626440088,
+              "r50mm_observed": 0.3666116149506636,
+              "prcptot_fitted": 797.9833409712955,
+              "r50mm_fitted": 3.5903910201670186,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 850.9826448001629,
+              "r50mm_observed": 3.700798224455342,
+              "prcptot_fitted": 804.06044902547,
+              "r50mm_fitted": 3.6512881383249436,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 828.2892428656746,
+              "r50mm_observed": 4.100536512981023,
+              "prcptot_fitted": 810.1375570796426,
+              "r50mm_fitted": 3.7121852564828686,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 575.8635830677928,
+              "r50mm_observed": 2.600013902493139,
+              "prcptot_fitted": 816.2146651338171,
+              "r50mm_fitted": 3.7730823746407935,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 890.5679428991589,
+              "r50mm_observed": 3.83397949279871,
+              "prcptot_fitted": 822.2917731879897,
+              "r50mm_fitted": 3.8339794927987043,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1299.0973977836693,
+              "r50mm_observed": 8.333402033694304,
+              "prcptot_fitted": 828.3688812421642,
+              "r50mm_fitted": 3.8948766109566293,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 1006.7784134463608,
+              "r50mm_observed": 5.050171852535936,
+              "prcptot_fitted": 834.4459892963387,
+              "r50mm_fitted": 3.9557737291145543,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 630.1985076259331,
+              "r50mm_observed": 2.950419102883594,
+              "prcptot_fitted": 840.5230973505113,
+              "r50mm_fitted": 4.016670847272479,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 682.3557260113306,
+              "r50mm_observed": 1.9167834167588502,
+              "prcptot_fitted": 846.6002054046858,
+              "r50mm_fitted": 4.077567965430404,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 901.4648745240667,
+              "r50mm_observed": 4.116577366298976,
+              "prcptot_fitted": 852.6773134588602,
+              "r50mm_fitted": 4.138465083588329,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 474.01438839818206,
+              "r50mm_observed": 1.6333880296828387,
+              "prcptot_fitted": 858.7544215130329,
+              "r50mm_fitted": 4.19936220174624,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 1332.283949454398,
+              "r50mm_observed": 9.26659847391827,
+              "prcptot_fitted": 864.8315295672073,
+              "r50mm_fitted": 4.260259319904165,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 369.05640520372305,
+              "r50mm_observed": 0.966501613099812,
+              "prcptot_fitted": 870.90863762138,
+              "r50mm_fitted": 4.32115643806209,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 805.8519808359993,
+              "r50mm_observed": 5.833663592859717,
+              "prcptot_fitted": 876.9857456755544,
+              "r50mm_fitted": 4.382053556220015,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 1055.2415693165426,
+              "r50mm_observed": 7.033718289104509,
+              "prcptot_fitted": 883.0628537297289,
+              "r50mm_fitted": 4.44295067437794,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        }
+      },
+      "annual_series": [
+        {
+          "year": 2001,
+          "prcptot_observed": 560.1223961882744,
+          "r50mm_observed": 2.183587382691958,
+          "prcptot_fitted": 737.2122604295582,
+          "r50mm_fitted": 2.9814198385877972,
+          "season_complete": true
+        },
+        {
+          "year": 2002,
+          "prcptot_observed": 991.1057872758697,
+          "r50mm_observed": 5.549773349554348,
+          "prcptot_fitted": 743.2893684837309,
+          "r50mm_fitted": 3.0423169567457222,
+          "season_complete": true
+        },
+        {
+          "year": 2003,
+          "prcptot_observed": 475.4101880981243,
+          "r50mm_observed": 1.333649791759248,
+          "prcptot_fitted": 749.3664765379053,
+          "r50mm_fitted": 3.103214074903633,
+          "season_complete": true
+        },
+        {
+          "year": 2004,
+          "prcptot_observed": 1157.1713705196269,
+          "r50mm_observed": 6.749856054073382,
+          "prcptot_fitted": 755.4435845920798,
+          "r50mm_fitted": 3.164111193061558,
+          "season_complete": true
+        },
+        {
+          "year": 2005,
+          "prcptot_observed": 597.0072232672832,
+          "r50mm_observed": 0.7169897717946438,
+          "prcptot_fitted": 761.5206926462524,
+          "r50mm_fitted": 3.225008311219483,
+          "season_complete": true
+        },
+        {
+          "year": 2006,
+          "prcptot_observed": 1074.5671342988248,
+          "r50mm_observed": 6.166873021723404,
+          "prcptot_fitted": 767.5978007004269,
+          "r50mm_fitted": 3.285905429377408,
+          "season_complete": true
+        },
+        {
+          "year": 2007,
+          "prcptot_observed": 773.6749087546003,
+          "r50mm_observed": 3.6505847150211403,
+          "prcptot_fitted": 773.6749087545995,
+          "r50mm_fitted": 3.346802547535333,
+          "season_complete": true
+        },
+        {
+          "year": 2008,
+          "prcptot_observed": 348.5011076868089,
+          "r50mm_observed": 0.43345703466161417,
+          "prcptot_fitted": 779.752016808774,
+          "r50mm_fitted": 3.407699665693258,
+          "season_complete": true
+        },
+        {
+          "year": 2009,
+          "prcptot_observed": 569.1983627283219,
+          "r50mm_observed": 2.249883148389491,
+          "prcptot_fitted": 785.8291248629484,
+          "r50mm_fitted": 3.4685967838511687,
+          "season_complete": true
+        },
+        {
+          "year": 2010,
+          "prcptot_observed": 1620.1805627514884,
+          "r50mm_observed": 10.384014046172918,
+          "prcptot_fitted": 791.9062329171211,
+          "r50mm_fitted": 3.5294939020090936,
+          "season_complete": true
+        },
+        {
+          "year": 2011,
+          "prcptot_observed": 330.1167626440088,
+          "r50mm_observed": 0.3666116149506636,
+          "prcptot_fitted": 797.9833409712955,
+          "r50mm_fitted": 3.5903910201670186,
+          "season_complete": true
+        },
+        {
+          "year": 2012,
+          "prcptot_observed": 850.9826448001629,
+          "r50mm_observed": 3.700798224455342,
+          "prcptot_fitted": 804.06044902547,
+          "r50mm_fitted": 3.6512881383249436,
+          "season_complete": true
+        },
+        {
+          "year": 2013,
+          "prcptot_observed": 828.2892428656746,
+          "r50mm_observed": 4.100536512981023,
+          "prcptot_fitted": 810.1375570796426,
+          "r50mm_fitted": 3.7121852564828686,
+          "season_complete": true
+        },
+        {
+          "year": 2014,
+          "prcptot_observed": 575.8635830677928,
+          "r50mm_observed": 2.600013902493139,
+          "prcptot_fitted": 816.2146651338171,
+          "r50mm_fitted": 3.7730823746407935,
+          "season_complete": true
+        },
+        {
+          "year": 2015,
+          "prcptot_observed": 890.5679428991589,
+          "r50mm_observed": 3.83397949279871,
+          "prcptot_fitted": 822.2917731879897,
+          "r50mm_fitted": 3.8339794927987043,
+          "season_complete": true
+        },
+        {
+          "year": 2016,
+          "prcptot_observed": 1299.0973977836693,
+          "r50mm_observed": 8.333402033694304,
+          "prcptot_fitted": 828.3688812421642,
+          "r50mm_fitted": 3.8948766109566293,
+          "season_complete": true
+        },
+        {
+          "year": 2017,
+          "prcptot_observed": 1006.7784134463608,
+          "r50mm_observed": 5.050171852535936,
+          "prcptot_fitted": 834.4459892963387,
+          "r50mm_fitted": 3.9557737291145543,
+          "season_complete": true
+        },
+        {
+          "year": 2018,
+          "prcptot_observed": 630.1985076259331,
+          "r50mm_observed": 2.950419102883594,
+          "prcptot_fitted": 840.5230973505113,
+          "r50mm_fitted": 4.016670847272479,
+          "season_complete": true
+        },
+        {
+          "year": 2019,
+          "prcptot_observed": 682.3557260113306,
+          "r50mm_observed": 1.9167834167588502,
+          "prcptot_fitted": 846.6002054046858,
+          "r50mm_fitted": 4.077567965430404,
+          "season_complete": true
+        },
+        {
+          "year": 2020,
+          "prcptot_observed": 901.4648745240667,
+          "r50mm_observed": 4.116577366298976,
+          "prcptot_fitted": 852.6773134588602,
+          "r50mm_fitted": 4.138465083588329,
+          "season_complete": true
+        },
+        {
+          "year": 2021,
+          "prcptot_observed": 474.01438839818206,
+          "r50mm_observed": 1.6333880296828387,
+          "prcptot_fitted": 858.7544215130329,
+          "r50mm_fitted": 4.19936220174624,
+          "season_complete": true
+        },
+        {
+          "year": 2022,
+          "prcptot_observed": 1332.283949454398,
+          "r50mm_observed": 9.26659847391827,
+          "prcptot_fitted": 864.8315295672073,
+          "r50mm_fitted": 4.260259319904165,
+          "season_complete": true
+        },
+        {
+          "year": 2023,
+          "prcptot_observed": 369.05640520372305,
+          "r50mm_observed": 0.966501613099812,
+          "prcptot_fitted": 870.90863762138,
+          "r50mm_fitted": 4.32115643806209,
+          "season_complete": true
+        },
+        {
+          "year": 2024,
+          "prcptot_observed": 805.8519808359993,
+          "r50mm_observed": 5.833663592859717,
+          "prcptot_fitted": 876.9857456755544,
+          "r50mm_fitted": 4.382053556220015,
+          "season_complete": true
+        },
+        {
+          "year": 2025,
+          "prcptot_observed": 1055.2415693165426,
+          "r50mm_observed": 7.033718289104509,
+          "prcptot_fitted": 883.0628537297289,
+          "r50mm_fitted": 4.44295067437794,
+          "season_complete": true
+        }
+      ]
+    },
+    {
+      "zone_id": "zone_b",
+      "status": "COMPUTED",
+      "complete_seasons_count": 25,
+      "minimum_seasons_required": 20,
+      "incomplete_seasons": [],
+      "indicators": {
+        "prcptot": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": -1.486773498326227,
+          "slope_per_decade": -14.86773498326227,
+          "slope_ci_low_per_year": -13.267017083535364,
+          "slope_ci_high_per_year": 9.355431409022314,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": -8.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 1284.2220806116165,
+          "correction_factor_cf": 0.7004847712426999,
+          "r1_lag1_autocorr": 0.0,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": -0.02666666666666667,
+          "z_statistic": -0.19533405850822874,
+          "p_value_raw": 0.8451314357419588,
+          "p_value_adjusted": 1.0,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 522.1343163581778,
+              "r50mm_observed": 2.383299358735295,
+              "prcptot_fitted": 635.6824391331243,
+              "r50mm_fitted": 2.279880230069317,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 666.8716679608058,
+              "r50mm_observed": 2.267070064610029,
+              "prcptot_fitted": 634.1956656347984,
+              "r50mm_fitted": 2.267070064610028,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 471.76327333553735,
+              "r50mm_observed": 1.534393577448866,
+              "prcptot_fitted": 632.7088921364721,
+              "r50mm_fitted": 2.2542598991507354,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 1180.5336831828924,
+              "r50mm_observed": 7.449455387619055,
+              "prcptot_fitted": 631.2221186381457,
+              "r50mm_fitted": 2.241449733691443,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 597.1681192656191,
+              "r50mm_observed": 1.5837305351408189,
+              "prcptot_fitted": 629.7353451398194,
+              "r50mm_fitted": 2.2286395682321505,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 628.2485716414935,
+              "r50mm_observed": 2.249696614077389,
+              "prcptot_fitted": 628.2485716414935,
+              "r50mm_fitted": 2.215829402772858,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 685.7176903372222,
+              "r50mm_observed": 2.416512112460832,
+              "prcptot_fitted": 626.7617981431672,
+              "r50mm_fitted": 2.2030192373135655,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 309.1479080468769,
+              "r50mm_observed": 0.20004037368998248,
+              "prcptot_fitted": 625.2750246448409,
+              "r50mm_fitted": 2.1902090718542766,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 371.5087445768228,
+              "r50mm_observed": 0.7165659777979858,
+              "prcptot_fitted": 623.7882511465145,
+              "r50mm_fitted": 2.177398906394984,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1167.6908360659954,
+              "r50mm_observed": 7.165927178081207,
+              "prcptot_fitted": 622.3014776481882,
+              "r50mm_fitted": 2.1645887409356916,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 433.38267644100137,
+              "r50mm_observed": 1.0499119741341474,
+              "prcptot_fitted": 620.8147041498623,
+              "r50mm_fitted": 2.151778575476399,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 748.8224515771049,
+              "r50mm_observed": 2.0170766831514917,
+              "prcptot_fitted": 619.327930651536,
+              "r50mm_fitted": 2.1389684100171067,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 799.0375982209372,
+              "r50mm_observed": 3.7503972693774656,
+              "prcptot_fitted": 617.8411571532097,
+              "r50mm_fitted": 2.126158244557814,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 566.3798120185905,
+              "r50mm_observed": 1.4833937495600806,
+              "prcptot_fitted": 616.3543836548833,
+              "r50mm_fitted": 2.1133480790985217,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 735.8166314465378,
+              "r50mm_observed": 2.1503423381012468,
+              "prcptot_fitted": 614.8676101565575,
+              "r50mm_fitted": 2.100537913639233,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1118.1785662288412,
+              "r50mm_observed": 6.149025429768808,
+              "prcptot_fitted": 613.3808366582311,
+              "r50mm_fitted": 2.0877277481799403,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 775.4256941861189,
+              "r50mm_observed": 3.7169142745365953,
+              "prcptot_fitted": 611.8940631599048,
+              "r50mm_fitted": 2.074917582720648,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 516.4754940708051,
+              "r50mm_observed": 1.8333726742758676,
+              "prcptot_fitted": 610.4072896615785,
+              "r50mm_fitted": 2.0621074172613554,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 476.4166082157992,
+              "r50mm_observed": 1.0341527573933718,
+              "prcptot_fitted": 608.9205161632526,
+              "r50mm_fitted": 2.049297251802063,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 472.6930719744101,
+              "r50mm_observed": 1.3666535473299588,
+              "prcptot_fitted": 607.4337426649263,
+              "r50mm_fitted": 2.0364870863427704,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 353.1743912137311,
+              "r50mm_observed": 0.7169151888008423,
+              "prcptot_fitted": 605.9469691666,
+              "r50mm_fitted": 2.0236769208834815,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 820.2510448689706,
+              "r50mm_observed": 4.431180632383645,
+              "prcptot_fitted": 604.4601956682736,
+              "r50mm_fitted": 2.010866755424189,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 287.4626448009547,
+              "r50mm_observed": 0.5667071080494607,
+              "prcptot_fitted": 602.9734221699473,
+              "r50mm_fitted": 1.9980565899648965,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 768.0941027744583,
+              "r50mm_observed": 3.7836885371471967,
+              "prcptot_fitted": 601.4866486716214,
+              "r50mm_fitted": 1.985246424505604,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 669.289557517836,
+              "r50mm_observed": 2.283944270361517,
+              "prcptot_fitted": 599.9998751732951,
+              "r50mm_fitted": 1.9724362590463116,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        },
+        "r50mm": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": -0.012810165459291901,
+          "slope_per_decade": -0.128101654592919,
+          "slope_ci_low_per_year": -0.10836916315418721,
+          "slope_ci_high_per_year": 0.0966562806617711,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": -22.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 2131.5321248987316,
+          "correction_factor_cf": 1.162653886308399,
+          "r1_lag1_autocorr": 0.0,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": -0.07333333333333333,
+          "z_statistic": -0.45485539848406326,
+          "p_value_raw": 0.6492132721144607,
+          "p_value_adjusted": 1.0,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 522.1343163581778,
+              "r50mm_observed": 2.383299358735295,
+              "prcptot_fitted": 635.6824391331243,
+              "r50mm_fitted": 2.279880230069317,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 666.8716679608058,
+              "r50mm_observed": 2.267070064610029,
+              "prcptot_fitted": 634.1956656347984,
+              "r50mm_fitted": 2.267070064610028,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 471.76327333553735,
+              "r50mm_observed": 1.534393577448866,
+              "prcptot_fitted": 632.7088921364721,
+              "r50mm_fitted": 2.2542598991507354,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 1180.5336831828924,
+              "r50mm_observed": 7.449455387619055,
+              "prcptot_fitted": 631.2221186381457,
+              "r50mm_fitted": 2.241449733691443,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 597.1681192656191,
+              "r50mm_observed": 1.5837305351408189,
+              "prcptot_fitted": 629.7353451398194,
+              "r50mm_fitted": 2.2286395682321505,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 628.2485716414935,
+              "r50mm_observed": 2.249696614077389,
+              "prcptot_fitted": 628.2485716414935,
+              "r50mm_fitted": 2.215829402772858,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 685.7176903372222,
+              "r50mm_observed": 2.416512112460832,
+              "prcptot_fitted": 626.7617981431672,
+              "r50mm_fitted": 2.2030192373135655,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 309.1479080468769,
+              "r50mm_observed": 0.20004037368998248,
+              "prcptot_fitted": 625.2750246448409,
+              "r50mm_fitted": 2.1902090718542766,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 371.5087445768228,
+              "r50mm_observed": 0.7165659777979858,
+              "prcptot_fitted": 623.7882511465145,
+              "r50mm_fitted": 2.177398906394984,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1167.6908360659954,
+              "r50mm_observed": 7.165927178081207,
+              "prcptot_fitted": 622.3014776481882,
+              "r50mm_fitted": 2.1645887409356916,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 433.38267644100137,
+              "r50mm_observed": 1.0499119741341474,
+              "prcptot_fitted": 620.8147041498623,
+              "r50mm_fitted": 2.151778575476399,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 748.8224515771049,
+              "r50mm_observed": 2.0170766831514917,
+              "prcptot_fitted": 619.327930651536,
+              "r50mm_fitted": 2.1389684100171067,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 799.0375982209372,
+              "r50mm_observed": 3.7503972693774656,
+              "prcptot_fitted": 617.8411571532097,
+              "r50mm_fitted": 2.126158244557814,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 566.3798120185905,
+              "r50mm_observed": 1.4833937495600806,
+              "prcptot_fitted": 616.3543836548833,
+              "r50mm_fitted": 2.1133480790985217,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 735.8166314465378,
+              "r50mm_observed": 2.1503423381012468,
+              "prcptot_fitted": 614.8676101565575,
+              "r50mm_fitted": 2.100537913639233,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1118.1785662288412,
+              "r50mm_observed": 6.149025429768808,
+              "prcptot_fitted": 613.3808366582311,
+              "r50mm_fitted": 2.0877277481799403,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 775.4256941861189,
+              "r50mm_observed": 3.7169142745365953,
+              "prcptot_fitted": 611.8940631599048,
+              "r50mm_fitted": 2.074917582720648,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 516.4754940708051,
+              "r50mm_observed": 1.8333726742758676,
+              "prcptot_fitted": 610.4072896615785,
+              "r50mm_fitted": 2.0621074172613554,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 476.4166082157992,
+              "r50mm_observed": 1.0341527573933718,
+              "prcptot_fitted": 608.9205161632526,
+              "r50mm_fitted": 2.049297251802063,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 472.6930719744101,
+              "r50mm_observed": 1.3666535473299588,
+              "prcptot_fitted": 607.4337426649263,
+              "r50mm_fitted": 2.0364870863427704,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 353.1743912137311,
+              "r50mm_observed": 0.7169151888008423,
+              "prcptot_fitted": 605.9469691666,
+              "r50mm_fitted": 2.0236769208834815,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 820.2510448689706,
+              "r50mm_observed": 4.431180632383645,
+              "prcptot_fitted": 604.4601956682736,
+              "r50mm_fitted": 2.010866755424189,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 287.4626448009547,
+              "r50mm_observed": 0.5667071080494607,
+              "prcptot_fitted": 602.9734221699473,
+              "r50mm_fitted": 1.9980565899648965,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 768.0941027744583,
+              "r50mm_observed": 3.7836885371471967,
+              "prcptot_fitted": 601.4866486716214,
+              "r50mm_fitted": 1.985246424505604,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 669.289557517836,
+              "r50mm_observed": 2.283944270361517,
+              "prcptot_fitted": 599.9998751732951,
+              "r50mm_fitted": 1.9724362590463116,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        }
+      },
+      "annual_series": [
+        {
+          "year": 2001,
+          "prcptot_observed": 522.1343163581778,
+          "r50mm_observed": 2.383299358735295,
+          "prcptot_fitted": 635.6824391331243,
+          "r50mm_fitted": 2.279880230069317,
+          "season_complete": true
+        },
+        {
+          "year": 2002,
+          "prcptot_observed": 666.8716679608058,
+          "r50mm_observed": 2.267070064610029,
+          "prcptot_fitted": 634.1956656347984,
+          "r50mm_fitted": 2.267070064610028,
+          "season_complete": true
+        },
+        {
+          "year": 2003,
+          "prcptot_observed": 471.76327333553735,
+          "r50mm_observed": 1.534393577448866,
+          "prcptot_fitted": 632.7088921364721,
+          "r50mm_fitted": 2.2542598991507354,
+          "season_complete": true
+        },
+        {
+          "year": 2004,
+          "prcptot_observed": 1180.5336831828924,
+          "r50mm_observed": 7.449455387619055,
+          "prcptot_fitted": 631.2221186381457,
+          "r50mm_fitted": 2.241449733691443,
+          "season_complete": true
+        },
+        {
+          "year": 2005,
+          "prcptot_observed": 597.1681192656191,
+          "r50mm_observed": 1.5837305351408189,
+          "prcptot_fitted": 629.7353451398194,
+          "r50mm_fitted": 2.2286395682321505,
+          "season_complete": true
+        },
+        {
+          "year": 2006,
+          "prcptot_observed": 628.2485716414935,
+          "r50mm_observed": 2.249696614077389,
+          "prcptot_fitted": 628.2485716414935,
+          "r50mm_fitted": 2.215829402772858,
+          "season_complete": true
+        },
+        {
+          "year": 2007,
+          "prcptot_observed": 685.7176903372222,
+          "r50mm_observed": 2.416512112460832,
+          "prcptot_fitted": 626.7617981431672,
+          "r50mm_fitted": 2.2030192373135655,
+          "season_complete": true
+        },
+        {
+          "year": 2008,
+          "prcptot_observed": 309.1479080468769,
+          "r50mm_observed": 0.20004037368998248,
+          "prcptot_fitted": 625.2750246448409,
+          "r50mm_fitted": 2.1902090718542766,
+          "season_complete": true
+        },
+        {
+          "year": 2009,
+          "prcptot_observed": 371.5087445768228,
+          "r50mm_observed": 0.7165659777979858,
+          "prcptot_fitted": 623.7882511465145,
+          "r50mm_fitted": 2.177398906394984,
+          "season_complete": true
+        },
+        {
+          "year": 2010,
+          "prcptot_observed": 1167.6908360659954,
+          "r50mm_observed": 7.165927178081207,
+          "prcptot_fitted": 622.3014776481882,
+          "r50mm_fitted": 2.1645887409356916,
+          "season_complete": true
+        },
+        {
+          "year": 2011,
+          "prcptot_observed": 433.38267644100137,
+          "r50mm_observed": 1.0499119741341474,
+          "prcptot_fitted": 620.8147041498623,
+          "r50mm_fitted": 2.151778575476399,
+          "season_complete": true
+        },
+        {
+          "year": 2012,
+          "prcptot_observed": 748.8224515771049,
+          "r50mm_observed": 2.0170766831514917,
+          "prcptot_fitted": 619.327930651536,
+          "r50mm_fitted": 2.1389684100171067,
+          "season_complete": true
+        },
+        {
+          "year": 2013,
+          "prcptot_observed": 799.0375982209372,
+          "r50mm_observed": 3.7503972693774656,
+          "prcptot_fitted": 617.8411571532097,
+          "r50mm_fitted": 2.126158244557814,
+          "season_complete": true
+        },
+        {
+          "year": 2014,
+          "prcptot_observed": 566.3798120185905,
+          "r50mm_observed": 1.4833937495600806,
+          "prcptot_fitted": 616.3543836548833,
+          "r50mm_fitted": 2.1133480790985217,
+          "season_complete": true
+        },
+        {
+          "year": 2015,
+          "prcptot_observed": 735.8166314465378,
+          "r50mm_observed": 2.1503423381012468,
+          "prcptot_fitted": 614.8676101565575,
+          "r50mm_fitted": 2.100537913639233,
+          "season_complete": true
+        },
+        {
+          "year": 2016,
+          "prcptot_observed": 1118.1785662288412,
+          "r50mm_observed": 6.149025429768808,
+          "prcptot_fitted": 613.3808366582311,
+          "r50mm_fitted": 2.0877277481799403,
+          "season_complete": true
+        },
+        {
+          "year": 2017,
+          "prcptot_observed": 775.4256941861189,
+          "r50mm_observed": 3.7169142745365953,
+          "prcptot_fitted": 611.8940631599048,
+          "r50mm_fitted": 2.074917582720648,
+          "season_complete": true
+        },
+        {
+          "year": 2018,
+          "prcptot_observed": 516.4754940708051,
+          "r50mm_observed": 1.8333726742758676,
+          "prcptot_fitted": 610.4072896615785,
+          "r50mm_fitted": 2.0621074172613554,
+          "season_complete": true
+        },
+        {
+          "year": 2019,
+          "prcptot_observed": 476.4166082157992,
+          "r50mm_observed": 1.0341527573933718,
+          "prcptot_fitted": 608.9205161632526,
+          "r50mm_fitted": 2.049297251802063,
+          "season_complete": true
+        },
+        {
+          "year": 2020,
+          "prcptot_observed": 472.6930719744101,
+          "r50mm_observed": 1.3666535473299588,
+          "prcptot_fitted": 607.4337426649263,
+          "r50mm_fitted": 2.0364870863427704,
+          "season_complete": true
+        },
+        {
+          "year": 2021,
+          "prcptot_observed": 353.1743912137311,
+          "r50mm_observed": 0.7169151888008423,
+          "prcptot_fitted": 605.9469691666,
+          "r50mm_fitted": 2.0236769208834815,
+          "season_complete": true
+        },
+        {
+          "year": 2022,
+          "prcptot_observed": 820.2510448689706,
+          "r50mm_observed": 4.431180632383645,
+          "prcptot_fitted": 604.4601956682736,
+          "r50mm_fitted": 2.010866755424189,
+          "season_complete": true
+        },
+        {
+          "year": 2023,
+          "prcptot_observed": 287.4626448009547,
+          "r50mm_observed": 0.5667071080494607,
+          "prcptot_fitted": 602.9734221699473,
+          "r50mm_fitted": 1.9980565899648965,
+          "season_complete": true
+        },
+        {
+          "year": 2024,
+          "prcptot_observed": 768.0941027744583,
+          "r50mm_observed": 3.7836885371471967,
+          "prcptot_fitted": 601.4866486716214,
+          "r50mm_fitted": 1.985246424505604,
+          "season_complete": true
+        },
+        {
+          "year": 2025,
+          "prcptot_observed": 669.289557517836,
+          "r50mm_observed": 2.283944270361517,
+          "prcptot_fitted": 599.9998751732951,
+          "r50mm_fitted": 1.9724362590463116,
+          "season_complete": true
+        }
+      ]
+    },
+    {
+      "zone_id": "zone_c",
+      "status": "COMPUTED",
+      "complete_seasons_count": 25,
+      "minimum_seasons_required": 20,
+      "incomplete_seasons": [],
+      "indicators": {
+        "prcptot": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": 0.08755058791371303,
+          "slope_per_decade": 0.8755058791371304,
+          "slope_ci_low_per_year": -15.351448483681542,
+          "slope_ci_high_per_year": 15.309319992501514,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": 2.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 2070.119615453195,
+          "correction_factor_cf": 1.1291561538835608,
+          "r1_lag1_autocorr": 0.0,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": 0.006666666666666667,
+          "z_statistic": 0.02197871409969785,
+          "p_value_raw": 0.982464935124309,
+          "p_value_adjusted": 1.0,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 600.1572637402332,
+              "r50mm_observed": 2.2748291680233237,
+              "prcptot_fitted": 755.0136234136239,
+              "r50mm_fitted": 3.0840317541349265,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 887.7492753879579,
+              "r50mm_observed": 3.8993511692887655,
+              "prcptot_fitted": 755.1011740015376,
+              "r50mm_fitted": 3.107813107691797,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 523.9028885475816,
+              "r50mm_observed": 2.225000685771325,
+              "prcptot_fitted": 755.1887245894513,
+              "r50mm_fitted": 3.1315944612486604,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 909.2927685041685,
+              "r50mm_observed": 4.261435410806209,
+              "prcptot_fitted": 755.276275177365,
+              "r50mm_fitted": 3.155375814805531,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 736.1794339994804,
+              "r50mm_observed": 2.91338582589394,
+              "prcptot_fitted": 755.3638257652788,
+              "r50mm_fitted": 3.1791571683623943,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 855.588150479525,
+              "r50mm_observed": 5.312164492877626,
+              "prcptot_fitted": 755.4513763531925,
+              "r50mm_fitted": 3.2029385219192648,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 692.0131836952423,
+              "r50mm_observed": 2.987747249500237,
+              "prcptot_fitted": 755.5389269411062,
+              "r50mm_fitted": 3.226719875476128,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 365.75771342801045,
+              "r50mm_observed": 1.2128139327337744,
+              "prcptot_fitted": 755.6264775290199,
+              "r50mm_fitted": 3.2505012290329987,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 523.8519037970748,
+              "r50mm_observed": 2.312644128450941,
+              "prcptot_fitted": 755.7140281169336,
+              "r50mm_fitted": 3.274282582589862,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1144.6814646501512,
+              "r50mm_observed": 6.984886170695474,
+              "prcptot_fitted": 755.8015787048473,
+              "r50mm_fitted": 3.2980639361467325,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 402.6406835708699,
+              "r50mm_observed": 0.9259080747467265,
+              "prcptot_fitted": 755.889129292761,
+              "r50mm_fitted": 3.321845289703596,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 755.9766798806747,
+              "r50mm_observed": 3.7623782462762807,
+              "prcptot_fitted": 755.9766798806747,
+              "r50mm_fitted": 3.3456266432604664,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 890.4965098507256,
+              "r50mm_observed": 4.299998172287825,
+              "prcptot_fitted": 756.0642304685884,
+              "r50mm_fitted": 3.36940799681733,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 516.4980139308553,
+              "r50mm_observed": 1.6365150141237776,
+              "prcptot_fitted": 756.1517810565022,
+              "r50mm_fitted": 3.3931893503742003,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 816.039624154628,
+              "r50mm_observed": 3.862905656994659,
+              "prcptot_fitted": 756.2393316444159,
+              "r50mm_fitted": 3.4169707039310637,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1041.6651310300635,
+              "r50mm_observed": 5.673659413687608,
+              "prcptot_fitted": 756.3268822323296,
+              "r50mm_fitted": 3.4407520574879342,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 984.483404800088,
+              "r50mm_observed": 5.313300321103674,
+              "prcptot_fitted": 756.4144328202433,
+              "r50mm_fitted": 3.4645334110447976,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 816.5809629203618,
+              "r50mm_observed": 3.48831476460167,
+              "prcptot_fitted": 756.501983408157,
+              "r50mm_fitted": 3.488314764601668,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 618.819739682046,
+              "r50mm_observed": 2.0492610060047154,
+              "prcptot_fitted": 756.5895339960707,
+              "r50mm_fitted": 3.5120961181585315,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 775.5725755761582,
+              "r50mm_observed": 4.148474049719951,
+              "prcptot_fitted": 756.6770845839844,
+              "r50mm_fitted": 3.535877471715402,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 366.84337844533405,
+              "r50mm_observed": 0.6250198246551987,
+              "prcptot_fitted": 756.7646351718981,
+              "r50mm_fitted": 3.5596588252722654,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 976.73945043881,
+              "r50mm_observed": 5.697903831873168,
+              "prcptot_fitted": 756.8521857598118,
+              "r50mm_fitted": 3.583440178829136,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 309.55667851282044,
+              "r50mm_observed": 1.186916302233265,
+              "prcptot_fitted": 756.9397363477256,
+              "r50mm_fitted": 3.6072215323859993,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 602.2637988305377,
+              "r50mm_observed": 3.3864652227509517,
+              "prcptot_fitted": 757.0272869356393,
+              "r50mm_fitted": 3.63100288594287,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 952.5947829068846,
+              "r50mm_observed": 5.47458746588654,
+              "prcptot_fitted": 757.114837523553,
+              "r50mm_fitted": 3.654784239499733,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        },
+        "r50mm": {
+          "status": "COMPUTED",
+          "n_complete_seasons": 25,
+          "slope_per_year": 0.023781353556867,
+          "slope_per_decade": 0.23781353556867,
+          "slope_ci_low_per_year": -0.0956352859956826,
+          "slope_ci_high_per_year": 0.1404191164072486,
+          "slope_ci_note": "Confidence interval for the Sen slope estimate; not a per-year uncertainty band.",
+          "kendall_s": 20.0,
+          "kendall_var_s": 1833.3333333333333,
+          "kendall_var_s_star": 2039.0337160551862,
+          "correction_factor_cf": 1.1122002087573744,
+          "r1_lag1_autocorr": 0.0,
+          "governing_test": "MODIFIED_MANN_KENDALL",
+          "kendall_tau": 0.06666666666666667,
+          "z_statistic": 0.42076673442994206,
+          "p_value_raw": 0.6739254249946611,
+          "p_value_adjusted": 1.0,
+          "is_significant": false,
+          "significance_note": "is_significant refers to p_value_adjusted at \u03b1=0.05; Holm-Bonferroni applied across 6 tests (3 zones \u00d7 2 indicators).",
+          "verdict": "NO_SIGNIFICANT_TREND",
+          "annual_series": [
+            {
+              "year": 2001,
+              "prcptot_observed": 600.1572637402332,
+              "r50mm_observed": 2.2748291680233237,
+              "prcptot_fitted": 755.0136234136239,
+              "r50mm_fitted": 3.0840317541349265,
+              "season_complete": true
+            },
+            {
+              "year": 2002,
+              "prcptot_observed": 887.7492753879579,
+              "r50mm_observed": 3.8993511692887655,
+              "prcptot_fitted": 755.1011740015376,
+              "r50mm_fitted": 3.107813107691797,
+              "season_complete": true
+            },
+            {
+              "year": 2003,
+              "prcptot_observed": 523.9028885475816,
+              "r50mm_observed": 2.225000685771325,
+              "prcptot_fitted": 755.1887245894513,
+              "r50mm_fitted": 3.1315944612486604,
+              "season_complete": true
+            },
+            {
+              "year": 2004,
+              "prcptot_observed": 909.2927685041685,
+              "r50mm_observed": 4.261435410806209,
+              "prcptot_fitted": 755.276275177365,
+              "r50mm_fitted": 3.155375814805531,
+              "season_complete": true
+            },
+            {
+              "year": 2005,
+              "prcptot_observed": 736.1794339994804,
+              "r50mm_observed": 2.91338582589394,
+              "prcptot_fitted": 755.3638257652788,
+              "r50mm_fitted": 3.1791571683623943,
+              "season_complete": true
+            },
+            {
+              "year": 2006,
+              "prcptot_observed": 855.588150479525,
+              "r50mm_observed": 5.312164492877626,
+              "prcptot_fitted": 755.4513763531925,
+              "r50mm_fitted": 3.2029385219192648,
+              "season_complete": true
+            },
+            {
+              "year": 2007,
+              "prcptot_observed": 692.0131836952423,
+              "r50mm_observed": 2.987747249500237,
+              "prcptot_fitted": 755.5389269411062,
+              "r50mm_fitted": 3.226719875476128,
+              "season_complete": true
+            },
+            {
+              "year": 2008,
+              "prcptot_observed": 365.75771342801045,
+              "r50mm_observed": 1.2128139327337744,
+              "prcptot_fitted": 755.6264775290199,
+              "r50mm_fitted": 3.2505012290329987,
+              "season_complete": true
+            },
+            {
+              "year": 2009,
+              "prcptot_observed": 523.8519037970748,
+              "r50mm_observed": 2.312644128450941,
+              "prcptot_fitted": 755.7140281169336,
+              "r50mm_fitted": 3.274282582589862,
+              "season_complete": true
+            },
+            {
+              "year": 2010,
+              "prcptot_observed": 1144.6814646501512,
+              "r50mm_observed": 6.984886170695474,
+              "prcptot_fitted": 755.8015787048473,
+              "r50mm_fitted": 3.2980639361467325,
+              "season_complete": true
+            },
+            {
+              "year": 2011,
+              "prcptot_observed": 402.6406835708699,
+              "r50mm_observed": 0.9259080747467265,
+              "prcptot_fitted": 755.889129292761,
+              "r50mm_fitted": 3.321845289703596,
+              "season_complete": true
+            },
+            {
+              "year": 2012,
+              "prcptot_observed": 755.9766798806747,
+              "r50mm_observed": 3.7623782462762807,
+              "prcptot_fitted": 755.9766798806747,
+              "r50mm_fitted": 3.3456266432604664,
+              "season_complete": true
+            },
+            {
+              "year": 2013,
+              "prcptot_observed": 890.4965098507256,
+              "r50mm_observed": 4.299998172287825,
+              "prcptot_fitted": 756.0642304685884,
+              "r50mm_fitted": 3.36940799681733,
+              "season_complete": true
+            },
+            {
+              "year": 2014,
+              "prcptot_observed": 516.4980139308553,
+              "r50mm_observed": 1.6365150141237776,
+              "prcptot_fitted": 756.1517810565022,
+              "r50mm_fitted": 3.3931893503742003,
+              "season_complete": true
+            },
+            {
+              "year": 2015,
+              "prcptot_observed": 816.039624154628,
+              "r50mm_observed": 3.862905656994659,
+              "prcptot_fitted": 756.2393316444159,
+              "r50mm_fitted": 3.4169707039310637,
+              "season_complete": true
+            },
+            {
+              "year": 2016,
+              "prcptot_observed": 1041.6651310300635,
+              "r50mm_observed": 5.673659413687608,
+              "prcptot_fitted": 756.3268822323296,
+              "r50mm_fitted": 3.4407520574879342,
+              "season_complete": true
+            },
+            {
+              "year": 2017,
+              "prcptot_observed": 984.483404800088,
+              "r50mm_observed": 5.313300321103674,
+              "prcptot_fitted": 756.4144328202433,
+              "r50mm_fitted": 3.4645334110447976,
+              "season_complete": true
+            },
+            {
+              "year": 2018,
+              "prcptot_observed": 816.5809629203618,
+              "r50mm_observed": 3.48831476460167,
+              "prcptot_fitted": 756.501983408157,
+              "r50mm_fitted": 3.488314764601668,
+              "season_complete": true
+            },
+            {
+              "year": 2019,
+              "prcptot_observed": 618.819739682046,
+              "r50mm_observed": 2.0492610060047154,
+              "prcptot_fitted": 756.5895339960707,
+              "r50mm_fitted": 3.5120961181585315,
+              "season_complete": true
+            },
+            {
+              "year": 2020,
+              "prcptot_observed": 775.5725755761582,
+              "r50mm_observed": 4.148474049719951,
+              "prcptot_fitted": 756.6770845839844,
+              "r50mm_fitted": 3.535877471715402,
+              "season_complete": true
+            },
+            {
+              "year": 2021,
+              "prcptot_observed": 366.84337844533405,
+              "r50mm_observed": 0.6250198246551987,
+              "prcptot_fitted": 756.7646351718981,
+              "r50mm_fitted": 3.5596588252722654,
+              "season_complete": true
+            },
+            {
+              "year": 2022,
+              "prcptot_observed": 976.73945043881,
+              "r50mm_observed": 5.697903831873168,
+              "prcptot_fitted": 756.8521857598118,
+              "r50mm_fitted": 3.583440178829136,
+              "season_complete": true
+            },
+            {
+              "year": 2023,
+              "prcptot_observed": 309.55667851282044,
+              "r50mm_observed": 1.186916302233265,
+              "prcptot_fitted": 756.9397363477256,
+              "r50mm_fitted": 3.6072215323859993,
+              "season_complete": true
+            },
+            {
+              "year": 2024,
+              "prcptot_observed": 602.2637988305377,
+              "r50mm_observed": 3.3864652227509517,
+              "prcptot_fitted": 757.0272869356393,
+              "r50mm_fitted": 3.63100288594287,
+              "season_complete": true
+            },
+            {
+              "year": 2025,
+              "prcptot_observed": 952.5947829068846,
+              "r50mm_observed": 5.47458746588654,
+              "prcptot_fitted": 757.114837523553,
+              "r50mm_fitted": 3.654784239499733,
+              "season_complete": true
+            }
+          ],
+          "multiple_testing_correction": "Holm-Bonferroni",
+          "multiple_testing_family_size": 6
+        }
+      },
+      "annual_series": [
+        {
+          "year": 2001,
+          "prcptot_observed": 600.1572637402332,
+          "r50mm_observed": 2.2748291680233237,
+          "prcptot_fitted": 755.0136234136239,
+          "r50mm_fitted": 3.0840317541349265,
+          "season_complete": true
+        },
+        {
+          "year": 2002,
+          "prcptot_observed": 887.7492753879579,
+          "r50mm_observed": 3.8993511692887655,
+          "prcptot_fitted": 755.1011740015376,
+          "r50mm_fitted": 3.107813107691797,
+          "season_complete": true
+        },
+        {
+          "year": 2003,
+          "prcptot_observed": 523.9028885475816,
+          "r50mm_observed": 2.225000685771325,
+          "prcptot_fitted": 755.1887245894513,
+          "r50mm_fitted": 3.1315944612486604,
+          "season_complete": true
+        },
+        {
+          "year": 2004,
+          "prcptot_observed": 909.2927685041685,
+          "r50mm_observed": 4.261435410806209,
+          "prcptot_fitted": 755.276275177365,
+          "r50mm_fitted": 3.155375814805531,
+          "season_complete": true
+        },
+        {
+          "year": 2005,
+          "prcptot_observed": 736.1794339994804,
+          "r50mm_observed": 2.91338582589394,
+          "prcptot_fitted": 755.3638257652788,
+          "r50mm_fitted": 3.1791571683623943,
+          "season_complete": true
+        },
+        {
+          "year": 2006,
+          "prcptot_observed": 855.588150479525,
+          "r50mm_observed": 5.312164492877626,
+          "prcptot_fitted": 755.4513763531925,
+          "r50mm_fitted": 3.2029385219192648,
+          "season_complete": true
+        },
+        {
+          "year": 2007,
+          "prcptot_observed": 692.0131836952423,
+          "r50mm_observed": 2.987747249500237,
+          "prcptot_fitted": 755.5389269411062,
+          "r50mm_fitted": 3.226719875476128,
+          "season_complete": true
+        },
+        {
+          "year": 2008,
+          "prcptot_observed": 365.75771342801045,
+          "r50mm_observed": 1.2128139327337744,
+          "prcptot_fitted": 755.6264775290199,
+          "r50mm_fitted": 3.2505012290329987,
+          "season_complete": true
+        },
+        {
+          "year": 2009,
+          "prcptot_observed": 523.8519037970748,
+          "r50mm_observed": 2.312644128450941,
+          "prcptot_fitted": 755.7140281169336,
+          "r50mm_fitted": 3.274282582589862,
+          "season_complete": true
+        },
+        {
+          "year": 2010,
+          "prcptot_observed": 1144.6814646501512,
+          "r50mm_observed": 6.984886170695474,
+          "prcptot_fitted": 755.8015787048473,
+          "r50mm_fitted": 3.2980639361467325,
+          "season_complete": true
+        },
+        {
+          "year": 2011,
+          "prcptot_observed": 402.6406835708699,
+          "r50mm_observed": 0.9259080747467265,
+          "prcptot_fitted": 755.889129292761,
+          "r50mm_fitted": 3.321845289703596,
+          "season_complete": true
+        },
+        {
+          "year": 2012,
+          "prcptot_observed": 755.9766798806747,
+          "r50mm_observed": 3.7623782462762807,
+          "prcptot_fitted": 755.9766798806747,
+          "r50mm_fitted": 3.3456266432604664,
+          "season_complete": true
+        },
+        {
+          "year": 2013,
+          "prcptot_observed": 890.4965098507256,
+          "r50mm_observed": 4.299998172287825,
+          "prcptot_fitted": 756.0642304685884,
+          "r50mm_fitted": 3.36940799681733,
+          "season_complete": true
+        },
+        {
+          "year": 2014,
+          "prcptot_observed": 516.4980139308553,
+          "r50mm_observed": 1.6365150141237776,
+          "prcptot_fitted": 756.1517810565022,
+          "r50mm_fitted": 3.3931893503742003,
+          "season_complete": true
+        },
+        {
+          "year": 2015,
+          "prcptot_observed": 816.039624154628,
+          "r50mm_observed": 3.862905656994659,
+          "prcptot_fitted": 756.2393316444159,
+          "r50mm_fitted": 3.4169707039310637,
+          "season_complete": true
+        },
+        {
+          "year": 2016,
+          "prcptot_observed": 1041.6651310300635,
+          "r50mm_observed": 5.673659413687608,
+          "prcptot_fitted": 756.3268822323296,
+          "r50mm_fitted": 3.4407520574879342,
+          "season_complete": true
+        },
+        {
+          "year": 2017,
+          "prcptot_observed": 984.483404800088,
+          "r50mm_observed": 5.313300321103674,
+          "prcptot_fitted": 756.4144328202433,
+          "r50mm_fitted": 3.4645334110447976,
+          "season_complete": true
+        },
+        {
+          "year": 2018,
+          "prcptot_observed": 816.5809629203618,
+          "r50mm_observed": 3.48831476460167,
+          "prcptot_fitted": 756.501983408157,
+          "r50mm_fitted": 3.488314764601668,
+          "season_complete": true
+        },
+        {
+          "year": 2019,
+          "prcptot_observed": 618.819739682046,
+          "r50mm_observed": 2.0492610060047154,
+          "prcptot_fitted": 756.5895339960707,
+          "r50mm_fitted": 3.5120961181585315,
+          "season_complete": true
+        },
+        {
+          "year": 2020,
+          "prcptot_observed": 775.5725755761582,
+          "r50mm_observed": 4.148474049719951,
+          "prcptot_fitted": 756.6770845839844,
+          "r50mm_fitted": 3.535877471715402,
+          "season_complete": true
+        },
+        {
+          "year": 2021,
+          "prcptot_observed": 366.84337844533405,
+          "r50mm_observed": 0.6250198246551987,
+          "prcptot_fitted": 756.7646351718981,
+          "r50mm_fitted": 3.5596588252722654,
+          "season_complete": true
+        },
+        {
+          "year": 2022,
+          "prcptot_observed": 976.73945043881,
+          "r50mm_observed": 5.697903831873168,
+          "prcptot_fitted": 756.8521857598118,
+          "r50mm_fitted": 3.583440178829136,
+          "season_complete": true
+        },
+        {
+          "year": 2023,
+          "prcptot_observed": 309.55667851282044,
+          "r50mm_observed": 1.186916302233265,
+          "prcptot_fitted": 756.9397363477256,
+          "r50mm_fitted": 3.6072215323859993,
+          "season_complete": true
+        },
+        {
+          "year": 2024,
+          "prcptot_observed": 602.2637988305377,
+          "r50mm_observed": 3.3864652227509517,
+          "prcptot_fitted": 757.0272869356393,
+          "r50mm_fitted": 3.63100288594287,
+          "season_complete": true
+        },
+        {
+          "year": 2025,
+          "prcptot_observed": 952.5947829068846,
+          "r50mm_observed": 5.47458746588654,
+          "prcptot_fitted": 757.114837523553,
+          "r50mm_fitted": 3.654784239499733,
+          "season_complete": true
+        }
+      ]
+    }
+  ]
+}

@@ -75,7 +75,7 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 > 
 > Second, we ingest near-real-time rainfall from **NASA’s Global Precipitation Measurement (GPM IMERG Early Run V07)** within four hours of precipitation over Meghalaya.  
 > 
-> We route this rainfall through a calibrated Muskingum-Cunge hydrologic routing engine down the Surma corridor, predicting river stage and harvest risk with twenty-one to twenty-six hours of lead time."
+> We route this rainfall through a calibrated Muskingum-Cunge hydrologic routing engine down the Surma corridor, designed to predict river stage and harvest risk with twenty-one to twenty-six hours of operational lead time."
 
 ---
 
@@ -139,14 +139,14 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 *Visual: Screen recording / live capture of Next.js dashboard at `http://localhost:3000`.*
 
 **Speaker 3 (Data & Tech Lead):**
-> "Here is our fully functioning system, built with Next.js and Python.  
+> "Here is our prototype early warning system, built with Next.js and Python.  
 > 
 > *(Speaker points to screen and speaks datasets aloud):*  
-> We use **NASA's Surface Water and Ocean Topography satellite—SWOT L2 HR RiverSP 2.0**. Because flat Bangladesh rivers suffer from slope noise, we filter out noisy passes and calibrate Manning’s roughness $n$ between 0.025 and 0.10.  
+> We parameterize river reaches using **NASA's Surface Water and Ocean Topography satellite—SWOT L2 HR RiverSP 2.0**. Because flat Bangladesh rivers suffer from slope noise, we filter out noisy passes and calibrate Manning’s roughness $n$ between 0.025 and 0.10.  
 > 
-> We drive routing using **NASA’s Global Precipitation Measurement GPM IMERG Early Run V07**, capturing half-hourly rainfall across the transboundary basin.  
+> In this demonstration, our engine routes rainfall patterned after **NASA’s Global Precipitation Measurement GPM IMERG Early Run V07** across the transboundary basin.  
 > 
-> Watch our live interface: as the user drags the timeline slider across the April 2026 event, our Muskingum-Cunge engine updates the river stage in real time. The hydrograph displays an analytical plus-or-minus zero-point-one-eight-meter uncertainty band alongside observed gauge levels.  
+> Watch our live interface: as the user drags the timeline slider across the April event, our Muskingum-Cunge engine updates the river stage dynamically. The hydrograph displays an analytical plus-or-minus zero-point-one-eight-meter uncertainty band alongside reference scenario levels.  
 > When the projected flood crest approaches the thirteen-point-two-meter danger mark, the **Harvest Flag** flips from GREEN to AMBER, and then to **RED: CRITICAL — HARVEST NOW**."
 
 ---
@@ -155,13 +155,13 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 *Visual: Focus on metrics grid, bilingual toggle switching to Bengali, and the permanent Limits Panel.*
 
 **Speaker 4 (Impact Lead / Speaker 1):**
-> "Our system is backed by rigorous scientific validation against actual BWDB gauge observations at Kanaighat:  
-> We achieve a **Nash-Sutcliffe Efficiency (NSE) of 0.73**,  
-> a **Kling-Gupta Efficiency (KGE) of 0.68**,  
+> "As transparently disclosed across our documentation and UI notices, this operational build runs on calibrated synthetic scenario fixtures modeled after historical April floods at Kanaighat:  
+> On this benchmark scenario, our Muskingum-Cunge engine achieves an **NSE of 0.73**,  
+> a **KGE of 0.68**,  
 > a **Percent Bias (PBIAS) of plus-one-point-nine percent**,  
-> and a **Warning Lead Time of twenty-two-point-five hours**—gaining over twenty-two hours of peak timing accuracy compared to a naive rainfall baseline.  
+> and demonstrates a **scenario lead time of twenty-one hours** over a naive rainfall baseline.  
 > 
-> That twenty-two-hour window allows officers to deploy combine harvesters and volunteer brigades to rescue the mature grain before the 13.20 meter danger level is breached.  
+> These metrics benchmark our hydraulic routing code on a constructed test case—confirming that if paired with authentic live feeds, the system can provide the vital twenty-hour operational window to mobilize combine harvesters before the 13.20 meter danger level is breached.  
 > 
 > With our built-in **Bangla language toggle**, advisories can be broadcast directly over Union Parishad loudspeakers.  
 > And our expanded-by-default **Operational Limits Panel** keeps scientific limits easy to inspect, while its heading remains available when collapsed. It clarifies that SWOT provides offline geometry rather than a continuous live gauge.
@@ -179,7 +179,7 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
 |---|---|---|---|
 | **0:00 – 0:05**<br>*(5s)* | Dashboard title screen with glowing logo and team title. | "We are Team [Name] from Bangladesh, presenting **HydroSense-SWOT**." | *Team [Name] · Bangladesh*<br>**HydroSense-SWOT** |
 | **0:05 – 0:12**<br>*(7s)* | Quick cut of flooded Haor paddies; stat overlay appears. | "In Bangladesh’s Haor basin, sudden April flash floods destroy entire Boro rice harvests overnight before embankments can be reinforced." | *The Crisis: 214,000 Tonnes of Boro Rice Lost to April Flash Floods* |
-| **0:12 – 0:22**<br>*(10s)* | **Live screen capture:** Mouse drags time slider; water level rises; reaches turn red; Harvest Decision badge flashes **RED: HARVEST NOW**. | "We route real-time **NASA GPM IMERG** rainfall through river reaches calibrated offline with **NASA SWOT satellite** geometry—delivering an automated Harvest Warning twenty-one hours in advance." | *NASA GPM IMERG Precipitation*<br>+ *NASA SWOT L2 HR RiverSP 2.0*<br>→ **21-Hour Advance Harvest Warning** |
+| **0:12 – 0:22**<br>*(10s)* | **Live screen capture:** Mouse drags time slider; water level rises; reaches turn red; Harvest Decision badge flashes **RED: HARVEST NOW**. | "Through calibrated synthetic scenarios, our prototype simulates routing GPM IMERG rainfall through reaches parameterized with NASA SWOT geometry—demonstrating a twenty-one-hour advance harvest warning architecture." | *Scenario Demonstration: GPM Rainfall + SWOT Geometry*<br>→ **Demonstrated 21-Hour Advance Harvest Warning Architecture** |
 | **0:22 – 0:30**<br>*(8s)* | Click toggle to **বাংলা** (*জরুরি: অবিলম্বে ফসল কাটুন*). Final screen with GitHub link and Space Apps logo. | "Protecting two hundred thousand farmers and safeguarding national food security. This is **HydroSense-SWOT**." | *Empowering 230,000+ Haor Farmers*<br>**HydroSense-SWOT · NASA Space Apps 2026** |
 
 ---
@@ -198,3 +198,19 @@ Per **Section 08 (page 9) of the Bangladesh Participants Guide**:
    - Video 1: Upload to YouTube (Unlisted), submit link in Bangladesh registration form.
    - Video 2: Upload MP4 to the Google Drive folder from your Local Lead + YouTube link in local form by 6:30 PM on Day 1.
    - Video 3: Upload to YouTube/Vimeo, paste link into the `Project Demo` field on `spaceappschallenge.org` by 12:00 PM on Day 2.
+
+---
+
+## 6. Video Segment 4: 60-Second "Earth System Trend Detective" Demo Pitch
+*Target Duration: Exactly 58.0 seconds (under 60.0s).*  
+*Audience: NASA Space Apps Judges — Challenge Track: "Be An Earth System Trend Detective!"*  
+*Theme: Trend-to-Action — Bridging 25-Year Satellite Climatology to Local Flood Resilience.*  
+*Epistemological Guard: Audited per project evidence; speculative operational lead times omitted.*
+
+| Time | Visual Action on Screen | Voiceover Dialogue | Subtitle Text (Mandatory) |
+|---|---|---|---|
+| **0:00 – 0:14**<br>*(14s)* | Opening view of `/trends` route. Screen highlights the Meghalaya Ridge bounding box bordering Sunamganj's Haor basin and the green VERIFIED REAL badge. | "To investigate whether flood threats are shifting in Bangladesh's Haor basin, our system retrieves and analyzes twenty-five years of authentic NASA GPM IMERG Final Run satellite precipitation across upstream catchments from 2001 to 2025." | *Analyzed 25 Years of NASA GPM IMERG Final Data (2001–2025)*<br>**Pre-Monsoon Season: April 1 – May 31 (Verified Real NASA Observations)** |
+| **0:14 – 0:34**<br>*(20s)* | **Live UI Interaction:** Click toggle between Total Seasonal Rain ($PRCPTOT$) and Heavy Rain Days ($R50mm$). Switch across Zone A, B, and C. Theil-Sen slope line and statistical cards update dynamically showing authentic observation points. | "Our system computes cell-first ETCCDI indicators, Theil-Sen median slopes, and Modified Mann-Kendall tests with Hamed and Rao rank autocorrelation corrections to evaluate whether observed changes represent genuine trends or natural climate variability—transparently reporting honest null findings when significance is not reached." | *Cell-First ETCCDI Indicators: PRCPTOT & R50mm*<br>+ *Theil-Sen Slope & Hamed & Rao (1998) Modified MK*<br>→ **Rigorous Serial-Correlation Adjusted Inference (Verified Real)** |
+| **0:34 – 0:48**<br>*(14s)* | Click navigation switcher back to `/dashboard`. Hydrograph with SWOT reach geometry and dynamic water levels appears. | "This climatological framework establishes the seasonal baseline for Module 1—our hydrodynamic routing pipeline, demonstrated in this build using a calibrated synthetic April 2026 event alongside offline NASA SWOT reach geometry." | *Strategic Climatology (Module 2 Real Observations)*<br>→ *Tactical Hydrodynamic Routing (Module 1 Demo)* |
+| **0:48 – 0:58**<br>*(10s)* | Click **বাংলা** language toggle. Final branded screen with Space Apps Bangladesh logo, GitHub repo, and open-source license. | "Rainfall trends reflect multi-decadal climate forcing, not individual flood forecasts. HydroSense connects both: strategic satellite detection and local community action." | *HydroSense-SWOT · NASA Space Apps Challenge 2026*<br>**From Earth System Detection to Ground Action** |
+
