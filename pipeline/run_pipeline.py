@@ -13,6 +13,7 @@ Step 7: Run baseline (rainfall threshold)       -> print baseline_flag transitio
 
 import os
 import sys
+import argparse
 import netCDF4  # MUST be before xarray (Trap B2)
 import xarray as xr
 import pandas as pd
@@ -24,44 +25,112 @@ PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-from pipeline.manning_calibration import calibrate_reach_manning
+from pipeline.provenance import validate_real_pipeline_inputs, ProvenanceError
+from pipeline.manning_calibration import calibrate_reach_manning, estimate_reach_hydraulics_literature
 from pipeline.muskingum_cunge import route_catchment_flow
 from pipeline.baseline import run_rainfall_baseline
 from pipeline.harvest_flag import compute_harvest_flags
 from pipeline.metrics import evaluate_all_metrics
 
 FIXTURES_DIR = os.path.join(PROJECT_ROOT, "data", "fixtures")
+REAL_DIR = os.path.join(PROJECT_ROOT, "data", "real")
 PROCESSED_DIR = os.path.join(PROJECT_ROOT, "data", "processed")
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 
 
-def main():
-    print("=" * 70)
-    print("  HYDROSENSE-SWOT: MINIMUM VIABLE PIPELINE (MVP) EXECUTION")
-    print("=" * 70)
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        description="HydroSense-SWOT: MVP Pipeline Orchestrator",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument(
+        "--mode",
+        required=True,
+        choices=["demo", "real"],
+        help="Pipeline execution mode: 'demo' (synthetic benchmark with explicit synthetic labels) or 'real' (fails closed if real data inputs are missing or invalid).",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Custom output directory for processed results (defaults to data/processed).",
+    )
+    parser.add_argument(
+        "--real-dir",
+        default=None,
+        help="Custom real data directory for validation (defaults to data/real).",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+    mode = args.mode
+    output_dir = args.output_dir or PROCESSED_DIR
+    real_dir = args.real_dir or REAL_DIR
+    os.makedirs(output_dir, exist_ok=True)
+
+    if mode == "real":
+        print("=" * 70)
+        print("  HYDROSENSE-SWOT: PIPELINE EXECUTION [MODE: REAL DATA]")
+        print("  FAIL-CLOSED PROVENANCE & INTEGRITY CHECK")
+        print("=" * 70)
+
+        # Fail-closed cryptographic & metadata provenance validation
+        try:
+            prov_result = validate_real_pipeline_inputs(real_dir)
+        except ProvenanceError as exc:
+            err_msg = (
+                "\n" + "!" * 70 + "\n"
+                "REAL DATA MODE FAILED CLOSED (PROVENANCE REJECTED):\n"
+                f"  {exc}\n\n"
+                "A present file is not proof of verified provenance.\n"
+                "Real mode strictly rejects missing manifests, checksum mismatches,\n"
+                "unverified metadata, and synthetic or unknown data.\n"
+                "Module 1 real-data integration is gated until real source files are\n"
+                "acquired and cryptographically verified in data/real/PROVENANCE.json.\n"
+                + "!" * 70 + "\n"
+            )
+            print(err_msg, file=sys.stderr)
+            raise SystemExit(1)
+
+        swot_path = prov_result["resolved_paths"]["swot"]
+        gauge_path = prov_result["resolved_paths"]["gauge"]
+        imerg_path = prov_result["resolved_paths"]["imerg"]
+        provenance_label = "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS"
+    else:
+        print("=" * 70)
+        print("  HYDROSENSE-SWOT: MINIMUM VIABLE PIPELINE (MVP) EXECUTION")
+        print("  MODE: DEMO (SYNTHETIC ENGINEERING BENCHMARK)")
+        print("  PROVENANCE: SYNTHETIC_DEMO")
+        print("  NOTICE: Running on synthetic fixtures. Not validated for real-world impact.")
+        print("=" * 70)
+
+        swot_path = os.path.join(FIXTURES_DIR, "swot_reaches.nc")
+        gauge_path = os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv")
+        imerg_path = os.path.join(FIXTURES_DIR, "imerg_map.nc")
+        provenance_label = "SYNTHETIC_DEMO"
 
     # -------------------------------------------------------------
-    # Step 1: Load swot_reaches.nc -> assert n_valid_passes >= 5
     # -------------------------------------------------------------
-    swot_path = os.path.join(FIXTURES_DIR, "swot_reaches.nc")
-    assert os.path.exists(swot_path), f"Missing fixture: {swot_path}"
+    # Step 1: Load SWOT Reaches -> assert n_valid_passes >= 5
+    # -------------------------------------------------------------
+    assert os.path.exists(swot_path), f"Missing SWOT dataset: {swot_path}"
     ds_swot = xr.open_dataset(swot_path)
-    print(f"\n[Step 1] Loaded swot_reaches.nc")
+    print(f"\n[Step 1] Loaded SWOT dataset: {swot_path}")
     print(f"         Reaches: {list(ds_swot['reach_id'].values)}")
     print(f"         Total time passes: {len(ds_swot['time'])}")
 
     # -------------------------------------------------------------
-    # Step 2: Load gauge_kanaighat.csv -> assert non-empty, UTC timestamps
+    # Step 2: Load Gauge Records -> assert non-empty, UTC timestamps
     # -------------------------------------------------------------
-    gauge_path = os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv")
-    assert os.path.exists(gauge_path), f"Missing fixture: {gauge_path}"
+    assert os.path.exists(gauge_path), f"Missing gauge dataset: {gauge_path}"
     # Guard against float reach_id truncation (Trap B3)
     df_gauge = pd.read_csv(gauge_path, dtype={"station_id": str, "reach_id": str})
     assert not df_gauge.empty, "Gauge dataset is empty!"
     # Ensure UTC timestamp awareness (Trap B1)
     df_gauge["timestamp"] = pd.to_datetime(df_gauge["timestamp"], utc=True)
     assert all(t.tzinfo is not None for t in df_gauge["timestamp"]), "Gauge timestamps must be timezone-aware UTC"
-    print(f"\n[Step 2] Loaded gauge_kanaighat.csv ({len(df_gauge)} records)")
+    print(f"\n[Step 2] Loaded gauge dataset: {gauge_path} ({len(df_gauge)} records)")
     print(f"         Station: {df_gauge['station_name'].iloc[0]} (ID: {df_gauge['station_id'].iloc[0]})")
     print(f"         Danger Level: {df_gauge['danger_level_m'].iloc[0]:.2f} m PWD")
     print(f"         Max observed level: {df_gauge['water_level_m'].max():.2f} m PWD")
@@ -75,51 +144,75 @@ def main():
 
     calibrated_params = {}
     target_reach_id = "22211000011"  # Kanaighat reach
-    cal_json_path = os.path.join(PROJECT_ROOT, "data", "processed", "calibration_results.json")
+    cal_json_path = os.path.join(output_dir, "calibration_results.json")
 
     for r_id in ds_swot["reach_id"].values:
         r_str = str(r_id)
         reach_sub = ds_swot.sel(reach_id=r_id)
-        res = calibrate_reach_manning(
-            wse_series=reach_sub["wse"].values,
-            width_series=reach_sub["width"].values,
-            slope2_series=reach_sub["slope2"].values,
-            slope_u_series=reach_sub["slope_u"].values,
-            wse_u_series=reach_sub["wse_u"].values if "wse_u" in reach_sub else None,
-            quality_series=reach_sub["quality_f"].values if "quality_f" in reach_sub else None,
-            dark_series=reach_sub["dark_frac"].values if "dark_frac" in reach_sub else None,
-            time_series=reach_sub["time"].values if "time" in reach_sub else None,
-            reach_id=r_str,
-        )
-        assert res["n_valid_passes"] >= 5, f"Reach {r_str} has fewer than 5 valid passes ({res['n_valid_passes']})"
-        assert 0.025 <= res["n"] <= 0.10, f"Reach {r_str} calibrated n={res['n']} outside [0.025, 0.10]"
-        calibrated_params[r_str] = res
-        print(
-            f"         Reach {r_str}: n = {res['n_calibrated']:.4f}, z_bed = {res['z_bed_m']:.2f} m, "
-            f"valid_passes = {res['n_valid_passes']}, RMSE = {res['rmse_m3s']} m³/s"
-        )
-        print(
-            f"           [Exclusions] Low-flow (<0.5m above bed) = {res['passes_excluded_low_flow']}, "
-            f"Slope noise = {res['passes_excluded_slope_quality']}, At-bound = {res['n_at_bound']}"
-        )
+        if mode == "real":
+            res = estimate_reach_hydraulics_literature(
+                wse_series=reach_sub["wse"].values,
+                width_series=reach_sub["width"].values,
+                slope2_series=reach_sub["slope2"].values,
+                slope_u_series=reach_sub["slope_u"].values,
+                wse_u_series=reach_sub["wse_u"].values if "wse_u" in reach_sub else None,
+                quality_series=reach_sub["quality_f"].values if "quality_f" in reach_sub else None,
+                dark_series=reach_sub["dark_frac"].values if "dark_frac" in reach_sub else None,
+                time_series=reach_sub["time"].values if "time" in reach_sub else None,
+                reach_id=r_str,
+                literature_n=0.033,
+                n_bounds=(0.025, 0.045),
+            )
+            res["provenance"] = provenance_label
+            calibrated_params[r_str] = res
+            print(
+                f"         Reach {r_str}: Literature-assigned n = {res['n']:.4f} "
+                f"({res['n_lower_bound']}-{res['n_upper_bound']}), z_bed = {res['z_bed_m']:.2f} m "
+                f"[Uncalibrated parameterization; Chow 1959 / Arcement & Schneider 1989]"
+            )
+        else:
+            res = calibrate_reach_manning(
+                wse_series=reach_sub["wse"].values,
+                width_series=reach_sub["width"].values,
+                slope2_series=reach_sub["slope2"].values,
+                slope_u_series=reach_sub["slope_u"].values,
+                wse_u_series=reach_sub["wse_u"].values if "wse_u" in reach_sub else None,
+                quality_series=reach_sub["quality_f"].values if "quality_f" in reach_sub else None,
+                dark_series=reach_sub["dark_frac"].values if "dark_frac" in reach_sub else None,
+                time_series=reach_sub["time"].values if "time" in reach_sub else None,
+                reach_id=r_str,
+            )
+            assert res["n_valid_passes"] >= 5, f"Reach {r_str} has fewer than 5 valid passes ({res['n_valid_passes']})"
+            assert 0.025 <= res["n"] <= 0.10, f"Reach {r_str} calibrated n={res['n']} outside [0.025, 0.10]"
+            res["provenance"] = provenance_label
+            calibrated_params[r_str] = res
+            print(
+                f"         Reach {r_str}: n = {res['n_calibrated']:.4f}, z_bed = {res['z_bed_m']:.2f} m, "
+                f"valid_passes = {res['n_valid_passes']}, RMSE = {res['rmse_m3s']} m³/s"
+            )
+            print(
+                f"           [Exclusions] Low-flow (<0.5m above bed) = {res['passes_excluded_low_flow']}, "
+                f"Slope noise = {res['passes_excluded_slope_quality']}, At-bound = {res['n_at_bound']}"
+            )
 
-    # Save to data/processed/calibration_results.json
+    # Save to calibration_results.json in target output_dir
     os.makedirs(os.path.dirname(cal_json_path), exist_ok=True)
     with open(cal_json_path, "w", encoding="utf-8") as f:
         json.dump(calibrated_params, f, indent=2)
 
     # Generate diagnostic figures
-    plot_calibration_diagnostics(ds_swot, calibrated_params)
+    plot_calibration_diagnostics(
+        ds_swot, calibrated_params, output_dir=os.path.join(output_dir, "calibration_plots")
+    )
 
     # -------------------------------------------------------------
-    # Step 4: Load imerg_map.nc -> assert MAP is not all-zero
+    # Step 4: Load IMERG MAP -> assert MAP is not all-zero
     # -------------------------------------------------------------
-    imerg_path = os.path.join(FIXTURES_DIR, "imerg_map.nc")
-    assert os.path.exists(imerg_path), f"Missing fixture: {imerg_path}"
+    assert os.path.exists(imerg_path), f"Missing IMERG dataset: {imerg_path}"
     ds_imerg = xr.open_dataset(imerg_path)
     map_vals = ds_imerg["precipitationCal"].values
     assert np.max(map_vals) > 0.0, "MAP is all-zero! Check CRS clip or variable name (Trap B7)"
-    print(f"\n[Step 4] Loaded imerg_map.nc ({len(ds_imerg['time'])} steps of 30-min MAP)")
+    print(f"\n[Step 4] Loaded IMERG dataset: {imerg_path} ({len(ds_imerg['time'])} steps of 30-min MAP)")
     print(f"         Sub-basins: {list(ds_imerg['sub_basin'].values)}")
     print(f"         Peak rainfall rate: {np.max(map_vals):.2f} mm/hr")
 
@@ -130,6 +223,29 @@ def main():
     surma_rain = ds_imerg["precipitationCal"].sel(sub_basin="upper_surma_meghalaya").values
     time_index = pd.to_datetime(ds_imerg["time"].values, utc=True)
     target_params = calibrated_params[target_reach_id]
+
+    if mode == "real":
+        basin_geom_path = os.path.join(real_dir, "basin_geometry.json")
+        if os.path.exists(basin_geom_path):
+            with open(basin_geom_path, "r", encoding="utf-8") as f:
+                geom_data = json.load(f)
+            catchment_area_km2 = float(geom_data.get("catchment_area_km2", 185.0))
+            runoff_coeff = float(geom_data.get("runoff_coeff", 0.58))
+            baseflow_m3s = float(geom_data.get("baseflow_m3s", 28.0))
+        else:
+            catchment_area_km2 = 185.0
+            runoff_coeff = 0.58
+            baseflow_m3s = 28.0
+            print(
+                "         [Parameter Uncertainty Notice] Exploratory run using provisional literature parameters:\n"
+                f"           Catchment Area A = {catchment_area_km2} km² (provisional fallback; requires independent delineation)\n"
+                f"           Runoff Coeff C = {runoff_coeff} (provisional assumption; literature range [0.45, 0.72])\n"
+                f"           Baseflow Q0 = {baseflow_m3s} m³/s (provisional assumption; literature range [18, 42])"
+            )
+    else:
+        catchment_area_km2 = 185.0
+        runoff_coeff = 0.62
+        baseflow_m3s = 35.0
 
     years = sorted(list(set(time_index.year)))
     routed_dfs = []
@@ -144,17 +260,18 @@ def main():
             map_series=sub_rain,
             time_index=sub_times,
             reach_params=target_params,
-            catchment_area_km2=185.0,
-            runoff_coeff=0.62,
-            baseflow_m3s=35.0,
+            catchment_area_km2=catchment_area_km2,
+            runoff_coeff=runoff_coeff,
+            baseflow_m3s=baseflow_m3s,
         )
-        # This is a retrospective synthetic engineering run, not an operational
-        # forecast. Flags are causal current-state classifications.
+        # Threshold flags are instantaneous state classifications, NOT forecast warnings.
+        # Any lead-time claim requires a separate causal issue-time hindcast.
         df_y = compute_harvest_flags(df_y, danger_level_m=13.20)
         df_base_y = run_rainfall_baseline(df_y, threshold_watch=35.0, threshold_act=65.0)
         df_y["baseline_flag"] = df_base_y["baseline_flag"]
         df_y["baseline_rain_6h"] = df_base_y["baseline_rain_6h"]
         df_y["baseline_stage"] = np.round(7.74 + df_base_y["baseline_rain_6h"] * 0.045, 2)
+        df_y["provenance"] = provenance_label
 
         routed_dfs.append(df_y)
         baseline_dfs.append(df_base_y)
@@ -216,16 +333,25 @@ def main():
         print(f"         Lead Time Gain over Baseline:   {lead_gain_h:+.1f} hours")
 
     # Save processed event results for UI loading
-    out_results_path = os.path.join(PROCESSED_DIR, "event_results.csv")
+    out_results_path = os.path.join(output_dir, "event_results.csv")
     df_routed.to_csv(out_results_path, index=False)
     print(f"\nSaved processed event results to {out_results_path} ({len(df_routed)} records)")
 
     # Generate formal scientific validation report and figures (Prompt 5)
     from pipeline.validation_report import run_scientific_validation
-    run_scientific_validation(out_results_path, os.path.join(FIXTURES_DIR, "gauge_kanaighat.csv"))
+    run_scientific_validation(out_results_path, gauge_path, output_dir=output_dir)
 
     print("\n" + "=" * 70)
-    print("  SYNTHETIC ENGINEERING PIPELINE COMPLETED (NOT REAL-WORLD VALIDATION)")
+    if mode == "demo":
+        print("  SYNTHETIC ENGINEERING PIPELINE COMPLETED [SYNTHETIC_DEMO]")
+        print("  NOTICE: This demonstration relies on synthetic fixtures.")
+        print("  It has not been field-deployed or validated for real-world warning.")
+    else:
+        print("  REAL-DATA EXPLORATORY HINDCAST COMPLETED")
+        print("  PROVENANCE: EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS")
+        print("  NOTICE: Model executed with real inputs and literature-assumed parameters.")
+        print("  Threshold flags are instantaneous state classifications, NOT forecast warnings.")
+        print("  It has not been field-calibrated or evaluated for operational warning skill.")
     print("=" * 70 + "\n")
 
 

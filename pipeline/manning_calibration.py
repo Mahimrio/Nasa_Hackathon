@@ -265,6 +265,80 @@ def calibrate_reach_manning(
     return cal_results
 
 
+def estimate_reach_hydraulics_literature(
+    wse_series: np.ndarray,
+    width_series: np.ndarray,
+    slope2_series: np.ndarray,
+    slope_u_series: np.ndarray,
+    wse_u_series: Optional[np.ndarray] = None,
+    quality_series: Optional[np.ndarray] = None,
+    dark_series: Optional[np.ndarray] = None,
+    time_series: Optional[np.ndarray] = None,
+    reach_id: str = "22211000011",
+    literature_n: float = 0.033,
+    n_bounds: Tuple[float, float] = (0.025, 0.045),
+) -> Dict[str, Any]:
+    """
+    Parameterizes reach hydraulics directly from SWOT geometry and published literature
+    without artificial optimization against assumed discharge targets.
+    
+    Roughness bounds: Chow (1959); Arcement & Schneider (1989) alluvial lowland channels.
+    """
+    reach_id_str = str(reach_id)
+    wse = np.array(wse_series, dtype=np.float64)
+    width = np.array(width_series, dtype=np.float64)
+    slope2 = np.array(slope2_series, dtype=np.float64)
+    slope_u = np.array(slope_u_series, dtype=np.float64)
+    n_pts = len(wse)
+
+    wse_u = np.array(wse_u_series, dtype=np.float64) if wse_u_series is not None else np.full(n_pts, 0.12)
+    quality = np.array(quality_series, dtype=np.int32) if quality_series is not None else np.zeros(n_pts, dtype=np.int32)
+    dark = np.array(dark_series, dtype=np.float64) if dark_series is not None else np.full(n_pts, 0.08)
+
+    # 1. Quality filter
+    mask, excl_stats = filter_swot_passes(
+        wse, width, slope2, wse_u, slope_u, quality, dark, return_stats=True
+    )
+    valid_count = excl_stats["retained_valid"]
+    wse_valid = wse[mask] if np.any(mask) else wse
+    width_valid = width[mask] if np.any(mask) else width
+    slope2_valid = slope2[mask] if np.any(mask) else slope2
+
+    # Note: SWOT observes water surface only; minimum WSE is a low water level, NOT river bed.
+    # True bed elevation requires in-situ bathymetric cross-section surveys.
+    # Without bathymetry, this reference level is labeled as an unresolved assumption.
+    z_bed = float(np.min(wse_valid)) if len(wse_valid) > 0 else 6.0
+
+    return {
+        "reach_id": reach_id_str,
+        "n": float(round(literature_n, 4)),
+        "n_calibrated": float(round(literature_n, 4)),
+        "n_lower_bound": float(n_bounds[0]),
+        "n_upper_bound": float(n_bounds[1]),
+        "z_bed": float(round(z_bed, 2)),
+        "z_bed_m": float(round(z_bed, 2)),
+        "z_bed_status": "unresolved_assumed_from_low_wse",
+        "z_bed_uncertainty_m": 0.18,
+        "n_valid_passes": int(valid_count),
+        "mean_slope2": float(round(float(np.mean(slope2_valid)), 7)) if len(slope2_valid) > 0 else 5.0e-5,
+        "mean_width_m": float(round(float(np.mean(width_valid)), 1)) if len(width_valid) > 0 else 160.0,
+        "mean_width": float(round(float(np.mean(width_valid)), 1)) if len(width_valid) > 0 else 160.0,
+        "calibration_period": "Literature reference (Chow 1959; Arcement & Schneider 1989)",
+        "passes_excluded_low_flow": 0,
+        "passes_excluded_slope_quality": int(excl_stats["excluded_slope_quality"]),
+        "n_at_bound": False,
+        "rmse_m3s": None,
+        "parameter_source": "literature_chow_1959_arcement_1989",
+        "is_observationally_calibrated": False,
+        "note": (
+            "Literature-assigned Manning roughness with physical uncertainty [0.025, 0.045]; "
+            "not observationally calibrated without in-situ discharge or validated rating curve. "
+            "Bed level is unresolved/assumed: SWOT observes water surface only, not river bathymetry; "
+            "absolute stage remains uncalibrated without surveyed bathymetry and geodetic datum tie."
+        ),
+    }
+
+
 def calibrate_all_reaches(
     ds_swot,
     output_json_path: Optional[str] = None,
