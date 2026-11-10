@@ -1,7 +1,7 @@
 {
   "mode": "real",
   "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
-  "generated_utc": "2026-11-10T15:34:01.623297+00:00",
+  "generated_utc": "2026-11-10T15:41:24.448944+00:00",
   "generator": "scripts/export_json.py",
   "sources": [
     {
@@ -26,11 +26,11 @@
     },
     {
       "path": "data/processed/real_hindcast_metrics.json",
-      "sha256": "f9761e37b336c5f3ab29499eb304ebcdf9f0b2dc8ca02f405c503aff946e9082"
+      "sha256": "56c8cf27021587fc6c9d67502370373f44f48387dbe89620d100c9d9bc480c88"
     },
     {
       "path": "data/processed/calibration_results_real.json",
-      "sha256": "7ba5ab5a2d4d074d681cdbfbe257662b4eae3365313083baa8a00b6887f20a4f"
+      "sha256": "667eb2caf06d446c70cd34eb757e3605df792db96da4e4433e8958a5ba7a7afa"
     }
   ],
   "disclosures": [

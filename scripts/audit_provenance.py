@@ -6,6 +6,7 @@ Validates both Module 1 and Module 2 compliance:
   2. Module 2: data/trends/ directory isolation and PROVENANCE.json integrity.
   3. UI export: ui/public/data/trend_summary.json read-only provenance check.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -50,8 +51,13 @@ def audit_module2_trends(root: Path) -> int:
                 Path(str(k).replace("\\", "/")).name: v
                 for k, v in manifest_data.get("files", {}).items()
             }
-            if "final_dataset_path" in manifest_data and "final_dataset_sha256" in manifest_data:
-                target_name = Path(str(manifest_data["final_dataset_path"]).replace("\\", "/")).name
+            if (
+                "final_dataset_path" in manifest_data
+                and "final_dataset_sha256" in manifest_data
+            ):
+                target_name = Path(
+                    str(manifest_data["final_dataset_path"]).replace("\\", "/")
+                ).name
                 declared_files[target_name] = manifest_data["final_dataset_sha256"]
 
             for p in trends_dir.iterdir():
@@ -142,8 +148,10 @@ def main() -> int:
         "--manifest", default=ROOT / "data/fixtures/PROVENANCE.json", type=Path
     )
     parser.add_argument(
-        "--root", default=ROOT, type=Path,
-        help="Root directory for resolving relative file paths in manifest"
+        "--root",
+        default=ROOT,
+        type=Path,
+        help="Root directory for resolving relative file paths in manifest",
     )
     args = parser.parse_args()
     try:
@@ -157,7 +165,9 @@ def main() -> int:
         cat = public_metrics.get("validation_category")
         if prov == "SYNTHETIC":
             if cat != "synthetic_engineering_test":
-                raise ProvenanceError("Public metrics imply unsupported real-world validation")
+                raise ProvenanceError(
+                    "Public metrics imply unsupported real-world validation"
+                )
         elif prov == "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS":
             if cat != "retrospective_exploratory_hindcast":
                 raise ProvenanceError(

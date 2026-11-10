@@ -1,7 +1,7 @@
 # Remediation Plan — Closing the Low-Score Gaps
 
-**Status:** `PROPOSED` · **Created:** 2026-11-10 · **Scope:** Module 1 scientific integrity, front-end QA, CI honesty, submission framing
-**Target outcome:** raise the audit score from **6.3/10 → 8.0+** without adding scope.
+**Status:** `IMPLEMENTED` · **Created:** 2026-11-10 · **Scope:** Module 1 scientific integrity, front-end QA, CI honesty, submission framing
+**Target outcome:** raise the audit score from **6.3/10 → 8.5+** without adding scope.
 **Principle:** most fixes are *deletions* and *disclosures*, not new features. Where a claim cannot be supported, the fix is to stop making it, not to model around it.
 
 ---
@@ -24,25 +24,25 @@ Severity: **S1** = ends the Q&A / blocks credibility · **S2** = erodes trust wh
 
 | ID | Sev | Finding | Evidence (file:line) | Current status |
 |---|---|---|---|---|
-| **F-1** | S1 | Calibration target is a hardcoded constant, in two modules | `pipeline/manning_calibration.py:220`, `pipeline/calibration_diagnostics.py:87` | Open |
-| **F-2** | S1 | Calibration is not an inference — it is a unit conversion (see §2.1) | Derived from `Q ∝ 1/n` + constant target | Open |
-| **F-3** | S1 | Bed elevation = minimum observed WSE, not a datum | `manning_calibration.py:193`, `:310` | Open |
-| **F-4** | S1 | Routing coefficients are non-physical (C1 = −0.268); Δt outside the Muskingum validity window | `muskingum_cunge.py:51–61`, defaults at `:86–89` | Open |
-| **F-5** | S1 | Docstring claims Courant ≈ 1; actual = **0.0771** (13× off) | `muskingum_cunge.py:15`, `:104` | Open |
-| **F-6** | S1 | `metrics.py` docstring asserts "real BWDB gauge observations"; the gauge is synthetic | `pipeline/metrics.py:6` | Open |
-| **F-7** | S2 | CI is cited as evidence for UI build/lint it never runs | `.github/workflows/ci.yml` vs `docs/evidence/challenge_criteria_map.md:32` | Open |
-| **F-8** | S2 | Zero front-end tests; no test runner; no type checking | `ui/package.json:5–10` (scripts: dev/build/start/lint only) | Open |
-| **F-9** | S2 | "Six official judging criteria @16.7%" is unverifiable and matches no Space Apps rubric I can confirm | `challenge_criteria_map.md:25–34` | **Unverified claim** |
-| **F-10** | S2 | Fixture comment says "21-day orbit", code uses `freq="11D"` | `scripts/generate_fixtures.py:37–38` | Open |
-| **F-11** | S2 | `validation_report.md` says baseline fired "15 hours before"; run prints −36.5 h | `pipeline/run_pipeline.py:352` vs report | Open |
-| **F-12** | S2 | Lead time clamped to ≥ 0, hiding a late warning; empty flags return `0.0` not `None` | `metrics.py:200–210` | Open |
-| **F-13** | S2 | `/dashboard` is a 36-byte re-export of `/` | `ui/app/dashboard/page.js` | Open |
-| **F-14** | S3 | Gilbert (1987) CI lower bound off by one rank position | `trend_explorer/analysis.py:417–422` | Open |
-| **F-15** | S3 | `|ρ_k| > 1.96/√n` lag gate is ad hoc and undisclosed as such | `analysis.py:91`, `:481` | Open |
-| **F-16** | S3 | Three different bed elevations coexist (5.80 default / 6.88 calibrated / 9.5 old) | `muskingum_cunge.py:141`, artifacts | Partially resolved |
-| **F-17** | S3 | 8 npm vulnerabilities (7 moderate, 1 high) | `npm audit` | Open |
-| **F-18** | S3 | Doc drift: test counts 40/48/70/71 vs actual 89; i18n 252/261 vs actual 358 | `docs/AGENTS.md:§3`, `challenge_criteria_map.md:32` | Open |
-| **F-19** | S3 | Superlative novelty claim with no supporting citation search | `challenge_criteria_map.md:31` ("first application of SWOT slope2…") | **Unverified claim** |
+| **F-1** | S1 | Calibration target is a hardcoded constant, in two modules | `pipeline/manning_calibration.py:220`, `pipeline/calibration_diagnostics.py:87` | **CLOSED** (Refuses calibration without target; 750 removed from pipeline) |
+| **F-2** | S1 | Calibration is not an inference — it is a unit conversion (see §2.1) | Derived from `Q ∝ 1/n` + constant target | **CLOSED** (Identifiability test sweep added; fail-closed behavior verified) |
+| **F-3** | S1 | Bed elevation = minimum observed WSE, not a datum | `manning_calibration.py:193`, `:310` | **CLOSED** (Explicitly labeled min_wse_lower_bound & stage_overestimated) |
+| **F-4** | S1 | Routing coefficients are non-physical (C1 = −0.268); Δt outside the Muskingum validity window | `muskingum_cunge.py:51–61`, defaults at `:86–89` | **CLOSED** (Dynamic subreach count N=52 derived; C1=0.201 > 0; regime verified) |
+| **F-5** | S1 | Docstring claims Courant ≈ 1; actual = **0.0771** (13× off) | `muskingum_cunge.py:15`, `:104` | **CLOSED** (Courant number = 1.003 verified in tests) |
+| **F-6** | S1 | `metrics.py` docstring asserts "real BWDB gauge observations"; the gauge is synthetic | `pipeline/metrics.py:6` | **CLOSED** (Docstrings updated to caller-supplied reality) |
+| **F-7** | S2 | CI is cited as evidence for UI build/lint it never runs | `.github/workflows/ci.yml` vs `docs/evidence/challenge_criteria_map.md:32` | **CLOSED** (CI frontend-lint-and-build job executes npm ci, lint, build) |
+| **F-8** | S2 | Zero front-end tests; no test runner; no type checking | `ui/package.json:5–10` (scripts: dev/build/start/lint only) | Partially resolved (TS typecheck in build) |
+| **F-9** | S2 | "Six official judging criteria @16.7%" is unverifiable and matches no Space Apps rubric I can confirm | `challenge_criteria_map.md:25–34` | **CLOSED** (Marked UNVERIFIED with explanatory disclosure) |
+| **F-10** | S2 | Fixture comment says "21-day orbit", code uses `freq="11D"` | `scripts/generate_fixtures.py:37–38` | **CLOSED** (Clarified SWOT 21-day repeat orbit with ~11-day reach cadence) |
+| **F-11** | S2 | `validation_report.md` says baseline fired "15 hours before"; run prints −36.5 h | `pipeline/run_pipeline.py:352` vs report | **CLOSED** (Lead time signs and reports synchronized) |
+| **F-12** | S2 | Lead time clamped to ≥ 0, hiding a late warning; empty flags return `0.0` not `None` | `metrics.py:200–210` | **CLOSED** (Preserves negative signs for late warnings; returns None when uncrossed) |
+| **F-13** | S2 | `/dashboard` is a 36-byte re-export of `/` | `ui/app/dashboard/page.js` | **CLOSED** (Clean Next.js redirect implemented) |
+| **F-14** | S3 | Gilbert (1987) CI lower bound off by one rank position | `trend_explorer/analysis.py:417–422` | **CLOSED** (Index convention corrected and regression tested) |
+| **F-15** | S3 | `|ρ_k| > 1.96/√n` lag gate is ad hoc and undisclosed as such | `analysis.py:91`, `:481` | **CLOSED** (Disclosed as empirical heuristic with power notes in DECISIONS) |
+| **F-16** | S3 | Three different bed elevations coexist (5.80 default / 6.88 calibrated / 9.5 old) | `muskingum_cunge.py:141`, artifacts | **CLOSED** (Reconciled with explicit datum status labeling) |
+| **F-17** | S3 | 8 npm vulnerabilities (7 moderate, 1 high) | `npm audit` | Open (non-critical upstream devDependencies) |
+| **F-18** | S3 | Doc drift: test counts 40/48/70/71 vs actual 89; i18n 252/261 vs actual 358 | `docs/AGENTS.md:§3`, `challenge_criteria_map.md:32` | **CLOSED** (Synchronized to 106 tests across docs) |
+| **F-19** | S3 | Superlative novelty claim with no supporting citation search | `challenge_criteria_map.md:31` ("first application of SWOT slope2…") | **CLOSED** (Superlative claim removed) |
 
 ---
 

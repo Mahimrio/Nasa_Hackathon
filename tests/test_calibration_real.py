@@ -95,12 +95,17 @@ def test_inverse_variance_weighting():
     # Pass 0 has very small uncertainty (0.05m), Pass 3 has high uncertainty (0.24m)
     wse_u = np.array([0.05, 0.12, 0.15, 0.24])
 
+    # Provide a synthetic target discharge so calibration runs.
+    # The weighting logic is only exercised when gauge_q_target is provided.
+    target_q = np.full(4, 750.0)
+
     res = calibrate_reach_manning(
         wse_series=wse,
         width_series=width,
         slope2_series=slope2,
         slope_u_series=slope_u,
         wse_u_series=wse_u,
+        gauge_q_target=target_q,
         reach_id="22211000011",
     )
 
@@ -154,7 +159,10 @@ def test_calibration_results_schema_and_json_export():
             assert "n_at_bound" in entry
             assert "rmse_m3s" in entry
             assert isinstance(entry["reach_id"], str)
-            assert 0.025 <= entry["n_calibrated"] <= 0.10
+            # n_calibrated is None when no target discharge provided (NOT_CALIBRATED).
+            # The effective roughness used downstream is n_effective.
+            assert entry["n_calibrated"] is None
+            assert 0.025 <= entry["n_effective"] <= 0.10
 
 
 def test_diagnostic_plots_generation():

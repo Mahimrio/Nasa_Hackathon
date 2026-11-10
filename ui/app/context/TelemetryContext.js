@@ -220,7 +220,8 @@ export function TelemetryProvider({ children }) {
 
   // Nearest-observation lookup (tolerance 30 min). Real BWDB readings are
   // discrete daily values, so exact timestamp equality is not guaranteed.
-  const gaugeLookup = useMemo(() => {
+  // Wrapped in useCallback so React Compiler memoization is stable.
+  const makeGaugeLookup = useCallback(() => {
     if (!gaugeData || !gaugeData.length) return () => null;
     const parsed = gaugeData
       .map((g) => ({ t: Date.parse(g.timestamp), v: g.water_level_m }))
@@ -248,24 +249,25 @@ export function TelemetryProvider({ children }) {
     const end = Math.min(eventData.length, start + windowSize);
     const sliced = eventData.slice(start, end);
 
+    const lookup = makeGaugeLookup();
     return sliced.map((d) => ({
       time: d.timestamp.slice(5, 16).replace("T", " "),
       timestamp: d.timestamp,
       modelled: d.modelled_stage,
       lower: d.stage_lower,
       upper: d.stage_upper,
-      observed: gaugeLookup(d.timestamp),
+      observed: lookup(d.timestamp),
       baseline: d.baseline_stage ?? (7.74 + (d.baseline_rain_6h ?? 0) * 0.045),
       rainfall: d.imerg_map_mmh,
       flag: d.harvest_flag,
     }));
-  }, [eventData, gaugeData, sliderIdx, gaugeLookup]);
+  }, [eventData, gaugeData, sliderIdx, makeGaugeLookup]);
 
   // ---- CURRENT GAUGE READING ----
   const currentGaugeLevel = useMemo(() => {
     if (!current) return null;
-    return gaugeLookup(current.timestamp);
-  }, [current, gaugeLookup]);
+    return makeGaugeLookup()(current.timestamp);
+  }, [current, makeGaugeLookup]);
 
   // ---- CURRENT SELECTED REACH ----
   const selectedReach = useMemo(() => {

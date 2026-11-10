@@ -417,9 +417,9 @@ def compute_sens_kendall_ci(
     m1 = max(1, math.floor((n_prime - half_width) / 2.0))
     m2 = min(n_prime, math.ceil((n_prime + half_width) / 2.0) + 1)
 
-    # Convert to 0-indexed Python array indices
-    idx_low = max(0, m1 - 1)
-    idx_high = min(n_prime - 1, m2 - 1)
+    # Convert to 0-indexed Python array indices (Finding F-14 convention)
+    idx_low = min(n_prime - 1, max(0, m1))
+    idx_high = min(n_prime - 1, max(0, m2 - 1))
 
     return float(slopes_sorted[idx_low]), float(slopes_sorted[idx_high])
 

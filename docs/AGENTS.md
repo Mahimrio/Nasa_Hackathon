@@ -50,7 +50,8 @@ This file serves as the concise operating contract for any AI assistant working 
 - **WO-015 (Documentation Synchronization & Dual-Module Architecture):** **DONE** (Re-architectured project into Module 1 Operational Warning and Module 2 Historical Rainfall Trend Explorer; established 4 status tiers; annotated baseline comparison discrepancies as under audit).
 - **WO-019 (Module 2 Build Prompts Playbook Specification):** **DONE** (Finalized 8-prompt master specification P-T1 to P-T8 in `docs/MODULE_2_BUILD_PROMPTS.md` and `MODULE_2_BUILD_PROMPTS.md`).
 - **WO-025 (Module 1 Real-Data Ingestion & Retrospective Hindcast):** **DONE** (Prompts P0–P7 completed; authentic NASA SWOT RiverSP Version D shapefiles, GPM IMERG Early 3B-HHR-E, and BWDB SW266 gauge data ingested under fail-closed provenance; evaluated May 2024 flood event with sparse gauge protocol and sensitivity analysis).
-- **Test Suite Status:** **93/93** pytest unit tests pass cleanly in ~56s (`python -m pytest tests/ -q`).
+- **WO-026 (Scoring Remediation & Scientific Integrity Tasks T-1 to T-10):** **DONE** (Fail-closed Manning calibration refusal when target_q is None; derived dynamic subreach count N=52 for Courant ~ 1.0 and non-negative coefficients C1, C2, C3 >= 0; preserved warning lead-time signs; fixed Gilbert 1987 CI index convention; created sensitivity_ablation.py and rendered ablation table on UI; updated judging criteria map; added 13 new unit tests).
+- **Test Suite Status:** **106/106** pytest unit tests pass cleanly (`python -m pytest tests/ -q`).
 - **Current Active Task:** **COMPLETE** (Submission package finalized; dual-module pipeline verified).
 - **Pending Human Verification:**
   - `[OPEN]` Official NASA Space Apps challenge title publication (Oct 28).

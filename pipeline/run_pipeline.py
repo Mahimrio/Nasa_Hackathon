@@ -26,7 +26,11 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from pipeline.provenance import validate_real_pipeline_inputs, ProvenanceError
-from pipeline.manning_calibration import calibrate_reach_manning, estimate_reach_hydraulics_literature
+from pipeline.manning_calibration import (
+    calibrate_reach_manning,
+    estimate_reach_hydraulics_literature,
+    resolve_n,
+)
 from pipeline.muskingum_cunge import route_catchment_flow
 from pipeline.baseline import run_rainfall_baseline
 from pipeline.harvest_flag import compute_harvest_flags
@@ -215,13 +219,16 @@ def main(argv=None):
                 time_series=reach_sub["time"].values if "time" in reach_sub else None,
                 reach_id=r_str,
             )
+            n_eff = resolve_n(res)
             assert res["n_valid_passes"] >= 5, f"Reach {r_str} has fewer than 5 valid passes ({res['n_valid_passes']})"
-            assert 0.025 <= res["n"] <= 0.10, f"Reach {r_str} calibrated n={res['n']} outside [0.025, 0.10]"
+            assert 0.025 <= n_eff <= 0.10, f"Reach {r_str} roughness n={n_eff} outside [0.025, 0.10]"
             res["provenance"] = provenance_label
             calibrated_params[r_str] = res
+            n_str = f"{res['n_calibrated']:.4f}" if res.get("n_calibrated") is not None else f"{n_eff:.4f} (literature prior)"
+            rmse_str = f"{res['rmse_m3s']} m³/s" if res.get("rmse_m3s") is not None else "N/A (uncalibrated)"
             print(
-                f"         Reach {r_str}: n = {res['n_calibrated']:.4f}, z_bed = {res['z_bed_m']:.2f} m, "
-                f"valid_passes = {res['n_valid_passes']}, RMSE = {res['rmse_m3s']} m³/s"
+                f"         Reach {r_str}: n = {n_str}, z_bed = {res['z_bed_m']:.2f} m, "
+                f"valid_passes = {res['n_valid_passes']}, RMSE = {rmse_str}"
             )
             print(
                 f"           [Exclusions] Low-flow (<0.5m above bed) = {res['passes_excluded_low_flow']}, "

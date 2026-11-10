@@ -29,6 +29,7 @@ import xarray as xr
 from pipeline.manning_calibration import (
     compute_manning_q,
     calibrate_reach_manning,
+    resolve_n,
     MANNING_N_MIN,
     MANNING_N_MAX,
 )
@@ -79,12 +80,15 @@ def plot_calibration_diagnostics(
     colors = ["#35D8F2", "#10B981", "#F59E0B", "#A78BFA"]
 
     for idx, (reach_id, res) in enumerate(cal_results.items()):
+        z_bed = res.get("z_bed_m")
+        # Skip reaches with no finite SWOT WSE (z_bed=None)
+        if z_bed is None:
+            continue
+
         sub_reach = ds_swot.sel(reach_id=reach_id)
         wse = sub_reach["wse"].values
         width = sub_reach["width"].values
         slope2 = sub_reach["slope2"].values
-        z_bed = res["z_bed_m"]
-        target_q = 750.0
 
         # Filter mid-to-high flow
         mask = wse > (z_bed + 0.5)
@@ -95,21 +99,31 @@ def plot_calibration_diagnostics(
         wse_sel = wse[mask]
         s_sel = slope2[mask]
 
-        rmse_curve = []
+        n_eff = resolve_n(res)
+        has_cal_target = res.get("rmse_m3s") is not None and res.get("n_calibrated") is not None
+
+        curve_vals = []
         for n_val in trial_n:
             q_modeled = compute_manning_q(wse_sel, w_sel, s_sel, z_bed, n_val)
-            err = np.sqrt(np.mean((q_modeled - target_q) ** 2))
-            rmse_curve.append(err)
+            if has_cal_target:
+                # Reconstruct implied target from optimal fit
+                q_cal = compute_manning_q(wse_sel, w_sel, s_sel, z_bed, n_eff)
+                err = np.sqrt(np.mean((q_modeled - q_cal) ** 2))
+                curve_vals.append(err)
+            else:
+                # Plot mean conveyance Q as n varies
+                curve_vals.append(float(np.mean(q_modeled)))
 
         color = colors[idx % len(colors)]
+        label_text = f"Reach {reach_id} (n={n_eff:.4f})" if has_cal_target else f"Reach {reach_id} (n={n_eff:.3f})"
         ax.plot(
             trial_n,
-            rmse_curve,
-            label=f"Reach {reach_id} (n={res['n_calibrated']:.4f})",
+            curve_vals,
+            label=label_text,
             color=color,
             linewidth=2.0,
         )
-        ax.axvline(res["n_calibrated"], color=color, linestyle=":", alpha=0.6)
+        ax.axvline(n_eff, color=color, linestyle=":", alpha=0.6)
 
     # Physical boundaries
     ax.axvline(
@@ -127,9 +141,9 @@ def plot_calibration_diagnostics(
         label=f"Upper Bound ({MANNING_N_MAX})",
     )
 
-    ax.set_title("Manning Roughness (n) Sensitivity & Convex Optimization Surface", fontsize=12, pad=12)
+    ax.set_title("Manning Roughness (n) Conveyance Sensitivity", fontsize=12, pad=12)
     ax.set_xlabel("Manning Roughness Coefficient (n)", fontsize=10)
-    ax.set_ylabel("RMSE Discharge Error (m³/s)", fontsize=10)
+    ax.set_ylabel("Conveyance / Residual Q (m³/s)", fontsize=10)
     ax.grid(True, linestyle="--", alpha=0.5)
     ax.legend(loc="upper right", framealpha=0.3, facecolor="#08111F")
 
@@ -148,13 +162,13 @@ def plot_calibration_diagnostics(
     x_positions = np.arange(len(reach_names))
     raw_rmse = [cal_results[r].get("rmse_m3s") for r in reach_names]
     rmse_values = [float(v) if v is not None else 0.0 for v in raw_rmse]
-    n_values = [cal_results[r]["n_calibrated"] for r in reach_names]
+    n_values = [resolve_n(cal_results[r]) for r in reach_names]
 
     bars = ax2.bar(x_positions, rmse_values, width=0.45, color="#35D8F2", alpha=0.85, edgecolor="#74ECFF")
 
     for bar, n_val, raw_v in zip(bars, n_values, raw_rmse):
         yval = bar.get_height()
-        label_text = f"n={n_val:.4f}" if raw_v is not None else f"n={n_val:.3f}\n(Lit)"
+        label_text = f"n={n_val:.4f}" if raw_v is not None else f"n={n_val:.3f}\n(Prior)"
         ax2.text(
             bar.get_x() + bar.get_width() / 2.0,
             yval + 0.5,

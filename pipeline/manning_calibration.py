@@ -31,6 +31,20 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 # Physical Roughness Bounds for Alluvial Lowland Rivers (Chow 1959 / Arcement & Schneider 1989)
 MANNING_N_MIN = 0.025
 MANNING_N_MAX = 0.10
+LITERATURE_N = 0.033  # Standard alluvial reference prior for wide sand/gravel channels
+
+
+def resolve_n(res: Any) -> float:
+    """Single source of truth for the effective roughness used in routing."""
+    if not isinstance(res, dict):
+        return float(LITERATURE_N)
+    if res.get("n_calibrated") is not None:
+        return float(res["n_calibrated"])
+    if res.get("n_effective") is not None:
+        return float(res["n_effective"])
+    if res.get("n") is not None:
+        return float(res["n"])
+    return float(LITERATURE_N)
 
 # Calibration Time-Split Boundaries (Pre-Event)
 CALIBRATION_START = "2024-01-01"
@@ -189,8 +203,11 @@ def calibrate_reach_manning(
     slope2_valid = slope2[mask]
     wse_u_valid = wse_u[mask]
 
-    # 3. Bed elevation proxy (Assumption A1: minimum observed WSE over passes)
-    z_bed = float(np.min(wse_valid))
+    # 3. Bed reference — LOWER BOUND ONLY. The true bed is <= min(WSE).
+    z_ref = float(np.min(wse_valid))
+    z_bed = z_ref
+    z_bed_source = "min_wse_lower_bound"
+    z_bed_bias_direction = "stage_overestimated"  # by an unknown amount
 
     # 4. Stage-dependent calibration filtering (Trap A1: mid-to-high stage passes only)
     stage_mask = wse_valid > (z_bed + 0.5)
@@ -210,14 +227,47 @@ def calibrate_reach_manning(
     weights = 1.0 / np.maximum(wse_u_cal ** 2, 0.0025)
     weights /= np.sum(weights)  # Normalize weights
 
-    # 6. Target discharge reference
-    if gauge_q_target is not None:
-        target_q = np.array(gauge_q_target, dtype=np.float64)
-        if len(target_q) != len(wse_cal):
-            target_q = np.full(len(wse_cal), np.mean(target_q))
-    else:
-        # Alluvial Surma mid-stage benchmark discharge (~750 m³/s at Kanaighat)
-        target_q = np.full(len(wse_cal), 750.0)
+    # 6. Target discharge reference — fail closed if no observation exists (Finding F-1 / F-2)
+    if gauge_q_target is None:
+        logger.warning(
+            "Reach %s: no observed discharge target supplied. "
+            "Refusing to calibrate; returning literature prior.", reach_id_str
+        )
+        return {
+            "reach_id": reach_id_str,
+            "n": float(LITERATURE_N),
+            "n_calibrated": None,
+            "n_effective": float(LITERATURE_N),
+            "n_literature": float(LITERATURE_N),
+            "n_lower_bound": float(MANNING_N_MIN),
+            "n_upper_bound": float(MANNING_N_MAX),
+            "calibration_method": "literature_prior",
+            "calibration_status": "NOT_CALIBRATED",
+            "is_observationally_calibrated": False,
+            "z_bed": float(round(z_bed, 2)),
+            "z_bed_m": float(round(z_bed, 2)),
+            "z_bed_source": z_bed_source,
+            "z_bed_bias_direction": z_bed_bias_direction,
+            "z_bed_uncertainty_m": 0.18,
+            "mean_slope2": float(round(float(np.mean(slope2_valid)), 7)),
+            "mean_width_m": float(round(float(np.mean(width_valid)), 1)),
+            "mean_width": float(round(float(np.mean(width_valid)), 1)),
+            "n_valid_passes": int(valid_count),
+            "passes_excluded_low_flow": int(n_excluded_low_flow),
+            "passes_excluded_slope_quality": int(excl_stats["excluded_slope_quality"]),
+            "n_at_bound": False,
+            "rmse_m3s": None,
+            "calibration_period": "Literature prior (no observed discharge)",
+            "n_lower_bound": float(MANNING_N_MIN),
+            "n_upper_bound": float(MANNING_N_MAX),
+            "parameter_source": "literature_chow_1959_arcement_1989",
+            "note": "Literature prior returned; no observed discharge target available for calibration.",
+            "provenance": "NO_OBSERVED_DISCHARGE",
+        }
+
+    target_q = np.array(gauge_q_target, dtype=np.float64)
+    if len(target_q) != len(wse_cal):
+        target_q = np.full(len(wse_cal), np.mean(target_q))
 
     # 7. Bounded scalar optimization (Guard B8: method='bounded' in [0.025, 0.10])
     def weighted_objective(n_trial: float) -> float:
@@ -248,8 +298,13 @@ def calibrate_reach_manning(
         "reach_id": reach_id_str,
         "n": float(round(n_opt, 4)),
         "n_calibrated": float(round(n_opt, 4)),
+        "n_effective": float(round(n_opt, 4)),
+        "calibration_status": "CALIBRATED_TO_TARGET",
+        "is_observationally_calibrated": True,
         "z_bed": float(round(z_bed, 2)),
         "z_bed_m": float(round(z_bed, 2)),
+        "z_bed_source": z_bed_source,
+        "z_bed_bias_direction": z_bed_bias_direction,
         "z_bed_uncertainty_m": 0.18,
         "n_valid_passes": int(valid_count),
         "mean_slope2": float(round(float(np.mean(slope2_valid)), 7)),
@@ -322,10 +377,13 @@ def estimate_reach_hydraulics_literature(
         "reach_id": reach_id_str,
         "n": float(round(literature_n, 4)),
         "n_calibrated": float(round(literature_n, 4)),
+        "n_effective": float(round(literature_n, 4)),
         "n_lower_bound": float(n_bounds[0]),
         "n_upper_bound": float(n_bounds[1]),
         "z_bed": float(round(z_bed, 2)) if z_bed is not None else None,
         "z_bed_m": float(round(z_bed, 2)) if z_bed is not None else None,
+        "z_bed_source": "min_wse_lower_bound" if z_bed is not None else "no_finite_wse",
+        "z_bed_bias_direction": "stage_overestimated" if z_bed is not None else None,
         "z_bed_status": (
             "unresolved_assumed_from_low_wse" if z_bed is not None else "not_observed_no_finite_wse"
         ),
@@ -380,9 +438,16 @@ def calibrate_all_reaches(
             reach_id=r_str,
         )
         results[r_str] = res
+        n_cal = res.get("n_calibrated")
+        z_bed = res.get("z_bed_m")
+        rmse = res.get("rmse_m3s")
         logger.info(
-            f"Reach {r_str}: n={res['n_calibrated']:.4f}, z_bed={res['z_bed_m']}m, "
-            f"valid_passes={res['n_valid_passes']}, RMSE={res['rmse_m3s']} m³/s, bound={res['n_at_bound']}"
+            f"Reach {r_str}: "
+            f"n_calibrated={n_cal:.4f}" if n_cal is not None else f"Reach {r_str}: n_calibrated=None, "
+            f"z_bed={z_bed}m, " if z_bed is not None else f"z_bed=None, "
+            f"valid_passes={res.get('n_valid_passes')}, "
+            f"RMSE={rmse} m³/s" if rmse is not None else "RMSE=None m³/s, "
+            f"bound={res.get('n_at_bound')}"
         )
 
     # Export to JSON

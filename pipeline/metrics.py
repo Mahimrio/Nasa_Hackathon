@@ -2,8 +2,9 @@
 HydroSense-SWOT — Scientific Performance Evaluation & Validation Metrics Module
 Upgraded for Prompt 5: P5-SCIENTIFIC-VALIDATION
 
-Implements rigorous scientific validation comparing model output and baseline
-predictions against real BWDB gauge observations during the April-May 2026 test period.
+Implements rigorous scientific evaluation comparing model output and baseline
+predictions against gauge observations supplied by the caller (synthetic fixtures
+in demo mode; BWDB gauge records when real ingestion is active).
 
 Key Principles Enforced:
 - Test-Period Discipline: Metrics evaluated on the test period ONLY (Apr 1 - May 31, 2026).
@@ -190,24 +191,31 @@ def compute_warning_lead_time(
     danger_level_m: float = KANAIGHAT_DANGER_LEVEL_M,
     flag_col: str = "harvest_flag",
     obs_col: str = "water_level_m",
-) -> float:
+) -> Optional[float]:
     """
     Computes advance warning lead time in hours:
     Time from the FIRST RED warning flag to the moment observed gauge crosses danger level.
+    Positive value indicates advance warning; negative value indicates late warning.
+    Returns None if no RED flag is issued or if observed stage never crosses danger level.
     """
-    red_rows = df_flags[df_flags[flag_col] == "RED"]
+    if df_flags.empty:
+        return None
+    flags = df_flags.sort_values("timestamp")
+    red_rows = flags[flags[flag_col] == "RED"]
     if red_rows.empty:
-        return 0.0
+        return None
+
+    if df_obs.empty:
+        return None
+    obs = df_obs.sort_values("timestamp")
+    obs_exceed = obs[obs[obs_col] >= danger_level_m]
+    if obs_exceed.empty:
+        return None
 
     t_first_red = pd.to_datetime(red_rows.iloc[0]["timestamp"], utc=True)
-
-    obs_exceed = df_obs[df_obs[obs_col] >= danger_level_m]
-    if obs_exceed.empty:
-        return 0.0
-
     t_obs_danger = pd.to_datetime(obs_exceed.iloc[0]["timestamp"], utc=True)
     lead_time_h = (t_obs_danger - t_first_red).total_seconds() / 3600.0
-    return float(max(lead_time_h, 0.0))
+    return float(lead_time_h)
 
 
 def compute_baseline_stage_proxy(
@@ -307,7 +315,7 @@ def evaluate_all_metrics(
             "kge": f"{kge:.2f}" if not np.isnan(kge) else "N/A",
             "pbias": f"{pbias:+.1f}%" if not np.isnan(pbias) else "N/A",
             "timing_error": f"{dte:+.1f} h",
-            "lead_time": f"{lead_h:.1f} h" if lead_h is not None else "N/A",
+            "lead_time": f"{lead_h:+.1f} h" if lead_h is not None else "N/A",
         },
     }
 

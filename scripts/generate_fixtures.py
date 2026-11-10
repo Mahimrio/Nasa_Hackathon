@@ -34,7 +34,8 @@ def generate_swot_reaches(fixtures_dir=FIXTURES_DIR):
         {"reach_id": "22211000022", "name": "Kushiyara-Mid-Sherpur", "width_mean": 210.0, "z_bed": 3.90, "slope_mean": 4.1e-5, "length_m": 15000.0},
     ]
 
-    # 21-day orbit, ~2 passes per cycle over 2020-2026 (75 months = ~206 passes)
+    # SWOT 21-day science orbit repeat cycle with ~2 passes (ascending/descending crossover)
+    # per cycle: nominal reach observation cadence is ~11 days (freq="11D", 75 months = ~206 passes)
     dates = pd.date_range("2020-01-10", "2026-03-25", freq="11D", tz="UTC")
     n_passes = len(dates)
     n_reaches = len(reaches)

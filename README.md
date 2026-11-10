@@ -4,15 +4,16 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![NASA Space Apps 2026](https://img.shields.io/badge/NASA%20Space%20Apps-2026-orange.svg)](https://spaceappschallenge.org)
 
-## Architecture & Project Modules
+## Architecture & Submission Structure
 
-HydroSense-SWOT is structured into two distinct, decoupled components:
+HydroSense-SWOT is structured into two distinct, decoupled components designed to answer the NASA challenge and demonstrate its actionable agricultural value:
 
-* **Module 1 — Operational Haor Flood-Routing & Decision Support System `[DUAL-MODE: DEMO & VERIFIED REAL]`:**  
+* **Primary Submission (Challenge Answer): Module 2 — Haor Rainfall Trend Explorer `[VERIFIED REAL NASA OBSERVATIONS]`:**  
+  Directly answers the NASA Space Apps Challenge prompt (*“Be An Earth System Trend Detective!”*). Powered by 25 years (2001–2025, 1,525 daily granules) of authentic NASA GPM IMERG Final Run V07B daily extracts (`GPM_3IMERGDF`). It computes cell-first April–May $PRCPTOT_{AM}$ and $R50mm_{AM}$, Theil–Sen slope estimation with analytical 95% Sen-Kendall confidence intervals, and autocorrelation-adjusted Mann–Kendall inference (Hamed & Rao 1998) across 3 geographic zones with reviewable SHA-256 provenance.
+* **Secondary Demonstration (Agricultural Impact Application): Module 1 — Haor Flood-Routing & Harvest Decision Support `[DUAL-MODE: DEMO & RETROSPECTIVE HINDCAST]`:**  
+  A downstream demonstration showing *why* trend detection matters on the ground for Boro rice farmers in Bangladesh's flash-flood-prone Haor basin.
   - **Demo Mode (`--mode demo`):** Executes synthetic engineering scenarios (`SYNTHETIC_DEMO`) to verify software behavior, UI rendering, and baseline comparison interfaces without external data dependencies.
-  - **Real Data Mode (`--mode real`):** Ingests authentic NASA SWOT RiverSP Version D shapefiles (`SWOT_L2_HR_RiverSP_reach_D`), NASA GPM IMERG Early half-hourly precipitation (`3B-HHR-E`), and official Bangladesh Water Development Board (BWDB) Kanaighat (`SW266`) river stage observations. Evaluates an exploratory retrospective hindcast (`EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS`) across the historical May 28 – June 4, 2024 flash flood event under strict fail-closed cryptographic provenance (`data/real/PROVENANCE.json`).
-* **Module 2 — Haor Rainfall Trend Explorer `[VERIFIED REAL NASA OBSERVATIONS]`:**  
-  A fail-closed analysis module powered by 25 years (2001–2025, 1,525 daily granules) of authentic NASA GPM IMERG Final Run V07B daily extracts. It computes cell-first April–May PRCPTOT and R50mm, Theil–Sen slopes, and autocorrelation-adjusted Mann–Kendall inference across 3 study zones with reviewable SHA-256 provenance.
+  - **Real Data Mode (`--mode real`):** Ingests authentic NASA SWOT RiverSP Version D shapefiles (`SWOT_L2_HR_RiverSP_reach_D`), NASA GPM IMERG Early half-hourly precipitation (`3B-HHR-E`), and official Bangladesh Water Development Board (BWDB) Kanaighat (`SW266`) river stage observations. Evaluates an exploratory retrospective hindcast (`EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS`) across the historical May 28 – June 4, 2024 flash flood event with literature hydraulic parameters ($n=0.033$) under strict fail-closed cryptographic provenance (`data/real/PROVENANCE.json`).
 
 > **Challenge Alignment Status:** Alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* is **locked and verified** (see [`docs/DECISIONS.md`](docs/DECISIONS.md) and [`docs/evidence/challenge_criteria_map.md`](docs/evidence/challenge_criteria_map.md)). The rainfall-first MVP focuses on precipitation indicators ($PRCPTOT$ and $R50mm$) using cell-first aggregation, Theil-Sen slope, and Modified Mann-Kendall trend testing under autocorrelation.
 
@@ -44,7 +45,7 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
    python pipeline/run_pipeline.py --mode real
    python scripts/evaluate_real_hindcast.py
    ```
-4. **Run test suite (93 unit tests, 100% passing):**  
+4. **Run test suite (106 unit tests, 100% passing):**  
    ```bash
    python -m pytest tests/ -v
    ```

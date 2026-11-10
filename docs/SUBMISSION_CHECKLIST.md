@@ -37,6 +37,7 @@
 | [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Expanded-by-default [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) with a persistent accessible heading and collapse control. |
 | [x] | **Clean JSON Exports** | Static JSON bridge contains zero `NaN` or `-999999.0` fill values. | **PASS** | Verified across all 5 JSON files in `ui/public/data/`. |
 | [x] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **PASS** | Completed. Corrected comparison logic in `validation_report.py` and `metrics.py`. Evaluated true persistence and threshold baselines; lead time honestly verified and reported in `docs/evidence/evaluation_split_baseline_and_metrics.md`. |
+| [x] | **Model Ablation & Hydraulic Validity** | Muskingum-Cunge Courant condition verified (~1.0), non-negative coefficients C1, C2, C3, and 5-model ablation published. | **PASS** | Verified via `tests/test_routing_regime.py`, `scripts/sensitivity_ablation.py`, and `ui/public/data/ablation.json`. |
 | [x] | **Module 1 Real Data Integration** | Real SWOT RiverSP V-D, GPM 3B-HHR-E, and BWDB SW266 data evaluated under fail-closed provenance. | **PASS** | Feasibility verified in `docs/evidence/module1_feasibility_report.md`; retrospective hindcast evaluated on May 2024 flood event in `docs/evidence/real_hindcast_report.md` (MAE: 1.50m on relative rise, 0 interpolation, 4-tier status matrix enforced). |
 
 ---
@@ -68,7 +69,7 @@ npm run build
 npm run dev
 ```
 
-- [x] All 5 clean checkout steps executed and verified (93/93 pytest tests passing, provenance audit verified).
+- [x] All 5 clean checkout steps executed and verified (106/106 pytest tests passing, provenance audit verified).
 - [x] Production bundle builds with 0 errors (`npm run build`).
 - [x] Next.js dev server launches on `http://localhost:3000` with 0 console errors.
 - [x] Dual-axis hydrograph timeline scrubber is fully interactive.

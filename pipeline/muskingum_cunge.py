@@ -24,6 +24,8 @@ from typing import Dict, Any, Optional, Tuple
 import numpy as np
 import pandas as pd
 
+from pipeline.manning_calibration import resolve_n
+
 logger = logging.getLogger("muskingum_cunge")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
@@ -76,6 +78,46 @@ def compute_hydraulic_travel_time(
     return c_wave, k_total_sec, k_total_hours
 
 
+def compute_subreach_count(
+    total_length_m: float,
+    celerity_mps: float,
+    dt_sec: float,
+    x_weight: float = 0.25,
+    minimum: int = 4,
+) -> int:
+    """Choose N so the scheme stays inside the Muskingum validity region.
+
+    - Courant criterion (Cunge 1969; Ponce & Theurer 1982): c·dt/dx ≈ 1
+    - Coefficient non-negativity: dt >= 2·K_sub·X
+    """
+    n_courant = int(np.ceil(total_length_m / (celerity_mps * dt_sec)))
+    k_total = total_length_m / celerity_mps
+    n_validity = int(np.ceil(2.0 * k_total * x_weight / dt_sec)) + 1
+    return max(minimum, n_courant, n_validity)
+
+
+def validate_routing_regime(
+    k_sec: float,
+    x_weight: float,
+    dt_sec: float,
+    celerity_mps: float,
+    dx_m: float,
+) -> None:
+    """Raise if the Muskingum scheme is outside its physical validity region."""
+    cour = celerity_mps * dt_sec / dx_m
+    lo, hi = 2.0 * k_sec * x_weight, 2.0 * k_sec * (1.0 - x_weight)
+    if not (lo <= dt_sec <= hi):
+        raise ValueError(
+            f"Muskingum invalid: need {lo:.0f}s <= dt {dt_sec:.0f}s <= {hi:.0f}s "
+            f"(K={k_sec:.0f}s, X={x_weight}). Increase sub-reach count."
+        )
+    c1, c2, c3 = compute_routing_coefficients(k_sec, x_weight, dt_sec)
+    if min(c1, c2, c3) < -1e-9:
+        raise ValueError(f"Non-physical routing coefficient: C1={c1:.4f}, C2={c2:.4f}, C3={c3:.4f}")
+    if not (0.5 <= cour <= 1.5):
+        logger.warning("Courant number %.3f outside target band [0.5, 1.5]", cour)
+
+
 def route_catchment_flow(
     map_series: np.ndarray,
     time_index: pd.DatetimeIndex,
@@ -85,12 +127,12 @@ def route_catchment_flow(
     baseflow_m3s: float = 90.0,
     v_mean: float = 0.90,
     x_weight: float = 0.25,
-    n_reaches: int = 4,
+    n_reaches: Optional[int] = None,
     total_reach_length_m: float = 140000.0,
     wse_uncertainty_m: float = 0.18,
 ) -> pd.DataFrame:
     """
-    Routes 30-min IMERG MAP series through a 4-sub-reach Muskingum-Cunge cascade.
+    Routes 30-min IMERG MAP series through a dynamically sized Muskingum-Cunge cascade.
 
     Parameters:
         map_series: 1D array of IMERG precipitationCal (mm/hr).
@@ -101,7 +143,7 @@ def route_catchment_flow(
         baseflow_m3s: Baseflow discharge in Surma river prior to rainfall surge (m³/s).
         v_mean: Mean channel flow velocity at mid-stage (m/s).
         x_weight: Muskingum weighting factor X (default 0.25).
-        n_reaches: Number of routing sub-reaches for Courant stability (default 4).
+        n_reaches: Number of routing sub-reaches (default None derives N for Courant ~ 1.0).
         total_reach_length_m: Total distance from international border to Kanaighat (~140 km).
         wse_uncertainty_m: Baseline SWOT radar altimetry elevation uncertainty (+/-0.18 m).
 
@@ -120,7 +162,16 @@ def route_catchment_flow(
 
     # 2. Dynamic Wave Celerity & Travel Time (Category A2 / 3.2)
     c_wave, k_total_sec, k_total_hours = compute_hydraulic_travel_time(total_reach_length_m, v_mean)
+    
+    # Dynamically size sub-reaches to satisfy Courant condition & non-negativity (Finding F-4 / F-5)
+    if n_reaches is None:
+        n_reaches = compute_subreach_count(total_reach_length_m, c_wave, dt_sec, x_weight)
+    
+    dx_m = total_reach_length_m / float(n_reaches)
     k_sub_sec = k_total_sec / float(n_reaches)
+
+    # Validate physical regime
+    validate_routing_regime(k_sub_sec, x_weight, dt_sec, c_wave, dx_m)
 
     # 3. Multi-reach sub-step Muskingum-Cunge routing
     c1, c2, c3 = compute_routing_coefficients(k_sub_sec, x_weight, dt_sec)
@@ -137,7 +188,7 @@ def route_catchment_flow(
     routed_q = q_current
 
     # 4. Invert Manning Equation to Stage at Kanaighat Reach
-    n_cal = float(reach_params.get("n_calibrated", reach_params.get("n", 0.032)))
+    n_cal = resolve_n(reach_params)
     z_bed = float(reach_params.get("z_bed_m", reach_params.get("z_bed", 5.80)))
     width = float(reach_params.get("mean_width_m", reach_params.get("mean_width", 160.0)))
     slope2 = float(reach_params.get("mean_slope2", 5.0e-5))
@@ -163,6 +214,11 @@ def route_catchment_flow(
     df_out.attrs["wave_celerity_mps"] = float(round(c_wave, 2))
     df_out.attrs["muskingum_x"] = float(x_weight)
     df_out.attrs["calibrated_n"] = float(round(n_cal, 4))
+    df_out.attrs["subreach_count"] = int(n_reaches)
+    df_out.attrs["courant_number"] = float(round(c_wave * dt_sec / dx_m, 3))
+    df_out.attrs["valid_regime"] = "Rising limb, in-channel flow only"
+
+    return df_out
     df_out.attrs["valid_regime"] = "Rising limb, in-channel flow only"
 
     return df_out
