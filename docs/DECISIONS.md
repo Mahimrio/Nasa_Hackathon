@@ -4,7 +4,7 @@
 **LOCKED & APPROVED CHALLENGE:** *Be An Earth System Trend Detective!*  
 Official Challenge URL: https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/  
 Access Date: 2026-10-24.  
-Decision: Officially locked and approved by team consensus as primary challenge response. Dual-module structure: Module 2 (Haor Rainfall Trend Explorer) serves as the primary direct answer to the Trend Detective prompt (detecting, quantifying, locating, and assessing statistical significance of climate trends using 26 years of NASA GPM IMERG Final daily data), while Module 1 (Flood-Routing Engine) serves as the downstream localized decision-support vertical slice.
+Decision: Officially locked and approved by team consensus as primary challenge response. Dual-module structure: Module 2 (Haor Rainfall Trend Explorer) serves as the primary direct answer to the Trend Detective prompt (detecting, quantifying, locating, and assessing statistical significance of climate trends using 25 years of NASA GPM IMERG Final daily data, 2001–2025, 1,525 daily granules), while Module 1 (Flood-Routing Engine) serves as the downstream localized decision-support vertical slice.
 
 **Official Criteria-to-Feature & Evidence Mapping (Gate 0 Acceptance Map):**
 | Official Judging Criterion | Challenge Requirement | HydroSense Implemented Feature | Evidence Artifact | Demo Step |

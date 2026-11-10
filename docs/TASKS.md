@@ -104,4 +104,11 @@
 * **Role:** R3 Statistician / R6 Frontend / R9 Red Team.
 * **Result:** PASSED. Fixed `idx_low = m1 - 1` in `trend_explorer/analysis.py`; updated `tests/test_gilbert_ci.py` with hand-verified order statistics; purged hardcoded "22.0h" / "Validated across 2026" strings across all UI components and bilingual locales; made `ProvenanceNotice` context-aware across modules.
 
+### WO-028: Complete Forensic Locale Alignment, Route-Specific Notice & Documentation Reconciliation
+* **Goal:** Resolve remaining forensic review findings: metrics subtitle 2026 claims, Bangla 22–26h lead copy, advisory disclaimers, route-specific ProvenanceNotice, and DECISIONS.md 25-season count.
+* **Why it matters:** Guarantees zero contradictions between user-facing text and scientific evidence across both languages and all routes.
+* **Role:** R6 Frontend / R9 Red Team / R10 QA.
+* **Result:** PASSED. Replaced metrics subtitles and verified notices in `en.json` and `bn.json` with 2024 retrospective hindcast facts (25 raw discrete readings, MAE 1.50 m); replaced Bangla 22–26h claims with Tier 4 unestablished notices; updated advisory disclaimers; rewrote `ProvenanceNotice.js` with `usePathname()` displaying Tier 2 Verified Real on `/trends` and Tier 3 Hindcast on `/`; reconciled `DECISIONS.md` to 25 seasons (2001–2025, 1,525 daily granules); 106 tests and Next.js build pass cleanly.
+
+
 
