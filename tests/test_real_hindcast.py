@@ -52,11 +52,13 @@ def test_sparse_gauge_protocol_alignment():
 
     # Synthetic simulation for testing alignment
     times = pd.date_range("2024-05-26", "2024-06-04", freq="30min", tz="UTC")
-    df_sim = pd.DataFrame({
-        "timestamp": times,
-        "modelled_stage": 4.5 + np.sin(np.linspace(0, 3.14, len(times))) * 2.5,
-        "routed_q": np.linspace(30.0, 300.0, len(times)),
-    })
+    df_sim = pd.DataFrame(
+        {
+            "timestamp": times,
+            "modelled_stage": 4.5 + np.sin(np.linspace(0, 3.14, len(times))) * 2.5,
+            "routed_q": np.linspace(30.0, 300.0, len(times)),
+        }
+    )
 
     aligned = align_sparse_observations(df_sim, df_obs, tolerance_minutes=15)
     assert not aligned.empty
@@ -69,7 +71,9 @@ def test_sparse_gauge_protocol_alignment():
 def test_hindcast_report_and_figures_generated():
     """Verifies that retrospective hindcast report and figures are generated with required disclosures."""
     report_path = os.path.join(EVIDENCE_DIR, "real_hindcast_report.md")
-    fig_path = os.path.join(EVIDENCE_DIR, "figures", "real_hindcast_stage_comparison.png")
+    fig_path = os.path.join(
+        EVIDENCE_DIR, "figures", "real_hindcast_stage_comparison.png"
+    )
 
     assert os.path.exists(report_path), "Missing real_hindcast_report.md"
     assert os.path.exists(fig_path), "Missing real_hindcast_stage_comparison.png"
@@ -89,4 +93,7 @@ def test_hindcast_report_and_figures_generated():
     assert "Public Works Department (PWD)" in content
     assert "relative stage anomalies" in content or "relative stage-rise" in content
     assert "provisional literature assumptions" in content
-    assert "Continuous metrics (NSE, KGE) are prohibited" in content or "Continuous Metrics (NSE, KGE)" in content
+    assert (
+        "Continuous metrics (NSE, KGE) are prohibited" in content
+        or "Continuous Metrics (NSE, KGE)" in content
+    )
