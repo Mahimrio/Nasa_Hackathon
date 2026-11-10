@@ -224,8 +224,8 @@ export default function DashboardPage() {
               </div>
               <div className="pathway-desc">
                 {lang === "en"
-                  ? "View location-specific directives, 22.0h warning window, affected haor areas, and field checklists for farmers & DAE officers."
-                  : "এলাকা-ভিত্তিক সুপারিশ, ২২.০ ঘণ্টা সতর্কবার্তা সময়সীমা, প্লাবিত হাওর এবং কৃষক ও কৃষি কর্মকর্তাদের নির্দেশিকা দেখুন।"}
+                  ? "View location-specific directives, simulated stage risetime, affected haor areas, and field checklists for farmers & DAE officers."
+                  : "এলাকা-ভিত্তিক সুপারিশ, সিমুলেটেড পানি বৃদ্ধির সময়সীমা, প্লাবিত হাওর এবং কৃষক ও কৃষি কর্মকর্তাদের নির্দেশিকা দেখুন।"}
               </div>
             </div>
             <div className="pathway-arrow" aria-hidden="true">

@@ -545,10 +545,10 @@ export default function HydrographPanel({
 
         <div className="crossing-badge-lead">
           <span style={{ color: "var(--cyan-300)", fontWeight: 700 }}>
-            {lang === "en" ? "Actionable Warning Lead:" : "কার্যকর সতর্কতা লিড:"} {formatNumber("22.0")} {lang === "en" ? "Hours" : "ঘণ্টা"}
+            {lang === "en" ? "Warning Lead Time:" : "সতর্কতার লিড টাইম:"} {telemetry?.metrics?.formatted?.lead_time && telemetry.metrics.formatted.lead_time !== "null" ? formatNumber(telemetry.metrics.formatted.lead_time) : "N/A"}
           </span>
           <span style={{ fontSize: "13px", color: "var(--text-muted)" }}>
-            ({lang === "en" ? "Golden Harvest Window" : "বোরো ধান কর্তনের সুবর্ণ সময়"})
+            ({lang === "en" ? "Tier 4: Unestablished" : "টিয়ার ৪: প্রতিষ্ঠিত নয়"})
           </span>
         </div>
       </div>

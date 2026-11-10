@@ -1,7 +1,7 @@
 {
   "mode": "real",
   "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
-  "generated_utc": "2026-11-10T15:41:24.448944+00:00",
+  "generated_utc": "2026-11-10T17:02:44.383146+00:00",
   "generator": "scripts/export_json.py",
   "sources": [
     {

@@ -146,9 +146,9 @@
     "pbiasTitle": "Percent Bias (PBIAS)",
     "pbiasDesc": "Average volume tendency of modelled values. +1.8% is exceptionally low, indicating negligible systematic over/underestimation.",
     "timingTitle": "Peak Stage Timing Error",
-    "timingDesc": "Time discrepancy between modelled crest and observed gauge crest. -2.0h indicates hydrograph peaks 2 hours before gauge, guaranteeing early warning.",
-    "leadTimeTitle": "Actionable Warning Lead Time",
-    "leadTimeDesc": "Advance warning provided to Upazila Agriculture Officers before river stage crosses danger level (13.20m PWD).",
+    "timingDesc": "Time discrepancy between modelled crest and observed gauge crest. In the 2024 exploratory hindcast, simulated peak is May 28 19:00 UTC vs observed crest May 31 00:00–03:00 UTC (attributable to transboundary Barak macro-inflow lag).",
+    "leadTimeTitle": "Warning Lead Time (Status Tier 4)",
+    "leadTimeDesc": "Status Tier 4: NOT ESTABLISHED. An operational warning lead time requires a causal issue-time hindcast; retrospective hydrographs show simulated state classification only.",
     "baselineNotice": "Rainfall Baseline NSE: -0.15 · Routing Improvement: +0.89",
     "verifiedNotice": "Validated against 1,464 hourly observations"
   },
@@ -177,17 +177,17 @@
       {
         "id": "wave-routing",
         "title": "Rising Limb Channel Routing (Not 2D Inundation)",
-        "text": "Hydrologic routing models rising limb channel stage and danger arrival time at the haor rim (~22–30h lead time) — 2D backwater floodplain inundation extent is not modelled."
+        "text": "Hydrologic routing models rising limb channel stage and relative wave transit — 2D backwater floodplain inundation extent is not modelled. Operational warning lead time requires a causal issue-time hindcast (Status Tier 4: NOT ESTABLISHED)."
       },
       {
         "id": "repeat-period",
         "title": "21-Day Orbit — Offline Geometry Calibrator",
-        "text": "SWOT is not a real-time live streaming gauge. SWOT provides offline channel cross-section and roughness calibration; real-time lead time comes from GPM IMERG routing."
+        "text": "SWOT is not a real-time live streaming gauge. SWOT provides offline channel cross-section and roughness priors; real-time event simulation uses GPM IMERG routing."
       },
       {
         "id": "computed-perf",
         "title": "Computed Scientific Performance",
-        "text": "Validated across April 1 – May 31, 2026: Model achieves NSE = {nse} (vs {baseNse} rainfall baseline), KGE = {kge}, Peak Timing Error = {timing}, and Actionable Warning Lead Time = {lead}."
+        "text": "Evaluated across May 28 – June 4, 2024 Event: Relative stage-rise MAE = 1.50 m, Simulated Peak Rise = 2.75 m (vs 3.90 m observed). Note: Continuous NSE/KGE are omitted on sparse gauge readings (Trap T-H5); operational warning lead time is N/A."
       }
     ]
   },
@@ -238,12 +238,12 @@
     "subtitle": "Coupled satellite altimetry calibration with kinematic wave routing",
     "closeBtn": "Close Architecture Info",
     "stepsTitle": "7-Step End-to-End Pipeline Workflow",
-    "offlineTitle": "1. Offline Satellite Geometry Calibration (NASA SWOT L2 HR)",
-    "offlineText": "NASA SWOT KaRIn Ka-band radar altimeter measures water surface elevation (WSE), width (W), and reach-averaged slope (slope2) along 10 km SWORD reaches. Roughness (n) is calibrated offline using bounded optimization n ∈ [0.025, 0.100].",
+    "offlineTitle": "1. Satellite Geometry & Prior Parameterization (NASA SWOT L2 HR)",
+    "offlineText": "NASA SWOT KaRIn Ka-band radar altimeter measures water surface elevation (WSE), width (W), and reach-averaged slope (slope2) along 10 km SWORD reaches. Roughness is parameterized using literature prior n = 0.033 (fail-closed without observed discharge target).",
     "onlineTitle": "2. Online Near-Real-Time Precipitation Routing (NASA GPM IMERG)",
     "onlineText": "NASA GPM IMERG Early Run V07 half-hourly precipitation is ingested ~4 hours post-observation, area-weighted over HydroSHEDS catchments, and converted to runoff volume.",
-    "routingTitle": "3. Muskingum-Cunge Wave Routing & Inversion",
-    "routingText": "Kinematic wave routing routes flood pulses through a 4-sub-reach cascade with celerity c = (5/3) V_mean. Wave travel time K ≈ 26h provides advance early warning before downstream gauge breach.",
+    "routingTitle": "3. Muskingum-Cunge Wave Routing (N=52 Sub-Reaches)",
+    "routingText": "Muskingum-Cunge routing routes flood pulses through an N=52 sub-reach cascade satisfying the Courant condition (C ≈ 1.003). Channel travel time simulates wave progression down to the downstream reach.",
     "decisionTitle": "4. Automated Boro Rice Harvest Flag Generation",
     "decisionText": "Compares modelled rising limb water level against statutory BWDB danger levels (13.20m PWD at Kanaighat) to trigger GREEN (Normal), AMBER (Watch), or RED (Critical) bilingual advisories."
   },
@@ -268,11 +268,11 @@
     "whereSub": "Barak Inflow ➔ Amalshid Node ➔ Surma & Kushiyara depressions",
     "whenLabel": "WHEN CROSSING DANGER?",
     "whenThreshold": "Threshold: 13.20m PWD",
-    "whenVal": "Apr 13, 01:00 UTC (~22h Lead)",
-    "whenSub": "Actionable Golden Window: 22.0 Hours advance notice",
+    "whenVal": "May 28 19:00 UTC (Simulated Peak)",
+    "whenSub": "Simulated Peak Rise: +2.75 m (Operational lead time: NOT ESTABLISHED)",
     "whyLabel": "WHY PREDICTED?",
     "whyVal": "Meghalaya Rain + SWOT Hydraulics",
-    "whySub": "GPM IMERG plume routed via calibrated Manning n=0.035 channel",
+    "whySub": "GPM IMERG plume routed via literature Manning n=0.033 channel",
     "whatLabel": "WHAT TO DO NEXT?",
     "actionGreen": "CONTINUE MONITORING",
     "actionAmber": "PREPARE TO HARVEST",
@@ -281,7 +281,7 @@
     "actionAmberSub": "Mobilize harvesters & prepare drying yards within 24-48h",
     "actionRedSub": "Immediately harvest 80%+ mature Boro paddy before dyke overtopping",
     "trustLabel": "Data Trust & Transparency",
-    "trustSub": "NASA SWOT L2 HR + GPM IMERG V07 + BWDB SW108 · April 2026 Validation Replay"
+    "trustSub": "NASA SWOT RiverSP D + GPM IMERG V07 + BWDB SW266 · Retrospective Exploratory Hindcast"
   },
   "advisorySection": {
     "sectionBadge": "DECIDE WHAT TO DO",
@@ -294,13 +294,13 @@
     "whyTriggeredTitle": "Why This Recommendation Was Triggered",
     "trigger1Title": "1. Orographic Precipitation Spike",
     "trigger1Desc": "NASA GPM IMERG detected heavy convective rainfall over the Meghalaya headwaters, delivering rapid surface runoff into the upstream Barak corridor.",
-    "trigger2Title": "2. SWOT Calibrated Hydraulic Wave Routing",
-    "trigger2Desc": "Coupled Muskingum-Cunge kinematic wave routing through calibrated SWORD reaches predicts wave arrival at the haor rim with a 22-hour advance lead time.",
+    "trigger2Title": "2. Muskingum-Cunge Hydraulic Wave Routing",
+    "trigger2Desc": "Coupled Muskingum-Cunge wave routing through SWORD reaches routes hydrographs under physical Courant conditions (N=52 sub-reaches, C ≈ 1.003).",
     "trigger3Title": "3. Submersible Embankment Overtopping Risk",
     "trigger3Desc": "Water level is projected to approach or exceed the statutory BWDB 13.20m PWD danger threshold, putting low-lying polders at immediate risk of drowning.",
-    "warningWindowTitle": "Warning Window & Exposure",
-    "goldenWindowVal": "22.0 Hours",
-    "goldenWindowLabel": "Golden Warning Window Before Embankment Inundation",
+    "warningWindowTitle": "Modeled Wave Transit & Exposure",
+    "goldenWindowVal": "N/A (Exploratory)",
+    "goldenWindowLabel": "Operational Warning Lead Time: Tier 4 (Not Established)",
     "affectedAreasTitle": "Affected Haor Depressions & Upazilas:",
     "affectedArea1": "Sunamganj Sadar",
     "affectedArea2": "Tahirpur (Tanguar Haor)",

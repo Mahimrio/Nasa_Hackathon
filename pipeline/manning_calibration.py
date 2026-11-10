@@ -441,12 +441,12 @@ def calibrate_all_reaches(
         n_cal = res.get("n_calibrated")
         z_bed = res.get("z_bed_m")
         rmse = res.get("rmse_m3s")
+        n_str = f"{n_cal:.4f}" if n_cal is not None else "None"
+        z_str = f"{z_bed:.2f}" if z_bed is not None else "None"
+        r_str = f"{rmse:.1f}" if rmse is not None else "None"
         logger.info(
-            f"Reach {r_str}: "
-            f"n_calibrated={n_cal:.4f}" if n_cal is not None else f"Reach {r_str}: n_calibrated=None, "
-            f"z_bed={z_bed}m, " if z_bed is not None else f"z_bed=None, "
-            f"valid_passes={res.get('n_valid_passes')}, "
-            f"RMSE={rmse} m³/s" if rmse is not None else "RMSE=None m³/s, "
+            f"Reach {r_str}: n_calibrated={n_str}, z_bed={z_str}m, "
+            f"valid_passes={res.get('n_valid_passes')}, RMSE={r_str} m³/s, "
             f"bound={res.get('n_at_bound')}"
         )
 

@@ -92,3 +92,16 @@
 * **Role:** R6 Frontend / R7 UX.
 * **Result:** PASSED. Created `ui/app/trends/page.js` with fail-closed data fetching, responsive glass-panel layout, bilingual English/Bangla text, and explicit operational limitations. Compiles cleanly in Next.js production build.
 
+### WO-026: Remediation of Hydrodynamic Routing, Identifiability, and Multi-Model Ablation
+* **Goal:** Implement audit remediation plan closing findings F-1 to F-19.
+* **Why it matters:** Eliminates numerical wave diffusion, enforces fail-closed roughness calibration, and provides comparative ablation benchmarks.
+* **Role:** R3 Hydrologist / R5 Backend / R10 QA.
+* **Result:** PASSED. Derived dynamic $N=52$ sub-reaches satisfying Courant condition $C \approx 1.003$ and $C_1, C_2, C_3 \ge 0$. Replaced 750 m³/s calibration with fail-closed `NOT_CALIBRATED` literature prior ($n=0.033$). Added multi-model ablation study. 106 tests passing.
+
+### WO-027: Purge Unearned UI Warning Claims & Fix Gilbert CI Rank Indexing
+* **Goal:** Eliminate discrepancies between front-facing UI copy and backend metrics; fix rank indexing in Sen's slope CI.
+* **Why it matters:** Protects user trust, ensures decision safety, and eliminates mathematical defects in confidence interval derivation.
+* **Role:** R3 Statistician / R6 Frontend / R9 Red Team.
+* **Result:** PASSED. Fixed `idx_low = m1 - 1` in `trend_explorer/analysis.py`; updated `tests/test_gilbert_ci.py` with hand-verified order statistics; purged hardcoded "22.0h" / "Validated across 2026" strings across all UI components and bilingual locales; made `ProvenanceNotice` context-aware across modules.
+
+

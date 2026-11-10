@@ -94,8 +94,8 @@ export default function AdvisoryBulletinModal({
             }}
           >
             {lang === "en"
-              ? "HYDROSENSE SYNTHETIC DEMONSTRATION — NOT AN OFFICIAL BULLETIN"
-              : "গণপ্রজাতন্ত্রী বাংলাদেশ সরকার · কৃষি সম্প্রসারণ অধিদপ্তর ও পানি উন্নয়ন বোর্ড"}
+              ? "HYDROSENSE DEMONSTRATION SCENARIO — NOT AN OFFICIAL BULLETIN"
+              : "হাইড্রোসেন্স প্রদর্শনী দৃশ্যকল্প — এটি কোনো অফিশিয়াল সরকারি বুলেটিন নয়"}
           </div>
           <h2
             id="bulletin-title"
@@ -234,10 +234,10 @@ export default function AdvisoryBulletinModal({
           </div>
           <div className="param-row">
             <span className="param-label">
-              {lang === "en" ? "Actionable Lead Time" : "আগাম সতর্কবার্তা সময়"}
+              {lang === "en" ? "Operational Lead Time" : "সতর্কবার্তা সময়"}
             </span>
             <span className="param-value" style={{ color: "var(--cyan-300)" }}>
-              {formatNumber("22.0")} {lang === "en" ? "Hours" : "ঘণ্টা"}
+              {lang === "en" ? "N/A (Tier 4: Not Established)" : "প্রযোজ্য নয় (টিয়ার ৪)"}
             </span>
           </div>
         </div>

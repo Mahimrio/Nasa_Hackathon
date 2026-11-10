@@ -111,6 +111,7 @@ A high-contrast hydrological mission dashboard combining a CVD-safe cividis reac
 | 2026-11-10 | Preserve lead-time signs and return None on uncrossed danger levels (T-4.2, F-12) | Clamping lead times to >= 0 and returning 0.0 for unissued warnings | Distinguishes absence of warning from zero-lead warning; late warnings honestly report negative lead time (e.g. -36.5 h). | Low | R3/R10 |
 | 2026-11-10 | Disclose lag gate heuristic and statistical power with N=25 (T-10, F-15) | Presenting ad-hoc lag criteria as formal theory | Acknowledged |ρ_k| > 1.96/√n as an empirical heuristic; disclosed minimum detectable Sen slope at 80% power; noted that spatial field significance was not formally evaluated. | Low | R3/R9 |
 | 2026-11-10 | Publish multi-model sensitivity ablation study (T-5) | Presenting physical routing without baseline benchmarks | Created scripts/sensitivity_ablation.py and ui/public/data/ablation.json comparing Physical Baseline, Bed Datum ±25cm, Linear Reservoir, and Rainfall-Only models. | Low | R3/R6 |
+| 2026-11-10 | Purge unearned UI warning claims and fix Gilbert (1987) rank indexing (WO-027) | Retaining hardcoded 22h strings and 1-indexed m1 off-by-one | Replaced hardcoded '22.0h' and 'Validated' claims across en.json, bn.json, HarvestAdvisorySection, HydrographPanel, and InteractiveMapLeaflet with dynamic Tier 4 disclosures; fixed idx_low = m1 - 1 in analysis.py; updated ProvenanceNotice to be context-aware per module. | Low | R3/R6/R9 |
 
 
 ---

@@ -7,11 +7,11 @@ export default function OperationalLimitsPanel({ metrics }) {
   const { lang, t, formatNumber } = useLocale();
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const nseVal = formatNumber(metrics?.formatted?.nse ?? "0.74");
-  const baseNseVal = formatNumber(metrics?.baseline?.formatted?.nse ?? "-0.15");
-  const kgeVal = formatNumber(metrics?.formatted?.kge ?? "0.68");
-  const timingVal = formatNumber(metrics?.formatted?.timing_error ?? "-2.0 h");
-  const leadVal = formatNumber(metrics?.formatted?.lead_time ?? "22.0 h");
+  const nseVal = metrics?.formatted?.nse != null ? formatNumber(metrics.formatted.nse) : "N/A";
+  const baseNseVal = metrics?.baseline?.formatted?.nse != null ? formatNumber(metrics.baseline.formatted.nse) : "N/A";
+  const kgeVal = metrics?.formatted?.kge != null ? formatNumber(metrics.formatted.kge) : "N/A";
+  const timingVal = metrics?.formatted?.timing_error != null ? formatNumber(metrics.formatted.timing_error) : "N/A";
+  const leadVal = metrics?.formatted?.lead_time != null && metrics.formatted.lead_time !== "null" ? formatNumber(metrics.formatted.lead_time) : "N/A";
 
   const rawItems = t("limits.items");
   const limits = Array.isArray(rawItems)
@@ -21,8 +21,8 @@ export default function OperationalLimitsPanel({ metrics }) {
             ...l,
             title:
               lang === "bn"
-                ? `গণনাকৃত বৈজ্ঞানিক কার্যকারিতা (NSE ${nseVal} · লিড ${leadVal})`
-                : `Computed Scientific Performance (NSE ${nseVal} · KGE ${kgeVal} · Lead ${leadVal})`,
+                ? `গণনাকৃত বৈজ্ঞানিক কার্যকারিতা (টিয়ার ৩ রেট্রোস্পেক্টিভ হিন্ডকাস্ট)`
+                : `Computed Scientific Performance (Tier 3 Retrospective Hindcast)`,
             text: (l.text || "")
               .replace("{nse}", nseVal)
               .replace("{baseNse}", baseNseVal)

@@ -153,9 +153,9 @@ export default function HarvestAdvisorySection({
             </span>
           </div>
           <div className="advisory-stat-box">
-            <span className="stat-label">{lang === "en" ? "Lead Window" : "সতর্কতা সময়"}</span>
-            <span className="stat-val" style={{ color: "var(--amber-caution)" }}>
-              {formatNumber("22.0")} h
+            <span className="stat-label">{lang === "en" ? "Operational Skill" : "অপারেশনাল স্কিল"}</span>
+            <span className="stat-val" style={{ color: "var(--amber-caution)", fontSize: "13px" }}>
+              {lang === "en" ? "Tier 4: N/A" : "টিয়ার ৪: N/A"}
             </span>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default function HarvestAdvisorySection({
                 <strong>{t("advisorySection.trigger2Title")}</strong>
                 <p>{t("advisorySection.trigger2Desc")}</p>
                 <div className="trigger-metric-tag">
-                  {lang === "en" ? "Calibrated Roughness:" : "ক্যালিব্রেটকৃত রুক্ষতা:"} <strong>Manning n = {formatNumber("0.035")}</strong> · {lang === "en" ? "Lead:" : "লিড:"} <strong>~{formatNumber("22.0")} h</strong>
+                  {lang === "en" ? "Literature Prior:" : "লিটারেচার রেফারেন্স:"} <strong>Manning n = {formatNumber("0.033")}</strong> · {lang === "en" ? "Routing:" : "রাউটিং:"} <strong>N = {formatNumber("52")}</strong>
                 </div>
               </div>
             </div>
@@ -222,7 +222,7 @@ export default function HarvestAdvisorySection({
 
           {/* Golden Window Callout */}
           <div className="golden-window-banner">
-            <div className="golden-window-hero-val">{formatNumber("22.0")} {lang === "en" ? "HOURS" : "ঘণ্টা"}</div>
+            <div className="golden-window-hero-val" style={{ fontSize: "18px" }}>{lang === "en" ? "EXPLORATORY HINDCAST" : "রেট্রোস্পেক্টিভ হিন্ডকাস্ট"}</div>
             <div className="golden-window-hero-label">{t("advisorySection.goldenWindowLabel")}</div>
           </div>
 

@@ -284,11 +284,11 @@ export default function ReachInspectorModal({ reach, calibrationData, riskFn, on
             <div style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.5" }}>
               {lang === "en" ? (
                 <>
-                  Scenario threshold: <strong>{reach.danger_level_m} m PWD</strong>. This synthetic demonstration does not assimilate BWDB observations or provide real-time validation.
+                  Scenario threshold: <strong>{reach.danger_level_m} m PWD</strong>. Evaluates relative stage rise (MAE = 1.50 m); operational forecast lead times are not established.
                 </>
               ) : (
                 <>
-                  বিপৎসীমা: <strong>{formatNumber(reach.danger_level_m)} মি PWD (১২.৭৫ মি MSL)</strong>। বাংলাদেশ পানি উন্নয়ন বোর্ডের (BWDB স্টেশন SW২৬৬) প্রত্যক্ষ গেজ পর্যবেক্ষণ সরাসরি এখানে যাচাইকরণের জন্য সমন্বিত।
+                  বিপৎসীমা: <strong>{formatNumber(reach.danger_level_m)} মি PWD</strong>। আপেক্ষিক পানি বৃদ্ধি মূল্যায়িত (MAE = ১.৫০ মি); অপারেশনাল সতর্কতার লিড টাইম প্রতিষ্ঠিত নয়।
                 </>
               )}
             </div>

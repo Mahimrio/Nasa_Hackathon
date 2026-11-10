@@ -753,8 +753,8 @@ export default function InteractiveMapLeaflet({
                         <strong className="stat-val">{lang === "en" ? "Surma (SW108 / SW266)" : "সুরমা (SW১০৮ / SW২৬৬)"}</strong>
                       </div>
                       <div className="layer-stat-item">
-                        <span className="stat-name">{lang === "en" ? "Transit Lag:" : "ট্রানজিট সময়:"}</span>
-                        <strong className="stat-val">~22.5 {lang === "en" ? "hours" : "ঘণ্টা"}</strong>
+                        <span className="stat-name">{lang === "en" ? "Routing Model:" : "রাউটিং মডেল:"}</span>
+                        <strong className="stat-val">{lang === "en" ? "Muskingum-Cunge (N=52)" : "মাস্কিংগাম-কাঞ্জ (N=৫২)"}</strong>
                       </div>
                     </div>
                   </div>
@@ -1108,8 +1108,8 @@ export default function InteractiveMapLeaflet({
                     <div style={{ fontSize: "12.5px", color: "var(--text-secondary)", lineHeight: "1.45" }}>
                       {isMeghalaya
                         ? (lang === "en"
-                            ? "Role: Receives convective pre-monsoon precipitation observed by NASA GPM IMERG Early Run; tributary lag to Kanaighat provides 22.5h advance flood warning."
-                            : "ভূমিকা: নাসা আইমার্জ আর্লি রান উপগ্রহ বৃষ্টিপাত এই অববাহিকায় পতিত হয়ে সুরমা নদী দিয়ে কানাইঘাটে পৌঁছাতে ২২.৫ ঘণ্টা সময় নেয়।")
+                            ? "Role: Receives convective pre-monsoon precipitation observed by NASA GPM IMERG Early Run; quickflow routes to Kanaighat gateway (Status Tier 4: operational lead time unestablished)."
+                            : "ভূমিকা: নাসা আইমার্জ আর্লি রান উপগ্রহ বৃষ্টিপাত এই অববাহিকায় পতিত হয়ে সুরমা নদী দিয়ে কানাইঘাট গেটওয়েতে প্রবাহিত হয় (টিয়ার ৪: অপারেশনাল লিড টাইম অপ্রমাণিত)।")
                         : (lang === "en"
                             ? "Barak Headwaters catchment discharging toward Amalshid border."
                             : "বরাক হেডওয়াটার্স ক্যাচমেন্ট যা আমলশীদ সীমান্তে পতিত হয়।")}
@@ -1486,8 +1486,8 @@ export default function InteractiveMapLeaflet({
                     >
                       {isSurma
                         ? (lang === "en"
-                            ? "Active routing channel: Directly connects upstream rainfall to SW108 validation gauge (22.5h lead time)."
-                            : "সক্রিয় হাইড্রোলিক রুট: মেঘালয়ের বৃষ্টিপাত সরাসরি SW১০৮ গেজে পৌঁছে দেয় (২২.৫ ঘণ্টা লিড টাইম)।")
+                            ? "Active routing channel: Directly connects upstream rainfall to Kanaighat gauge SW266 (physical Muskingum-Cunge N=52 cascade)."
+                            : "সক্রিয় হাইড্রোলিক রুট: মেঘালয়ের বৃষ্টিপাত সরাসরি কানাইঘাট গেজ SW২৬৬ এ রাউট করে (পদার্থবিজ্ঞানভিত্তিক মাস্কিংগাম-কাঞ্জ N=৫২ ক্যাসকেড)।")
                         : (lang === "en"
                             ? "Barak south distributary: Parameterized in SWORD v16 for regional hydraulic context (non-operational for Surma forecasts)."
                             : "বরাক দক্ষিণ শাখা: আঞ্চলিক ড্রেনেজ কাঠামোর অংশ (সুরমা পূর্বাভাসে সরাসরি মডেলড নয়)।")}
