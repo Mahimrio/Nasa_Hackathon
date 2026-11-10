@@ -8,8 +8,9 @@
 
 HydroSense-SWOT is structured into two distinct, decoupled components:
 
-* **Module 1 — Flood-routing demonstration `[SYNTHETIC ENGINEERING TEST]`:**  
-  The checked-in dashboard uses generated rainfall, stage, and SWOT-shaped scenarios. It demonstrates software behavior only; it is not an operational warning system, real data replay, or validated forecast.
+* **Module 1 — Operational Haor Flood-Routing & Decision Support System `[DUAL-MODE: DEMO & VERIFIED REAL]`:**  
+  - **Demo Mode (`--mode demo`):** Executes synthetic engineering scenarios (`SYNTHETIC_DEMO`) to verify software behavior, UI rendering, and baseline comparison interfaces without external data dependencies.
+  - **Real Data Mode (`--mode real`):** Ingests authentic NASA SWOT RiverSP Version D shapefiles (`SWOT_L2_HR_RiverSP_reach_D`), NASA GPM IMERG Early half-hourly precipitation (`3B-HHR-E`), and official Bangladesh Water Development Board (BWDB) Kanaighat (`SW266`) river stage observations. Evaluates an exploratory retrospective hindcast (`EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS`) across the historical May 28 – June 4, 2024 flash flood event under strict fail-closed cryptographic provenance (`data/real/PROVENANCE.json`).
 * **Module 2 — Haor Rainfall Trend Explorer `[VERIFIED REAL NASA OBSERVATIONS]`:**  
   A fail-closed analysis module powered by 25 years (2001–2025, 1,525 daily granules) of authentic NASA GPM IMERG Final Run V07B daily extracts. It computes cell-first April–May PRCPTOT and R50mm, Theil–Sen slopes, and autocorrelation-adjusted Mann–Kendall inference across 3 study zones with reviewable SHA-256 provenance.
 
@@ -35,21 +36,24 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
 3. **Execute scientific pipeline & export UI data:**  
    ```bash
    # Demo mode runs synthetic benchmark with explicit SYNTHETIC_DEMO labels:
-   python3 pipeline/run_pipeline.py --mode demo
-   python3 scripts/export_json.py
-   ./scripts/audit_provenance.py
-   # Note: Real-data mode (--mode real) fails closed unless verified NASA/BWDB inputs exist in data/real/
+   python pipeline/run_pipeline.py --mode demo
+   python scripts/export_json.py
+   python scripts/audit_provenance.py
+
+   # Real-data mode runs verified NASA SWOT & GPM IMERG Early inputs with fail-closed provenance:
+   python pipeline/run_pipeline.py --mode real
+   python scripts/evaluate_real_hindcast.py
    ```
-4. **Run test suite (89 unit tests):**  
+4. **Run test suite (93 unit tests, 100% passing):**  
    ```bash
-   python3 -m pytest tests/ -v
+   python -m pytest tests/ -v
    ```
 5. **Run Module 2 Trend Explorer analysis (fail-closed, requires verified NASA data):**  
    ```bash
    # Ingest verified NASA GPM IMERG Final daily data via OPeNDAP:
-   python3 trend_explorer/ingest_imerg.py
+   python trend_explorer/ingest_imerg.py
    # Run multi-zone trend analysis (Theil-Sen, Hamed-Rao MMK, Holm-Bonferroni):
-   python3 scripts/run_trend_analysis.py --input data/trends/imerg_sylhet_2001_2025.nc
+   python scripts/run_trend_analysis.py --input data/trends/imerg_sylhet_2001_2025.nc
    ```
 6. **Launch Next.js interactive dashboard:**  
    ```bash
@@ -60,20 +64,29 @@ The dashboard reflows for tablet and phone screens. Journey navigation stays vis
 
 ## Data Sources
 
-### Module 1: Synthetic engineering fixtures
-- The bundled SWOT-, GPM-, and gauge-shaped files are all `SYNTHETIC`; see `data/fixtures/PROVENANCE.json`.
-- Candidate real sources are documented, but no bundled artifact represents a NASA, BWDB, or FFWC retrieval.
-- **SWORD v16 & HydroSHEDS v1:** River network topology, reach boundaries, and catchment area delineation (`hydrosheds.org`).
-- **OpenStreetMap & OpenFreeMap:** Authoritative high-density river centerline geometry (OSM relations `5904030` Surma, `5904029` Kushiyara) rendered on the colorblind-accessible OpenFreeMap Positron basemap.
+### Module 1: Dual-Mode Hydrologic Datasets
+- **Real Data Mode (`data/real/`):**
+  - **NASA SWOT RiverSP Version D (`SWOT_L2_HR_RiverSP_reach_D`):** High-rate KaRIn interferometric radar altimetry reach shapefiles for 19 Surma River reaches (`45220400501` to `45220400591`). WSE referenced to WGS84 ellipsoid with geoid undulation (`geoid_hght` $\approx -53.99\text{ m}$) and tidal corrections.
+  - **NASA GPM IMERG Early Run V07B (`GPM_3IMERGHHE`, prefix `3B-HHR-E`):** 431 half-hourly slices retrieved via GES DISC OPeNDAP for the May 26 – June 3, 2024 event window.
+  - **BWDB / FFWC Kanaighat Station `SW266`:** 40 discrete ground observations from official bulletins during the May–June 2024 flash flood event (Danger Level: $13.20\text{ m PWD} = 12.75\text{ m MSL}$).
+  - **SWORD v16 & HydroBASINS Level 08:** River reach topology ($123.0\text{ km}$ total length), target outlet reach `45220400591`, local quickflow catchment area ($425\text{ km}^2$), and transboundary Barak basin ($26,200\text{ km}^2$).
+  - **Cryptographic Provenance:** Validated fail-closed via `data/real/PROVENANCE.json` with official PO.DAAC DOI, CMR Concept ID, and FFWC citations.
+- **Demo Mode (`data/fixtures/`):**
+  - Bundled synthetic engineering fixtures (`SYNTHETIC_DEMO`) preserved for hermetic unit testing and offline demonstrations without internet connectivity.
 
 ### Module 2: Haor Rainfall Trend Explorer `[VERIFIED REAL NASA DATA]`
 - **NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF`):** Research-grade daily global precipitation (0.1° grid, ~3.5-month latency), retrospectively reprocessed and gauge-adjusted via the Global Precipitation Climatology Centre (GPCC) for April–May across **2001 to 2025** (1,525 daily granules retrieved and SHA-256 verified from NASA Earthdata Cloud).
 
 ## Scientific Performance & Audit Status
 
-### Module 1 Hydrologic Routing `[SYNTHETIC ENGINEERING TEST]`
-Metrics produced from the bundled scenarios are engineering diagnostics only.
-They are not independent observations, predictive skill, or warning lead-time evidence.
+### Formal Status Tier Classification
+
+| Status Tier | Scope & State | Verification Evidence |
+|---|---|---|
+| **Tier 1: Implementation** | **COMPLETE** | Software components, mode flags, and fail-closed security firewalls fully implemented and verified. |
+| **Tier 2: Real-Data Acquisition** | **COMPLETE** | Authentic NASA SWOT Version D, GES DISC IMERG Early `3B-HHR-E`, and BWDB SW266 data ingested and cryptographically registered in `data/real/PROVENANCE.json`. |
+| **Tier 3: Retrospective Hindcast** | **VERIFIED (EXPLORATORY)** | Retrospective relative stage-rise evaluated against raw BWDB observations (MAE: $1.50\text{ m}$, Peak Difference: $-1.15\text{ m}$, timing window: May 31 00:00–03:00 UTC). Detailed in [`docs/evidence/real_hindcast_report.md`](docs/evidence/real_hindcast_report.md). |
+| **Tier 4: Operational Forecast Skill** | **NOT ESTABLISHED** | The model has not undergone a causal issue-time hindcast; operational warning lead times have **not** been established and must not be claimed. |
 
 > **Scientific Audit Notice `[AUDITED & VERIFIED]`:**  
 > The baseline comparison subroutine was audited and re-benchmarked: the prior `df_sim` self-comparison in `pipeline/validation_report.py` was resolved, true persistence and threshold baselines are evaluated against the benchmark event, and warning lead time is reported honestly as N/A in the absence of an operational issue-time product. Detailed findings are documented in [`docs/evidence/evaluation_split_baseline_and_metrics.md`](docs/evidence/evaluation_split_baseline_and_metrics.md) and [`docs/evidence/leakage_prevention_and_lead_time_trace.md`](docs/evidence/leakage_prevention_and_lead_time_trace.md).

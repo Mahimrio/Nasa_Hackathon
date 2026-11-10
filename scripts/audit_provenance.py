@@ -153,10 +153,21 @@ def main() -> int:
         if not public_metrics_path.is_file() and args.root != ROOT:
             public_metrics_path = ROOT / "ui/public/data/metrics_summary.json"
         public_metrics = json.loads(public_metrics_path.read_text(encoding="utf-8"))
-        if public_metrics.get("provenance") != "SYNTHETIC":
-            raise ProvenanceError("Public metric export is not explicitly SYNTHETIC")
-        if public_metrics.get("validation_category") != "synthetic_engineering_test":
-            raise ProvenanceError("Public metrics imply unsupported real-world validation")
+        prov = public_metrics.get("provenance")
+        cat = public_metrics.get("validation_category")
+        if prov == "SYNTHETIC":
+            if cat != "synthetic_engineering_test":
+                raise ProvenanceError("Public metrics imply unsupported real-world validation")
+        elif prov == "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS":
+            if cat != "retrospective_exploratory_hindcast":
+                raise ProvenanceError(
+                    "Real-mode public metrics must have validation_category='retrospective_exploratory_hindcast'"
+                )
+        else:
+            raise ProvenanceError(
+                f"Public metric export has invalid provenance '{prov}'. "
+                "Must be 'SYNTHETIC' or 'EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS'."
+            )
 
         # Module 2 Trends Audit
         mod2_count = audit_module2_trends(args.root)

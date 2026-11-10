@@ -49,8 +49,9 @@ This file serves as the concise operating contract for any AI assistant working 
 - **WO-014 (Agrarian UI/UX Redesign & 100% Bilingual Parity):** **DONE** (Complete migration to high-contrast agricultural palette #F5F8FA/#FFFFFF/#173B57, first-page 5-second triage, 252 localized keys with authentic agricultural Bangla, zero contrast bugs).
 - **WO-015 (Documentation Synchronization & Dual-Module Architecture):** **DONE** (Re-architectured project into Module 1 Operational Warning and Module 2 Historical Rainfall Trend Explorer; established 4 status tiers; annotated baseline comparison discrepancies as under audit).
 - **WO-019 (Module 2 Build Prompts Playbook Specification):** **DONE** (Finalized 8-prompt master specification P-T1 to P-T8 in `docs/MODULE_2_BUILD_PROMPTS.md` and `MODULE_2_BUILD_PROMPTS.md`).
-- **Test Suite Status:** **40/40** pytest unit tests pass cleanly in ~7.3s (`python -m pytest tests/ -q`).
-- **Current Active Task:** **WO-010** (Release QA & submission compliance audit).
+- **WO-025 (Module 1 Real-Data Ingestion & Retrospective Hindcast):** **DONE** (Prompts P0–P7 completed; authentic NASA SWOT RiverSP Version D shapefiles, GPM IMERG Early 3B-HHR-E, and BWDB SW266 gauge data ingested under fail-closed provenance; evaluated May 2024 flood event with sparse gauge protocol and sensitivity analysis).
+- **Test Suite Status:** **93/93** pytest unit tests pass cleanly in ~56s (`python -m pytest tests/ -q`).
+- **Current Active Task:** **COMPLETE** (Submission package finalized; dual-module pipeline verified).
 - **Pending Human Verification:**
   - `[OPEN]` Official NASA Space Apps challenge title publication (Oct 28).
   - `[OPEN]` Local Lead qualification pre-screening confirmation & pre-existing code inquiry.

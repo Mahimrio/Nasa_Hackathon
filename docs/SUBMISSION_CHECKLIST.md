@@ -16,7 +16,7 @@
 | [x] | **No Minors in Video** | No individuals under 18 years of age may appear in any submission video without explicit legal waiver. | **PASS** | Confirmed: All team members appearing in videos are adult university students (AUST). |
 | [x] | **Export Control (ITAR/EAR)** | No export-controlled technical data, defense articles, or restricted satellite telemetry. | **PASS** | Uses exclusively public, open-access NASA Earthdata products (PO.DAAC & GES DISC). |
 | [x] | **No Commercial Promotion** | Submissions must be non-commercial educational/scientific responses to the challenge. | **PASS** | Pure open-source humanitarian early-warning tool for Haor basin farmers. |
-| [x] | **No PII / Credential Leakage** | No personal passwords, tokens, API keys, or private identity data committed to Git. | **PASS** | `.env` is ignored by `.gitignore`; `.env.example` contains only placeholder keys; `data/raw/` is ignored. |
+| [x] | **No PII / Credential Leakage** | No personal passwords, tokens, API keys, or private identity data committed to Git. | **PASS** | `.env` and `.dodsrc` are strictly ignored by `.gitignore` and never committed; `.env.example` contains only placeholder keys; `data/raw/` is ignored. |
 | [x] | **Open Source License** | Project must include a recognized open-source license. | **PASS** | MIT License committed in root [LICENSE](../LICENSE). |
 | [x] | **Third-Party Attribution** | All datasets, papers, models, and open-source libraries must be cited with licenses. | **PASS** | Documented completely in [docs/SOURCES.md](SOURCES.md) (Datasets D1–D5, Papers P1–P6, Code C1–C9). |
 | [x] | **Transparent AI Disclosure** | Full disclosure of all generative AI tools used in code, design, or writing. | **PASS** | Recorded systematically in [docs/AI_USE_LOG.md](AI_USE_LOG.md). |
@@ -37,6 +37,7 @@
 | [x] | **Limitations Acknowledged** | Prominently display physical constraints (revisit latency, in-channel regime, orographic bias). | **PASS** | Expanded-by-default [Operational Limits Panel](../ui/app/components/OperationalLimitsPanel.js) with a persistent accessible heading and collapse control. |
 | [x] | **Clean JSON Exports** | Static JSON bridge contains zero `NaN` or `-999999.0` fill values. | **PASS** | Verified across all 5 JSON files in `ui/public/data/`. |
 | [x] | **Baseline Comparison Integrity** | Baseline benchmarking logic must evaluate true baseline series and physical travel time. | **PASS** | Completed. Corrected comparison logic in `validation_report.py` and `metrics.py`. Evaluated true persistence and threshold baselines; lead time honestly verified and reported in `docs/evidence/evaluation_split_baseline_and_metrics.md`. |
+| [x] | **Module 1 Real Data Integration** | Real SWOT RiverSP V-D, GPM 3B-HHR-E, and BWDB SW266 data evaluated under fail-closed provenance. | **PASS** | Feasibility verified in `docs/evidence/module1_feasibility_report.md`; retrospective hindcast evaluated on May 2024 flood event in `docs/evidence/real_hindcast_report.md` (MAE: 1.50m on relative rise, 0 interpolation, 4-tier status matrix enforced). |
 
 ---
 
@@ -67,7 +68,7 @@ npm run build
 npm run dev
 ```
 
-- [x] All 5 clean checkout steps executed and verified (71/71 pytest tests passing, provenance audit verified).
+- [x] All 5 clean checkout steps executed and verified (93/93 pytest tests passing, provenance audit verified).
 - [x] Production bundle builds with 0 errors (`npm run build`).
 - [x] Next.js dev server launches on `http://localhost:3000` with 0 console errors.
 - [x] Dual-axis hydrograph timeline scrubber is fully interactive.

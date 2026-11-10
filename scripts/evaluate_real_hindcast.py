@@ -484,6 +484,83 @@ Because local channel bathymetry and rating curves are unavailable, all channel 
     return report_path
 
 
+def export_metrics_json(
+    metrics: Dict[str, Any],
+    sens_df: pd.DataFrame,
+    aligned_df: pd.DataFrame,
+    prov: Dict[str, Any],
+    output_path: str,
+    target_reach_id: str | None = None,
+) -> str:
+    """
+    Emits a machine-readable, provenance-labelled metrics artefact consumed by
+    `scripts/export_json.py --mode real`. This is the missing real-to-UI contract:
+    the Markdown report is for humans, this JSON is for the dashboard.
+
+    Deliberately carries `nse: None` and `kge: None`: continuous skill scores are
+    not defensible on 40 daily gauge readings (sparse-gauge protocol, Trap T-H5).
+    """
+    manifest = prov.get("manifest", {}) or {}
+    datasets = manifest.get("datasets", []) or []
+
+    def _iso(ts):
+        return pd.to_datetime(ts, utc=True).isoformat()
+
+    aligned_records = []
+    for _, r in aligned_df.iterrows():
+        aligned_records.append(
+            {
+                "timestamp": _iso(r["timestamp"]),
+                "obs_stage_pwd_m": round(float(r["obs_water_level_pwd_m"]), 3),
+                "sim_stage_m": round(float(r["sim_stage_m"]), 3),
+                "obs_rise_m": round(float(r["obs_rise_m"]), 3),
+                "sim_rise_m": round(float(r["sim_rise_m"]), 3),
+                "residual_rise_m": round(float(r["residual_rise_m"]), 3),
+            }
+        )
+
+    sensitivity_records = json.loads(sens_df.to_json(orient="records", date_format="iso"))
+
+    payload = {
+        "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
+        "validation_category": "retrospective_exploratory_hindcast",
+        "status_tier": 3,
+        "status_label": "Retrospective Exploratory Hindcast",
+        "operational_forecast_skill_established": False,
+        "is_observationally_calibrated": False,
+        "generated_utc": pd.Timestamp.utcnow().isoformat(),
+        "target_reach_id": str(target_reach_id) if target_reach_id is not None else None,
+        "nse": None,
+        "kge": None,
+        "continuous_metrics_notice": (
+            "Continuous NSE/KGE are omitted: the BWDB SW266 record provides sparse "
+            "discrete readings and cannot support continuous hydrograph skill scores."
+        ),
+        "datum": {
+            "gauge": "PWD (Public Works Department), +0.45 m relative to MSL",
+            "satellite": "WGS84 ellipsoid, geoid corrected",
+            "comparison": "relative stage rise only; no surveyed geodetic tie",
+        },
+        "danger_level_m_pwd": 13.20,
+        "metrics": metrics,
+        "sensitivity": sensitivity_records,
+        "aligned_observations": aligned_records,
+        "sources": datasets,
+        "disclosures": [
+            "Parameters are provisional literature assumptions, not observational calibration.",
+            "Bed elevation is an unresolved proxy (minimum SWOT WSE), not surveyed bathymetry.",
+            "Threshold flags are retrospective state classifications, not predictive warnings.",
+            "Absolute PWD danger-level crossing is unverified without a geodetic leveling tie.",
+            "The local 425 km2 delineated basin omits transboundary Barak macro-inflow (>26,000 km2).",
+        ],
+    }
+
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2, ensure_ascii=False)
+    return output_path
+
+
 def main():
     print("=" * 70)
     print("  HYDROSENSE-SWOT: REAL-DATA RETROSPECTIVE HINDCAST EVALUATION")
@@ -496,7 +573,15 @@ def main():
     gauge_path = prov["resolved_paths"]["gauge"]
     imerg_path = prov["resolved_paths"]["imerg"]
     geom_path = os.path.join(REAL_DIR, "basin_geometry.json")
-    event_results_path = os.path.join(PROCESSED_DIR, "event_results.csv")
+    # Prefer the mode-scoped real artefact. `event_results.csv` is rewritten by
+    # `--mode demo` runs (synthetic, 2020-2026) and must never be mistaken for
+    # real hindcast output.
+    event_results_real_path = os.path.join(PROCESSED_DIR, "event_results_real.csv")
+    event_results_path = (
+        event_results_real_path
+        if os.path.exists(event_results_real_path)
+        else os.path.join(PROCESSED_DIR, "event_results.csv")
+    )
 
     assert os.path.exists(geom_path), f"Missing {geom_path}"
     assert os.path.exists(event_results_path), f"Missing {event_results_path}. Run pipeline/run_pipeline.py --mode real first."
@@ -545,6 +630,18 @@ def main():
     fig_rel_for_md = "figures/real_hindcast_stage_comparison.png"
     generate_hindcast_markdown_report(metrics, sens_df, aligned_df, fig_rel_for_md, report_path)
     print(f"[Step 6] Compiled formal real-data hindcast report: {report_path}")
+
+    # 8. Machine-readable metrics for the UI export bridge
+    metrics_json_path = os.path.join(PROCESSED_DIR, "real_hindcast_metrics.json")
+    export_metrics_json(
+        metrics,
+        sens_df,
+        aligned_df,
+        prov,
+        metrics_json_path,
+        target_reach_id=target_reach_id,
+    )
+    print(f"[Step 7] Exported UI-consumable hindcast metrics: {metrics_json_path}")
 
     print("\n" + "=" * 70)
     print("  REAL-DATA RETROSPECTIVE HINDCAST EVALUATION COMPLETED")

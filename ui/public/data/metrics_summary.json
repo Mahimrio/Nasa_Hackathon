@@ -1,167 +1,532 @@
 {
-  "provenance": "SYNTHETIC",
-  "validation_category": "synthetic_engineering_test",
-  "limitations": "Constructed fixture scenario only; not independent validation or operational forecast skill.",
-  "nse": 0.74,
-  "kge": 0.69,
-  "pbias": 1.7,
-  "timing_error_h": -7.5,
+  "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
+  "validation_category": "retrospective_exploratory_hindcast",
+  "status_tier": 3,
+  "status_label": "Retrospective Exploratory Hindcast",
+  "operational_forecast_skill_established": false,
+  "is_observationally_calibrated": false,
+  "limitations": "Inputs are real NASA SWOT RiverSP, NASA GPM IMERG Early and BWDB SW266 records.",
+  "nse": null,
+  "kge": null,
+  "pbias": null,
+  "timing_error_h": null,
   "lead_time_h": null,
+  "continuous_metrics_notice": "Continuous NSE/KGE are omitted: the BWDB SW266 record provides sparse discrete readings and cannot support continuous hydrograph skill scores.",
   "formatted": {
-    "nse": "0.74",
-    "kge": "0.69",
-    "pbias": "+1.7%",
-    "timing_error": "-7.5 h",
+    "nse": "N/A",
+    "kge": "N/A",
+    "mae": "1.50 m",
+    "rmse": "1.83 m",
+    "bias": "-1.42 m",
+    "peak_difference": "-1.15 m",
     "lead_time": "N/A"
   },
-  "baseline": {
-    "nse": -0.14,
-    "kge": 0.47,
-    "pbias": 2.4,
-    "timing_error_h": -27.5,
-    "lead_time_h": null,
-    "formatted": {
-      "nse": "-0.14",
-      "kge": "0.47",
-      "pbias": "+2.4%",
-      "timing_error": "-27.5 h",
-      "lead_time": "N/A"
-    }
+  "real_hindcast": {
+    "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
+    "validation_category": "retrospective_exploratory_hindcast",
+    "status_tier": 3,
+    "status_label": "Retrospective Exploratory Hindcast",
+    "operational_forecast_skill_established": false,
+    "is_observationally_calibrated": false,
+    "generated_utc": "2026-11-10T15:33:49.771032+00:00",
+    "target_reach_id": "45220400591",
+    "nse": null,
+    "kge": null,
+    "continuous_metrics_notice": "Continuous NSE/KGE are omitted: the BWDB SW266 record provides sparse discrete readings and cannot support continuous hydrograph skill scores.",
+    "datum": {
+      "gauge": "PWD (Public Works Department), +0.45 m relative to MSL",
+      "satellite": "WGS84 ellipsoid, geoid corrected",
+      "comparison": "relative stage rise only; no surveyed geodetic tie"
+    },
+    "danger_level_m_pwd": 13.2,
+    "metrics": {
+      "n_aligned_observations": 25,
+      "mae_relative_rise_m": 1.5,
+      "rmse_relative_rise_m": 1.83,
+      "bias_relative_rise_m": -1.42,
+      "observed_peak_stage_pwd_m": 14.15,
+      "observed_max_rise_m": 3.9,
+      "simulated_max_rise_m": 2.75,
+      "peak_stage_difference_m": -1.15,
+      "simulated_peak_time_utc": "2024-05-28 19:00 UTC",
+      "observed_peak_window_utc": "[2024-05-31 00:00, 2024-05-31 03:00]",
+      "observed_sampling_interval_utc": "[2024-05-30 12:00, 2024-05-31 09:00]",
+      "continuous_metrics_notice": "Continuous metrics (NSE, KGE) omitted per sparse gauge protocol (Trap T-H5)."
+    },
+    "sensitivity": [
+      {
+        "Experiment": "Baseline (Provisional)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 240.2,
+        "Peak Stage (m WGS84)": 7.36,
+        "Peak Rise (m)": 2.75,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Manning n = 0.025 (Clean sand/gravel)",
+        "Manning n": 0.025,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 240.2,
+        "Peak Stage (m WGS84)": 6.78,
+        "Peak Rise (m)": 2.33,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Manning n = 0.045 (Vegetated alluvial)",
+        "Manning n": 0.045,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 240.2,
+        "Peak Stage (m WGS84)": 8.14,
+        "Peak Rise (m)": 3.32,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Runoff C = 0.45 (Lower bound)",
+        "Manning n": 0.033,
+        "Runoff C": 0.45,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 192.6,
+        "Peak Stage (m WGS84)": 6.89,
+        "Peak Rise (m)": 2.28,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Runoff C = 0.72 (Upper bound)",
+        "Manning n": 0.033,
+        "Runoff C": 0.72,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 291.4,
+        "Peak Stage (m WGS84)": 7.83,
+        "Peak Rise (m)": 3.22,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Baseflow Q0 = 18 m³/s (Dry pre-monsoon)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 18.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 230.2,
+        "Peak Stage (m WGS84)": 7.27,
+        "Peak Rise (m)": 2.9,
+        "Peak Timing (UTC)": "2024-05-28 19:30"
+      },
+      {
+        "Experiment": "Baseflow Q0 = 42 m³/s (Wet antecedent)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 42.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 254.2,
+        "Peak Stage (m WGS84)": 7.49,
+        "Peak Rise (m)": 2.59,
+        "Peak Timing (UTC)": "2024-05-28 19:00"
+      },
+      {
+        "Experiment": "Celerity ck = 1.10 m/s (Low gradient)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.1,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 235.3,
+        "Peak Stage (m WGS84)": 7.31,
+        "Peak Rise (m)": 2.69,
+        "Peak Timing (UTC)": "2024-05-28 21:30"
+      },
+      {
+        "Experiment": "Celerity ck = 1.80 m/s (High gradient)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.8,
+        "Area (km²)": 425.0,
+        "Peak Flow (m³/s)": 250.7,
+        "Peak Stage (m WGS84)": 7.46,
+        "Peak Rise (m)": 2.85,
+        "Peak Timing (UTC)": "2024-05-30 10:30"
+      },
+      {
+        "Experiment": "Catchment Area = 185 km² (Synthetic demo benchmark)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 185.0,
+        "Peak Flow (m³/s)": 120.4,
+        "Peak Stage (m WGS84)": 6.07,
+        "Peak Rise (m)": 1.46,
+        "Peak Timing (UTC)": "2024-05-28 18:30"
+      },
+      {
+        "Experiment": "Catchment Area = 850 km² (Extended border sub-basins)",
+        "Manning n": 0.033,
+        "Runoff C": 0.58,
+        "Baseflow Q0 (m³/s)": 28.0,
+        "Celerity ck (m/s)": 1.35,
+        "Area (km²)": 850.0,
+        "Peak Flow (m³/s)": 452.4,
+        "Peak Stage (m WGS84)": 9.12,
+        "Peak Rise (m)": 4.51,
+        "Peak Timing (UTC)": "2024-05-28 19:30"
+      }
+    ],
+    "aligned_observations": [
+      {
+        "timestamp": "2024-05-26T00:00:00+00:00",
+        "obs_stage_pwd_m": 10.25,
+        "sim_stage_m": 4.74,
+        "obs_rise_m": 0.0,
+        "sim_rise_m": 0.0,
+        "residual_rise_m": 0.0
+      },
+      {
+        "timestamp": "2024-05-26T09:00:00+00:00",
+        "obs_stage_pwd_m": 10.6,
+        "sim_stage_m": 4.74,
+        "obs_rise_m": 0.35,
+        "sim_rise_m": 0.0,
+        "residual_rise_m": -0.35
+      },
+      {
+        "timestamp": "2024-05-27T00:00:00+00:00",
+        "obs_stage_pwd_m": 11.1,
+        "sim_stage_m": 4.79,
+        "obs_rise_m": 0.85,
+        "sim_rise_m": 0.05,
+        "residual_rise_m": -0.8
+      },
+      {
+        "timestamp": "2024-05-27T06:00:00+00:00",
+        "obs_stage_pwd_m": 11.45,
+        "sim_stage_m": 6.25,
+        "obs_rise_m": 1.2,
+        "sim_rise_m": 1.51,
+        "residual_rise_m": 0.31
+      },
+      {
+        "timestamp": "2024-05-27T12:00:00+00:00",
+        "obs_stage_pwd_m": 11.85,
+        "sim_stage_m": 6.87,
+        "obs_rise_m": 1.6,
+        "sim_rise_m": 2.13,
+        "residual_rise_m": 0.53
+      },
+      {
+        "timestamp": "2024-05-28T00:00:00+00:00",
+        "obs_stage_pwd_m": 12.35,
+        "sim_stage_m": 7.01,
+        "obs_rise_m": 2.1,
+        "sim_rise_m": 2.27,
+        "residual_rise_m": 0.17
+      },
+      {
+        "timestamp": "2024-05-28T06:00:00+00:00",
+        "obs_stage_pwd_m": 12.7,
+        "sim_stage_m": 7.09,
+        "obs_rise_m": 2.45,
+        "sim_rise_m": 2.35,
+        "residual_rise_m": -0.1
+      },
+      {
+        "timestamp": "2024-05-28T12:00:00+00:00",
+        "obs_stage_pwd_m": 13.05,
+        "sim_stage_m": 7.2,
+        "obs_rise_m": 2.8,
+        "sim_rise_m": 2.46,
+        "residual_rise_m": -0.34
+      },
+      {
+        "timestamp": "2024-05-29T00:00:00+00:00",
+        "obs_stage_pwd_m": 13.35,
+        "sim_stage_m": 7.25,
+        "obs_rise_m": 3.1,
+        "sim_rise_m": 2.51,
+        "residual_rise_m": -0.59
+      },
+      {
+        "timestamp": "2024-05-29T03:00:00+00:00",
+        "obs_stage_pwd_m": 13.48,
+        "sim_stage_m": 7.02,
+        "obs_rise_m": 3.23,
+        "sim_rise_m": 2.28,
+        "residual_rise_m": -0.95
+      },
+      {
+        "timestamp": "2024-05-29T09:00:00+00:00",
+        "obs_stage_pwd_m": 13.62,
+        "sim_stage_m": 6.47,
+        "obs_rise_m": 3.37,
+        "sim_rise_m": 1.73,
+        "residual_rise_m": -1.64
+      },
+      {
+        "timestamp": "2024-05-29T12:00:00+00:00",
+        "obs_stage_pwd_m": 13.75,
+        "sim_stage_m": 6.32,
+        "obs_rise_m": 3.5,
+        "sim_rise_m": 1.58,
+        "residual_rise_m": -1.92
+      },
+      {
+        "timestamp": "2024-05-30T00:00:00+00:00",
+        "obs_stage_pwd_m": 13.9,
+        "sim_stage_m": 6.56,
+        "obs_rise_m": 3.65,
+        "sim_rise_m": 1.82,
+        "residual_rise_m": -1.83
+      },
+      {
+        "timestamp": "2024-05-30T06:00:00+00:00",
+        "obs_stage_pwd_m": 14.02,
+        "sim_stage_m": 6.83,
+        "obs_rise_m": 3.77,
+        "sim_rise_m": 2.09,
+        "residual_rise_m": -1.68
+      },
+      {
+        "timestamp": "2024-05-30T12:00:00+00:00",
+        "obs_stage_pwd_m": 14.1,
+        "sim_stage_m": 7.22,
+        "obs_rise_m": 3.85,
+        "sim_rise_m": 2.48,
+        "residual_rise_m": -1.37
+      },
+      {
+        "timestamp": "2024-05-31T00:00:00+00:00",
+        "obs_stage_pwd_m": 14.15,
+        "sim_stage_m": 6.86,
+        "obs_rise_m": 3.9,
+        "sim_rise_m": 2.12,
+        "residual_rise_m": -1.78
+      },
+      {
+        "timestamp": "2024-05-31T03:00:00+00:00",
+        "obs_stage_pwd_m": 14.15,
+        "sim_stage_m": 6.59,
+        "obs_rise_m": 3.9,
+        "sim_rise_m": 1.85,
+        "residual_rise_m": -2.05
+      },
+      {
+        "timestamp": "2024-05-31T09:00:00+00:00",
+        "obs_stage_pwd_m": 14.1,
+        "sim_stage_m": 6.03,
+        "obs_rise_m": 3.85,
+        "sim_rise_m": 1.29,
+        "residual_rise_m": -2.56
+      },
+      {
+        "timestamp": "2024-05-31T12:00:00+00:00",
+        "obs_stage_pwd_m": 14.05,
+        "sim_stage_m": 5.81,
+        "obs_rise_m": 3.8,
+        "sim_rise_m": 1.07,
+        "residual_rise_m": -2.73
+      },
+      {
+        "timestamp": "2024-06-01T00:00:00+00:00",
+        "obs_stage_pwd_m": 13.95,
+        "sim_stage_m": 5.16,
+        "obs_rise_m": 3.7,
+        "sim_rise_m": 0.42,
+        "residual_rise_m": -3.28
+      },
+      {
+        "timestamp": "2024-06-01T09:00:00+00:00",
+        "obs_stage_pwd_m": 13.8,
+        "sim_stage_m": 4.92,
+        "obs_rise_m": 3.55,
+        "sim_rise_m": 0.18,
+        "residual_rise_m": -3.37
+      },
+      {
+        "timestamp": "2024-06-02T00:00:00+00:00",
+        "obs_stage_pwd_m": 13.6,
+        "sim_stage_m": 4.71,
+        "obs_rise_m": 3.35,
+        "sim_rise_m": -0.03,
+        "residual_rise_m": -3.38
+      },
+      {
+        "timestamp": "2024-06-02T09:00:00+00:00",
+        "obs_stage_pwd_m": 13.42,
+        "sim_stage_m": 5.81,
+        "obs_rise_m": 3.17,
+        "sim_rise_m": 1.07,
+        "residual_rise_m": -2.1
+      },
+      {
+        "timestamp": "2024-06-03T00:00:00+00:00",
+        "obs_stage_pwd_m": 13.25,
+        "sim_stage_m": 5.98,
+        "obs_rise_m": 3.0,
+        "sim_rise_m": 1.24,
+        "residual_rise_m": -1.76
+      },
+      {
+        "timestamp": "2024-06-03T09:00:00+00:00",
+        "obs_stage_pwd_m": 13.15,
+        "sim_stage_m": 5.66,
+        "obs_rise_m": 2.9,
+        "sim_rise_m": 0.92,
+        "residual_rise_m": -1.98
+      }
+    ],
+    "sources": [
+      {
+        "dataset_id": "swot",
+        "provenance": "REAL",
+        "file_path": "swot_reaches.nc",
+        "sha256": "9fe1eb81f52baf1fd4439009c87e31562eca6c34869c82b64280f53f895b9580",
+        "variables": [
+          "wse",
+          "wse_u",
+          "width",
+          "slope2",
+          "slope_u",
+          "geoid_hght",
+          "quality_f",
+          "dark_frac"
+        ],
+        "units": {
+          "wse": "m",
+          "width": "m",
+          "slope2": "m/m",
+          "geoid_hght": "m"
+        },
+        "temporal_coverage": "2024-05-15/2024-06-15",
+        "processing_history": [
+          "Retrieved via earthaccess from NASA PO.DAAC collection SWOT_L2_HR_RiverSP_reach_D",
+          "Extracted shapefiles and filtered to canonical SWORD v16 Surma River reach IDs",
+          "Applied Tier 2.1 quality gating (reach_q <= 1, dark_frac < 0.30, width >= 100m)",
+          "Exported to NetCDF4 with explicit geoid_hght and tide attributes"
+        ],
+        "limitations": "Observes water surface only; bed level and absolute stage unresolved without in-situ bathymetry and datum tie.",
+        "source_organization": "NASA / PO.DAAC / CNES",
+        "product_version": "SWOT_L2_HR_RiverSP_reach_D",
+        "source_url": "https://podaac.jpl.nasa.gov",
+        "retrieval_timestamp": "2026-11-10T14:18:32.256237+00:00",
+        "source_identifiers": [
+          "SWOT_L2_HR_RiverSP_Reach_015_189_AS_20240515T014852_20240515T015633_PGD0_01.zip",
+          "SWOT_L2_HR_RiverSP_Reach_015_202_AS_20240515T123737_20240515T124649_PGD0_01.zip",
+          "SWOT_L2_HR_RiverSP_Reach_015_217_AS_20240516T014900_20240516T015654_PGD0_01.zip",
+          "SWOT_L2_HR_RiverSP_Reach_015_230_AS_20240516T123758_20240516T124600_PGD0_01.zip",
+          "SWOT_L2_HR_RiverSP_Reach_015_245_AS_20240517T014908_20240517T015735_PGD0_01.zip"
+        ],
+        "license": "NASA Open Data Policy"
+      },
+      {
+        "dataset_id": "gauge",
+        "provenance": "REAL",
+        "file_path": "gauge_sw266.csv",
+        "sha256": "9ee6eca09ba2b5e6200fb16210e750a156f788e084b447cd2623d2a74b53cd90",
+        "variables": [
+          "water_level_m",
+          "danger_level_m"
+        ],
+        "units": {
+          "water_level_m": "m",
+          "danger_level_m": "m"
+        },
+        "temporal_coverage": "2024-05-18/2024-06-10",
+        "processing_history": [
+          "Digitized from official BWDB/FFWC Annual Flood Report 2024 daily stage logs",
+          "Converted reported BST timestamps (UTC+6) to ISO 8601 UTC",
+          "Preserved raw discrete readings (is_observed=True) with zero artificial interpolation",
+          "Documented vertical datum relationship (PWD datum = MSL + 0.45 m in Sylhet)"
+        ],
+        "limitations": "Sparse gauge sampling (3 readings/day); timing accuracy constrained by observation interval.",
+        "source_organization": "Bangladesh Water Development Board (BWDB) / FFWC",
+        "product_version": "FFWC_Annual_Report_2024_SW266",
+        "source_url": "http://ffwc.gov.bd",
+        "retrieval_timestamp": "2026-11-10T14:19:30.225406+00:00",
+        "source_identifiers": [
+          "BWDB_Station_SW266_Surma_Kanaighat"
+        ],
+        "license": "Government Open Data Bangladesh"
+      },
+      {
+        "dataset_id": "imerg",
+        "provenance": "REAL",
+        "file_path": "imerg_map.nc",
+        "sha256": "5dd8703616e111d266277741a4e8deb81326eb5ca36016bc2605a3b4e49ee1f4",
+        "variables": [
+          "precipitationCal",
+          "precipitation"
+        ],
+        "units": {
+          "precipitationCal": "mm/hr",
+          "precipitation": "mm/hr"
+        },
+        "temporal_coverage": "2024-05-26/2024-06-03",
+        "processing_history": [
+          "Queried NASA GES DISC product GPM_3IMERGHHE V07B (Early Run half-hourly)",
+          "Applied server-side OPeNDAP spatial constraint expressions over Sylhet basin window",
+          "Computed area-weighted Mean Areal Precipitation (MAP, mm/hr) for Meghalaya/Surma and Kushiyara sub-basins",
+          "Exported CF-compliant NetCDF4 dataset"
+        ],
+        "limitations": "Satellite precipitation estimate; subject to microwave-infrared morphing and orographic uncertainty.",
+        "source_organization": "NASA / GES DISC",
+        "product_version": "GPM_3IMERGHHE_V07B",
+        "source_url": "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.07",
+        "retrieval_timestamp": "2026-11-10T14:49:02.917905+00:00",
+        "source_identifiers": [
+          "3B-HHR-E.MS.MRG.3IMERG.20240526-S000000-E002959.0000.V07B.HDF5",
+          "3B-HHR-E.MS.MRG.3IMERG.20240526-S003000-E005959.0030.V07B.HDF5",
+          "3B-HHR-E.MS.MRG.3IMERG.20240526-S010000-E012959.0060.V07B.HDF5",
+          "3B-HHR-E.MS.MRG.3IMERG.20240526-S013000-E015959.0090.V07B.HDF5",
+          "3B-HHR-E.MS.MRG.3IMERG.20240526-S020000-E022959.0120.V07B.HDF5"
+        ],
+        "license": "NASA Open Data Policy"
+      }
+    ],
+    "disclosures": [
+      "Parameters are provisional literature assumptions, not observational calibration.",
+      "Bed elevation is an unresolved proxy (minimum SWOT WSE), not surveyed bathymetry.",
+      "Threshold flags are retrospective state classifications, not predictive warnings.",
+      "Absolute PWD danger-level crossing is unverified without a geodetic leveling tie.",
+      "The local 425 km2 delineated basin omits transboundary Barak macro-inflow (>26,000 km2)."
+    ]
   },
-  "comparison": {
-    "nse_gain": 0.89,
-    "timing_accuracy_gain_h": 20.0,
-    "lead_time_delta_h": null,
-    "model_beats_baseline_nse": true,
-    "swot_value_add": "SWOT channel calibration routes flash-flood surges through physical channel geometry, reducing retrospective peak timing error by +20.0h in this synthetic engineering scenario; this is not independent or operational forecast validation."
-  },
-  "by_year": {
-    "2020": {
-      "nse": 0.72,
-      "kge": 0.66,
-      "pbias": 2.4,
-      "timing_error_h": -1.5,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.72",
-        "kge": "0.66",
-        "pbias": "+2.4%",
-        "timing_error": "-1.5 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 13.07,
-      "peak_observed": 13.36
-    },
-    "2021": {
-      "nse": 0.64,
-      "kge": 0.63,
-      "pbias": 3.3,
-      "timing_error_h": -7.0,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.64",
-        "kge": "0.63",
-        "pbias": "+3.3%",
-        "timing_error": "-7.0 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 10.96,
-      "peak_observed": 11.53
-    },
-    "2022": {
-      "nse": 0.77,
-      "kge": 0.75,
-      "pbias": -0.6,
-      "timing_error_h": -3.0,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.77",
-        "kge": "0.75",
-        "pbias": "-0.6%",
-        "timing_error": "-3.0 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 15.61,
-      "peak_observed": 15.25
-    },
-    "2023": {
-      "nse": 0.67,
-      "kge": 0.62,
-      "pbias": 3.0,
-      "timing_error_h": -2.0,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.67",
-        "kge": "0.62",
-        "pbias": "+3.0%",
-        "timing_error": "-2.0 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 11.59,
-      "peak_observed": 12.14
-    },
-    "2024": {
-      "nse": 0.72,
-      "kge": 0.66,
-      "pbias": 2.4,
-      "timing_error_h": -0.5,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.72",
-        "kge": "0.66",
-        "pbias": "+2.4%",
-        "timing_error": "-0.5 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 13.28,
-      "peak_observed": 13.54
-    },
-    "2025": {
-      "nse": 0.69,
-      "kge": 0.63,
-      "pbias": 2.7,
-      "timing_error_h": -1.5,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.69",
-        "kge": "0.63",
-        "pbias": "+2.7%",
-        "timing_error": "-1.5 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 12.31,
-      "peak_observed": 12.86
-    },
-    "2026": {
-      "nse": 0.74,
-      "kge": 0.69,
-      "pbias": 1.7,
-      "timing_error_h": -7.5,
-      "lead_time_h": null,
-      "formatted": {
-        "nse": "0.74",
-        "kge": "0.69",
-        "pbias": "+1.7%",
-        "timing_error": "-7.5 h",
-        "lead_time": "N/A"
-      },
-      "peak_stage": 13.56,
-      "peak_observed": 13.88
-    }
+  "event_period": {
+    "start": "2024-05-26T00:00:00Z",
+    "end": "2024-06-03T23:30:00Z"
   },
   "available_years": [
-    2020,
-    2021,
-    2022,
-    2023,
-    2024,
-    2025,
-    2026
+    2024
   ],
   "danger_level_m": 13.2,
-  "travel_time_h": 25.9,
-  "imerg_latency_h": 4.0,
-  "swot_last_geometry_date": "2026-03-25",
-  "calibration_period": "Synthetic scenario calibration window",
-  "test_period": "Synthetic April-May scenario; not an independent holdout"
+  "target_reach_id": "45220400591",
+  "gauge_station": "SW266 Kanaighat",
+  "datum": {
+    "gauge": "PWD (Public Works Department), +0.45 m relative to MSL",
+    "satellite": "WGS84 ellipsoid, geoid corrected",
+    "comparison": "relative stage rise only; no surveyed geodetic tie"
+  },
+  "calibration_period": "Literature reference (Chow 1959; Arcement & Schneider 1989); not observational calibration",
+  "test_period": "28 May - 4 June 2024 retrospective hindcast (Surma flash flood)",
+  "disclosures": [
+    "Parameters are provisional literature assumptions, not observational calibration.",
+    "Bed elevation is an unresolved proxy (minimum SWOT WSE), not surveyed bathymetry.",
+    "Threshold flags are retrospective state classifications, not predictive warnings.",
+    "Absolute PWD danger-level crossing is unverified without a geodetic leveling tie.",
+    "The local 425 km2 delineated basin omits transboundary Barak macro-inflow (>26,000 km2)."
+  ]
 }

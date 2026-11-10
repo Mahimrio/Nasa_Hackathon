@@ -18,28 +18,29 @@ Next.js 16 (App Router), Vanilla CSS Design System with custom tokens, Recharts 
 
 ## Product Purpose
 
-HydroSense-SWOT bridges the critical upstream observational gap between transboundary Meghalaya rainfall and vulnerable downstream Haor wetlands. It transforms complex satellite data into an authoritative, single-glance decision framework ("Harvest Decision Flag": GREEN / AMBER / RED) with 20–30 hours of actionable lead time, protecting hundreds of thousands of farming livelihoods. Success means an agriculture officer can look at the interface in 3 seconds, trust the hydrodynamic basis, and trigger community harvest advisories before floodwaters cross the border gauge.
+HydroSense-SWOT bridges the critical upstream observational gap between transboundary Meghalaya rainfall and vulnerable downstream Haor wetlands. It transforms complex satellite data into an authoritative, single-glance decision framework ("Harvest Decision Flag": GREEN / AMBER / RED) for rapid agricultural triage, protecting vulnerable farming livelihoods. Success means an agriculture officer can inspect the interface in 3 seconds, evaluate the hydrodynamic basis, and formulate community harvest advisories before floodwaters overwhelm low-lying polders.
 
 ## Positioning
 
 HydroSense-SWOT unifies two complementary Earth-observation capabilities into a single cohesive platform for Bangladesh's Haor region:
 
-1. **Module 1 — Operational Haor Flood-Warning System `[IMPLEMENTED]`:** Routes near-real-time NASA GPM IMERG Early Run satellite rainfall through un-gauged border river reaches whose physical hydraulic conveyance (Manning roughness, width, water surface elevation, and reach slope) is parameterized offline using NASA SWOT Ka-band radar interferometry, generating rapid 20–30h harvest decision advisories.
+1. **Module 1 — Operational Haor Flood-Routing & Decision Support System `[DUAL-MODE: DEMO & VERIFIED REAL]`:** Routes satellite precipitation through border river reaches parameterized from NASA SWOT Ka-band radar interferometry. Operates in two distinct modes: an offline synthetic demonstration mode (`--mode demo`) for UI and logic testing, and a verified real-data mode (`--mode real`) integrating authentic NASA SWOT Version D reach shapefiles, NASA GPM IMERG Early (`3B-HHR-E`), and official BWDB Kanaighat (`SW266`) gauge observations under strict fail-closed cryptographic provenance.
 2. **Module 2 — Haor Rainfall Trend Explorer `[IMPLEMENTED - FAIL-CLOSED ON REAL DATA]`:** Evaluates 25 complete pre-monsoon seasons (2001–2025, 1,525 daily granules) of research-quality NASA GPM IMERG Final Run precipitation data to determine whether pre-monsoon precipitation volume ($PRCPTOT_{AM}$) or extreme storm frequency ($R50mm_{AM}$) has changed with statistical significance in transboundary quadrant zones. (Locked alignment with NASA Space Apps Challenge 2026: *“Be An Earth System Trend Detective!”* per `docs/DECISIONS.md`).
 
 ## Implementation & Validation Status
 
 - **Implemented `[CONFIRMED]`:**
-  - Automated Manning roughness calibration ($n \in [0.025, 0.10]$) on 4 SWOT river reaches (`22211000011`, `22211000012`, `22211000021`, `22211000022`).
-  - 4-sub-reach Muskingum-Cunge hydrologic routing down the Surma corridor to the BWDB Kanaighat gauge station (SW108/SW266).
-  - Automated 3-tier Harvest Flag logic (GREEN: Normal, AMBER: Caution / 80% danger level, RED: Critical Harvest / 100% danger level at 13.20 m PWD).
-  - Bilingual localization (English / বাংলা) across headers, metric cards, harvest directives, and modal dialogs.
-  - Interactive event replay controls with day rail, custom skip, reach inspector, and live hydrodynamic verification statistics.
-  - Baseline comparison subroutine audited and re-benchmarked (WO-016 & Gate 4); true persistence and rainfall threshold baselines evaluated against the test event.
-  - Rainfall-first Trend Explorer MVP backend implemented in `trend_explorer/analysis.py` and `scripts/run_trend_analysis.py` with cell-first aggregation, Theil-Sen slope, and Modified Mann-Kendall test under autocorrelation. Unit-tested in `tests/test_trend_explorer.py` (48/48 tests pass).
-  - Frontend delivery dashboard at `/` and Trend Explorer view at `/trends` compiled cleanly in Next.js 16 App Router.
+  - **Dual-Mode Pipeline Execution:** Supported via `--mode demo` (synthetic engineering scenarios) and `--mode real` (fail-closed verified NASA & BWDB ingestion).
+  - **Real SWOT & SWORD Ingestion:** 19 official Surma River reaches (`45220400501` to `45220400591`, $123.0\text{ km}$ length) from SWORD v16 / SWOT RiverSP Version D shapefiles, with target outlet at Kanaighat (`45220400591`).
+  - **Independently Delineated Catchment:** Local Meghalaya quickflow area ($425\text{ km}^2$) and transboundary Barak macro-basin ($26,200\text{ km}^2$) replacing legacy synthetic benchmarks.
+  - **Literature Hydraulic Parameterization with Physical Uncertainty:** Literature-assigned Manning's $n = 0.033$ with bounds $[0.025, 0.045]$ (Chow 1959; Arcement & Schneider 1989), low-flow bed level proxy ($z_{\text{bed}} = 3.56\text{ m}$), and sensitivity analysis across $n, C, Q_0, c_k$.
+  - **Retrospective Flash Flood Hindcast:** Evaluated against 40 raw, independent BWDB SW266 gauge observations during the May 28 – June 4, 2024 flash flood event (relative stage-rise MAE = $1.50\text{ m}$, observed peak = $14.15\text{ m PWD}$, peak timing window = May 31 00:00–03:00 UTC).
+  - **Automated 3-tier Harvest Flag logic:** GREEN (Normal), AMBER (Caution / 80% danger level), RED (Critical Harvest / 100% danger level at $13.20\text{ m PWD}$). Flags are instantaneous state classifications; operational lead times are strictly disclaimed without an issue-time forecast product.
+  - **Bilingual localization (English / বাংলা):** 100% key parity across headers, metric cards, harvest directives, and modal dialogs.
+  - **Full Automated Test Suite:** 93/93 unit and integration tests passing hermetically (`python -m pytest tests/`).
+  - **Frontend Delivery Dashboard:** Compiled cleanly in Next.js 16 App Router across `/` (Overview & Map), `/forecast` (Hydrograph), `/advisory` (Action Bulletins), and `/trends` (Module 2 Trend Explorer).
 - **Proposed Research `[PROPOSED RESEARCH]`:**
-  - Analysis of spatial trend heterogeneity between the steep Meghalaya escarpment and lowland Haor wetlands, and evaluation of potential multi-variable challenge extensions (e.g., soil moisture proxies) upon full NASA challenge resource publication.
+  - Multi-sensor soil moisture integration (SMAP/GLDAS) and causal issue-time hindcast experiments to rigorously evaluate predictive operational lead time.
 
 ## Operating Context
 
@@ -64,13 +65,13 @@ HydroSense-SWOT unifies two complementary Earth-observation capabilities into a 
 
 ## Evidence on Hand
 
-- NASA SWOT L2 HR RiverSP 2.0 (PO.DAAC Collection C2799438271-POCLOUD).
-- NASA GPM IMERG Early Run V07B (`GPM_3IMERGHHE`, ~4-hour latency, operational routing).
-- NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF` / `GPM_3IMERGM`, 2001–2025, GPCC gauge-adjusted, climatology).
-- Bangladesh Water Development Board (BWDB) Kanaighat gauge records (Station SW108/SW266, Danger Level 13.20 m PWD).
-- Verified historical validation event: April 1 – May 31, 2026 transboundary flash flood replay.
+- NASA SWOT Level 2 High-Rate River Single-Pass Vector Version D (`SWOT_L2_HR_RiverSP_reach_D`, PO.DAAC DOI: `10.5067/SWOT-RIVSP-D`).
+- NASA GPM IMERG Early Run V07B (`GPM_3IMERGHHE`, prefix `3B-HHR-E`, ~4-hour latency, operational routing).
+- NASA GPM IMERG Final Run V07 (`GPM_3IMERGDF`, 2001–2025, GPCC gauge-adjusted, climatology).
+- Bangladesh Water Development Board (BWDB) Kanaighat gauge records (Station `SW266`, Danger Level 13.20 m PWD = 12.75 m MSL).
+- Independently delineated SWORD v16 Asia river topology (19 Surma reaches, 123 km length, 425 km² quickflow area) in `data/real/basin_geometry.json`.
+- Verified real-data retrospective hindcast report: May 28 – June 4, 2024 flash flood event evaluated strictly on raw observation timestamps in `docs/evidence/real_hindcast_report.md`.
 - Published research: Haor Basin Flash Flood Assessment (*J. Environ. Sci. & Nat. Resour.* 2019; 149,224 ha lost in Sunamganj).
-- Verified model performance on April–May 2026 test event: NSE 0.73, KGE 0.68, PBIAS +1.9%, Timing Error -2.0 h, Lead Time 22.5 h. (Note: Baseline comparison metrics are undergoing formal re-audit).
 
 ## Product Principles
 

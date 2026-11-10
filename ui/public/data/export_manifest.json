@@ -1,0 +1,45 @@
+{
+  "mode": "real",
+  "provenance": "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS",
+  "generated_utc": "2026-11-10T15:34:01.623297+00:00",
+  "generator": "scripts/export_json.py",
+  "sources": [
+    {
+      "path": "data/real/swot_reaches.nc",
+      "sha256": "9fe1eb81f52baf1fd4439009c87e31562eca6c34869c82b64280f53f895b9580"
+    },
+    {
+      "path": "data/real/imerg_map.nc",
+      "sha256": "5dd8703616e111d266277741a4e8deb81326eb5ca36016bc2605a3b4e49ee1f4"
+    },
+    {
+      "path": "data/real/gauge_sw266.csv",
+      "sha256": "9ee6eca09ba2b5e6200fb16210e750a156f788e084b447cd2623d2a74b53cd90"
+    },
+    {
+      "path": "data/real/basin_geometry.json",
+      "sha256": "1b20406ab8a70d3e5241766d7fb4b5a92de8e0371e9deb7ff60701c508ffd163"
+    },
+    {
+      "path": "data/processed/event_results_real.csv",
+      "sha256": "7031794335fc43b6c03c91a3bdcf0e2b0bba24ec6e359828464092987e74a9b3"
+    },
+    {
+      "path": "data/processed/real_hindcast_metrics.json",
+      "sha256": "f9761e37b336c5f3ab29499eb304ebcdf9f0b2dc8ca02f405c503aff946e9082"
+    },
+    {
+      "path": "data/processed/calibration_results_real.json",
+      "sha256": "7ba5ab5a2d4d074d681cdbfbe257662b4eae3365313083baa8a00b6887f20a4f"
+    }
+  ],
+  "disclosures": [
+    "Inputs are real NASA SWOT RiverSP, NASA GPM IMERG Early and BWDB SW266 records.",
+    "Hydraulic parameters are provisional literature assumptions, not observational calibration.",
+    "Bed elevation is an unresolved proxy (minimum SWOT WSE), not surveyed bathymetry.",
+    "NSE/KGE are omitted: the sparse BWDB gauge cannot support continuous skill scores.",
+    "Threshold flags are retrospective state classifications, not predictive warnings.",
+    "Absolute PWD danger-level crossing is unverified without a geodetic leveling tie.",
+    "The 425 km2 local basin omits transboundary Barak macro-inflow (>26,000 km2)."
+  ]
+}

@@ -197,9 +197,10 @@ def main(argv=None):
             )
             res["provenance"] = provenance_label
             calibrated_params[r_str] = res
+            z_bed_text = f"{res['z_bed_m']:.2f} m" if res.get("z_bed_m") is not None else "not observed"
             print(
                 f"         Reach {r_str}: Literature-assigned n = {res['n']:.4f} "
-                f"({res['n_lower_bound']}-{res['n_upper_bound']}), z_bed = {res['z_bed_m']:.2f} m "
+                f"({res['n_lower_bound']}-{res['n_upper_bound']}), z_bed = {z_bed_text} "
                 f"[Uncalibrated parameterization; Chow 1959 / Arcement & Schneider 1989]"
             )
         else:
@@ -230,7 +231,15 @@ def main(argv=None):
     # Save to calibration_results.json in target output_dir
     os.makedirs(os.path.dirname(cal_json_path), exist_ok=True)
     with open(cal_json_path, "w", encoding="utf-8") as f:
-        json.dump(calibrated_params, f, indent=2)
+        json.dump(calibrated_params, f, indent=2, allow_nan=False)
+
+    # Mode-scoped canonical copy: a later `--mode demo` run rewrites
+    # calibration_results.json with synthetic values, so real-mode evidence must
+    # also live at a stable, mode-specific path that demo runs never touch.
+    if mode == "real":
+        real_cal_json_path = os.path.join(output_dir, "calibration_results_real.json")
+        with open(real_cal_json_path, "w", encoding="utf-8") as f:
+            json.dump(calibrated_params, f, indent=2, allow_nan=False)
 
     # Generate diagnostic figures
     plot_calibration_diagnostics(

@@ -304,10 +304,19 @@ def estimate_reach_hydraulics_literature(
     width_valid = width[mask] if np.any(mask) else width
     slope2_valid = slope2[mask] if np.any(mask) else slope2
 
+    # SWOT has spatial/temporal gaps: some SWORD reaches carry no finite WSE at
+    # all. Never let NaN leak into downstream JSON (it is invalid strict JSON and
+    # silently poisons the UI). Report `None` = "not observed" instead.
+    wse_finite = wse_valid[np.isfinite(wse_valid)]
+    width_finite = width_valid[np.isfinite(width_valid)]
+    slope2_finite = slope2_valid[np.isfinite(slope2_valid)]
+
     # Note: SWOT observes water surface only; minimum WSE is a low water level, NOT river bed.
     # True bed elevation requires in-situ bathymetric cross-section surveys.
     # Without bathymetry, this reference level is labeled as an unresolved assumption.
-    z_bed = float(np.min(wse_valid)) if len(wse_valid) > 0 else 6.0
+    z_bed = float(np.min(wse_finite)) if wse_finite.size > 0 else None
+    mean_slope2 = float(round(float(np.mean(slope2_finite)), 7)) if slope2_finite.size > 0 else None
+    mean_width = float(round(float(np.mean(width_finite)), 1)) if width_finite.size > 0 else None
 
     return {
         "reach_id": reach_id_str,
@@ -315,14 +324,16 @@ def estimate_reach_hydraulics_literature(
         "n_calibrated": float(round(literature_n, 4)),
         "n_lower_bound": float(n_bounds[0]),
         "n_upper_bound": float(n_bounds[1]),
-        "z_bed": float(round(z_bed, 2)),
-        "z_bed_m": float(round(z_bed, 2)),
-        "z_bed_status": "unresolved_assumed_from_low_wse",
-        "z_bed_uncertainty_m": 0.18,
+        "z_bed": float(round(z_bed, 2)) if z_bed is not None else None,
+        "z_bed_m": float(round(z_bed, 2)) if z_bed is not None else None,
+        "z_bed_status": (
+            "unresolved_assumed_from_low_wse" if z_bed is not None else "not_observed_no_finite_wse"
+        ),
+        "z_bed_uncertainty_m": 0.18 if z_bed is not None else None,
         "n_valid_passes": int(valid_count),
-        "mean_slope2": float(round(float(np.mean(slope2_valid)), 7)) if len(slope2_valid) > 0 else 5.0e-5,
-        "mean_width_m": float(round(float(np.mean(width_valid)), 1)) if len(width_valid) > 0 else 160.0,
-        "mean_width": float(round(float(np.mean(width_valid)), 1)) if len(width_valid) > 0 else 160.0,
+        "mean_slope2": mean_slope2,
+        "mean_width_m": mean_width,
+        "mean_width": mean_width,
         "calibration_period": "Literature reference (Chow 1959; Arcement & Schneider 1989)",
         "passes_excluded_low_flow": 0,
         "passes_excluded_slope_quality": int(excl_stats["excluded_slope_quality"]),

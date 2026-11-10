@@ -20,6 +20,11 @@ This audit register establishes the verified baseline of the HydroSense-SWOT cod
 | **Pipeline Core** | Scientific Metrics Suite | `pipeline/metrics.py` | Implemented, Verified (unit tests) | Lead time N/A without issue-time forecast |
 | **Pipeline Core** | Validation Reporting Engine | `pipeline/validation_report.py` | Implemented, Verified (unit tests) | Hermetic, output-dir parameterized |
 | **Pipeline Core** | Provenance Contracts | `pipeline/provenance.py` | Implemented, Verified (unit tests) | Fail-closed manifest validator |
+| **Module 1 Real** | SWOT RiverSP V-D Ingestion | `scripts/ingest_swot_real.py` | Implemented, Verified | 15 shapefiles from PO.DAAC |
+| **Module 1 Real** | GPM IMERG Early Ingestion | `scripts/ingest_imerg_early_real.py` | Implemented, Verified | 431 slices via GES DISC OPeNDAP |
+| **Module 1 Real** | BWDB SW266 Gauge Ingestion | `scripts/ingest_gauge_sw266_real.py` | Implemented, Verified | 40 discrete observations (0 interpolation) |
+| **Module 1 Real** | Basin Delineation | `scripts/delineate_basin_geometry.py` | Implemented, Verified | SWORD v16 Asia 19 reaches & HydroBASINS |
+| **Module 1 Real** | Retrospective Hindcast Evaluation | `scripts/evaluate_real_hindcast.py` | Implemented, Verified | Sparse gauge protocol, MAE & sensitivity |
 | **Ingestion** | Real SWOT RiverSP Ingestion | `pipeline/ingest_swot.py` | Implemented, Verified | Fails closed without credentials |
 | **Ingestion** | Real GPM IMERG Ingestion | `pipeline/ingest_imerg.py` | Implemented, Verified | Fails closed without remote auth |
 | **Ingestion** | Real BWDB Gauge Ingestion | `pipeline/ingest_gauge.py` | Implemented, Verified | Fails closed without remote auth |

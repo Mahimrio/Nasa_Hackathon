@@ -46,18 +46,25 @@ The rainfall and stage event profiles are selected in code by year. The values b
 
 The script applies year-specific Gaussian widths and time windows around these pulses, adds noise, and rounds gauge output to two decimals. The generator source remains the authoritative specification of every parameter. When it changes, update this table and the manifest in the same change.
 
-### Important limitation of --mode real
+### Completed Real Data Integration (`--mode real`) & Strict Provenance Separation
 
-The --mode real branch calls SWORD and SWOT ingestion for the historical reach file. It then calls the synthetic event, rainfall, and gauge generators. It therefore does not produce a fully real fixture set. The current mode name and success message can mislead readers. Do not claim that a complete real-data pipeline ran merely because this command completed.
+The project enforces an architectural separation between synthetic engineering demonstration fixtures and verified real observations:
 
-Before enabling a real-data release, each output must have per-file provenance. A missing or failed source must fail closed or leave an explicitly marked synthetic demo; it must never silently mix real and synthetic records under one label.
+1. **Demo Mode (`data/fixtures/`):** Bundled synthetic scenarios labeled `SYNTHETIC_DEMO` are retained exclusively for offline UI testing, layout rendering, and hermetic unit tests. Manifested in `data/fixtures/PROVENANCE.json`.
+2. **Real Data Mode (`data/real/`):** Authenticated, real datasets are ingested into `data/real/` and validated fail-closed by `data/real/PROVENANCE.json`:
+   - `swot_reaches.nc`: 15 official NASA PO.DAAC `SWOT_L2_HR_RiverSP_reach_D` shapefile granules across 19 Surma River reaches (`45220400501` to `45220400591`).
+   - `imerg_map.nc`: 431 half-hourly slices of NASA GES DISC `GPM_3IMERGHHE` (V07B, prefix `3B-HHR-E`) retrieved via OPeNDAP for the May 26 – June 3, 2024 event window.
+   - `gauge_sw266.csv`: 40 raw discrete stage observations from official BWDB/FFWC bulletins for Kanaighat Station `SW266` ($13.20\text{ m PWD}$ danger level).
+   - `basin_geometry.json`: SWORD v16 Asia reach topology ($123.0\text{ km}$ length) and independently delineated catchment areas ($425\text{ km}^2$ quickflow, $26,200\text{ km}^2$ macro-basin).
+3. **Fail-Closed Gate:** In `--mode real`, any missing file, checksum mismatch, or unauthorized path traversal immediately terminates the pipeline with code 1. Real mode never opens files under `data/fixtures/`.
+4. **Retrospective Hindcast Evaluation:** Processed outputs are labeled `EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS` and formally reported in [`docs/evidence/real_hindcast_report.md`](evidence/real_hindcast_report.md).
 
 ## Metric interpretation
 
 - Do not publish NSE, KGE, PBIAS, lead time, timing error, calibration values, or event dates from synthetic fixtures as observed performance.
-- If synthetic metrics are shown for engineering demonstration, label the entire metric group **Synthetic scenario result ? not validation** and link to this disclosure.
+- If synthetic metrics are shown for engineering demonstration, label the entire metric group **Synthetic scenario result — not validation** and link to this disclosure.
 - Do not describe synthetic agreement as model skill, independent validation, a benchmark against observations, or evidence of operational warning ability.
-- Keep synthetic fixtures for interface development, deterministic tests, and code-path demonstrations. The real-data and synthetic-data paths must be visually and machine-readably distinct.
+- Keep synthetic fixtures for interface development, deterministic tests, and code-path demonstrations. The real-data and synthetic-data paths are visually and machine-readably distinct.
 
 ## Required implementation before this disclosure can pass review
 

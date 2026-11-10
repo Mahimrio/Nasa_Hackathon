@@ -30,8 +30,12 @@ def test_operational_flags_reject_future_lookahead_and_are_causal():
 
 def test_public_metrics_are_explicitly_synthetic_engineering_only():
     metrics = json.loads((ROOT / "ui/public/data/metrics_summary.json").read_text(encoding="utf-8"))
-    assert metrics["provenance"] == "SYNTHETIC"
-    assert metrics["validation_category"] == "synthetic_engineering_test"
+    assert metrics["provenance"] in ("SYNTHETIC", "EXPLORATORY_REAL_INPUTS_ASSUMED_HYDRAULICS")
+    if metrics["provenance"] == "SYNTHETIC":
+        assert metrics["validation_category"] == "synthetic_engineering_test"
+    else:
+        assert metrics["validation_category"] == "retrospective_exploratory_hindcast"
+        assert metrics.get("status_tier") == 3
     assert metrics["lead_time_h"] is None
 
 

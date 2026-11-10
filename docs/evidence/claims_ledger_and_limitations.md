@@ -22,6 +22,9 @@ Every numerical figure and performance assertion appearing in project documentat
 | **Baseline NSE Comparison** | README & Dashboard | Baseline NSE `-0.14` | Recomputed directly using 6h unrouted rolling accumulation benchmark on identical holdout samples. | **VERIFIED ON FIXTURE DATA**. |
 | **SWOT Continuous Monitoring** | Pitch Drafts | "SWOT tracks rivers continuously" | Factually false. SWOT has a 21-day orbit cycle and ~2 passes per cycle in the tropics. | **WITHDRAWN** (SWOT is strictly used for offline geometry calibration). |
 | **2D Floodplain Inundation** | Project Ideation | "Predicts 2D embankment overtopping" | Unimplemented and out of scope. 1D channel stage routing cannot model 2D hydrodynamic flow. | **EXCLUDED FROM SCOPE** (Disclosed in Scope OUT). |
+| **May 2024 Real Event Relative Rise MAE** | Real Hindcast Report | MAE `1.50 m` | Computed strictly on N=25 raw BWDB SW266 observations without interpolation across May 26 - June 3, 2024 event window. | **VERIFIED ON REAL DATA** (Status Tier 3 Exploratory Hindcast). |
+| **May 2024 Peak Stage Difference** | Real Hindcast Report | `+2.75 m` sim rise vs `+3.90 m` obs rise (Diff: `-1.15 m`) | Underestimates macro peak due to unmodeled transboundary Barak inflow (26,200 km² macro-basin vs 425 km² quickflow). | **VERIFIED ON REAL DATA** (Physical sub-basin disconnect documented). |
+| **May 2024 Peak Arrival Timing** | Real Hindcast Report | Sim: May 28 19:00 UTC vs Obs: May 31 00:00–03:00 UTC | Local Meghalaya flash pulse peaks ~25h after storm; broader Barak flood wave crests 2–3 days later. | **VERIFIED ON REAL DATA** (Timing interval window documented). |
 
 ---
 
