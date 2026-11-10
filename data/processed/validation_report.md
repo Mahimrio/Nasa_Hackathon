@@ -17,9 +17,9 @@
 
 | Metric | HydroSense-SWOT (Calibrated) | Rainfall Baseline | Delta / Value Added | Formula & Units |
 |---|---|---|---|---|
-| **Nash-Sutcliffe Efficiency (NSE)** | **0.73** | -0.14 | **+0.88** | $1 - \frac{\sum (sim-obs)^2}{\sum (obs-\bar{obs})^2}$ |
+| **Nash-Sutcliffe Efficiency (NSE)** | **0.73** | -0.16 | **+0.89** | $1 - \frac{\sum (sim-obs)^2}{\sum (obs-\bar{obs})^2}$ |
 | **Kling-Gupta Efficiency (KGE)** | **0.69** | 0.47 | **+0.22** | $1 - \sqrt{(r-1)^2 + (\alpha-1)^2 + (\beta-1)^2}$ |
-| **Percent Bias (PBIAS)** | **+2.5%** | +2.4% | **Lower volume distortion** | $\frac{\sum (sim-obs)}{\sum obs} \times 100\%$ |
+| **Percent Bias (PBIAS)** | **+2.5%** | +3.2% | **Lower volume distortion** | $\frac{\sum (sim-obs)}{\sum obs} \times 100\%$ |
 | **Peak Timing Error** | **-7.5 h** | -27.5 h | **+20.0 h gain** | $(t_{sim\_peak} - t_{obs\_peak})$ in hours |
 | **Warning Lead Time** | **N/A** | N/A | **Operational decision window** | Time from 1st RED flag to Danger Level |
 
@@ -41,15 +41,15 @@
 ## 3. Diagnostic Validation Figures
 
 ### Figure 1: Test-Period Hydrograph & Uncertainty Envelope
-![Validation Hydrograph](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/hydrograph_test_period.png)
+![Validation Hydrograph](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/hydrograph_test_period.png)
 *Figure 1: Comparison between HydroSense modelled stage (cyan curve with shaded $\pm 0.18\text{ m}$ SWOT uncertainty envelope), observed BWDB gauge readings (white points), and BWDB Danger Level ($13.20\text{ m PWD}$). Inverted hyetograph shows 30-minute IMERG Early Run rainfall.*
 
 ### Figure 2: Simulated vs Observed Scatter Plot
-![Scatter Plot](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/scatter_sim_vs_obs.png)
+![Scatter Plot](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/scatter_sim_vs_obs.png)
 *Figure 2: 1:1 scatter plot of simulated versus observed water level on the April-May 2026 test period ($N=1464$).*
 
 ### Figure 3: Residual & Error Distribution Analysis
-![Residual Analysis](file:///F:/Nasa Webapp Challange/data/processed/validation_plots/residual_analysis.png)
+![Residual Analysis](file:///F:/Nasa/Nasa_Hackathon/data/processed/validation_plots/residual_analysis.png)
 *Figure 3: Residual time series $e(t) = Sim(t) - Obs(t)$ and histogram of residual distribution.*
 
 ---

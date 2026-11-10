@@ -1,0 +1,353 @@
+{
+  "dataset_name": "Surma River Basin Geometry & SWORD v16 Reaches",
+  "pour_point": {
+    "station_name": "Kanaighat",
+    "station_id": "SW266",
+    "latitude": 25.0,
+    "longitude": 92.26,
+    "river": "Surma River"
+  },
+  "target_reach_id": "45220400591",
+  "catchment_area_km2": 425.0,
+  "macro_barak_basin_km2": 26200.0,
+  "total_surma_length_km": 123.0,
+  "runoff_coeff": 0.58,
+  "runoff_coeff_bounds": [
+    0.45,
+    0.72
+  ],
+  "baseflow_m3s": 28.0,
+  "baseflow_m3s_bounds": [
+    18.0,
+    42.0
+  ],
+  "parameter_status": "provisional_literature_assumptions_subject_to_sensitivity",
+  "data_sources": [
+    {
+      "source": "NASA PO.DAAC / CNES SWOT Level 2 High-Rate River Single-Pass Vector (SWOT_L2_HR_RiverSP_reach_D)",
+      "doi": "10.5067/SWOT-RIVSP-D",
+      "collection": "SWOT_L2_HR_RiverSP_reach_D"
+    },
+    {
+      "source": "SWORD (SWOT River Database) v16 Asia Reaches",
+      "doi": "10.5281/zenodo.10013982",
+      "citation": "Altenau et al. (2021), Water Resources Research"
+    },
+    {
+      "source": "HydroBASINS Level 08 (Asia)",
+      "citation": "Lehner & Grill (2013), Hydrological Processes"
+    },
+    {
+      "source": "BWDB / FFWC Annual Flood Report 2024",
+      "station": "SW266 Kanaighat, Surma River"
+    }
+  ],
+  "reaches": {
+    "45220400591": {
+      "reach_id": "45220400591",
+      "river_name": "Surma River",
+      "p_lat": 24.995661,
+      "p_lon": 91.238404,
+      "length_m": 10880.3,
+      "width_m": 203.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 587594.5,
+      "upstream_reach_ids": [
+        "45220400601"
+      ],
+      "downstream_reach_ids": [
+        "45220400581"
+      ]
+    },
+    "45220400581": {
+      "reach_id": "45220400581",
+      "river_name": "Surma River",
+      "p_lat": 24.964195,
+      "p_lon": 91.169639,
+      "length_m": 10881.9,
+      "width_m": 190.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 576714.2,
+      "upstream_reach_ids": [
+        "45220400591"
+      ],
+      "downstream_reach_ids": [
+        "45220400571"
+      ]
+    },
+    "45220400571": {
+      "reach_id": "45220400571",
+      "river_name": "Surma River",
+      "p_lat": 24.866076,
+      "p_lon": 91.158875,
+      "length_m": 15033.2,
+      "width_m": 171.0,
+      "slope": 0.0002084,
+      "dist_out_m": 565832.3,
+      "upstream_reach_ids": [
+        "45220400581"
+      ],
+      "downstream_reach_ids": [
+        "45220400551"
+      ]
+    },
+    "45220402051": {
+      "reach_id": "45220402051",
+      "river_name": "Surma River",
+      "p_lat": 24.891321,
+      "p_lon": 91.086128,
+      "length_m": 804.7,
+      "width_m": 67.0,
+      "slope": 0.0001253,
+      "dist_out_m": 564775.8,
+      "upstream_reach_ids": [
+        "45220402041"
+      ],
+      "downstream_reach_ids": [
+        "45220402061"
+      ]
+    },
+    "45220402061": {
+      "reach_id": "45220402061",
+      "river_name": "Surma River",
+      "p_lat": 24.887814,
+      "p_lon": 91.090341,
+      "length_m": 389.9,
+      "width_m": 63.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 563971.1,
+      "upstream_reach_ids": [
+        "45220402051"
+      ],
+      "downstream_reach_ids": [
+        "45220402071"
+      ]
+    },
+    "45220402071": {
+      "reach_id": "45220402071",
+      "river_name": "Surma River",
+      "p_lat": 24.887482,
+      "p_lon": 91.095329,
+      "length_m": 738.5,
+      "width_m": 75.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 563581.2,
+      "upstream_reach_ids": [
+        "45220402061"
+      ],
+      "downstream_reach_ids": [
+        "45220402081"
+      ]
+    },
+    "45220402081": {
+      "reach_id": "45220402081",
+      "river_name": "Surma River",
+      "p_lat": 24.884752,
+      "p_lon": 91.100703,
+      "length_m": 480.6,
+      "width_m": 89.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 562842.6,
+      "upstream_reach_ids": [
+        "45220402071"
+      ],
+      "downstream_reach_ids": [
+        "45220402091"
+      ]
+    },
+    "45220402091": {
+      "reach_id": "45220402091",
+      "river_name": "Surma River",
+      "p_lat": 24.882301,
+      "p_lon": 91.102342,
+      "length_m": 405.5,
+      "width_m": 80.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 562362.1,
+      "upstream_reach_ids": [
+        "45220402081"
+      ],
+      "downstream_reach_ids": [
+        "45220402101"
+      ]
+    },
+    "45220402101": {
+      "reach_id": "45220402101",
+      "river_name": "Surma River",
+      "p_lat": 24.870445,
+      "p_lon": 91.106753,
+      "length_m": 2977.5,
+      "width_m": 63.0,
+      "slope": 7.11e-05,
+      "dist_out_m": 561956.5,
+      "upstream_reach_ids": [
+        "45220402091"
+      ],
+      "downstream_reach_ids": [
+        "45220402111"
+      ]
+    },
+    "45220402111": {
+      "reach_id": "45220402111",
+      "river_name": "Surma River",
+      "p_lat": 24.850369,
+      "p_lon": 91.116996,
+      "length_m": 3598.0,
+      "width_m": 80.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 558979.1,
+      "upstream_reach_ids": [
+        "45220402101"
+      ],
+      "downstream_reach_ids": [
+        "45220402121"
+      ]
+    },
+    "45220402131": {
+      "reach_id": "45220402131",
+      "river_name": "Surma River",
+      "p_lat": 24.837299,
+      "p_lon": 91.124022,
+      "length_m": 2051.6,
+      "width_m": 122.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 555115.0,
+      "upstream_reach_ids": [
+        "45220402121"
+      ],
+      "downstream_reach_ids": [
+        "45220402141"
+      ]
+    },
+    "45220402141": {
+      "reach_id": "45220402141",
+      "river_name": "Surma River",
+      "p_lat": 24.826479,
+      "p_lon": 91.116766,
+      "length_m": 1221.2,
+      "width_m": 186.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 553063.4,
+      "upstream_reach_ids": [
+        "45220402131"
+      ],
+      "downstream_reach_ids": [
+        "45220401991"
+      ]
+    },
+    "45220401991": {
+      "reach_id": "45220401991",
+      "river_name": "Surma River",
+      "p_lat": 24.817026,
+      "p_lon": 91.114275,
+      "length_m": 1043.1,
+      "width_m": 136.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 551842.2,
+      "upstream_reach_ids": [
+        "45220402141"
+      ],
+      "downstream_reach_ids": [
+        "45220400551"
+      ]
+    },
+    "45220400551": {
+      "reach_id": "45220400551",
+      "river_name": "Surma River",
+      "p_lat": 24.769351,
+      "p_lon": 91.096151,
+      "length_m": 10999.7,
+      "width_m": 210.0,
+      "slope": 1.5e-05,
+      "dist_out_m": 550799.1,
+      "upstream_reach_ids": [
+        "45220400571",
+        "45220401991"
+      ],
+      "downstream_reach_ids": [
+        "45220400541"
+      ]
+    },
+    "45220400541": {
+      "reach_id": "45220400541",
+      "river_name": "Surma River",
+      "p_lat": 24.700515,
+      "p_lon": 91.092604,
+      "length_m": 11503.3,
+      "width_m": 254.0,
+      "slope": 1.31e-05,
+      "dist_out_m": 539799.4,
+      "upstream_reach_ids": [
+        "45220400551"
+      ],
+      "downstream_reach_ids": [
+        "45220400531"
+      ]
+    },
+    "45220400531": {
+      "reach_id": "45220400531",
+      "river_name": "Surma River",
+      "p_lat": 24.602649,
+      "p_lon": 91.112013,
+      "length_m": 19205.3,
+      "width_m": 317.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 528296.1,
+      "upstream_reach_ids": [
+        "45220400541"
+      ],
+      "downstream_reach_ids": [
+        "45220400521"
+      ]
+    },
+    "45220400521": {
+      "reach_id": "45220400521",
+      "river_name": "Surma River",
+      "p_lat": 24.508435,
+      "p_lon": 91.062125,
+      "length_m": 11405.6,
+      "width_m": 278.0,
+      "slope": 4.5e-05,
+      "dist_out_m": 509090.9,
+      "upstream_reach_ids": [
+        "45220400531"
+      ],
+      "downstream_reach_ids": [
+        "45220400511"
+      ]
+    },
+    "45220400511": {
+      "reach_id": "45220400511",
+      "river_name": "Surma River",
+      "p_lat": 24.473845,
+      "p_lon": 91.073958,
+      "length_m": 499.6,
+      "width_m": 352.5,
+      "slope": 4.5e-05,
+      "dist_out_m": 497685.3,
+      "upstream_reach_ids": [
+        "45220400521"
+      ],
+      "downstream_reach_ids": [
+        "45220400501",
+        "45220401943"
+      ]
+    },
+    "45220400501": {
+      "reach_id": "45220400501",
+      "river_name": "Surma River",
+      "p_lat": 24.421986,
+      "p_lon": 91.05181,
+      "length_m": 18854.5,
+      "width_m": 256.0,
+      "slope": 3.15e-05,
+      "dist_out_m": 488076.4,
+      "upstream_reach_ids": [
+        "45220400511"
+      ],
+      "downstream_reach_ids": [
+        "45220400111"
+      ]
+    }
+  }
+}

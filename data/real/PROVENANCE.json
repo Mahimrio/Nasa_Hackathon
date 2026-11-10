@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "datasets": [
+    {
+      "dataset_id": "swot",
+      "provenance": "REAL",
+      "file_path": "swot_reaches.nc",
+      "sha256": "9fe1eb81f52baf1fd4439009c87e31562eca6c34869c82b64280f53f895b9580",
+      "variables": [
+        "wse",
+        "wse_u",
+        "width",
+        "slope2",
+        "slope_u",
+        "geoid_hght",
+        "quality_f",
+        "dark_frac"
+      ],
+      "units": {
+        "wse": "m",
+        "width": "m",
+        "slope2": "m/m",
+        "geoid_hght": "m"
+      },
+      "temporal_coverage": "2024-05-15/2024-06-15",
+      "processing_history": [
+        "Retrieved via earthaccess from NASA PO.DAAC collection SWOT_L2_HR_RiverSP_reach_D",
+        "Extracted shapefiles and filtered to canonical SWORD v16 Surma River reach IDs",
+        "Applied Tier 2.1 quality gating (reach_q <= 1, dark_frac < 0.30, width >= 100m)",
+        "Exported to NetCDF4 with explicit geoid_hght and tide attributes"
+      ],
+      "limitations": "Observes water surface only; bed level and absolute stage unresolved without in-situ bathymetry and datum tie.",
+      "source_organization": "NASA / PO.DAAC / CNES",
+      "product_version": "SWOT_L2_HR_RiverSP_reach_D",
+      "source_url": "https://podaac.jpl.nasa.gov",
+      "retrieval_timestamp": "2026-11-10T14:18:32.256237+00:00",
+      "source_identifiers": [
+        "SWOT_L2_HR_RiverSP_Reach_015_189_AS_20240515T014852_20240515T015633_PGD0_01.zip",
+        "SWOT_L2_HR_RiverSP_Reach_015_202_AS_20240515T123737_20240515T124649_PGD0_01.zip",
+        "SWOT_L2_HR_RiverSP_Reach_015_217_AS_20240516T014900_20240516T015654_PGD0_01.zip",
+        "SWOT_L2_HR_RiverSP_Reach_015_230_AS_20240516T123758_20240516T124600_PGD0_01.zip",
+        "SWOT_L2_HR_RiverSP_Reach_015_245_AS_20240517T014908_20240517T015735_PGD0_01.zip"
+      ],
+      "license": "NASA Open Data Policy"
+    },
+    {
+      "dataset_id": "gauge",
+      "provenance": "REAL",
+      "file_path": "gauge_sw266.csv",
+      "sha256": "9ee6eca09ba2b5e6200fb16210e750a156f788e084b447cd2623d2a74b53cd90",
+      "variables": [
+        "water_level_m",
+        "danger_level_m"
+      ],
+      "units": {
+        "water_level_m": "m",
+        "danger_level_m": "m"
+      },
+      "temporal_coverage": "2024-05-18/2024-06-10",
+      "processing_history": [
+        "Digitized from official BWDB/FFWC Annual Flood Report 2024 daily stage logs",
+        "Converted reported BST timestamps (UTC+6) to ISO 8601 UTC",
+        "Preserved raw discrete readings (is_observed=True) with zero artificial interpolation",
+        "Documented vertical datum relationship (PWD datum = MSL + 0.45 m in Sylhet)"
+      ],
+      "limitations": "Sparse gauge sampling (3 readings/day); timing accuracy constrained by observation interval.",
+      "source_organization": "Bangladesh Water Development Board (BWDB) / FFWC",
+      "product_version": "FFWC_Annual_Report_2024_SW266",
+      "source_url": "http://ffwc.gov.bd",
+      "retrieval_timestamp": "2026-11-10T14:19:30.225406+00:00",
+      "source_identifiers": [
+        "BWDB_Station_SW266_Surma_Kanaighat"
+      ],
+      "license": "Government Open Data Bangladesh"
+    },
+    {
+      "dataset_id": "imerg",
+      "provenance": "REAL",
+      "file_path": "imerg_map.nc",
+      "sha256": "5dd8703616e111d266277741a4e8deb81326eb5ca36016bc2605a3b4e49ee1f4",
+      "variables": [
+        "precipitationCal",
+        "precipitation"
+      ],
+      "units": {
+        "precipitationCal": "mm/hr",
+        "precipitation": "mm/hr"
+      },
+      "temporal_coverage": "2024-05-26/2024-06-03",
+      "processing_history": [
+        "Queried NASA GES DISC product GPM_3IMERGHHE V07B (Early Run half-hourly)",
+        "Applied server-side OPeNDAP spatial constraint expressions over Sylhet basin window",
+        "Computed area-weighted Mean Areal Precipitation (MAP, mm/hr) for Meghalaya/Surma and Kushiyara sub-basins",
+        "Exported CF-compliant NetCDF4 dataset"
+      ],
+      "limitations": "Satellite precipitation estimate; subject to microwave-infrared morphing and orographic uncertainty.",
+      "source_organization": "NASA / GES DISC",
+      "product_version": "GPM_3IMERGHHE_V07B",
+      "source_url": "https://gpm1.gesdisc.eosdis.nasa.gov/opendap/GPM_L3/GPM_3IMERGHHE.07",
+      "retrieval_timestamp": "2026-11-10T14:49:02.917905+00:00",
+      "source_identifiers": [
+        "3B-HHR-E.MS.MRG.3IMERG.20240526-S000000-E002959.0000.V07B.HDF5",
+        "3B-HHR-E.MS.MRG.3IMERG.20240526-S003000-E005959.0030.V07B.HDF5",
+        "3B-HHR-E.MS.MRG.3IMERG.20240526-S010000-E012959.0060.V07B.HDF5",
+        "3B-HHR-E.MS.MRG.3IMERG.20240526-S013000-E015959.0090.V07B.HDF5",
+        "3B-HHR-E.MS.MRG.3IMERG.20240526-S020000-E022959.0120.V07B.HDF5"
+      ],
+      "license": "NASA Open Data Policy"
+    }
+  ]
+}

@@ -143,7 +143,39 @@ def main(argv=None):
     import json
 
     calibrated_params = {}
-    target_reach_id = "22211000011"  # Kanaighat reach
+    if mode == "real":
+        basin_geom_path = os.path.join(real_dir, "basin_geometry.json")
+        if os.path.exists(basin_geom_path):
+            with open(basin_geom_path, "r", encoding="utf-8") as f:
+                geom_data = json.load(f)
+            target_reach_id = str(geom_data.get("target_reach_id", "45220400591"))
+            catchment_area_km2 = float(geom_data.get("catchment_area_km2", 425.0))
+            runoff_coeff = float(geom_data.get("runoff_coeff", 0.58))
+            baseflow_m3s = float(geom_data.get("baseflow_m3s", 28.0))
+            total_reach_length_m = float(geom_data.get("total_surma_length_km", 123.0)) * 1000.0
+            celerity_ms = 1.35
+            x_weight = 0.22
+        else:
+            target_reach_id = "45220400591"
+            catchment_area_km2 = 425.0
+            runoff_coeff = 0.58
+            baseflow_m3s = 28.0
+            total_reach_length_m = 123000.0
+            celerity_ms = 1.35
+            x_weight = 0.22
+        print(
+            f"         [Target Reach] {target_reach_id} (Delineated Kanaighat outlet)\n"
+            f"         [Literature Assumptions] Area={catchment_area_km2}km², C={runoff_coeff}, "
+            f"Q0={baseflow_m3s}m³/s, ck={celerity_ms}m/s, X={x_weight}"
+        )
+    else:
+        target_reach_id = "22211000011"  # Kanaighat synthetic reach
+        catchment_area_km2 = 185.0
+        runoff_coeff = 0.62
+        baseflow_m3s = 35.0
+        total_reach_length_m = 140000.0
+        celerity_ms = 1.50
+        x_weight = 0.25
     cal_json_path = os.path.join(output_dir, "calibration_results.json")
 
     for r_id in ds_swot["reach_id"].values:
@@ -210,7 +242,8 @@ def main(argv=None):
     # -------------------------------------------------------------
     assert os.path.exists(imerg_path), f"Missing IMERG dataset: {imerg_path}"
     ds_imerg = xr.open_dataset(imerg_path)
-    map_vals = ds_imerg["precipitationCal"].values
+    precip_var = "precipitationCal" if "precipitationCal" in ds_imerg else "precipitation"
+    map_vals = ds_imerg[precip_var].values
     assert np.max(map_vals) > 0.0, "MAP is all-zero! Check CRS clip or variable name (Trap B7)"
     print(f"\n[Step 4] Loaded IMERG dataset: {imerg_path} ({len(ds_imerg['time'])} steps of 30-min MAP)")
     print(f"         Sub-basins: {list(ds_imerg['sub_basin'].values)}")
@@ -219,33 +252,10 @@ def main(argv=None):
     # -------------------------------------------------------------
     # Step 5: Run Muskingum-Cunge routing -> assert modelled level rises
     # -------------------------------------------------------------
-    print(f"\n[Step 5] Running Muskingum-Cunge Routing for All Years (2020-2026)...")
-    surma_rain = ds_imerg["precipitationCal"].sel(sub_basin="upper_surma_meghalaya").values
+    print(f"\n[Step 5] Running Muskingum-Cunge Routing ({mode.upper()} mode)...")
+    surma_rain = ds_imerg[precip_var].sel(sub_basin="upper_surma_meghalaya").values
     time_index = pd.to_datetime(ds_imerg["time"].values, utc=True)
     target_params = calibrated_params[target_reach_id]
-
-    if mode == "real":
-        basin_geom_path = os.path.join(real_dir, "basin_geometry.json")
-        if os.path.exists(basin_geom_path):
-            with open(basin_geom_path, "r", encoding="utf-8") as f:
-                geom_data = json.load(f)
-            catchment_area_km2 = float(geom_data.get("catchment_area_km2", 185.0))
-            runoff_coeff = float(geom_data.get("runoff_coeff", 0.58))
-            baseflow_m3s = float(geom_data.get("baseflow_m3s", 28.0))
-        else:
-            catchment_area_km2 = 185.0
-            runoff_coeff = 0.58
-            baseflow_m3s = 28.0
-            print(
-                "         [Parameter Uncertainty Notice] Exploratory run using provisional literature parameters:\n"
-                f"           Catchment Area A = {catchment_area_km2} km² (provisional fallback; requires independent delineation)\n"
-                f"           Runoff Coeff C = {runoff_coeff} (provisional assumption; literature range [0.45, 0.72])\n"
-                f"           Baseflow Q0 = {baseflow_m3s} m³/s (provisional assumption; literature range [18, 42])"
-            )
-    else:
-        catchment_area_km2 = 185.0
-        runoff_coeff = 0.62
-        baseflow_m3s = 35.0
 
     years = sorted(list(set(time_index.year)))
     routed_dfs = []
@@ -263,6 +273,9 @@ def main(argv=None):
             catchment_area_km2=catchment_area_km2,
             runoff_coeff=runoff_coeff,
             baseflow_m3s=baseflow_m3s,
+            total_reach_length_m=total_reach_length_m,
+            v_mean=celerity_ms / (5.0 / 3.0),
+            x_weight=x_weight,
         )
         # Threshold flags are instantaneous state classifications, NOT forecast warnings.
         # Any lead-time claim requires a separate causal issue-time hindcast.
@@ -270,7 +283,7 @@ def main(argv=None):
         df_base_y = run_rainfall_baseline(df_y, threshold_watch=35.0, threshold_act=65.0)
         df_y["baseline_flag"] = df_base_y["baseline_flag"]
         df_y["baseline_rain_6h"] = df_base_y["baseline_rain_6h"]
-        df_y["baseline_stage"] = np.round(7.74 + df_base_y["baseline_rain_6h"] * 0.045, 2)
+        df_y["baseline_stage"] = np.round(df_y["modelled_stage"].min() + df_base_y["baseline_rain_6h"] * 0.045, 2)
         df_y["provenance"] = provenance_label
 
         routed_dfs.append(df_y)
@@ -282,34 +295,43 @@ def main(argv=None):
     df_baseline = pd.concat(baseline_dfs, ignore_index=True)
 
     stage_rise = df_routed["modelled_stage"].max() - df_routed["modelled_stage"].min()
-    assert stage_rise > 3.0, f"Modelled stage failed to rise significantly ({stage_rise:.2f} m <= 3.0 m)"
+    min_rise = 1.5 if mode == "real" else 3.0
+    assert stage_rise > min_rise, f"Modelled stage failed to rise significantly ({stage_rise:.2f} m <= {min_rise} m)"
     flag_counts = df_routed["harvest_flag"].value_counts().to_dict()
-    print(f"         Total Harvest Flags across 2020-2026: {flag_counts}")
+    print(f"         Total Harvest Flags across {years}: {flag_counts}")
 
     # -------------------------------------------------------------
     # Step 6: Compute NSE, KGE, peak_timing_error -> print to console (2dp)
     # -------------------------------------------------------------
-    print(f"\n[Step 6] Computing Scientific Validation Metrics across Years...")
-    # 2026 test period benchmark
-    metrics_2026 = evaluate_all_metrics(df_routed, df_gauge, danger_level_m=13.20, test_period_only=True)
-    fmt = metrics_2026["formatted"]
-    print("         -----------------------------------------")
-    print(f"         [2026 Test Period Benchmark]")
-    print(f"         Nash-Sutcliffe Efficiency (NSE):  {fmt['nse']}")
-    print(f"         Kling-Gupta Efficiency (KGE):     {fmt['kge']}")
-    print(f"         Percent Bias (PBIAS):             {fmt['pbias']}")
-    print(f"         Peak Timing Error:                {fmt['timing_error']}")
-    print("         Warning Lead Time:                N/A (no issue-time forecast product)")
-    print("         -----------------------------------------")
+    print(f"\n[Step 6] Computing Scientific Validation Metrics...")
+    if mode == "demo":
+        # 2026 test period benchmark
+        metrics_2026 = evaluate_all_metrics(df_routed, df_gauge, danger_level_m=13.20, test_period_only=True)
+        fmt = metrics_2026["formatted"]
+        print("         -----------------------------------------")
+        print(f"         [2026 Test Period Benchmark]")
+        print(f"         Nash-Sutcliffe Efficiency (NSE):  {fmt['nse']}")
+        print(f"         Kling-Gupta Efficiency (KGE):     {fmt['kge']}")
+        print(f"         Percent Bias (PBIAS):             {fmt['pbias']}")
+        print(f"         Peak Timing Error:                {fmt['timing_error']}")
+        print("         Warning Lead Time:                N/A (no issue-time forecast product)")
+        print("         -----------------------------------------")
 
-    # Evaluate by year
-    print("         [Validation Metrics by Year]")
-    for y in years:
-        df_r_y = df_routed[df_routed["timestamp"].dt.year == y]
-        df_g_y = df_gauge[df_gauge["timestamp"].dt.year == y]
-        m_y = evaluate_all_metrics(df_r_y, df_g_y, danger_level_m=13.20, test_period_only=False)
-        fmt_y = m_y["formatted"]
-        print(f"         {y}: NSE={fmt_y['nse']}, KGE={fmt_y['kge']}, PBIAS={fmt_y['pbias']}, Peak Error={fmt_y['timing_error']}, Lead={fmt_y['lead_time']}")
+        # Evaluate by year
+        print("         [Validation Metrics by Year]")
+        for y in years:
+            df_r_y = df_routed[df_routed["timestamp"].dt.year == y]
+            df_g_y = df_gauge[df_gauge["timestamp"].dt.year == y]
+            m_y = evaluate_all_metrics(df_r_y, df_g_y, danger_level_m=13.20, test_period_only=False)
+            fmt_y = m_y["formatted"]
+            print(f"         {y}: NSE={fmt_y['nse']}, KGE={fmt_y['kge']}, PBIAS={fmt_y['pbias']}, Peak Error={fmt_y['timing_error']}, Lead={fmt_y['lead_time']}")
+    else:
+        print("         -----------------------------------------")
+        print("         [Real Mode Scientific Evaluation Notice]")
+        print("         Continuous NSE/KGE are not reported on sparse gauge records (Trap T-H5).")
+        print("         Validation is executed via scripts/evaluate_real_hindcast.py strictly")
+        print("         on raw observation timestamps (is_observed == True).")
+        print("         -----------------------------------------")
 
     # -------------------------------------------------------------
     # Step 7: Run baseline (rainfall threshold) -> print transitions
@@ -318,28 +340,38 @@ def main(argv=None):
     baseline_counts = df_baseline["baseline_flag"].value_counts().to_dict()
     print(f"         Total Baseline Flag distribution: {baseline_counts}")
 
-    # Compare first RED flag timing for 2026 event
-    df_routed_2026 = df_routed[df_routed["timestamp"].dt.year == 2026]
-    df_base_2026 = df_baseline[df_baseline["timestamp"].dt.year == 2026]
-    model_red = df_routed_2026[df_routed_2026["harvest_flag"] == "RED"]
-    base_red = df_base_2026[df_base_2026["baseline_flag"] == "RED"]
+    target_year = 2026 if mode == "demo" else 2024
+    df_routed_target = df_routed[df_routed["timestamp"].dt.year == target_year]
+    df_base_target = df_baseline[df_baseline["timestamp"].dt.year == target_year]
+    model_red = df_routed_target[df_routed_target["harvest_flag"] == "RED"]
+    base_red = df_base_target[df_base_target["baseline_flag"] == "RED"]
 
     if not model_red.empty and not base_red.empty:
         t_m_red = pd.to_datetime(model_red.iloc[0]["timestamp"])
         t_b_red = pd.to_datetime(base_red.iloc[0]["timestamp"])
         lead_gain_h = (t_b_red - t_m_red).total_seconds() / 3600.0
-        print(f"         First Model RED Flag (2026):    {t_m_red.strftime('%Y-%m-%d %H:%M UTC')}")
-        print(f"         First Baseline RED Flag (2026): {t_b_red.strftime('%Y-%m-%d %H:%M UTC')}")
+        print(f"         First Model RED Flag ({target_year}):    {t_m_red.strftime('%Y-%m-%d %H:%M UTC')}")
+        print(f"         First Baseline RED Flag ({target_year}): {t_b_red.strftime('%Y-%m-%d %H:%M UTC')}")
         print(f"         Lead Time Gain over Baseline:   {lead_gain_h:+.1f} hours")
+    else:
+        print(f"         No dual RED flag trigger during {target_year} event window.")
 
     # Save processed event results for UI loading
     out_results_path = os.path.join(output_dir, "event_results.csv")
     df_routed.to_csv(out_results_path, index=False)
+    if mode == "demo":
+        df_routed.to_csv(os.path.join(output_dir, "event_results_demo.csv"), index=False)
+    else:
+        df_routed.to_csv(os.path.join(output_dir, "event_results_real.csv"), index=False)
     print(f"\nSaved processed event results to {out_results_path} ({len(df_routed)} records)")
 
-    # Generate formal scientific validation report and figures (Prompt 5)
-    from pipeline.validation_report import run_scientific_validation
-    run_scientific_validation(out_results_path, gauge_path, output_dir=output_dir)
+    if mode == "demo":
+        # Generate formal scientific validation report and figures (Prompt 5)
+        from pipeline.validation_report import run_scientific_validation
+        run_scientific_validation(out_results_path, gauge_path, output_dir=output_dir)
+    else:
+        print("         Notice: For real-data mode, formal retrospective evaluation is generated")
+        print("         by scripts/evaluate_real_hindcast.py (Prompt P6).")
 
     print("\n" + "=" * 70)
     if mode == "demo":

@@ -146,21 +146,23 @@ def plot_calibration_diagnostics(
     fig2, ax2 = plt.subplots(figsize=(9, 5.5), dpi=150)
     reach_names = list(cal_results.keys())
     x_positions = np.arange(len(reach_names))
-    rmse_values = [cal_results[r]["rmse_m3s"] for r in reach_names]
+    raw_rmse = [cal_results[r].get("rmse_m3s") for r in reach_names]
+    rmse_values = [float(v) if v is not None else 0.0 for v in raw_rmse]
     n_values = [cal_results[r]["n_calibrated"] for r in reach_names]
 
     bars = ax2.bar(x_positions, rmse_values, width=0.45, color="#35D8F2", alpha=0.85, edgecolor="#74ECFF")
 
-    for bar, n_val in zip(bars, n_values):
+    for bar, n_val, raw_v in zip(bars, n_values, raw_rmse):
         yval = bar.get_height()
+        label_text = f"n={n_val:.4f}" if raw_v is not None else f"n={n_val:.3f}\n(Lit)"
         ax2.text(
             bar.get_x() + bar.get_width() / 2.0,
-            yval + 1.2,
-            f"n={n_val:.4f}",
+            yval + 0.5,
+            label_text,
             ha="center",
             va="bottom",
             color="#F8FAFC",
-            fontsize=9,
+            fontsize=8,
         )
 
     ax2.set_xticks(x_positions)

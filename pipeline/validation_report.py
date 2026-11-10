@@ -384,6 +384,12 @@ def run_scientific_validation(
     """
     if event_csv_path is None:
         event_csv_path = os.path.join(OUTPUT_DIR, "event_results.csv")
+        demo_path = os.path.join(OUTPUT_DIR, "event_results_demo.csv")
+        if os.path.exists(demo_path) and os.path.exists(event_csv_path):
+            df_check = pd.read_csv(event_csv_path)
+            if "timestamp" in df_check and not df_check["timestamp"].str.contains("2026").any():
+                event_csv_path = demo_path
+
     if gauge_csv_path is None:
         gauge_csv_path = os.path.join(str(ROOT_DIR), "data", "fixtures", "gauge_kanaighat.csv")
 
@@ -393,13 +399,16 @@ def run_scientific_validation(
     df_sim = pd.read_csv(event_csv_path)
     df_obs = pd.read_csv(gauge_csv_path)
 
+    has_2026 = "timestamp" in df_sim and pd.to_datetime(df_sim["timestamp"], utc=True).dt.year.isin([2026]).any()
+    test_period = True if has_2026 else False
+
     # 1. Evaluate comparison
     comparison = compare_model_vs_baseline(
         df_sim=df_sim,
         df_baseline=df_sim,
         df_obs=df_obs,
         danger_level_m=KANAIGHAT_DANGER_LEVEL_M,
-        test_period_only=True,
+        test_period_only=test_period,
     )
 
     # 2. Get aligned test dataset for plots
@@ -407,7 +416,7 @@ def run_scientific_validation(
         df_sim=df_sim,
         df_obs=df_obs,
         tolerance="15min",
-        test_period_only=True,
+        test_period_only=test_period,
     )
 
     hs_metrics = comparison["hydrosense"]
