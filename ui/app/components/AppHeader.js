@@ -201,7 +201,7 @@ export default function AppHeader({
           aria-current={routeKey === "trends" ? "page" : undefined}
           onClick={choose("trends")}
         >
-          <span className="nav-step-badge nav-step-badge--nasa" style={{ background: "var(--teal-primary, #0ea5e9)", color: "#0b1215", fontWeight: 800, padding: "0 5px", borderRadius: "4px" }}>
+          <span className="nav-step-badge nav-step-badge--nasa">
             NASA
           </span>
           <span>{lang === "en" ? "Trend Detective" : "ট্রেন্ড ডিটেকটিভ"}</span>

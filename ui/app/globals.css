@@ -876,6 +876,18 @@ body.lang-bn div {
   font-family: var(--font-mono);
 }
 
+.nav-step-badge--nasa {
+  width: auto !important;
+  min-width: 32px;
+  height: 18px;
+  padding: 0 6px !important;
+  border-radius: 4px !important;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  background: var(--teal-primary, #0ea5e9);
+  color: #0b1215;
+}
+
 [data-theme="mocha"] .topbar-nav-link.active {
   background: var(--mocha-brown);
   color: var(--pale-lavender);
