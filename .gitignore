@@ -23,6 +23,11 @@ ui/node_modules/
 ui/.next/
 ui/out/
 ui/build/
+.turbo/
+.cache/
+.eslintcache
+*.tsbuildinfo
+next-env.d.ts
 
 # Package managers
 .pnp
@@ -51,18 +56,45 @@ yarn-error.log*
 # Raw Data Downloads
 data/raw/
 
-
-# OS generated files
+# OS generated & unnecessary files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 desktop.ini
+*.tmp
+*.temp
+*.bak
+*~
+*.swp
+*.swo
 
 # IDE & Editor
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Skill & tooling platform binaries (downloaded on demand per OS/arch)
+# Participant guides & unnecessary documents
+*.pdf
+Space-Apps-Challenge-Participants-Guide.pdf
+
+# AI Agent Skills & Tooling (Antigravity, Claude, Cursor, Gemini, Impeccable)
+.agent/
+.agents/
+.claude/
+.cursor/
+.gemini/
+.impeccable/
+**/skills/
 **/scripts/bin/
 
+# Markdown Prompt & Internal Documentation Files
+*.md
+docs/**/*.md
+ui/**/*.md
+!README.md
+!ui/README.md
+!docs/evidence/real_hindcast_report.md
+!data/fixtures/README.md
