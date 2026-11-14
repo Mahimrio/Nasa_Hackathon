@@ -49,8 +49,8 @@ export default function ProvenanceNotice() {
           <span style={{ fontSize: "12.5px", color: "var(--text-secondary)", fontWeight: 500 }}>
             {lang === "en" ? "Module 2: Earth System Trend Explorer" : "মডিউল ২: আর্থ সিস্টেম ট্রেন্ড এক্সপ্লোরার"}
           </span>
-          <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
-            NASA GPM IMERG Final Run V07B (2001–2025 • 1,525 daily granules)
+          <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
+            NASA GPM IMERG Final Run V07B (2001–2025 | 1,525 daily granules)
           </span>
         </div>
         <div style={{ marginTop: "6px", fontSize: "11.5px", lineHeight: 1.5, color: "var(--text-secondary)" }}>
@@ -65,15 +65,15 @@ export default function ProvenanceNotice() {
     Boolean(metrics?.real_hindcast) ||
     String(metrics?.provenance || "").startsWith("EXPLORATORY");
 
-  const tier = isReal ? "Tier 3" : "—";
+  const tier = isReal ? "Tier 3" : (lang === "en" ? "DEMO" : "ডেমো");
   const tierLabel = isReal
     ? (lang === "en" ? "Module 1: Retrospective Exploratory Hindcast" : "মডিউল ১: অনুবর্তী পরীক্ষামূলক হ্যান্ডকাস্ট")
     : (lang === "en" ? "Module 1: Synthetic Engineering Demo" : "মডিউল ১: সিন্থেটিক ইঞ্জিনিয়ারিং ডেমো");
 
   const sources = isReal
     ? (lang === "en"
-        ? "NASA SWOT RiverSP v2.0 • GPM IMERG Early V07B • BWDB SW266 Kanaighat"
-        : "NASA SWOT RiverSP v2.0 • GPM IMERG Early V07B • BWDB SW266 কানাইঘাট")
+        ? "NASA SWOT RiverSP v2.0 | GPM IMERG Early V07B | BWDB SW266 Kanaighat"
+        : "NASA SWOT RiverSP v2.0 | GPM IMERG Early V07B | BWDB SW266 কানাইঘাট")
     : (lang === "en"
         ? "Project-generated fixtures (SWOT-shaped, IMERG-shaped, gauge-shaped)"
         : "প্রকল্প-উৎপন্ন ফিক্সচার (SWOT-সদৃশ, IMERG-সদৃশ, গেজ-সদৃশ)");
@@ -113,7 +113,7 @@ export default function ProvenanceNotice() {
             color: isReal ? "var(--green-500)" : "var(--amber-500)",
             textTransform: "uppercase",
             letterSpacing: "0.04em",
-            fontFamily: "var(--font-mono)",
+            fontFamily: "var(--font-sans)",
           }}
         >
           {tier}
@@ -123,7 +123,7 @@ export default function ProvenanceNotice() {
           {tierLabel}
         </span>
 
-        <span style={{ fontSize: "11px", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+        <span style={{ fontSize: "11.5px", color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
           {sources}
         </span>
       </div>
