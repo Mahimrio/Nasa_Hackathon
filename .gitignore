@@ -95,6 +95,7 @@ Space-Apps-Challenge-Participants-Guide.pdf
 docs/**/*.md
 ui/**/*.md
 !README.md
+!CONTRIBUTING.md
 !ui/README.md
 !docs/evidence/real_hindcast_report.md
 !data/fixtures/README.md
